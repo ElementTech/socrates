@@ -25,15 +25,9 @@ mat-grid-tile {
 }
 
 .mat-column-configure {
-    flex: 0 0 10% ;
+    flex: 0 0 20% ;
 }
-mat-cell.mat-column-name{
-    border: 1px dotted black;
-}
-mat-cell.mat-column-name:hover {
-    background-color: lightgray;
-    cursor: pointer;
-  }
+
   mat-row:hover{
       background-color:white;
   }

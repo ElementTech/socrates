@@ -1,0 +1,75 @@
+# Default values for socrates.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+istio:
+  enabled: true
+
+client:
+  replicaCount: 1
+  image:
+    repository: jatasocrates/socrates-client
+    tag: v1
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    limits:
+      cpu: 300m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+server:
+  replicaCount: 1
+  storageClass: gp2
+  storage: 3Gi
+  image:
+    repository: jatasocrates/socrates-server
+    tag: v1
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 4000
+  resources:
+    limits:
+      cpu: 300m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+mongodb:
+  persistence:
+    enabled: false
+  architecture: replicaset
+  auth:
+    enabled: true
+    usernames: 
+      - user
+    passwords: 
+      - password
+    databases: 
+      - meandatabase

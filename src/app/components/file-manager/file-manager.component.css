@@ -1,0 +1,49 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.file-or-folder {
+  padding: 8px;
+  overflow: hidden;
+}
+
+.container{
+  overflow: hidden;
+}
+
+.file-or-folder-icon {
+  width: 80px;
+  height: 80px;
+  font-size: 80px;
+}
+
+.file-icon {
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  font-size: 60px;
+  
+
+}
+.file-or-folder-icon,.file-icon{
+  transition: transform 250ms;
+}
+
+.file-icon:hover,.file-or-folder-icon:hover{
+  transform: translateY(-8px);
+}
+.pointer {
+  cursor: pointer;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

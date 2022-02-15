@@ -1,0 +1,96 @@
+<!-- <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <h5 class="my-0 mr-md-auto font-weight-normal">Socrates</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="btn btn-outline-primary" routerLinkActive="active" routerLink="/blocks-list">Blocks</a>
+  </nav>
+  <a class="btn btn-outline-primary" routerLinkActive="active" routerLink="/create-block">Flows</a>
+</div> -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Amitai Getzler">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Socrates</title>
+
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    
+    <mat-toolbar class="mat-elevation-z10" color="primary" fxLayout="row">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <img class="masthead-avatar" width="30px"  src="/assets/socrates.png" /> Socrates &nbsp;
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/portal'"> <i class="fa-solid fa-users fa-lg" aria-hidden="true"></i> Portal </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/blocks-list'"> <i class="fa-solid fa-cube fa-lg" aria-hidden="true"></i> Blocks </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/instance-list'"> <i class="fa-solid fa-cubes fa-lg" aria-hidden="true"></i> Instances </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-list'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/parameters'"> <i class="fa-solid fa-th-list fa-lg" aria-hidden="true"></i> Parameters </a>
+      <span class="example-spacer"></span>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/home'"> <mat-icon aria-hidden="false">help</mat-icon>  Help </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/settings'"> <i class="fa-solid fa-cog fa-lg" aria-hidden="true"></i> Settings </a>
+      <span class="fill-remaining-space">
+        <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
+          <i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
+        </button>
+        <mat-menu #menu="matMenu" [overlapTrigger]="false">
+          <button mat-menu-item>
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Coming Soon</span>
+          </button>
+        </mat-menu>
+      </span>
+    </mat-toolbar>
+    
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav mode="side" opened>
+        <mat-list>
+          <div mat-header>Actions</div>
+          
+          <mat-list-item [routerLink]="'/create-block'">
+            <mat-icon mat-list-icon><i class="fa-solid fa-cube" aria-hidden="true"></i></mat-icon>
+            <div mat-line>Block</div>
+            <div mat-line>Create</div>
+          </mat-list-item>
+          <mat-divider style="color: white; background-color: white;"></mat-divider>
+          <mat-list-item [routerLink]="'/create-instance'">
+            <mat-icon mat-list-icon><i class="fa-solid fa-cubes" aria-hidden="true"></i></mat-icon>
+            <div mat-line>Instance</div>
+            <div mat-line>Create</div>
+          </mat-list-item>
+          <mat-divider style="color: white; background-color: white;"></mat-divider>
+          <mat-list-item [routerLink]="'/create-flow'">
+            <mat-icon mat-list-icon><i class="fa-solid fa-chain" aria-hidden="true"></i></mat-icon>
+            <div mat-line>Flow</div>
+            <div mat-line>Create</div>
+          </mat-list-item>          
+          <mat-divider style="color: white; background-color: white;"></mat-divider>
+          <mat-list-item [routerLink]="'/parameters'">
+            <mat-icon mat-list-icon><i class="fa-solid fa-th-list" aria-hidden="true"></i></mat-icon>
+            <div mat-line>Parameter</div>
+            <div mat-line>Create</div>
+          </mat-list-item>                     
+          <mat-list-item [routerLink]="'/home'" class="bottom-close">
+            <div mat-line><i class="fa-solid fa-question-circle" aria-hidden="true"></i> &nbsp;Help</div>
+          </mat-list-item>   
+          <!-- <mat-divider></mat-divider> -->
+          <!-- <div mat-subheader>Notes</div> -->
+          <!-- <a mat-list-item (click)="sidenav.toggle()" class="bottom-close" style="color: maroon;"><i class="fa-solid fa-close fa-lg" aria-hidden="true"></i>&nbsp;Close</a> -->
+        </mat-list>
+      </mat-sidenav>
+    
+      <mat-sidenav-content style="height: 90vh; overflow-y: scroll;">
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+    
+  </body>
+</html>
+
+
+

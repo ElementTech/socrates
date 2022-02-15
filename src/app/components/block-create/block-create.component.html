@@ -1,0 +1,222 @@
+
+<form [formGroup]="blockForm" class="container" (ngSubmit)="onSubmit()">
+  <mat-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="blockForm" class="">
+      <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+        <ng-template matStepLabel>Fill in the Block's Information</ng-template>
+    
+         
+       
+        <div class="d-flex">
+    
+          <div class="flex-grow-1">
+            <mat-form-field class="col-6" style="margin-right: 1em;" appearance="fill">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="My Block" formControlName="name" required>
+            </mat-form-field>
+    
+            <mat-form-field class="col-4" appearance="fill">
+              <mat-label>Language</mat-label>
+              <mat-select formControlName="lang">
+                <mat-option [value]="lang" *ngFor="let lang of Language">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{lang}}/{{lang}}-original.svg" width="30" height="30">{{lang}}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field> 
+
+              <section>
+                <mat-checkbox class="example-margin" id="prescript_check" formControlName="prescript" [(ngModel)]="prescript_enabled" [checked]="prescript_enabled">Enabled a Pre-Script</mat-checkbox>
+              </section>
+              <mat-form-field  class="col-11" appearance="fill">
+                <mat-label>Description</mat-label>
+                <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
+              </mat-form-field>
+    
+          </div>
+          <div style="max-width: 50%;">
+            <div class="d-flex justify-content-between pb-2">
+              <label>Parameters</label>
+              <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItem()">Add Parameter</button>
+            </div>
+            <!-- <pre>{{blockForm.value | json}}</pre> -->
+            <table class="table table-bordered table-hover table-sm table-responsive">
+              <thead class="thead-default">
+                <tr>
+                  <th>Key</th>
+                  <th>Value</th>
+                  <th>Secret</th>
+                  <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                  
+                  <tr formArrayName="parameters"
+                  *ngFor="let item of blockForm.get('parameters')['controls']; let i = index;"
+                  >
+              
+                    <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key"></td>
+                    <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i" formControlName="value"></td>
+                    <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox (change)="this.togglePass(i,item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+             
+                   
+                      <td class="text-center align-middle"><button type="button" (click)="removeItem(i)" class="btn-danger" aria-label="Close">
+                        <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card maxwidth" cdkDropListGroup >
+              <div class="d-flex justify-content-between pb-2">
+                <label>Shared Parameters - Drag From the List Below</label>
+                <!-- <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItemShared()">Add Parameter</button> -->
+              </div>
+              <!-- <pre>{{blockForm.value | json}}</pre> -->
+              <table class="table table-bordered table-hover table-sm table-responsive">
+                <thead class="thead-default">
+                  <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>Secret</th>
+                    <th>Delete</th>
+                  </tr>
+                  </thead>
+                  <tbody
+                  cdkDropList 
+                  cdkDropListOrientation="vertical"
+                  cdkDropListSortingDisabled="true"
+                  (cdkDropListDropped)="drop($event)"
+                  [cdkDropListData]="shared"
+                  >
+               
+                    <tr formArrayName="shared" cdkDrag
+                    *ngFor="let item of blockForm.get('shared')['controls']; let i = index;"
+                    >
+                
+                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key" required disabled></td>
+                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i+'shared'" formControlName="value" required disabled></td>
+                      <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox disabled (change)="this.togglePass(i+'shared',item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+              
+                    
+                        <td class="text-center align-middle"><button type="button" (click)="removeItemShared(i)" class="btn-danger" aria-label="Close">
+                          <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
+                      </tr>
+                  </tbody>
+              </table>
+                <mat-divider></mat-divider>
+              <div
+              class="example-chip items-body"
+              cdkDropList 
+              cdkDropListOrientation="vertical"
+              cdkDropListSortingDisabled="true"
+              (cdkDropListDropped)="drop($event)"
+              [cdkDropListData]="sharedParams"
+              
+              infinite-scroll
+              [infiniteScrollDistance]="scrollDistance"
+              [scrollWindow]="false"
+              [horizontal]="false"
+              [infiniteScrollUpDistance]="scrollUpDistance"
+              [infiniteScrollThrottle]="throttle"
+              (scrolled)="onScrollDown($event)"
+              (scrolledUp)="onUp($event)"
+            
+              >
+
+             
+                <div class="items-body-content example-box"  *ngFor="let sha of sharedParams" cdkDrag>
+                  <span *ngIf="sha.secret">{{sha.key}} - ***</span>
+                  <span *ngIf="!sha.secret">{{sha.key}} - {{sha.value}}</span>
+                  <i class="fa-solid fa-hand-grab-o"></i>
+                </div>
+
+        
+              </div>
+            </div>
+          </div>
+         
+        </div>
+
+      
+
+    </mat-step>
+    <mat-step [stepControl]="blockForm" [optional]="!prescript_enabled" *ngIf="prescript_enabled">
+  
+      <ng-template matStepLabel>Pre-Script</ng-template>
+      <div>
+        <button mat-button color="primary" matStepperPrevious type="button">Back</button>
+        <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+      </div>
+      <ngx-codemirror
+      formControlName="prescript"
+        [options]="{
+          lineNumbers: true,
+          theme: 'material'
+        }"
+        
+      ></ngx-codemirror>
+
+  </mat-step>    
+    <mat-step [stepControl]="blockForm" label="Fill in the Block's Code">
+   
+ 
+      <div>
+        <button mat-button color="primary" matStepperPrevious type="button">Back</button>
+        <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+      </div>
+      <ngx-codemirror
+      formControlName="script"
+        [options]="{
+          lineNumbers: true,
+          theme: 'material'
+        }"
+        
+      ></ngx-codemirror>
+
+
+     
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review</ng-template>
+      <table class="table table-hover">
+        <thead>
+            <tr>
+              <th>Name</th>
+              <th>Language</th>
+              <th>Description</th>
+              <th>Parameters</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ blockForm.controls['name'].value }}</td>
+            <td>{{ blockForm.controls['lang'].value }}</td>
+            <td>{{ blockForm.controls['desc'].value }}</td>
+            <td>
+              <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"]'>
+
+                <mat-chip-list aria-label="Parameters">
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key != ""'>
+                    <mat-chip color="primary" selected *ngFor="let param of blockForm.controls['parameters'].value">{{param.key}}</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key == "" && blockForm.controls["shared"].length == 0'>
+                    <mat-chip *ngFor="let param of blockForm.controls['parameters'].value">No Parameters</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["shared"].length != 0'>
+                    <mat-chip color="accent" selected *ngFor="let param of blockForm.controls['shared'].value">{{param.key}}</mat-chip>
+                  </ng-container>
+                </mat-chip-list>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id == ''">Create</button>
+        <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id != ''">Update</button>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</form>

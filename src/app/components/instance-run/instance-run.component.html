@@ -1,0 +1,117 @@
+
+
+
+<div class="row">
+    <div class="col-3">
+        <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content" style="background-color:white;border: 1px solid black; border-radius: 3px;">
+            <mat-list class="infinitelist">
+                <ng-container *cdkVirtualFor="let item of listItems" >
+         
+                        <mat-list-item>
+                        <img matListAvatar [src]="item.image">
+                        <h3 matLine> {{item.title}} </h3>
+                        <p matLine>
+                            <span> {{item.content}}: &nbsp; <code>{{item.runtime}}</code> </span>
+                        </p>
+                        <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id}">
+                            <mat-icon>
+                            more_vert
+                            </mat-icon>
+                        </button>
+                        <mat-divider></mat-divider>
+                        </mat-list-item>
+            
+                </ng-container>
+                <div class="spinner-item">
+                    <mat-progress-spinner [mode]="'indeterminate'" [diameter]="50" *ngIf="loading != false">     
+              </mat-progress-spinner>
+                  </div>
+            </mat-list>
+        </cdk-virtual-scroll-viewport>
+                
+        <mat-menu #itemMenu="matMenu" >
+            <ng-template matMenuContent let-name="name">
+            <button mat-menu-item (click)="showConsole(name)">
+                <i class="fa-solid fa-code" aria-hidden="true"></i> Console Log
+            </button>
+            <button mat-menu-item (click)="deleteDockerInstance(name)">
+                <i class="fa-solid fa-times-circle" style="color: red;" aria-hidden="true"></i> Delete
+            </button>
+          </ng-template>
+        </mat-menu>
+
+    </div>
+    <div class="col-9">
+        <mat-toolbar class="d-flex justify-content-center">
+            <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">{{this.Instance.name}} </h1>
+            <a class="play-btn" id="play-btn" (click)="ani();"></a>
+        </mat-toolbar>
+        <mat-divider style="height: 1em;"></mat-divider>
+        <div class="d-flex flex-row">
+            <div class="col-3">
+                <ul class="list-group container">
+            
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <mat-list-item>
+
+
+                            <ng-container matColumnDef="parameters">
+                                <mat-chip-list>
+                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.parameters.length != 0'>
+                                  
+                                      <mat-chip color="primary" selected *ngFor="let param of this.Instance.parameters">
+                                        <ng-container *ngIf="param.secret == true">
+                                          {{param.key}}=***
+                                        </ng-container>
+                                        <ng-container *ngIf="param.secret == false">
+                                          {{param.key}}={{param.value}}
+                                        </ng-container>
+                                      </mat-chip>
+                                  
+                                  </ng-container>
+                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.shared.length != 0'>
+                                    
+                                      <mat-chip color="accent" selected *ngFor="let param of this.Instance.shared">
+                                        <ng-container *ngIf="param.secret == true">
+                                          {{param.key}}=***
+                                        </ng-container>
+                                        <ng-container *ngIf="param.secret == false">
+                                          {{param.key}}={{param.value}}
+                                        </ng-container>
+                                      </mat-chip>
+                                  
+                                  </ng-container>
+                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.parameters.length == 0 && this.Instance.shared.length == 0'>
+                                    <mat-chip>No Parameters</mat-chip>
+                                  </ng-container>
+                                </mat-chip-list>
+                            </ng-container>
+
+
+
+                      
+                        </mat-list-item>
+
+     
+                    <span class="badge bg-primary rounded-pill" *ngIf='this.Instance.parameters.length != 0 && this.Instance.shared.length != 0'>{{this.Instance.parameters.length+this.Instance.shared.length}}</span>
+                    <span class="badge bg-primary rounded-pill" *ngIf='this.Instance.parameters.length == 0 && this.Instance.shared.length == 0'>0</span>
+                    <span class="badge bg-primary rounded-pill" *ngIf='this.Instance.parameters.length != 0 && this.Instance.shared.length == 0'>{{this.Instance.parameters.length}}</span>
+                    <span class="badge bg-primary rounded-pill" *ngIf='this.Instance.parameters.length == 0 && this.Instance.shared.length != 0'>{{this.Instance.shared.length}}</span>
+                    </li>
+                    <li *ngIf='this.Instance.desc != ""' class="list-group-item d-flex justify-content-between align-items-center">
+                        {{this.Instance.desc}}
+                    </li>
+                </ul> 
+            </div>
+            <div class="col">
+                <mat-toolbar class="d-flex justify-content-between">
+                    <h1 style="margin-right: 1em;">{{this.runNumber}}</h1>
+                    <button mat-stroked-button color="primary" (click)="makeFull()"><small>Press ESC To Enter/Exit Full Screen</small></button>
+                    
+                </mat-toolbar>
+                <ngx-codemirror [options]="{lineNumbers: true, theme: 'material',lineWrapping: true,matchBrackets: true,readOnly:true}" (keydown)="fullScreen($event, this);" [(ngModel)]="output"></ngx-codemirror>
+            </div>
+        </div> 
+    </div>
+</div>
+

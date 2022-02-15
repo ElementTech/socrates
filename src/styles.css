@@ -1,0 +1,13 @@
+@charset "UTF-8";
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html, body { 
+  height: 100%;
+
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.example-spacer {
+    flex: 1 1 auto;
+  }

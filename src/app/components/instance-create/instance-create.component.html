@@ -1,0 +1,189 @@
+
+<form [formGroup]="instanceForm" class="container" (ngSubmit)="onSubmit()">
+    <mat-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="instanceForm" label="Choose A Block">
+      <div class="d-flex justify-content-between m-3"> 
+        <div>
+          
+        </div>
+        
+        <mat-chip-list aria-label="Chosen Block" class="">
+          Chosen Block: &nbsp;
+          <mat-chip matBadge="{{paramCount}}" matBadgePosition="before" matBadgeColor="accent">{{clickedRows.name}}</mat-chip>
+        </mat-chip-list>
+        <div>
+
+          <button mat-raised-button color="primary" class="align-self-end" matStepperNext type="button" [disabled]="isDisabled">Next</button>
+        </div>
+      </div>
+
+
+      
+
+        <div class="mat-elevation-z8">
+            <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            <mat-table [dataSource]="dataSource" matSort>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+              </ng-container>
+          
+              <!-- Color Column -->
+              <ng-container matColumnDef="lang">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Langauge</mat-header-cell>
+                
+                <mat-cell *matCellDef="let row" [style.color]="row.lang"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{row.lang}}/{{row.lang}}-original.svg" width="20" height="20">&nbsp;{{row.lang}}</mat-cell>
+              </ng-container>
+        
+              <ng-container matColumnDef="parameters">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
+                      <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
+                    </mat-chip-list>
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0'>
+                      <mat-chip *ngFor="let param of row.parameters">No Parameters</mat-chip>
+                    </mat-chip-list>
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.shared.length != 0'>
+                      <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
+                    </mat-chip-list>
+                </mat-cell>
+              </ng-container>
+              
+              <ng-container matColumnDef="desc">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.desc">{{row.desc}}</mat-cell>
+              </ng-container>
+        
+        
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row class="chosen-row"
+                (click)="onClickRow(row)"
+                [class.demo-row-is-clicked]="clickedRows == row"
+              *matRowDef="let row; columns: displayedColumns;">
+              </mat-row>
+            </mat-table>
+          
+         
+          </div>
+
+
+
+        <div>
+      
+        </div>
+    </mat-step>
+      <mat-step [stepControl]="instanceForm" class="">
+      
+          <ng-template matStepLabel>Fill in the Instance's Information</ng-template>
+          <div class="row">
+  
+          <div class="row-cols col-6">
+            <mat-form-field class="w-50" style="margin-right: 1em;" appearance="fill">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="My Instance" formControlName="name" required>
+            </mat-form-field>
+
+            <div class="col">
+              <div class="d-flex justify-content-between pb-2">
+                <label>Parameters</label>
+                <!-- <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItem()">Add Parameter</button> -->
+              </div>
+              <table class="table table-bordered table-hover table-sm table-responsive">
+                <thead class="thead-default">
+                  <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>Secret</th>
+                    <!-- <th>Delete</th> -->
+                  </tr>
+                  </thead>
+                  <tbody>
+               
+                    <tr formArrayName="parameters"
+                    *ngFor="let item of instanceForm.get('parameters')['controls']; let i = index;"
+                    >
+                
+                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key" disabled></td>
+                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i" formControlName="value"></td>
+                      <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox disabled (change)="this.togglePass(i,item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+               
+<!--                      
+                        <td class="text-center align-middle"><button type="button" (click)="removeItem(i)" class="btn-danger" aria-label="Close">
+                          <i class="fa-solid fa-times" aria-hidden="true"></i></button></td> -->
+                      </tr>
+                      <tr formArrayName="shared"
+                      *ngFor="let item of instanceForm.get('shared')['controls']; let i = index;"
+                      >
+                  
+                        <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key" disabled></td>
+                        <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i+'shared'" formControlName="value" disabled></td>
+                        <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox disabled (change)="this.togglePass(i+'shared',item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+                 
+  <!--                      
+                          <td class="text-center align-middle"><button type="button" (click)="removeItem(i)" class="btn-danger" aria-label="Close">
+                            <i class="fa-solid fa-times" aria-hidden="true"></i></button></td> -->
+                        </tr>
+                  </tbody>
+              </table>
+            </div>
+  
+          </div>
+  
+  
+  
+            <mat-form-field class="col-6" appearance="fill">
+              <mat-label>Description</mat-label>
+              <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="text-center">
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+          </div>
+  
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Review</ng-template>
+        <table class="table table-hover">
+          <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Parameters</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ instanceForm.controls['name'].value }}</td>
+              <td>{{ instanceForm.controls['desc'].value }}</td>
+              <td>
+                
+                <mat-chip-list aria-label="Parameters">
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length != 0'>
+                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['parameters'].value">{{param.key}}</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length == 0 && instanceForm.controls["shared"].value.length == 0'>
+                    <mat-chip>No Parameters</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["shared"].value.length != 0'>
+                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}</mat-chip>
+                  </ng-container>
+                </mat-chip-list>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id == ''">Create</button>
+          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id != ''">Update</button>
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </form>

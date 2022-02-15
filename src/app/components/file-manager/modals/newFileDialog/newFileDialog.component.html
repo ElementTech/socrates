@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>Create a new link</h1>
+
+<mat-dialog-content>
+  <ul style="list-style-type:none;padding:0;margin: 0;">
+    <li>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Link Name" [(ngModel)]="fileName">
+      </mat-form-field>
+    </li>    
+    <li>
+      <mat-button-toggle-group name="type" [(ngModel)]="fileType" (change)="onValChange($event.value)">
+        <mat-button-toggle value="block"><i class="fa-solid fa-cube" aria-hidden="true"></i> Block</mat-button-toggle>
+        <mat-button-toggle value="instance"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Instance</mat-button-toggle>
+        <mat-button-toggle value="flow"><i class="fa-solid fa-chain" aria-hidden="true"></i> Flow</mat-button-toggle>
+      </mat-button-toggle-group>
+    </li>
+    <li>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Component</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Component"
+               matInput
+               [matAutocomplete]="auto" [(ngModel)]="fileID">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of options" [value]="option._id">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </li>    
+  </ul>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button [mat-dialog-close]="{'name': fileName,'type': fileType, '_id': fileID}" color="primary">OK</button>
+</mat-dialog-actions>

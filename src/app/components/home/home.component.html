@@ -1,0 +1,68 @@
+<!-- Masthead-->
+
+    <!-- <div class="container d-flex align-items-center flex-column">
+        <img class="masthead-avatar mb-5" width="300px"  src="/assets/socrates.png" />
+        <h1 class="masthead-heading text-uppercase mb-0">Socrates</h1>
+        <div class="divider-custom divider-dark">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <p class="masthead-subheading font-weight-light mb-0">Developer Portal for Custom Flows</p>
+
+    </div>
+     -->
+  <div class="row mb-0 page-section m-5">
+    <mat-card class="example-card" style="margin-right: 1em;">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"> <i class="fa-solid fa-cube fa-3x" aria-hidden="true"></i> </div>
+          <mat-card-title>Block</mat-card-title>
+          <mat-card-subtitle>Component</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Block is a component made of a <code>Code</code> in a specific Language. It might have parameters, defaults, and a <code>Pre-Code</code> to execute before the main.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button [routerLink]="'/blocks-list'">Blocks</button>
+          <button mat-button [routerLink]="'/create-block'"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+        </mat-card-actions>
+      </mat-card>
+      <mat-card class="example-card" style="margin-right: 1em;">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image" style="margin-right: 1em;"> <i class="fa-solid fa-cubes fa-3x" aria-hidden="true"></i> </div>
+          <mat-card-title>Instance</mat-card-title>
+          <mat-card-subtitle>Component</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Instance is attached to a <code>Block</code>. It is essentialy a Parameterized Block, with it's own execution History. Multiple Instance can exist for the same Block.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button [routerLink]="'/instance-list'">Instances</button>
+            <button mat-button [routerLink]="'/create-instance'"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+        </mat-card-actions>
+      </mat-card>     
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image" style="margin-right: 1em;"> <i class="fa-solid fa-chain fa-3x" aria-hidden="true"></i> </div>
+          <mat-card-title>Flow</mat-card-title>
+          <mat-card-subtitle>Component</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Flow is a <code>pipeline</code> of one or more <code>Instances</code>. They share <code>ENV Variables</code>. It has it's own execution history and can be drilled down to individual Instances
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button [routerLink]="'/flow-list'">Flows</button>
+          <button mat-button [routerLink]="'/create-flow'"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+        </mat-card-actions>
+      </mat-card> 
+  </div>
+
+<!-- About Section-->
+
+<!-- Contact Section-->

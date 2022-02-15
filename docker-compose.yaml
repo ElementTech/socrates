@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  mongodb:
+    image : davybello/mongo-replica-set:4.4.8
+    container_name: mongodb
+    restart: on-failure
+    volumes:
+      - "./.data/mongo1:/var/lib/mongo1"
+      - "./.data/mongo2:/var/lib/mongo2"
+      - "./.data/mongo3:/var/lib/mongo3"
+    ports:
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
+  docker:
+    image: docker:dind
+    container_name: docker
+    privileged: true
+    entrypoint: dockerd -H tcp://0.0.0.0:2375
+    volumes:
+      - /tmp:/tmp
+    expose:
+      - 2375
+  server:
+    build: backend
+    container_name: server
+    restart: always
+    ports:
+      - '4000:4000'
+    volumes:
+      - /tmp:/tmp
+    environment:
+      - DB_NAME=mongodb  
+      - DOCKER_TLS_CERTDIR=
+      - DOCKER_HOST=tcp://docker:2375      
+    links:
+      - mongodb
+      - docker
+  client:
+    build: .
+    restart: always
+    ports:
+      - '80:80'
+volumes:
+  mongodb4_data:

@@ -1,0 +1,145 @@
+<!-- 
+  <div class="search-results d-flex flex-row"
+        infinite-scroll
+        [infiniteScrollDistance]="scrollDistance"
+        [scrollWindow]="false"
+        [horizontal]="true"
+        [infiniteScrollUpDistance]="scrollUpDistance"
+        [infiniteScrollThrottle]="throttle"
+        (scrolled)="onScrollDown($event)"
+        (scrolledUp)="onUp($event)"
+        
+        cdkDropList="shoplist" cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)">
+
+      <div class="example-box" *ngFor="let i of array" cdkDrag>
+        {{i.name}}
+      </div>
+  
+ 
+  </div>
+  
+ 
+    <div
+      cdkDropList="basked"
+      [cdkDropListData]="basket"
+      cdkDropListOrientation="horizontal"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of basket" cdkDrag>{{item.name}}</div>
+    </div>
+   -->
+  <form cdkDropListGroup class="d-flex" [formGroup]="flowForm" (ngSubmit)="onSubmit()">
+
+    
+    <div class="example-container">
+      <mat-toolbar class="d-flex justify-content-center">
+        <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
+    </mat-toolbar>
+  
+
+    
+      <div
+        infinite-scroll
+        [infiniteScrollDistance]="scrollDistance"
+        [scrollWindow]="false"
+        [horizontal]="false"
+        [infiniteScrollUpDistance]="scrollUpDistance"
+        [infiniteScrollThrottle]="throttle"
+        (scrolled)="onScrollDown($event)"
+        (scrolledUp)="onUp($event)"
+        cdkDropList
+        [cdkDropListData]="array"
+        class="example-list infinite"
+        id="initial-list"
+       
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let i of array" cdkDrag>
+         
+          {{i.name}}
+          <mat-chip-list>
+            <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
+           
+              <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
+                <ng-container *ngIf="param.secret == true">
+                  {{param.key}}=***
+                </ng-container>
+                <ng-container *ngIf="param.secret == false">
+                  {{param.key}}={{param.value}}
+                </ng-container>
+              </mat-chip>
+           
+            </ng-container>
+            <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
+             
+              <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
+                <ng-container *ngIf="param.secret == true">
+                  {{param.key}}=***
+                </ng-container>
+                <ng-container *ngIf="param.secret == false">
+                  {{param.key}}={{param.value}}
+                </ng-container>
+              </mat-chip>
+           
+            </ng-container>
+          </mat-chip-list>
+
+        </div>
+      </div>
+    </div>
+  
+    <div style="max-width: 60%;">
+      <mat-toolbar class="d-flex justify-content-between">
+     
+        <button mat-stroked-button color="accent" (click)="addStep()">
+          <i class="fa-solid fa-plus-circle" aria-hidden="true"></i> Add Step
+        </button>
+        
+        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
+        <div></div>
+      </mat-toolbar>
+
+      <!-- <tr formArrayName="parameters"
+      *ngFor="let item of blockForm.get('parameters')['controls']; let i = index;"
+      >
+  
+        <td [formGroupName]="i"  -->
+
+        <div class="d-flex flex-row" *ngFor="let num of this.steps; let i = index">
+            <div class="align-middle border-end border-start border-1">
+              <div>&nbsp;</div>
+              
+              <i class="fa-solid fa-arrow-down fa-1x" aria-hidden="true"></i>
+
+            </div>
+          <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="this.steps[i]" class="example-list-horiz" (cdkDropListDropped)="drop($event)">
+            <div class="example-box-horiz" *ngFor="let item of this.steps[i]" cdkDrag>
+              <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              {{item.name}}</div>
+          </div>
+          <div class="border-end border-start border-1" style="width:3em;">
+            <div class="text-center align-vertical">
+              <div>&nbsp;</div>
+              <h2>{{i}}</h2>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="details text-center">
+     
+      <mat-toolbar class="d-flex justify-content-center">
+        <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id == ''">Create</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id != ''">Update</button>
+      </mat-toolbar>
+    
+      <mat-form-field class="w-100 pt-3" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="My Flow" formControlName="name" required>
+      </mat-form-field>
+      <mat-form-field class="w-100" appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
+      </mat-form-field>
+   
+    </div>
+  </form>

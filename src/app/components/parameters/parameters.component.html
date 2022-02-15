@@ -1,0 +1,61 @@
+
+  <div class="container">
+    <mat-toolbar class="d-flex justify-content-center">
+      <i class="fa-solid fa-th-list" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Parameters</h1>
+      <button color="primary" mat-button (click)="addParam()"><i class="fa-solid fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+      <button color="accent" mat-button (click)="saveParam()"><i class="fa-solid fa-save fa-2x" aria-hidden="true"></i></button>
+  </mat-toolbar>
+    <div class="example-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    
+    <div class="example-container mat-elevation-z8">
+      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-table [dataSource]="dataSource" matSort>
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="key">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Key</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-form-field floatLabel="never">
+                <input matInput placeholder="key" [value]="row.key" [(ngModel)]="row.key">
+            </mat-form-field>    
+           </mat-cell>
+        </ng-container>
+    
+        <!-- Color Column -->
+        <ng-container matColumnDef="value">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.value">
+            <mat-form-field floatLabel="never">
+                <input matInput placeholder="value" [id]="row.key" [value]="row.value" [(ngModel)]="row.value">
+            </mat-form-field>  
+            </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="secret">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Secret</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.secret">
+                <mat-slide-toggle (change)="this.togglePass(row)" [value]="row.secret" [(ngModel)]="row.secret"></mat-slide-toggle>  
+            </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="configure">
+          <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.configure">
+            <button mat-button (click)="removeParam(row)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+          </mat-cell>
+        </ng-container>
+  
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class="chosen-row" *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    
+   
+    </div>
+  
+  </div>

@@ -1,0 +1,237 @@
+const express = require('express');
+const docker = require('../engine/docker');
+const app = express();
+const flowRoute = express.Router();
+let mongoose = require('mongoose');
+// Flow model
+let Flow = require('../models/Flow');
+let FlowInstance = require('../models/FlowInstance');
+let Instance = require('../models/Instance');
+const { ObjectId } = require('mongodb');
+
+// Add Flow
+flowRoute.route('/create').post((req, res, next) => {
+  const newSteps = []
+  req.body.steps.forEach(step=>{
+    tempStep = []
+    for (let index = 0; index < step.length; index++) {
+      tempStep.push({"num": index,"id": step[index]._id})
+    }
+    newSteps.push(tempStep)
+  })
+  req.body.steps = newSteps
+  Flow.create(req.body, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+});
+
+// Get All Flows
+flowRoute.route('/').get((req, res, next) => {
+  Flow.find((error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
+// Get single flow
+flowRoute.route('/read/:id').get((req, res, next) => {
+  Flow.findById(req.params.id, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+    let populatedStepsPromises = []
+    let populatedSteps = []
+    for (let index = 0; index < data.steps.length; index++) {
+      let step = data.steps[index];
+      let tempStep = []
+      for (let indexj = 0; indexj < step.length; indexj++) {      
+        populatedStepsPromises.push(Instance.findById(step[indexj].id).exec().then(function(data) {tempStep.push({"num":step[indexj].num,"data":data})}))
+      }
+      populatedSteps.push(tempStep)
+    }
+    Promise.all(populatedStepsPromises).then(promiseResult => {
+      data.steps = populatedSteps.map(step=>step.sort(function (a, b) {
+        return a.num - b.num;
+      }).map(inst=>JSON.stringify(inst)))
+      res.send(data)
+    });
+
+
+    }
+  })
+})
+
+
+// Update flow
+flowRoute.route('/update/:id').put((req, res, next) => {
+  Flow.findByIdAndUpdate(req.params.id, {
+    $set: req.body
+  }, (error, data) => {
+    if (error) {
+      console.log(error)
+      return next(error);
+    } else {
+      res.json(data)
+      console.log('Data updated successfully')
+    }
+  })
+})
+
+// Delete flow
+flowRoute.route('/delete/:id').delete((req, res, next) => {
+  Flow.findByIdAndRemove(req.params.id, (error, data) => {
+    console.log("Removing: " + req.params.id)
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data
+      })
+    }
+  })
+})
+
+flowRoute.route('/run').post((req, res, next) => {
+  Flow.findById(req.body.id).exec(function(error, data){
+      if (error) {
+        return next(error)
+      } else {
+
+        const flow_run_id = new mongoose.Types.ObjectId().toHexString()
+        docker.run_flow(data,flow_run_id)
+        res.json(flow_run_id)
+        
+      }
+  });
+})
+
+// Get single docker
+flowRoute.route('/instance/one/read/:id').get((req, res, next) => {
+  FlowInstance.findById(req.params.id, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
+// Get All Flow Instances of a specific flow ID
+flowRoute.route('/instance/read/:id').get((req, res,next) => {
+  FlowInstance.find({ flow: req.params.id }).sort({_id: -1}).exec(function(error,data)
+  { 
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }    
+  });
+})
+
+// Get All Dockers stats of a specific instance ID
+flowRoute.route('/instance/read/stats/:id').get((req, res,next) => {
+  FlowInstance.find({ flow: req.params.id }).exec(function(error,data)
+  { 
+    if (error) {
+      return next(error)
+    } else {
+      let numFail = 0
+      let numSuccess = 0
+      let avgRun = 0
+      let numRuns = data.length
+      let runs = []
+      data.forEach(element => {
+        if (element.done == true){
+          if (element.error){
+            numFail++
+          }
+          else
+          {
+            numSuccess++
+          }
+          let tempTimeSeconds = 0
+          for (const key in element.runtime) {
+              const timeElement = element.runtime[key];
+              
+              if (key == "seconds"){
+                avgRun+=timeElement
+                tempTimeSeconds+=timeElement
+              }
+              if (key == "minutes"){
+                avgRun+=timeElement*60
+                tempTimeSeconds+=timeElement*60
+              }
+              if (key == "hours"){
+                avgRun+=timeElement*60*60
+                tempTimeSeconds+=timeElement*60*60
+              }
+              if (key == "days"){
+                avgRun+=timeElement*24*60*60
+                tempTimeSeconds+=timeElement*24*60*60
+              }
+              if (key == "weekdays"){
+                avgRun+=timeElement*7*24*60*60
+                tempTimeSeconds+=timeElement*7*24*60*60
+              }
+          }
+          runs.push({"name":data.indexOf(element),"value":tempTimeSeconds})    
+        }
+  
+      });
+      res.json({"fail": numFail,"success":numSuccess,"avg":secondsToHms(avgRun/data.length),"runs":runs})
+    }    
+  });
+})
+
+// Update docker
+flowRoute.route('/instance/update/:id').put((req, res, next) => {
+  FlowInstance.findByIdAndUpdate(req.params.id, {
+    $set: req.body
+  }, (error, data) => {
+    if (error) {
+      return next(error);
+      console.log(error)
+    } else {
+      res.json(data)
+      console.log('Data updated successfully')
+    }
+  })
+})
+
+// Delete docker
+flowRoute.route('/instance/delete/:id').delete((req, res, next) => {
+  FlowInstance.findByIdAndRemove(req.params.id, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data
+      })
+    }
+  })
+})
+
+function secondsToHms(d) {
+  d = Number(d);
+  var w = Math.floor(d / 604800)
+  var y = Math.floor(d / 86400)
+  var h = Math.floor(d / 3600);
+  var m = Math.floor(d % 3600 / 60);
+  var s = Math.floor(d % 3600 % 60);
+
+  var wDisplay = w > 0 ? w + (w == 1 ? " week, " : " weeks, ") : "";
+  var yDisplay = y > 0 ? y + (y == 1 ? " day, " : " days, ") : "";
+  var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+  var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+  var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+  return wDisplay + yDisplay + hDisplay + mDisplay + sDisplay; 
+}
+
+module.exports = flowRoute;

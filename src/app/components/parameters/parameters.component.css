@@ -1,0 +1,39 @@
+/* The solution */
+
+.page-section{
+    padding: 0 !important;
+    height: 100%;
+}
+.paginate-center>* {
+    flex: 1 1 auto;  
+    }
+.card-img-top {
+    width: 4vw;
+    height: 4vw;
+
+    object-fit: cover;
+}
+.item{
+    max-height: 20em !important;
+    max-width: 16em !important;
+}
+mat-grid-tile {
+    background: lightblue;
+  }
+  .mat-form-field {
+  margin-right: 12px;
+}
+
+.mat-column-configure {
+    flex: 0 0 10% ;
+}
+mat-cell.mat-column-name{
+    border: 1px dotted black;
+}
+mat-cell.mat-column-name:hover {
+    background-color: lightgray;
+    cursor: pointer;
+  }
+  mat-row:hover{
+      background-color:white;
+  }

@@ -1,0 +1,26 @@
+
+.CodeMirror {
+    height:80vh;
+    width: 100%;
+  }
+.desc{
+  min-height: 50vh;
+}
+
+  .mat-row .mat-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .chosen-row:hover {
+    background-color: lightgray;
+  }
+  
+  .demo-row-is-clicked {
+    font-weight: bold;
+  }
+  .mat-standard-chip {    
+    min-width: auto !important;
+    min-height: 3em !important;
+  }

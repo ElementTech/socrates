@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "socrates.fullname" . }}-server
+  labels:
+    app: {{ template "socrates.name" . }}-server
+    chart: {{ template "socrates.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "socrates.name" . }}-server
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "socrates.name" . }}-server
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: Always
+      volumes: 
+        - name: docker-graph-storage 
+          persistentVolumeClaim:
+            claimName: socrates-engine-storage
+        - name: tmp
+          emptyDir: {}          
+      containers:
+        - name: dind-daemon 
+          image: docker:dind
+          env:    
+            - name: DOCKER_HOST 
+              value: tcp://localhost:2375
+          command: ['dockerd', '-H', 'tcp://0.0.0.0:2375'] 
+          resources: 
+              requests: 
+                  cpu: 20m 
+                  memory: 512Mi 
+          securityContext: 
+              privileged: true 
+          volumeMounts: 
+            - name: docker-graph-storage 
+              mountPath: /var/lib/docker
+            - name: tmp
+              mountPath: /tmp                
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          
+          volumeMounts: 
+            - name: tmp
+              mountPath: /tmp           
+          env:    
+            - name: DOCKER_HOST 
+              value: tcp://localhost:2375
+            - name: PORT
+              value: "4000"
+            - name: ENV
+              value: production
+            - name: DB_USERNAME
+              value: user
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_NAME
+              value: {{ template "socrates.name" . }}-mongodb-headless
+          ports:
+            - name: http
+              containerPort: 4000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+          resources:
+{{ toYaml .Values.server.resources | indent 12 }}
+    {{- with .Values.server.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.server.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.server.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      imagePullSecrets:
+        - name: dc-2fjvj

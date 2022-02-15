@@ -15,6 +15,7 @@ const webhooks = new Webhooks({
 
 webhooks.onAny(({ id, name, payload }) => {
    console.log(name, "event received");
+   console.log(payload)
 });
  
 let healthcheck = new health.HealthChecker();

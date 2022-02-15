@@ -45,6 +45,7 @@ function duration(t0, t1){
   let t = {};
   //, 'milliseconds'
   ['weekdays', 'days', 'hours', 'minutes', 'seconds'].forEach(q=>{ if (eval(q)>0) { t[q] = eval(q); } });
+  console.log(t)
   return t;
 }
 

@@ -41,7 +41,7 @@ Settings.find((error, data) => {
               return
             }
               //
-              if (workerData.instance.block.prescript == "" || workerData.instance.block.prescript == "false")
+              if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
               {
                 workerData.instance.block.prescript = "echo No Pre-Script"
               }
@@ -52,6 +52,7 @@ Settings.find((error, data) => {
               {
                 workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared)
               }
+              var auxContainer;
               docker.createContainer({
                 Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
                 Env: workerData.instance.parameters.map(doc=>{
@@ -62,27 +63,28 @@ Settings.find((error, data) => {
                   return `${doc.key}=${doc.value}`
                 }),
                 HostConfig: {
-                  AutoRemove: true,
+                  AutoRemove: false,
                   Binds: [
                       `${require("path").dirname(path)}:/tmp`
                   ]
                 }, 
                 Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
-              }, function(err, container) {
-                  container.start({}, function(err, data) {
-                    create_docker_instance_in_database(
-                      {
-                        _id: workerData.custom_id,
-                        parameters: workerData.instance.parameters,
-                        container_id: container.id,
-                        instance: workerData.instance._id,
-                        console: [],
-                        done:false
-                      }
-                    )
-                    containerLogs(container,workerData.custom_id);
-                  });
-              });
+              }).then(function(container) {
+                auxContainer = container;
+                return auxContainer.start()
+              }).then(function(data) {
+                create_docker_instance_in_database(
+                  {
+                    _id: workerData.custom_id,
+                    parameters: workerData.instance.parameters,
+                    container_id: auxContainer.id,
+                    instance: workerData.instance._id,
+                    console: [],
+                    done:false
+                  }
+                )
+                containerLogs(auxContainer,workerData.custom_id);
+              })
           })
           // 'some-python-image', ['python', 'main.py', arg]
         
@@ -103,11 +105,9 @@ function containerLogs(container,generated_id) {
     container.inspect(function (err, data) {
       const startTime = data["State"]["StartedAt"];
       const refreshTime = setInterval(function() {
-  
         set_docker_instance_in_database(generated_id,
           {runtime: engine.duration(startTime,Date.now())}
         )
-       
       }, 1000);
       // create a single stream for stdin and stdout
       var logStream = new stream.PassThrough();
@@ -117,7 +117,6 @@ function containerLogs(container,generated_id) {
         )
       
       });
-  
       container.logs({
         follow: true,
         stdout: true,
@@ -126,9 +125,7 @@ function containerLogs(container,generated_id) {
         if(err) {
           console.log(err)
         }
-  
         const refreshTimeConnect = setInterval(function() {
-  
           try {
             container.modem.demuxStream(stream, logStream, logStream);
             clearInterval(refreshTimeConnect)
@@ -136,39 +133,28 @@ function containerLogs(container,generated_id) {
             console.log(error)
           }
         }, 1000);
-        
-  
-        
-        
         stream.on('end', function(){
-       
-       
           clearInterval(refreshTime);
-        
           logStream.end('DONE');
-            
             container.inspect(function (err, data) {
               const finishedAt = data["State"]["FinishedAt"];
               if (data.State.ExitCode != 0)
               {
                 set_docker_instance_in_database(generated_id,
-                  { done: true, error: true, runtime: duration(startTime,finishedAt) }
+                  { done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
                 )
               }
               else
               {
                 set_docker_instance_in_database(generated_id,
-                  { done: true, error: false, runtime: duration(startTime,finishedAt) }
+                  { done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
                 )
               }
+            container.remove()
             parentPort.postMessage("Done")
-
-        
           });
-      
         });
       });
-  
     });
 }
   

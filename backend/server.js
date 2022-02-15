@@ -7,6 +7,16 @@ let express = require('express'),
 const createError = require('http-errors');
 const upsertMany = require('@meanie/mongoose-upsert-many');
 const health = require('@cloudnative/health-connect');
+const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
+const EventSource = require('eventsource')
+const webhooks = new Webhooks({
+   secret: "theeleusinianmysteries",
+});
+
+webhooks.onAny(({ id, name, payload }) => {
+   console.log(name, "event received");
+});
+ 
 let healthcheck = new health.HealthChecker();
 mongoose.plugin(upsertMany);
 // Connecting with mongo db
@@ -22,6 +32,20 @@ mongoose.connect(dbConfig.db, {
       process.exit(error)
    }
 )
+
+const webhookProxyUrl = "https://smee.io/IrqK0nopGAOc847"; // replace with your own Webhook Proxy URL
+const source = new EventSource(webhookProxyUrl);
+source.onmessage = (event) => {
+  const webhookEvent = JSON.parse(event.data);
+  webhooks
+    .verifyAndReceive({
+      id: webhookEvent["x-request-id"],
+      name: webhookEvent["x-github-event"],
+      signature: webhookEvent["x-hub-signature"],
+      payload: webhookEvent.body,
+    })
+    .catch(console.error);
+};
 
 // Setting up port with express js
 const blockRoute = require('./routes/block.route')
@@ -52,7 +76,9 @@ app.use('/api/settings', settingsRoute)
 app.use('/api/flow', flowRoute)
 app.use('/api/parameter', parameterRoute)
 app.use('/api/file', FileRoute)
+app.use(createNodeMiddleware(webhooks))
 // app.use('/api/web', webRequestsRoute)
+
 
 
 //Settings.create({"langs":{"python":{"image":"latest","command":"python"}}}, (error, data) => {

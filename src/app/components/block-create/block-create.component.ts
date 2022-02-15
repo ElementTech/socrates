@@ -4,12 +4,19 @@ import { Component, OnInit, NgZone, ViewEncapsulation,ViewChild } from '@angular
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { FormArray } from '@angular/forms';
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-block-create',
   templateUrl: './block-create.component.html',
   styleUrls: ['./block-create.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    },
+  ],
 })
 
 export class BlockCreateComponent implements OnInit {  

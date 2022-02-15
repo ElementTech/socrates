@@ -1,7 +1,7 @@
 
 <form [formGroup]="blockForm" class="container" (ngSubmit)="onSubmit()">
   <mat-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="blockForm" class="">
+    <mat-step [stepControl]="blockForm" class="" errorMessage="Name and Language is required.">
       <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
         <ng-template matStepLabel>Fill in the Block's Information</ng-template>
     
@@ -170,7 +170,6 @@
           lineNumbers: true,
           theme: 'material'
         }"
-        
       ></ngx-codemirror>
 
 

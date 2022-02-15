@@ -8,12 +8,18 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Block } from 'src/app/model/Block';
 import { MatStepper } from '@angular/material/stepper';
-
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 @Component({
   selector: 'app-instance-create',
   templateUrl: './instance-create.component.html',
   styleUrls: ['./instance-create.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    },
+  ]
 })
 
 export class InstanceCreateComponent implements OnInit {  

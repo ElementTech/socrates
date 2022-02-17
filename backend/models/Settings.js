@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 let Settings = new Schema({
    langs: {
       type: [Object] // {Python: {Default_Image: "latest","Run Command":"python"}}
+   },
+   github: {
+      type: [Object]
    }
 }, {
    collection: 'settings'

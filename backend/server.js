@@ -9,15 +9,7 @@ const upsertMany = require('@meanie/mongoose-upsert-many');
 const health = require('@cloudnative/health-connect');
 const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
 const EventSource = require('eventsource')
-const webhooks = new Webhooks({
-   secret: "theeleusinianmysteries",
-});
-
-webhooks.onAny(({ id, name, payload }) => {
-   console.log(name, "event received");
-   console.log(payload)
-});
- 
+const { Octokit } = require("@octokit/core");
 let healthcheck = new health.HealthChecker();
 mongoose.plugin(upsertMany);
 // Connecting with mongo db
@@ -33,8 +25,48 @@ mongoose.connect(dbConfig.db, {
       process.exit(error)
    }
 )
+let Settings = require('./models/Settings');
+const settingsRoute = require('./routes/settings.route');
+const webhooks = new Webhooks({
+   secret: "theeleusinianmysteries",
+});
+webhooks.onAny(({ id, name, payload }) => {
+   console.log(name, "event received. Only watching push events.");
+   Settings.find(async (error, data) => {
+      if (error) {
+        console.log(error)
+      } else {
+        const settings = data[0].github[0]
+        if (settings.githubConnected){
+           if (settings.githubWebhook)
+           {
+            if (name == "push" && (payload.ref.includes(settings.githubBranch)) && (payload.repository.full_name == settings.githubURL))
+            {
+               console.log("Legal Github Payload, Updating")
+               const octokit = new Octokit({ auth: `${settings.githubToken}` });
+               try {
+                 const response = await octokit.request(`GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1`, {
+                   owner: settings.githubURL.split("/")[0],
+                   repo: settings.githubURL.split("/")[1],
+                   branch: settings.githubBranch
+                 })
+                  const prefixList = data[0].langs.map(lang=>lang.type)
+                  settingsRoute.updateGithubTree(response.data.tree,octokit,prefixList)
+               } catch (error) {
+                 console.log(error)
+               }
+            }
+           }
+        }
+        else
+        {
+           console.log("Github Not Connected in Settings")
+        }
+      }
+    })
+});
 
-const webhookProxyUrl = "https://smee.io/IrqK0nopGAOc847"; // replace with your own Webhook Proxy URL
+const webhookProxyUrl = "https://smee.io/vK9sWLDceWSfSEe"; // replace with your own Webhook Proxy URL
 const source = new EventSource(webhookProxyUrl);
 source.onmessage = (event) => {
   const webhookEvent = JSON.parse(event.data);
@@ -53,11 +85,10 @@ const blockRoute = require('./routes/block.route')
 const instanceRoute = require('./routes/instance.route')
 const dockerRoute = require('./routes/docker.route');
 const parameterRoute = require('./routes/parameter.route');
-const settingsRoute = require('./routes/settings.route');
 // const webRequestsRoute = require('../backend/routes/web-requests.route')
-let Settings = require('./models/Settings');
 const flowRoute = require('./routes/flow.route');
-const FileRoute = require('./routes/file');
+const fileRoute = require('./routes/file.route');
+const githubRoute = require('./routes/github.route');
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
@@ -73,10 +104,11 @@ app.use('/health', health.HealthEndpoint(healthcheck))
 app.use('/api/block', blockRoute)
 app.use('/api/instance', instanceRoute)
 app.use('/api/docker', dockerRoute)
-app.use('/api/settings', settingsRoute)
+app.use('/api/settings', settingsRoute.settingsRoute)
 app.use('/api/flow', flowRoute)
 app.use('/api/parameter', parameterRoute)
-app.use('/api/file', FileRoute)
+app.use('/api/file', fileRoute)
+app.use('/api/github', githubRoute)
 app.use(createNodeMiddleware(webhooks))
 // app.use('/api/web', webRequestsRoute)
 

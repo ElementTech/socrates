@@ -19,10 +19,15 @@
     overflow: auto;
     max-height: 750px;
   }
-  #add-button{
-
-    right: 40px;
-    bottom: 30px;
-    left: auto;
-    position: absolute;
+ 
+  :host ::ng-deep .mat-slide-toggle-content {
+    display: flex; /* Turn into a flexbox container for alignment */
+  }
+  
+  .material-icons {
+    margin-right: 2px; /* Spacing from the content */
+  }
+  
+  :host ::ng-deep .mat-slide-toggle-label-before .mat-slide-toggle-bar {
+    margin-left: 10px; /* Spacing from the icon and content */
   }

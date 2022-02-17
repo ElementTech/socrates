@@ -56,6 +56,8 @@ import { FileService } from './components/file-manager/service/file.service';
 import { FileManagerModule } from './components/file-manager/file-manager.module';
 import { PortalComponent } from './components/portal/portal.component';
 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -110,7 +112,8 @@ import { PortalComponent } from './components/portal/portal.component';
     InfiniteScrollModule,
     MatSlideToggleModule,
     FileManagerModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatProgressBarModule
   ],
   providers: [ApiService,SidenavService,FileService],
   bootstrap: [AppComponent]

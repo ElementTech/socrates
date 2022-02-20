@@ -24,3 +24,14 @@
     min-width: auto !important;
     min-height: 3em !important;
   }
+  .mat-form-field-flex {
+    padding-top: 0;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-underline {
+    bottom: 0;
+  }

@@ -1,6 +1,7 @@
 //add this script in myWorker.js file
 const {parentPort, workerData} = require("worker_threads");
 let Settings = require('../models/Settings');
+let GithubElement = require('../models/GithubElement');
 var Docker = require('dockerode');
 var docker = new Docker();
 var stream = require('stream');
@@ -35,57 +36,25 @@ Settings.find((error, data) => {
       function onFinished(err, output) {
         tmp.file(function _tempFileCreated(err, path, fd) {
           if (err) throw err;
-          fs.writeFile(path, workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""), err => {
-            if (err) {
-              console.error(err)
-              return
+          if (workerData.instance.block.github){
+            if (data[0].github[0].githubConnected){
+              GithubElement.findOne({path:workerData.instance.block.github_path},(error, git) => {
+                if ((git.content != null) && (git.content != undefined))
+                {
+                  writeAndRun(path,data=data,Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+                }
+              });
             }
-              //
-              if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
-              {
-                workerData.instance.block.prescript = "echo No Pre-Script"
-              }
-              if (workerData.custom_env){
-                workerData.instance.parameters = workerData.custom_env
-              }
-              else
-              {
-                workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared)
-              }
-              var auxContainer;
-              docker.createContainer({
-                Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
-                Env: workerData.instance.parameters.map(doc=>{
-                  if (doc.key == "" || doc.value == "")
-                  {
-                    return `no_params=true`
-                  }
-                  return `${doc.key}=${doc.value}`
-                }),
-                HostConfig: {
-                  AutoRemove: false,
-                  Binds: [
-                      `${require("path").dirname(path)}:/tmp`
-                  ]
-                }, 
-                Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
-              }).then(function(container) {
-                auxContainer = container;
-                return auxContainer.start()
-              }).then(function(data) {
-                create_docker_instance_in_database(
-                  {
-                    _id: workerData.custom_id,
-                    parameters: workerData.instance.parameters,
-                    container_id: auxContainer.id,
-                    instance: workerData.instance._id,
-                    console: [],
-                    done:false
-                  }
-                )
-                containerLogs(auxContainer,workerData.custom_id);
-              })
-          })
+            else
+            {
+              writeAndRun(path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+            }
+          }
+          else
+          {
+            writeAndRun(path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+          }
+      
           // 'some-python-image', ['python', 'main.py', arg]
         
           
@@ -99,6 +68,61 @@ Settings.find((error, data) => {
     });
   }
 })
+
+function writeAndRun(path,data,script)
+{
+  fs.writeFile(path, script, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+      //
+      if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
+      {
+        workerData.instance.block.prescript = "echo No Pre-Script"
+      }
+      if (workerData.custom_env){
+        workerData.instance.parameters = workerData.custom_env
+      }
+      else
+      {
+        workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared).concat(workerData.instance.multis).concat(workerData.instance.booleans)
+      }
+      var auxContainer;
+      docker.createContainer({
+        Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
+        Env: workerData.instance.parameters.map(doc=>{
+          if (doc.key == "" || doc.value == "")
+          {
+            return `no_params=true`
+          }
+          return `${doc.key}=${doc.value}`
+        }),
+        HostConfig: {
+          AutoRemove: false,
+          Binds: [
+              `${require("path").dirname(path)}:/tmp`
+          ]
+        }, 
+        Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
+      }).then(function(container) {
+        auxContainer = container;
+        return auxContainer.start()
+      }).then(function(data) {
+        create_docker_instance_in_database(
+          {
+            _id: workerData.custom_id,
+            parameters: workerData.instance.parameters,
+            container_id: auxContainer.id,
+            instance: workerData.instance._id,
+            console: [],
+            done:false
+          }
+        )
+        containerLogs(auxContainer,workerData.custom_id);
+      })
+  })
+}
 
 function containerLogs(container,generated_id) {
 

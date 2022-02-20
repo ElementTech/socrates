@@ -38,7 +38,7 @@ export class InstanceListComponent implements OnInit {
  
   readInstance(){
     this.apiService.getInstances().subscribe((data) => {
-  
+      console.log(data)
      this.dataSource = new MatTableDataSource(this.fetchLastBuild(data));
      
      this.dataSource.filterPredicate = function(data, filter: string): boolean {

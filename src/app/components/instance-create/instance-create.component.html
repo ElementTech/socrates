@@ -43,14 +43,21 @@
                     <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
                       <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
                     </mat-chip-list>
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0'>
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
                       <mat-chip *ngFor="let param of row.parameters">No Parameters</mat-chip>
                     </mat-chip-list>
                     <mat-chip-list aria-label="Parameters" *ngIf='row.shared.length != 0'>
                       <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
                     </mat-chip-list>
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.booleans.length != 0'>
+                      <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
+                    </mat-chip-list>
+                    <mat-chip-list aria-label="Parameters" *ngIf='row.multis.length != 0'>
+                      <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
+                    </mat-chip-list>
                 </mat-cell>
               </ng-container>
+
               
               <ng-container matColumnDef="desc">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
@@ -105,9 +112,19 @@
                     <tr formArrayName="parameters"
                     *ngFor="let item of instanceForm.get('parameters')['controls']; let i = index;"
                     >
+                    
                 
-                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key" disabled></td>
-                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i" formControlName="value"></td>
+                      <td [formGroupName]="i" class="flex-grow-1">
+                        
+                        <input class="form-control" formControlName="key" disabled>
+
+                 
+                      
+                      </td>
+                      <td [formGroupName]="i" class="flex-grow-1">
+                        <input class="form-control" [id]="i" formControlName="value">
+                      
+                      </td>
                       <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox disabled (change)="this.togglePass(i,item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
                
 <!--                      
@@ -125,7 +142,38 @@
   <!--                      
                           <td class="text-center align-middle"><button type="button" (click)="removeItem(i)" class="btn-danger" aria-label="Close">
                             <i class="fa-solid fa-times" aria-hidden="true"></i></button></td> -->
-                        </tr>
+                      </tr>
+                      <tr formArrayName="booleans" 
+                      *ngFor="let item of instanceForm.get('booleans')['controls']; let i = index;"
+                      >
+                  
+                        <td [formGroupName]="i" class="">
+                          <input disabled class="form-control" formControlName="key" placeholder="key">
+                        </td>
+                        <td [formGroupName]="i" class="text-center align-middle"><mat-checkbox formControlName="value" color="primary"></mat-checkbox></td>
+                        <td></td>
+
+                      </tr>
+                      <tr formArrayName="multis"
+                      *ngFor="let item of instanceForm.get('multis')['controls']; let i = index;"
+                      >
+                  
+                        <td [formGroupName]="i" class="">
+                            <input disabled class="form-control" formControlName="key" placeholder="key">
+                        </td>
+                        <td [formGroupName]="i" class="text-center align-middle">
+                          <mat-select formControlName="value" placeholder="value">
+                              <mat-option *ngFor="let choice of item.value.value.split(',')" [value]="choice">
+                                  {{choice}}
+                              </mat-option>
+                          </mat-select>
+                        
+                        </td>
+                          <td></td>
+
+                      </tr>
+
+                        
                   </tbody>
               </table>
             </div>
@@ -162,15 +210,23 @@
               <td>{{ instanceForm.controls['desc'].value }}</td>
               <td>
                 
+                
                 <mat-chip-list aria-label="Parameters">
                   <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length != 0'>
-                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['parameters'].value">{{param.key}}</mat-chip>
+                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['parameters'].value">{{param.key}}={{param.value}}</mat-chip>
                   </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length == 0 && instanceForm.controls["shared"].value.length == 0'>
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length == 0 && instanceForm.controls["shared"].value.length == 0
+                  && instanceForm.controls["booleans"].value.length == 0 && instanceForm.controls["multis"].value.length == 0'>
                     <mat-chip>No Parameters</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["shared"].value.length != 0'>
-                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}</mat-chip>
+                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}={{param.value}}</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["booleans"].value.length != 0'>
+                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['booleans'].value">{{param.key}}={{param.value}}</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["multis"].value.length != 0'>
+                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['multis'].value">{{param.key}}={{param.value}}</mat-chip>
                   </ng-container>
                 </mat-chip-list>
 

@@ -12,6 +12,12 @@ let Instance = new Schema({
    shared: {
       type: [Object]
    },
+   booleans: {
+      type: [Object]
+   },
+   multis: {
+      type: [Object]
+   },
    desc: {
       type: String
    },

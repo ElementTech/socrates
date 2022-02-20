@@ -26,7 +26,7 @@ import { SidenavService } from 'src/app/service/sidenav.service';
 export class InstanceRunComponent implements OnInit {
  
   dataSource: MatTableDataSource<any>;
-  Instance= {name:"name",desc:"desc",parameters:[],shared:[]};
+  Instance= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[]};
   displayedColumns = ['name','desc','parameters'];
   output: String = "";
   runNumber: number;

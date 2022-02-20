@@ -81,9 +81,31 @@
                                       </mat-chip>
                                   
                                   </ng-container>
-                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.parameters.length == 0 && this.Instance.shared.length == 0'>
+                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.parameters.length == 0 && this.Instance.shared.length == 0 && this.Instance.booleans.length == 0
+                                  && this.Instance.multis.length == 0'>
                                     <mat-chip>No Parameters</mat-chip>
                                   </ng-container>
+
+                                  <ng-container aria-label="Parameters" *ngIf='this.Instance.booleans.length != 0'>
+                                    
+                                    <mat-chip color="accent" selected *ngFor="let param of this.Instance.booleans">
+                                      <ng-container>
+                                        {{param.key}}={{param.value}}
+                                      </ng-container>
+                                    </mat-chip>
+                                
+                                </ng-container>
+                                <ng-container aria-label="Parameters" *ngIf='this.Instance.multis.length != 0'>
+                                    
+                                    <mat-chip color="accent" selected *ngFor="let param of this.Instance.multis">
+                                      <ng-container>
+                                        {{param.key}}={{param.value}}
+                                      </ng-container>
+                                    </mat-chip>
+                                
+                                </ng-container>
+
+                                  
                                 </mat-chip-list>
                             </ng-container>
 

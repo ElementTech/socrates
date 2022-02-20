@@ -45,6 +45,8 @@ export class InstanceCreateComponent implements OnInit {
   shared: FormArray;
   id = "";
   @ViewChild('stepper') stepper: MatStepper;
+  booleans: FormArray;
+  multis: FormArray;
   constructor(
     public fb: FormBuilder,
     private router: Router,
@@ -88,6 +90,21 @@ export class InstanceCreateComponent implements OnInit {
             secret: item.secret
           }));
         });
+
+        this.multis = this.instanceForm.get('multis') as FormArray;
+        data.multis.forEach(item=>{
+          this.multis.push(this.fb.group({
+            key: item.key,
+            value: item.value
+          }));
+        });
+        this.booleans = this.instanceForm.get('booleans') as FormArray;
+        data.booleans.forEach(item=>{
+          this.booleans.push(this.fb.group({
+            key: item.key,
+            value: item.value
+          }));
+        });
       });
       
 
@@ -118,6 +135,10 @@ export class InstanceCreateComponent implements OnInit {
       parameters: this.fb.array([
       ]),
       shared: this.fb.array([
+      ]),
+      booleans: this.fb.array([
+      ]),
+      multis: this.fb.array([
       ]),
       desc: [''],
       block: ['',[Validators.required]]
@@ -150,6 +171,18 @@ export class InstanceCreateComponent implements OnInit {
       secret: secret
     });
   }
+  createBooleanKeyValue(key,value): FormGroup {
+    return this.fb.group({
+      key: key,
+      value: value
+    });
+  }
+  createMultisKeyValue(key,value): FormGroup {
+    return this.fb.group({
+      key: key,
+      value: value
+    });
+  }
   addItem(): void {
     this.parameters = this.instanceForm.get('parameters') as FormArray;
     this.parameters.push(this.createItem());
@@ -175,14 +208,19 @@ export class InstanceCreateComponent implements OnInit {
     }
   }
   togglePass(i,checkbox) {
-    if (checkbox)
-    {
-      document.getElementById(i).setAttribute("type","password");
+    try {
+      if (checkbox)
+      {
+        document.getElementById(i).setAttribute("type","password");
+      }
+      else
+      {
+        document.getElementById(i).setAttribute("type","text");
+      }
+    } catch (error) {
+      
     }
-    else
-    {
-      document.getElementById(i).setAttribute("type","text");
-    }
+
   }
 
   onClickRow(row){
@@ -190,6 +228,10 @@ export class InstanceCreateComponent implements OnInit {
     this.parameters.clear()
     this.shared = this.instanceForm.get('shared') as FormArray;
     this.shared.clear()
+    this.booleans = this.instanceForm.get('booleans') as FormArray;
+    this.booleans.clear()
+    this.multis = this.instanceForm.get('multis') as FormArray;
+    this.multis.clear()
     this.paramCount = 0
     this.clickedRows = row;
 
@@ -212,6 +254,22 @@ export class InstanceCreateComponent implements OnInit {
         this.paramCount+=1
       } 
     });
+
+    row.booleans.forEach(element => {
+      if (element.key){
+        this.booleans.push(this.createBooleanKeyValue(element.key,element.value));
+        this.paramCount+=1
+      } 
+    });
+
+    row.multis.forEach(element => {
+      if (element.key){
+        this.multis.push(this.createMultisKeyValue(element.key,element.value));
+        this.paramCount+=1
+      } 
+    });
+
+
   }
 
   onSubmit() {

@@ -51,6 +51,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
           <mat-chip-list>
+
             <ng-container aria-label="Parameters" *ngIf='row.parameters.length != 0'>
             
                 <mat-chip color="primary" selected *ngFor="let param of row.parameters">
@@ -75,8 +76,14 @@
                 </mat-chip>
             
             </ng-container>
-            <ng-container aria-label="Parameters" *ngIf='row.parameters.length == 0 && row.shared.length == 0'>
+            <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
               <mat-chip>No Parameters</mat-chip>
+            </ng-container>
+            <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
+              <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}={{param.value}}</mat-chip>
+            </ng-container>
+            <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
+              <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}={{param.value}}</mat-chip>
             </ng-container>
           </mat-chip-list>
         </mat-cell>

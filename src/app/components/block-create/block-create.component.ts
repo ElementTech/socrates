@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { FormArray } from '@angular/forms';
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-block-create',
@@ -30,11 +31,12 @@ export class BlockCreateComponent implements OnInit {
   sum = 15;
   data: any;
   throttle = 300;
+  githubList: any;
   scrollDistance = 1.5;
   scrollUpDistance = 2;
   direction = "";
 
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('CodeMirror') private cm: any;
   submitted = false;
   blockForm: FormGroup;
@@ -43,6 +45,9 @@ export class BlockCreateComponent implements OnInit {
   Language: String[] = []
   title = "New Block"
   shared: FormArray;
+  booleans: FormArray;
+  multis: any;
+  githubConnected: any;
 
   constructor(
     public fb: FormBuilder,
@@ -83,44 +88,74 @@ export class BlockCreateComponent implements OnInit {
     for (let index = 0; index < this.blockForm.get('shared').value.length; index++) {
       this.togglePass(index+"shared",this.blockForm.get('shared').value[index].secret)
     }
+    
   }
 
   ngOnInit() { 
-    
-      this.appendItems(0, this.sum);
-   
     this.mainForm();
+    this.appendItems(0, this.sum);
     this.id = this.actRoute.snapshot.paramMap.get('id')
-    if (this.id == ""){
-      console.log("New Flow")
-    }
-    else
-    {
-      console.log("Populate Flow")
-      this.apiService.getBlock(this.id).subscribe(data => {
-        delete data.__v
-        delete data._id
-        console.log(data)
+    this.apiService.getSettings().subscribe(settings=>{
+        this.githubConnected = settings[0].github[0].githubConnected
+        if (this.githubConnected){
+          this.apiService.getGithubElements().subscribe(data=>{
+            this.githubList = data;
+          });
+        }
+        if (this.id == ""){
+          console.log("New Flow")
+        }
+        else
+        {
+          console.log("Populate Flow")
+          this.apiService.getBlock(this.id).subscribe(data => {
+            delete data.__v
+            delete data._id
+            this.blockForm.get('prescript').setValue(data.prescript)
+            this.blockForm.get('name').setValue(data.name)
+            this.blockForm.get('script').setValue(data.script)
+            this.blockForm.get('github').setValue(data.github)
+            this.blockForm.get('desc').setValue(data.desc)
+            this.blockForm.get('lang').setValue(data.lang)
+            this.shared = this.blockForm.get('shared') as FormArray;
+            data.shared.forEach(item=>{
+              this.shared.push(this.fb.group({
+                key: item.key,
+                value: item.value,
+                secret: item.secret,
+                _id: item._id
+              }));
+            });
+    
+            if (data.github && this.githubConnected){
+              console.log(data,this.githubConnected)
+              this.blockForm.get('github_path').setValue(data.github_path)
+              this.connectGit(this.githubList.find(element => element.path == data.github_path))
+              this.blockForm.get('script').setValue(atob(this.githubList.find(element => element.path == data.github_path).content))
+            }
+            this.blockForm.get('parameters').setValue(data.parameters)
+    
+            this.multis = this.blockForm.get('multis') as FormArray;
+            data.multis.forEach(item=>{
+              this.multis.push(this.fb.group({
+                key: item.key,
+                value: item.value
+              }));
+            });
+            this.booleans = this.blockForm.get('booleans') as FormArray;
+            data.booleans.forEach(item=>{
+              this.booleans.push(this.fb.group({
+                key: item.key,
+                value: item.value
+              }));
+            });
+    
+    
+          });
+        }
+    })
+   
 
-        this.blockForm.get('prescript').setValue(data.prescript)
-        this.blockForm.get('name').setValue(data.name)
-        this.blockForm.get('script').setValue(data.script)
-        
-        this.blockForm.get('desc').setValue(data.desc)
-        this.blockForm.get('lang').setValue(data.lang)
-        this.shared = this.blockForm.get('shared') as FormArray;
-        data.shared.forEach(item=>{
-          console.log(item)
-          this.shared.push(this.fb.group({
-            key: item.key,
-            value: item.value,
-            secret: item.secret,
-            _id: item._id
-          }));
-        });
-        this.blockForm.get('parameters').setValue(data.parameters)
-      });
-    }
   //  this.apiService.getLangs().subscribe(
   //     (res) => {
   //       res = JSON.parse(res.toString())
@@ -140,14 +175,26 @@ export class BlockCreateComponent implements OnInit {
     });
   }
   togglePass(i,checkbox) {
-    if (checkbox)
-    {
-      document.getElementById(i).setAttribute("type","password");
+    try {
+      if (checkbox)
+      {
+        document.getElementById(i).setAttribute("type","password");
+      }
+      else
+      {
+        document.getElementById(i).setAttribute("type","text");
+      }
+    } catch (error) {
+      if (checkbox)
+      {
+        document.getElementsByClassName("firstvalue")[0].setAttribute("type","password");
+      }
+      else
+      {
+        document.getElementsByClassName("firstvalue")[0].setAttribute("type","text");
+      }
     }
-    else
-    {
-      document.getElementById(i).setAttribute("type","text");
-    }
+
   }
 
 
@@ -198,7 +245,13 @@ export class BlockCreateComponent implements OnInit {
       ]),
       shared: this.fb.array([
       ]),
+      booleans: this.fb.array([
+      ]),
+      multis: this.fb.array([
+      ]),
       script: ['You Can Drag and Drop a Text File Here', [Validators.required]],
+      github: [false, [Validators.required]],
+      github_path: [''],
       prescript: ['false',this.prescript_enabled],
       desc: [''],
       lang: ['', [Validators.required]]
@@ -217,6 +270,21 @@ export class BlockCreateComponent implements OnInit {
     return this.blockForm.controls;
   }
 
+  connectGit(git){
+    this.blockForm.get('github_path').setValue(git.path)
+    this.blockForm.get('script').setValue(atob(git.content))
+    this.blockForm.get('github').setValue(true)
+    document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
+    document.getElementById(git.path).classList.add('bg-primary')
+  }
+
+  disconnectGit(){
+    this.blockForm.get('github_path').setValue('')
+    this.blockForm.get('script').setValue('')
+    this.blockForm.get('github').setValue(false)
+    document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
+  }
+
   createItem(): FormGroup {
     return this.fb.group({
       key: '',
@@ -224,9 +292,29 @@ export class BlockCreateComponent implements OnInit {
       secret: false,
     });
   }
+  createBooleanItem(): FormGroup {
+    return this.fb.group({
+      key: '',
+      value: ''
+    });
+  }
+  createMultiItem(): FormGroup {
+    return this.fb.group({
+      key: '',
+      value: ''
+    });
+  }
   addItem(): void {
     this.parameters = this.blockForm.get('parameters') as FormArray;
     this.parameters.push(this.createItem());
+  }
+  addBooleanItem(): void {
+    this.booleans = this.blockForm.get('booleans') as FormArray;
+    this.booleans.push(this.createBooleanItem());
+  }
+  addMultiItem(): void {
+    this.multis = this.blockForm.get('multis') as FormArray;
+    this.multis.push(this.createMultiItem());
   }
   addItemShared(): void {
     this.shared = this.blockForm.get('shared') as FormArray;
@@ -236,8 +324,16 @@ export class BlockCreateComponent implements OnInit {
     this.parameters.removeAt(index)
     
   }
+  removeItemBoolean(index): void {
+    this.booleans.removeAt(index)
+    
+  }
   removeItemShared(index): void {
     this.shared.removeAt(index)
+    
+  }
+  removeItemMulti(index): void {
+    this.multis.removeAt(index)
     
   }
 
@@ -272,6 +368,7 @@ export class BlockCreateComponent implements OnInit {
   }
 
 
+ 
   
 
 }

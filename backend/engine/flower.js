@@ -96,7 +96,7 @@ async function calculate_general_envs(run_ids){
       for (const run_object of step) 
       {
         Instance.findById(run_object.id, (error,doc) =>{
-          generalEnvVars = generalEnvVars.concat(doc.parameters).concat(doc.shared)
+          generalEnvVars = generalEnvVars.concat(doc.parameters).concat(doc.shared).concat(doc.booleans).concat(doc.multis)
           if (generalEnvVars.length >= run_ids.length)
           {
             resolve(generalEnvVars)

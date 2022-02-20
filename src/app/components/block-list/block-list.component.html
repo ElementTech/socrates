@@ -16,7 +16,8 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+     
+          <mat-cell *matCellDef="let row"><div *ngIf="row.github_path != ''"><i class="fa fa-github" aria-hidden="true"></i>&nbsp;</div>{{row.name}}</mat-cell>
         </ng-container>
     
         <!-- Color Column -->
@@ -47,11 +48,17 @@
               <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
                 <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
               </ng-container>
-              <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0'>
+              <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
                 <mat-chip   *ngFor="let param of row.parameters">No Parameters</mat-chip>
               </ng-container>
               <ng-container aria-label="Parameters" *ngIf='row.shared.length != 0'>
                 <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
+              </ng-container>
+              <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
+                <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
+              </ng-container>
+              <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
+                <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
               </ng-container>
             </mat-chip-list>
     

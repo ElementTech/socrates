@@ -4,7 +4,11 @@ export class Block {
    lang: string;
    parameters: [Object];
    shared: [Object];
+   booleans: [Object];
+   multis: [Object];
    script: string;
+   github: Boolean;
+   github_path?: string;
    prescript: string;
    description: string
 }

@@ -383,6 +383,38 @@ export class ApiService {
     )
   }
 
+// Get all blocks
+getGithubElements() {
+  return this.http.get<[Block]>(`${this.baseUri}/github`);
+}
+
+// Get block
+getGithubElement(id): Observable<any> {
+  let url = `${this.baseUri}/github/read/${id}`;
+  return this.http.get(url, {headers: this.headers}).pipe(
+    map((res: Response) => {
+      return res || {}
+    }),
+    catchError(this.errorMgmt)
+  )
+}
+
+// Update block
+updateGithubElement(id, data): Observable<any> {
+  let url = `${this.baseUri}/github/update/${id}`;
+  return this.http.put(url, data, { headers: this.headers }).pipe(
+    catchError(this.errorMgmt)
+  )
+}
+
+// Delete block
+deleteGithubElement(id): Observable<any> {
+  let url = `${this.baseUri}/github/delete/${id}`;
+  return this.http.delete(url, { headers: this.headers }).pipe(
+    catchError(this.errorMgmt)
+  )
+}
+
 
 }
 

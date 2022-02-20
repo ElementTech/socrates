@@ -12,8 +12,21 @@ let Block = new Schema({
    shared: {
       type: [Object]
    },
+   booleans: {
+      type: [Object]
+   },
+   multis: {
+      type: [Object]
+   },
    script:{
       type: String
+   },
+   github: {
+      type: Boolean
+   },
+   github_path: {
+      type: String,
+      required: false
    },
    prescript:{
       type: String

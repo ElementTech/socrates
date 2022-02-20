@@ -5,5 +5,7 @@ export class Instance {
    block: String;
    parameters: [Object];
    shared: [Object];
+   booleans: [Object];
+   multis: [Object];
    desc: String
 }

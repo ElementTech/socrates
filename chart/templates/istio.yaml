@@ -5,7 +5,7 @@ metadata:
   name: socrates
 spec:
   hosts:
-    - "socrates.int.explorium.ninja"
+    - "socrates.explorium.ninja"
   gateways:
   - "socrates-gateway"
   http:
@@ -26,14 +26,14 @@ metadata:
   name: "socrates-gateway"
 spec:
   selector:
-    istio: internal-ingressgateway # use internal Istio gateway implementation
+    istio: ingressgateway # use internal Istio gateway implementation
   servers:
   - port:
       number: 80
       name: http
       protocol: HTTP
     hosts:
-    - "socrates.int.explorium.ninja"
+    - "socrates.explorium.ninja"
     tls:
       httpsRedirect: true # sends 301 redirect for http requests
   - port:
@@ -41,5 +41,5 @@ spec:
       name: https
       protocol: HTTP
     hosts:
-    - "socrates.int.explorium.ninja"
+    - "socrates.explorium.ninja"
 {{- end }}

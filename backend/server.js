@@ -128,19 +128,22 @@ async function mySeeder() {
                "lang": "python",
                "image": "python",
                "tag": "latest",
-               "command":"python -u"
+               "command":"python -u",
+               "type": ".py"
             },
             {
                "lang": "nodejs",
                "image": "node",
                "tag": "latest",
-               "command":"node"
+               "command":"node",
+               "type": ".js"
             },
             {
                "lang": "bash",
                "image": "ubuntu",
                "tag": "latest",
-               "command":"sh"
+               "command":"sh",
+               "type": ".sh"
             }
          ]
       }

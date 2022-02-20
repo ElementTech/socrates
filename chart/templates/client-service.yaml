@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: client
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: "socrates.int.explorium.ninja"  
+    external-dns.alpha.kubernetes.io/hostname: "socrates.explorium.ninja"  
   labels:
     app: {{ template "socrates.name" . }}-client
     chart: {{ template "socrates.chart" . }}

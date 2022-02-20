@@ -15,6 +15,7 @@ import { FlowRunComponent } from './components/flow-run/flow-run.component';
 import { FlowStatsComponent } from './components/flow-stats/flow-stats.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { PortalComponent } from './components/portal/portal.component';
+import { GithubListComponent } from './components/github-list/github-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'instance-stats/:id', component: InstanceStatsComponent },
   { path: 'flow-stats/:id', component: FlowStatsComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'github-list', component: GithubListComponent },
   { path: 'flow-list', component: FlowListComponent },
   { path: 'create-flow/:id', component: FlowCreateComponent },
   { path: 'create-flow',redirectTo: 'create-flow/', pathMatch: 'full'},

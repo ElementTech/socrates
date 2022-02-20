@@ -69,7 +69,20 @@ function updateGithubTree(tree,octokit,prefixList){
     }
     else
     {
-      GithubElement.updateOne({"path": item.path},{"prefix":prefix,"content":blobdata.data.content},{upsert: true}).exec()
+      GithubElement.updateOne({"path": item.path},{"prefix":prefix,"content":blobdata.data.content,'sha':item.sha},{upsert: true}).exec()
+    }
+  })
+  console.log(tree)
+  GithubElement.find((error, data) => {
+    if (error) {
+      console.log(error)
+    } else {
+      data.forEach(item=>{
+        if (!tree.find(gitelement => gitelement.path === item.path))
+        {
+          GithubElement.find({"path": item.path}).remove().exec();
+        }
+      })
     }
   })
 }
@@ -97,6 +110,18 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
         Settings.find({}, (error, data) => {
           const prefixList = data[0].langs.map(lang=>lang.type)
           updateGithubTree(response.data.tree,octokit,prefixList)
+          Settings.findByIdAndUpdate(data[0]._id,{
+            $set: {'github':[
+              {
+                githubToken: req.body.github.githubToken,
+                githubURL: req.body.github.githubURL,
+                githubBranch: req.body.github.githubBranch,
+                githubWebhook: req.body.github.githubWebhook,
+                githubConnected: req.body.github.githubConnected,
+                sha: response.data.sha
+              }
+            ]}
+          }).exec();
         });
       } catch (error) {
         console.log(error)

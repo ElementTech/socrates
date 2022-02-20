@@ -13,12 +13,15 @@ import { ApiService } from 'src/app/service/api.service';
 export class SettingsComponent implements OnInit {
   githubURL = ""
   githubBranch = "main"
+  hide = true;
+
   githubWebhook = true
   githubToken = ""
   githubConnected = false
   ELEMENT_DATA: Element[] = [];
   SettingsID: String;
   socratesURL = window.location.protocol + "//" + window.location.host
+  sha: any;
   constructor(  private _snackBar: MatSnackBar,private apiService: ApiService) { }
   progressbarValue = 0;
   ngOnInit(): void {
@@ -65,6 +68,7 @@ export class SettingsComponent implements OnInit {
       this.githubBranch = data[0].github[0].githubBranch
       this.githubWebhook = data[0].github[0].githubWebhook
       this.githubConnected = data[0].github[0].githubConnected
+      this.sha = data[0].github[0].sha
       this.githubToken = data[0].github[0].githubToken
       if (data[0].github[0].githubConnected){
         this.startTimer(60)
@@ -138,14 +142,15 @@ export class SettingsComponent implements OnInit {
  
   }
   disconnectGithub(){
-    this.apiService.updateSetting(this.SettingsID,{"github": {"githubURL":"","githubBranch":"","githubWebhook":false,"githubConnected": false}}).subscribe(data=>{
+    this._snackBar.open('Github Connection Detached', 'Close', {
+      duration: 3000
+    });
+    this.apiService.updateSetting(this.SettingsID,{"github": {"githubURL":"","sha":"","githubBranch":"","githubWebhook":false,"githubConnected": false}}).subscribe(data=>{
       this.githubURL = ""
       this.githubBranch = ""
       this.githubWebhook = false
       this.githubConnected = false
-      this._snackBar.open('Github Connection Detached', 'Close', {
-        duration: 3000
-      });
+      this.getSettings()
   });
   }
 

@@ -50,8 +50,21 @@ webhooks.onAny(({ id, name, payload }) => {
                    repo: settings.githubURL.split("/")[1],
                    branch: settings.githubBranch
                  })
+                  console.log(response.data)
                   const prefixList = data[0].langs.map(lang=>lang.type)
                   settingsRoute.updateGithubTree(response.data.tree,octokit,prefixList)
+                  Settings.findByIdAndUpdate(data[0]._id,{
+                     $set: {'github':[
+                       {
+                         githubToken: settings.githubToken,
+                         githubURL: settings.githubURL,
+                         githubBranch: settings.githubBranch,
+                         githubWebhook: settings.githubWebhook,
+                         githubConnected: settings.githubConnected,
+                         sha: response.data.sha
+                       }
+                     ]}
+                  }).exec();
                } catch (error) {
                  console.log(error)
                }

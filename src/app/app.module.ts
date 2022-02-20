@@ -56,8 +56,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FileService } from './components/file-manager/service/file.service';
 import { FileManagerModule } from './components/file-manager/file-manager.module';
 import { PortalComponent } from './components/portal/portal.component';
-
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { GithubListComponent,DialogContentExampleDialog } from './components/github-list/github-list.component';
+import {MatDialogModule} from '@angular/material/dialog'
 
 @NgModule({
   declarations: [
@@ -75,7 +76,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     FlowRunComponent,
     FlowStatsComponent,
     ParametersComponent,
-    PortalComponent
+    PortalComponent,
+    GithubListComponent,
+    DialogContentExampleDialog
+    
   ],
   imports: [
     NgxChartsModule,
@@ -117,7 +121,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatProgressBarModule,
     MatDatepickerModule,
     MatExpansionModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
   ],
   providers: [ApiService,SidenavService,FileService],
   bootstrap: [AppComponent]

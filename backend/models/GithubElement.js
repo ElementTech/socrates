@@ -11,6 +11,9 @@ let GithubElement = new Schema({
    },
    prefix:{
       type: String
+   },
+   sha: {
+      type: String
    }
 }, {
    collection: 'github'

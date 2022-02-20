@@ -133,7 +133,10 @@
 				<mat-form-field class="example-full-width w-50" style="padding-right: 10px;" appearance="fill">
 					<mat-label>Branch to Watch</mat-label>
 					<input [(ngModel)]="githubBranch" matInput placeholder="Branch">
+					<mat-divider></mat-divider>
+					<small>{{this.sha}}</small>
 				</mat-form-field>
+			
 				<mat-form-field class="example-full-width w-50" appearance="fill">
 					<mat-label>Token for Private Repositories</mat-label>
 					<input type="password" [(ngModel)]="githubToken" matInput placeholder="Access Token">
@@ -142,12 +145,21 @@
 				  <div class="card-body">
 					<div class="d-flex justify-content-between">
 						<p>Automatically Update On Push To<code><br>{{socratesURL}}/api/github/webhooks</code></p>	
+						<mat-form-field appearance="outline" style="width: 40%;">
+							<mat-label>Secret</mat-label>
+							<input matInput [type]="hide ? 'password' : 'text'" value="theeleusinianmysteries" readonly>
+							<button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+							  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+							</button>
+						</mat-form-field>
 					</div>
+					
 					<mat-slide-toggle [(ngModel)]="githubWebhook" labelPosition="before" color="primary">
 						<mat-icon>webhook</mat-icon>
 						
 						<a href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks">Enabled Webhook</a>
 					</mat-slide-toggle>
+				
 				  </div>
 				</div>
 			

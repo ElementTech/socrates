@@ -64,6 +64,12 @@ spec:
               value: password
             - name: DB_NAME
               value: {{ template "socrates.name" . }}-mongodb-headless
+            - name: MASTER_PASSWORD
+              value: Data123!@#
+            - name: MASTER_EMAIL
+              value: devops@explorium.ai
+            - name: AUTH_SECRET
+              value: random_string
           ports:
             - name: http
               containerPort: 4000

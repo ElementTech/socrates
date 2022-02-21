@@ -2,11 +2,16 @@
   <div class="container">
     <mat-toolbar class="d-flex justify-content-center">
       <i class="fa-solid fa-user-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Users</h1>
+     
   </mat-toolbar>
-    <div class="example-header">
+    <div class="example-header d-flex">
+     
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      
       </mat-form-field>
+      <span class="example-spacer"></span>
+      <a class="btn btn-outline-dark h-25" routerLink="/register"><i class="fa fa-user-plus" aria-hidden="true"></i> Register a new user</a>
     </div>
     
     <div class="example-container mat-elevation-z8">

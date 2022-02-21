@@ -84,7 +84,9 @@ const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_ADMIN'
+  } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } }

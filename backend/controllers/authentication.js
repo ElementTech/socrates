@@ -7,6 +7,29 @@ var sendJSONresponse = function(res, status, content) {
   res.json(content);
 };
 
+module.exports.createAdmin = function(req) {
+
+  var user = new User();
+
+  user.name = req.name;
+  user.email = req.email;
+  user.admin = req.admin
+
+  user.setPassword(req.password);
+  user.save(function(err) {
+    if (err) {
+      console.error("Creating Admin Failed")
+    }
+    else
+    {
+      var token;
+      token = user.generateJwt();
+      console.log("Creating Admin User")
+    }
+  });
+
+};
+
 module.exports.register = function(req, res) {
 
   if(!req.body.name || !req.body.email || !req.body.password) {
@@ -20,6 +43,7 @@ module.exports.register = function(req, res) {
 
   user.name = req.body.name;
   user.email = req.body.email;
+  user.admin = req.body.admin
 
   user.setPassword(req.body.password);
   user.save(function(err) {
@@ -30,6 +54,7 @@ module.exports.register = function(req, res) {
     }
     else
     {
+      console.log("Creating User")
       var token;
       token = user.generateJwt();
       res.status(200);

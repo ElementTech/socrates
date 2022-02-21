@@ -64,6 +64,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuardService } from './service/auth-guard.service';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,9 @@ import { AuthGuardService } from './service/auth-guard.service';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    DialogContentExampleDialog
+    DialogContentExampleDialog,
+    UnauthorizedComponent,
+    UserListComponent
     
   ],
   imports: [

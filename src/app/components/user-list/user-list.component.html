@@ -1,0 +1,64 @@
+
+  <div class="container">
+    <mat-toolbar class="d-flex justify-content-center">
+      <i class="fa-solid fa-user-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Users</h1>
+  </mat-toolbar>
+    <div class="example-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    
+    <div class="example-container mat-elevation-z8">
+      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-table [dataSource]="dataSource" matSort>
+    
+        <ng-container matColumnDef="run" >
+          <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.run">
+            <mat-chip-list class="d-flex">
+              <button mat-button [routerLink]="['/flow-run/', row._id]"><i class="fa-solid fa-play-circle fa-3x" aria-hidden="true"></i></button>
+              <img *ngIf="row.lastrun == false" matListAvatar src="../../../assets/success.png">
+              <img *ngIf="row.lastrun == true" matListAvatar src="../../../assets/fail.png">
+              <img *ngIf="row.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
+              <img *ngIf="row.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
+              <mat-chip class="flex-fill">{{row.numruns}}</mat-chip>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.email}}</mat-cell>
+        </ng-container>
+      
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+        </ng-container>
+    
+  
+        <ng-container matColumnDef="admin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Admin</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.desc">{{row.admin}}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="configure">
+          <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.configure">
+            <button mat-button (click)="removeUser(row._id)" *ngIf="row.name != 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+            <button mat-button (click)="makeAdmin(row._id)" *ngIf="!row.admin"><mat-icon aria-hidden="false" style="color: blue;">admin_panel_settings</mat-icon>Make Admin</button>
+            <button mat-button (click)="revokeAdmin(row._id)" *ngIf="row.admin && row.name != 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">admin_panel_settings</mat-icon>Revoke Admin</button>
+          </mat-cell>
+        </ng-container>
+  
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    
+   
+    </div>
+  
+  </div>

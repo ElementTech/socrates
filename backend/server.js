@@ -111,6 +111,7 @@ const flowRoute = require('./routes/flow.route');
 const fileRoute = require('./routes/file.route');
 const githubRoute = require('./routes/github.route');
 var routesApi = require('./routes/index');
+const UserRoute = require('./routes/users.route');
 
 // let Instances = require('./models/Instances');
 const app = express();
@@ -133,6 +134,7 @@ app.use('/api/flow', flowRoute)
 app.use('/api/parameter', parameterRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)
+app.use('/api/user', UserRoute)
 app.use('/api', routesApi);
 app.use(createNodeMiddleware(webhooks))
 // app.use('/api/web', webRequestsRoute)
@@ -178,10 +180,13 @@ async function mySeeder() {
    // ...
 
    await seed.save()
+
+   
 }
 
 
 mySeeder();
+require('./controllers/authentication').createAdmin({name:"admin",password:process.env.MASTER_PASSWORD ? process.env.MASTER_PASSWORD : "123456",admin:true,email:process.env.MASTER_EMAIL ? process.env.MASTER_EMAIL : 'admin@socrates.com'})
 // Create port
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {

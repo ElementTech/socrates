@@ -1,7 +1,7 @@
 
-<mat-card>
+<mat-card class="container">
     <mat-card-header>
-        <mat-card-title>Your profile</mat-card-title>
+        <mat-card-title><i class="fa fa-user" aria-hidden="true"></i> Your profile</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="form-horizontal">
@@ -12,6 +12,10 @@
         <div class="form-group">
           <label class="col-sm-3 control-label">Email</label>
           <p class="form-control-static">{{ details?.email }}</p>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Are You Admin?</label>
+          <p class="form-control-static">{{ details?.admin }}</p>
         </div>
       </div>
     </mat-card-content>

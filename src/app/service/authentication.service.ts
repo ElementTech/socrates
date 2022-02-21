@@ -8,6 +8,7 @@ export interface UserDetails {
   _id: string;
   email: string;
   name: string;
+  admin: boolean;
   exp: number;
   iat: number;
 }
@@ -19,6 +20,7 @@ interface TokenResponse {
 export interface TokenPayload {
   email: string;
   password: string;
+  admin: boolean;
   name?: string;
 }
 
@@ -47,6 +49,18 @@ export class AuthenticationService {
       payload = token.split('.')[1];
       payload = window.atob(payload);
       return JSON.parse(payload);
+    } else {
+      return null;
+    }
+  }
+
+  public isAdmin(): UserDetails {
+    const token = this.getToken();
+    let payload;
+    if (token) {
+      payload = token.split('.')[1];
+      payload = window.atob(payload);
+      return JSON.parse(payload)['admin'];
     } else {
       return null;
     }

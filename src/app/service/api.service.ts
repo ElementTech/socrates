@@ -416,6 +416,39 @@ deleteGithubElement(id): Observable<any> {
 }
 
 
+// Get all blocks
+getUsers() {
+  return this.http.get<[Block]>(`${this.baseUri}/user`);
+}
+
+// Get block
+getUser(id): Observable<any> {
+  let url = `${this.baseUri}/user/read/${id}`;
+  return this.http.get(url, {headers: this.headers}).pipe(
+    map((res: Response) => {
+      return res || {}
+    }),
+    catchError(this.errorMgmt)
+  )
+}
+
+// Update block
+updateUser(id, data): Observable<any> {
+  let url = `${this.baseUri}/user/update/${id}`;
+  return this.http.put(url, data, { headers: this.headers }).pipe(
+    catchError(this.errorMgmt)
+  )
+}
+
+// Delete block
+deleteUser(id): Observable<any> {
+  let url = `${this.baseUri}/user/delete/${id}`;
+  return this.http.delete(url, { headers: this.headers }).pipe(
+    catchError(this.errorMgmt)
+  )
+}
+
+
 }
 
 // Instances

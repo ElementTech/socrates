@@ -24,6 +24,10 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  admin: {
+    type: Boolean,
+    required: true
+  },
   hash: String,
   salt: String
 });
@@ -46,8 +50,9 @@ userSchema.methods.generateJwt = function() {
     _id: this._id,
     email: this.email,
     name: this.name,
+    admin: this.admin,
     exp: parseInt(expiry.getTime() / 1000),
-  }, "MY_SECRET"); // DO NOT KEEP YOUR SECRET IN THE CODE!
+  }, process.env.AUTH_SECRET ? process.env.AUTH_SECRET: "MY_SECRET"); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
 userSchema.plugin(uniqueValidator)
-mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

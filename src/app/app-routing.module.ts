@@ -20,38 +20,74 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuardService } from './service/auth-guard.service';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
   { path: 'home', component: HomeComponent },
-  { path: 'portal', component: PortalComponent },
+  { path: 'portal', component: PortalComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
 
-  { path: 'create-block/:id', component: BlockCreateComponent },
+  { path: 'create-block/:id', component: BlockCreateComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
   { path: 'create-block',redirectTo: 'create-block/', pathMatch: 'full'},
 
-  { path: 'create-instance/:id', component: InstanceCreateComponent },
-  { path: 'create-instance', redirectTo: 'create-instance/', pathMatch: 'full' },
+  { path: 'create-instance/:id', component: InstanceCreateComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'create-instance', redirectTo: 'create-instance/', pathMatch: 'full'},
 
-  { path: 'blocks-list/:name', component: BlockListComponent },
-  { path: 'blocks-list',redirectTo: 'blocks-list/', pathMatch: 'full' },
+  { path: 'blocks-list/:name', component: BlockListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'blocks-list',redirectTo: 'blocks-list/', pathMatch: 'full'},
 
-  { path: 'instance-list/:name', component: InstanceListComponent },
+  { path: 'instance-list/:name', component: InstanceListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
   { path: 'instance-list',redirectTo: 'instance-list/', pathMatch: 'full'},
 
-  { path: 'instance-run/:id', component: InstanceRunComponent },
-  { path: 'instance-stats/:id', component: InstanceStatsComponent },
-  { path: 'flow-stats/:id', component: FlowStatsComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: 'github-list', component: GithubListComponent },
-  { path: 'flow-list', component: FlowListComponent },
-  { path: 'create-flow/:id', component: FlowCreateComponent },
+  { path: 'instance-run/:id', component: InstanceRunComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'instance-stats/:id', component: InstanceStatsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'flow-stats/:id', component: FlowStatsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_ADMIN'
+  } },
+  { path: 'user-list', component: UserListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_ADMIN'
+  } },
+  { path: 'github-list', component: GithubListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'flow-list', component: FlowListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'create-flow/:id', component: FlowCreateComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }   },
   { path: 'create-flow',redirectTo: 'create-flow/', pathMatch: 'full'},
-  { path: 'flow-run/:id', component: FlowRunComponent },
-  { path: 'parameters', component: ParametersComponent },
+  { path: 'flow-run/:id', component: FlowRunComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'parameters', component: ParametersComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
 
   { path: 'login', component: LoginComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] }
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  } }
 ];
 
 @NgModule({

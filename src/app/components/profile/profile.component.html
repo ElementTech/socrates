@@ -1,24 +1,29 @@
+<div class="container w-50">
+  <h2><i class="fa fa-user-circle" aria-hidden="true"></i> Your Profile</h2>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span class="badge bg-primary rounded-pill">Name</span>
 
-<mat-card class="container">
-    <mat-card-header>
-        <mat-card-title><i class="fa fa-user" aria-hidden="true"></i> Your profile</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="form-horizontal">
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Full name</label>
-          <p class="form-control-static">{{ details?.name }}</p>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Email</label>
-          <p class="form-control-static">{{ details?.email }}</p>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Are You Admin?</label>
-          <p class="form-control-static">{{ details?.admin }}</p>
-        </div>
-      </div>
-    </mat-card-content>
- 
+      {{ details?.name }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span class="badge bg-primary rounded-pill">Email</span>
 
-</mat-card>
+      {{ details?.email }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span class="badge bg-primary rounded-pill">Are You Admin?</span>
+
+      {{ details?.admin }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <mat-form-field floatPlaceholder="auto">
+          <input matInput [(ngModel)]="password"
+                 type="password"
+                 required
+                 placeholder="password">
+      </mat-form-field>
+      <button mat-raised-button (click)="setPassword()" color="primary">Change Password</button>
+    </li>
+  </ul>
+</div>

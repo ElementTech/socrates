@@ -75,7 +75,7 @@ export class AuthenticationService {
     }
   }
 
-  private request(method: 'post'|'get', type: 'login'|'register'|'profile', user?: TokenPayload): Observable<any> {
+  private request(method: 'post'|'get', type: 'login'|'register'|'profile'|'setpwd', user?: TokenPayload): Observable<any> {
     let base;
 
     if (method === 'post') {
@@ -98,6 +98,11 @@ export class AuthenticationService {
 
   public register(user: TokenPayload): Observable<any> {
     return this.request('post', 'register', user);
+  }
+
+  public setpwd(user: TokenPayload): Observable<any> {
+    console.log(user)
+    return this.request('post', 'setpwd', user);
   }
 
   public login(user: TokenPayload): Observable<any> {

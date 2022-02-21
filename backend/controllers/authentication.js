@@ -30,6 +30,36 @@ module.exports.createAdmin = function(req) {
 
 };
 
+module.exports.setpwd = async function(req, res) {
+
+  if(!req.body.email || !req.body.password) {
+    sendJSONresponse(res, 400, {
+      "message": "Password is required"
+    });
+    return;
+  }
+  const user = await User.findOne({email:req.body.email});
+  user.setPassword(req.body.password);
+  await user.save({validateModifiedOnly: true},function(err) {
+    if (err) {
+      console.log(err)
+      sendJSONresponse(res, 400, {
+        "message": "Error Updating Password"
+      });
+    }
+    else
+    {
+      console.log("Updating User Password")
+      res.status(200);
+      res.json({
+        "status" : "success"
+      });
+    }
+  });
+
+};
+
+
 module.exports.register = function(req, res) {
 
   if(!req.body.name || !req.body.email || !req.body.password) {

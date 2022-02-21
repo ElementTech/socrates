@@ -92,11 +92,11 @@ function writeAndRun(path,data,script)
       docker.createContainer({
         Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
         Env: workerData.instance.parameters.map(doc=>{
-          if (doc.key == "" || doc.value == "")
+          if (doc.key.toString() == "" || doc.value.toString() == "")
           {
             return `no_params=true`
           }
-          return `${doc.key}=${doc.value}`
+          return `${doc.key.toString()}=${doc.value}`
         }),
         HostConfig: {
           AutoRemove: false,

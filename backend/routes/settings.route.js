@@ -6,7 +6,8 @@ const path = require('path');
 // Settings model
 let Settings = require('../models/Settings');
 const GithubElement = require('../models/GithubElement');
-
+const auth = require("../middleware/auth");
+settingsRoute.use(auth)
 // Add Settings
 settingsRoute.route('/create').post((req, res, next) => {
   Settings.create(req.body, (error, data) => {

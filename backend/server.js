@@ -101,6 +101,8 @@ source.onmessage = (event) => {
     .catch(console.error);
 };
 
+
+
 // Setting up port with express js
 const blockRoute = require('./routes/block.route')
 const instanceRoute = require('./routes/instance.route')
@@ -120,6 +122,7 @@ app.use(bodyParser.urlencoded({
    extended: false
 }));
 app.use(passport.initialize());
+
 app.use(cors()); 
 app.use(express.static(path.join(__dirname, 'dist/socrates')));
 app.use('/', express.static(path.join(__dirname, 'dist/socrates')));

@@ -7,7 +7,8 @@ const parameterRoute = express.Router();
 let Parameter = require('../models/Parameter');
 let Block = require('../models/Block');
 let Instance = require('../models/Instance');
-
+const auth = require("../middleware/auth");
+parameterRoute.use(auth)
 // Add Parameter
 parameterRoute.route('/create').post((req, res, next) => {
   Parameter.create(req.body, (error, data) => {

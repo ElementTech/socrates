@@ -4,7 +4,8 @@ const FileRoute = express.Router();
 
 // File model
 let File = require('../models/FileElement');
-
+const auth = require("../middleware/auth");
+FileRoute.use(auth)
 // Add File
 FileRoute.route('/create').post((req, res, next) => {
   File.create(req.body, (error, data) => {

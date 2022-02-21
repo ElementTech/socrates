@@ -16,13 +16,20 @@ export interface IFileService {
 
 @Injectable()
 export class FileService implements IFileService {
+  private token: string;
+  private getToken(): string {
+    if (!this.token) {
+      this.token = localStorage.getItem('mean-token');
+    }
+    return this.token;
+  }
   private map = new Map<string, FileElement>();
 
   constructor(private http: HttpClient) {}
 
   //baseUri:string = 'http://'+environment.api+':4000/api';
   baseUri:string = window.location.protocol + '//' + window.location.host + '/api'
-  headers = new HttpHeaders().set('Content-Type', 'application/json');
+  headers = new HttpHeaders().set('Content-Type', 'application/json').set("Authorization", `Bearer ${this.getToken()}`);
 
   // Error handling 
   errorMgmt(error: HttpErrorResponse) {
@@ -41,7 +48,7 @@ export class FileService implements IFileService {
   add(fileElement: FileElement): Observable<any> {
     let url = `${this.baseUri}/file/create`;
     fileElement.id = v4();
-    return this.http.post(url, fileElement)
+    return this.http.post(url, fileElement, { headers: this.headers })
     .pipe(
       tap( // Log the result or error
       {
@@ -113,7 +120,7 @@ export class FileService implements IFileService {
   }
 
   getAll() {
-    return this.http.get<any>(`${this.baseUri}/file`)
+    return this.http.get<any>(`${this.baseUri}/file`, { headers: this.headers })
     .pipe(
       tap( // Log the result or error
       {

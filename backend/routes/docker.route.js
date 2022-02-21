@@ -6,7 +6,8 @@ var childProcess = require('child_process')
 
 // Docker model
 let DockerInstance = require('../models/DockerInstance');
-
+const auth = require("../middleware/auth");
+dockerRoute.use(auth)
 // Add Docker
 dockerRoute.route('/create').post((req, res, next) => {
   DockerInstance.create(req.body, (error, data) => {

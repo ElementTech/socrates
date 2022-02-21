@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const GithubRoute = express.Router();
-
+const auth = require("../middleware/auth");
+GithubRoute.use(auth)
 // Github model
 let Github = require('../models/GithubElement');
 

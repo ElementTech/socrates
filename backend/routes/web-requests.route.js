@@ -3,7 +3,8 @@ const app = express();
 const webRequestsRoute = express.Router();
 const fetch = require('node-fetch');
 
-
+const auth = require("../middleware/auth");
+webRequestsRoute.use(auth)
 
 // Get All Blocks
 webRequestsRoute.route('/langs').get((req, res) => {

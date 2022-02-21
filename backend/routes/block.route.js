@@ -5,7 +5,8 @@ const blockRoute = express.Router();
 // Block model
 let Block = require('../models/Block');
 let Instance = require('../models/Instance');
-
+const auth = require("../middleware/auth");
+blockRoute.use(auth)
 // Add Block
 blockRoute.route('/create').post((req, res, next) => {
   Block.create(req.body, (error, data) => {

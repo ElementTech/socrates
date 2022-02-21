@@ -32,15 +32,15 @@
       <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-list'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
       <a mat-button routerLinkActive="activebutton" [routerLink]="'/parameters'"> <i class="fa-solid fa-th-list fa-lg" aria-hidden="true"></i> Parameters </a>
       <span class="example-spacer"></span>
-      <a mat-button routerLinkActive="activebutton" [routerLink]="'/user-list'"> <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>  Users </a>
       <a mat-button routerLinkActive="activebutton" [routerLink]="'/github-list'"> <i class="fa fa-github fa-lg" aria-hidden="true"></i>  Github </a>
+      <a mat-button routerLinkActive="activebutton" [routerLink]="'/user-list'"> <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>  Users </a>
       <a mat-button routerLinkActive="activebutton" [routerLink]="'/settings'"> <i class="fa-solid fa-cog fa-lg" aria-hidden="true"></i> Settings </a>
       <a mat-button routerLinkActive="activebutton" [routerLink]="'/home'"> <mat-icon aria-hidden="false">help</mat-icon>  Help </a>
-
       <span class="fill-remaining-space">
         <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
           <i class="fa fa-user-circle fa-2x" [ngStyle]="{'color': (auth.isLoggedIn()) ? 'lightgreen' : 'white'}" aria-hidden="true"></i>
         </button>
+        
         <mat-menu #menu="matMenu" [overlapTrigger]="false">
           <button (click)="auth.logout()" mat-menu-item *ngIf="auth.isLoggedIn()">
             <mat-icon>logout</mat-icon>
@@ -56,6 +56,8 @@
           </button>
         </mat-menu>
       </span>
+      <button class="btn btn-dark" *ngIf="auth.isLoggedIn()">{{auth.getUserDetails().name}}</button>
+
     </mat-toolbar>
     
     <mat-sidenav-container>

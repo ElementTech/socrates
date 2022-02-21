@@ -8,7 +8,8 @@ let Flow = require('../models/Flow');
 let FlowInstance = require('../models/FlowInstance');
 let Instance = require('../models/Instance');
 const { ObjectId } = require('mongodb');
-
+const auth = require("../middleware/auth");
+flowRoute.use(auth)
 // Add Flow
 flowRoute.route('/create').post((req, res, next) => {
   const newSteps = []

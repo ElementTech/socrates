@@ -13,12 +13,18 @@ import { environment } from 'src/environments/environment';
 })
 
 export class ApiService {
-
+  private token: string;
+  private getToken(): string {
+    if (!this.token) {
+      this.token = localStorage.getItem('mean-token');
+    }
+    return this.token;
+  }
 
   //baseUri:string = 'http://'+environment.api+':4000/api';
   baseUri:string = window.location.protocol + '//' + window.location.host + '/api'
   //webUri:string = 'http://localhost:4000/api/web';
-  headers = new HttpHeaders().set('Content-Type', 'application/json');
+  headers = new HttpHeaders().set('Content-Type', 'application/json').set("Authorization", `Bearer ${this.getToken()}`);
 
   constructor(private http: HttpClient) { }
 
@@ -31,7 +37,7 @@ export class ApiService {
   // Create
   bulkParameter(data): Observable<any> {
     let url = `${this.baseUri}/parameter/bulk`;
-    return this.http.post(url, data)
+    return this.http.post(url,data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -40,7 +46,7 @@ export class ApiService {
   // Create
   createParameter(data): Observable<any> {
     let url = `${this.baseUri}/parameter/create`;
-    return this.http.post(url, data)
+    return this.http.post(url, data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -48,7 +54,7 @@ export class ApiService {
 
   // Get all blocks
   getParameters() {
-    return this.http.get(`${this.baseUri}/parameter`);
+    return this.http.get(`${this.baseUri}/parameter`,{headers: this.headers});
   }
 
   // Get block
@@ -82,7 +88,7 @@ export class ApiService {
   // Create
   createBlock(data): Observable<any> {
     let url = `${this.baseUri}/block/create`;
-    return this.http.post(url, data)
+    return this.http.post(url,data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -90,7 +96,7 @@ export class ApiService {
 
   // Get all blocks
   getBlocks() {
-    return this.http.get<[Block]>(`${this.baseUri}/block`);
+    return this.http.get<[Block]>(`${this.baseUri}/block`,{headers: this.headers});
   }
 
   // Get block
@@ -137,7 +143,7 @@ export class ApiService {
   // Create
   createInstance(data): Observable<any> {
     let url = `${this.baseUri}/instance/create`;
-    return this.http.post(url, data)
+    return this.http.post(url, data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -145,7 +151,7 @@ export class ApiService {
 
   // Get all blocks
   getInstances() {
-    return this.http.get<[Instance]>(`${this.baseUri}/instance`);
+    return this.http.get<[Instance]>(`${this.baseUri}/instance`,{headers: this.headers});
   }
 
   // Get block
@@ -177,7 +183,7 @@ export class ApiService {
 
   runInstance(data): Observable<any> {
     let url = `${this.baseUri}/instance/run`;
-    return this.http.post(url, data)
+    return this.http.post(url,data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -185,7 +191,7 @@ export class ApiService {
 
   runFlow(data): Observable<any> {
     let url = `${this.baseUri}/flow/run`;
-    return this.http.post(url, data)
+    return this.http.post(url,data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -196,7 +202,7 @@ export class ApiService {
 
   // Get all blocks
   getDockerInstances() {
-    return this.http.get(`${this.baseUri}/docker`);
+    return this.http.get(`${this.baseUri}/docker`,{headers: this.headers});
   }
 
   // Get block
@@ -320,7 +326,7 @@ export class ApiService {
   
     // Get all blocks
     getSettings() {
-      return this.http.get(`${this.baseUri}/settings`);
+      return this.http.get(`${this.baseUri}/settings`,{headers: this.headers});
     }
   
     // Get block
@@ -345,7 +351,7 @@ export class ApiService {
   // Create
   createFlow(data): Observable<any> {
     let url = `${this.baseUri}/flow/create`;
-    return this.http.post(url, data)
+    return this.http.post(url,data,{headers: this.headers})
       .pipe(
         catchError(this.errorMgmt)
       )
@@ -353,7 +359,7 @@ export class ApiService {
 
   // Get all blocks
   getFlows() {
-    return this.http.get<[Flow]>(`${this.baseUri}/flow`);
+    return this.http.get<[Flow]>(`${this.baseUri}/flow`,{headers: this.headers});
   }
 
   // Get block
@@ -385,7 +391,7 @@ export class ApiService {
 
 // Get all blocks
 getGithubElements() {
-  return this.http.get<[Block]>(`${this.baseUri}/github`);
+  return this.http.get<[Block]>(`${this.baseUri}/github`,{headers: this.headers});
 }
 
 // Get block
@@ -418,7 +424,7 @@ deleteGithubElement(id): Observable<any> {
 
 // Get all blocks
 getUsers() {
-  return this.http.get<[Block]>(`${this.baseUri}/user`);
+  return this.http.get<[Block]>(`${this.baseUri}/user`,{headers: this.headers});
 }
 
 // Get block

@@ -4,7 +4,8 @@ const UserRoute = express.Router();
 
 // User model
 let User = require('../models/users');
-
+const auth = require("../middleware/auth");
+UserRoute.use(auth)
 // Add User
 UserRoute.route('/create').post((req, res, next) => {
   User.create(req.body, (error, data) => {

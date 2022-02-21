@@ -18,7 +18,7 @@ module.exports.createAdmin = function(req) {
   user.setPassword(req.password);
   user.save(function(err) {
     if (err) {
-      console.error("Creating Admin Failed")
+      console.error("Admin User Already Exists. Skipping Creation...")
     }
     else
     {

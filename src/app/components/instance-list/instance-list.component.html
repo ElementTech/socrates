@@ -76,7 +76,7 @@
                 </mat-chip>
             
             </ng-container>
-            <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
+            <ng-container aria-label="Parameters" *ngIf='row.parameters.length == 0 && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
               <mat-chip>No Parameters</mat-chip>
             </ng-container>
             <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>

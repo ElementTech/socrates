@@ -6,6 +6,8 @@ let mongoose = require('mongoose');
 // Instance model
 let Instance = require('../models/Instance');
 let Flow = require('../models/Flow');
+const auth = require("../middleware/auth");
+instanceRoute.use(auth)
 // Add Instance
 instanceRoute.route('/create').post((req, res, next) => {
   Instance.create(req.body, (error, data) => {

@@ -42,7 +42,9 @@
         <ng-container matColumnDef="configure">
           <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.configure">
-            <button mat-button [routerLink]="['/create-flow/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
+
+            <!-- Flow Edit Is Broken for some reason -->
+            <!-- <button mat-button [routerLink]="['/create-flow/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button> -->
             <button mat-button (click)="removeFlow(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
             <a [routerLink]="['/flow-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
           </mat-cell>

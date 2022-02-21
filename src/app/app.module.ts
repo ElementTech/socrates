@@ -59,6 +59,11 @@ import { PortalComponent } from './components/portal/portal.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GithubListComponent,DialogContentExampleDialog } from './components/github-list/github-list.component';
 import {MatDialogModule} from '@angular/material/dialog'
+import { AuthenticationService } from './service/authentication.service';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuardService } from './service/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -78,16 +83,19 @@ import {MatDialogModule} from '@angular/material/dialog'
     ParametersComponent,
     PortalComponent,
     GithubListComponent,
+    LoginComponent,
+    RegisterComponent,
+    ProfileComponent,
     DialogContentExampleDialog
     
   ],
   imports: [
     NgxChartsModule,
     BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    HttpClientModule,
     CodemirrorModule,
     NgxPaginationModule,
     BrowserAnimationsModule,
@@ -124,7 +132,7 @@ import {MatDialogModule} from '@angular/material/dialog'
     MatNativeDateModule,
     MatDialogModule
   ],
-  providers: [ApiService,SidenavService,FileService],
+  providers: [ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService],
   bootstrap: [AppComponent]
 })
 

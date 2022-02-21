@@ -10,6 +10,12 @@ const health = require('@cloudnative/health-connect');
 const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
 const EventSource = require('eventsource')
 const { Octokit } = require("@octokit/core");
+
+// User Manual
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var passport = require('passport');
 let healthcheck = new health.HealthChecker();
 mongoose.plugin(upsertMany);
 // Connecting with mongo db
@@ -25,6 +31,8 @@ mongoose.connect(dbConfig.db, {
       process.exit(error)
    }
 )
+require('./models/users');
+require('./config/passport');
 let Settings = require('./models/Settings');
 const settingsRoute = require('./routes/settings.route');
 const webhooks = new Webhooks({
@@ -102,12 +110,15 @@ const parameterRoute = require('./routes/parameter.route');
 const flowRoute = require('./routes/flow.route');
 const fileRoute = require('./routes/file.route');
 const githubRoute = require('./routes/github.route');
+var routesApi = require('./routes/index');
+
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
    extended: false
 }));
+app.use(passport.initialize());
 app.use(cors()); 
 app.use(express.static(path.join(__dirname, 'dist/socrates')));
 app.use('/', express.static(path.join(__dirname, 'dist/socrates')));
@@ -122,6 +133,7 @@ app.use('/api/flow', flowRoute)
 app.use('/api/parameter', parameterRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)
+app.use('/api', routesApi);
 app.use(createNodeMiddleware(webhooks))
 // app.use('/api/web', webRequestsRoute)
 
@@ -180,6 +192,14 @@ const server = app.listen(port, () => {
 app.use((req, res, next) => {
    next(createError(404));
 });
+
+app.use(function (err, req, res, next) {
+   if (err.name === 'UnauthorizedError') {
+     res.status(401);
+     res.json({"message" : err.name + ": " + err.message});
+   }
+ });
+ 
 
 // error handler
 app.use(function (err, req, res, next) {

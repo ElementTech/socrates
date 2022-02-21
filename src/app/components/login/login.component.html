@@ -1,0 +1,25 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+    <mat-card-header>
+      <mat-card-title>Log in</mat-card-title>
+      <p class="lead">Not a member? Please <a routerLink="/register">register</a> instead.</p>
+
+    </mat-card-header>
+    <form class="example-form" (submit)="login()">
+      <mat-card-content>
+        <mat-form-field class="example-full-width">
+          <input type="email" matInput name="email" placeholder="Enter email" [(ngModel)]="credentials.email">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input type="password" matInput name="password" placeholder="Password" [(ngModel)]="credentials.password">
+        </mat-form-field>
+      </mat-card-content>
+      <button mat-stroked-button color="accent" class="btn-block">Log in</button>
+    </form>
+    <p *ngIf="error" class="error">
+      {{ error }}
+    </p>
+
+  </mat-card>
+
+</div>

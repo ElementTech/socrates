@@ -16,6 +16,10 @@ import { FlowStatsComponent } from './components/flow-stats/flow-stats.component
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { PortalComponent } from './components/portal/portal.component';
 import { GithubListComponent } from './components/github-list/github-list.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuardService } from './service/auth-guard.service';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -43,7 +47,11 @@ const routes: Routes = [
   { path: 'create-flow/:id', component: FlowCreateComponent },
   { path: 'create-flow',redirectTo: 'create-flow/', pathMatch: 'full'},
   { path: 'flow-run/:id', component: FlowRunComponent },
-  { path: 'parameters', component: ParametersComponent }
+  { path: 'parameters', component: ParametersComponent },
+
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

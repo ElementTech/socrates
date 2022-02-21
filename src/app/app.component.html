@@ -38,12 +38,20 @@
 
       <span class="fill-remaining-space">
         <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
-          <i class="fa fa-user-circle fa-2x" aria-hidden="true"></i>
+          <i class="fa fa-user-circle fa-2x" [ngStyle]="{'color': (auth.isLoggedIn()) ? 'lightgreen' : 'white'}" aria-hidden="true"></i>
         </button>
         <mat-menu #menu="matMenu" [overlapTrigger]="false">
-          <button mat-menu-item>
-            <mat-icon>exit_to_app</mat-icon>
-            <span>Coming Soon</span>
+          <button (click)="auth.logout()" mat-menu-item *ngIf="auth.isLoggedIn()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+          <button routerLink="/login" mat-menu-item *ngIf="!auth.isLoggedIn()">
+            <mat-icon>assignment_ind</mat-icon>
+            <span>Login</span>
+          </button>
+          <button routerLink="/profile" mat-menu-item *ngIf="auth.isLoggedIn()">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
           </button>
         </mat-menu>
       </span>

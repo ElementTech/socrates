@@ -83,7 +83,10 @@
         </div>
     </mat-step>
       <mat-step [stepControl]="instanceForm" errorMessage="Name and Language is required.">
-      
+        <div class="text-center">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+        </div>
           <ng-template matStepLabel>Fill in the Instance's Information</ng-template>
           <div class="row">
   
@@ -180,17 +183,14 @@
   
           </div>
   
-  
+
   
             <mat-form-field class="col-6" appearance="fill">
               <mat-label>Description</mat-label>
               <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
             </mat-form-field>
           </div>
-          <div class="text-center">
-            <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
-          </div>
+
   
       </mat-step>
 

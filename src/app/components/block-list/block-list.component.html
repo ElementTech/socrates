@@ -12,6 +12,13 @@
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+          
+          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]"></mat-cell>
+        </ng-container>
     
         <!-- Name Column -->
         <ng-container matColumnDef="name">

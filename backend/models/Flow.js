@@ -11,7 +11,11 @@ let Flow = new Schema({
    },
    desc: {
       type: String
-   }
+   },
+   image: {
+      type: String,
+      required: false
+   },
 }, {
    collection: 'flows'
 })

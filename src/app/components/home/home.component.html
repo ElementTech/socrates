@@ -13,7 +13,7 @@
     </div>
      -->
   <div class="row mb-0 page-section m-5">
-    <mat-card class="example-card" style="margin-right: 1em;">
+    <mat-card class="example-card" >
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"> <i class="fa-solid fa-cube fa-3x" aria-hidden="true"></i> </div>
           <mat-card-title>Block</mat-card-title>
@@ -29,7 +29,7 @@
           <button mat-button [routerLink]="'/create-block'"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
         </mat-card-actions>
       </mat-card>
-      <mat-card class="example-card" style="margin-right: 1em;">
+      <mat-card class="example-card">
         <mat-card-header>
           <div mat-card-avatar class="example-header-image" style="margin-right: 1em;"> <i class="fa-solid fa-cubes fa-3x" aria-hidden="true"></i> </div>
           <mat-card-title>Instance</mat-card-title>
@@ -59,6 +59,36 @@
         <mat-card-actions>
           <button mat-button [routerLink]="'/flow-list'">Flows</button>
           <button mat-button [routerLink]="'/create-flow'"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+        </mat-card-actions>
+      </mat-card> 
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image" style="margin-right: 1em;"> <i class="fa fa-photo fa-3x" aria-hidden="true"></i> </div>
+          <mat-card-title>Icons</mat-card-title>
+          <mat-card-subtitle>Feature</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Icons allow you to give <code>Flows, Instances and Blocks</code> an image on creation that will follow them wherever they are.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button [routerLink]="'/file-upload'">Icons</button>
+        </mat-card-actions>
+      </mat-card> 
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image" style="margin-right: 1em;"> <i class="fa fa-list fa-3x" aria-hidden="true"></i> </div>
+          <mat-card-title>Shared Parameters</mat-card-title>
+          <mat-card-subtitle>Feature</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Parameters allow you to define shared Keys and Values which are fixed into Components. A change in a Shared parameter will propegate to all <code>Flows, Instances and Blocks</code>.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button [routerLink]="'/parameters'">Parameters</button>
         </mat-card-actions>
       </mat-card> 
   </div>

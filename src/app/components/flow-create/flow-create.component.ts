@@ -2,7 +2,10 @@ import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '
 import { Component, OnInit,NgZone, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 import { SidenavService } from 'src/app/service/sidenav.service';
 import { ApiService } from '../../service/api.service';
 @Component({
@@ -13,6 +16,8 @@ import { ApiService } from '../../service/api.service';
 export class FlowCreateComponent implements OnInit {
 
   flowForm: FormGroup;
+  Images?: Observable<any>;
+  imageUrls = {};
   array = [];
   steps: any = [[]];
   id: any = "";
@@ -24,27 +29,10 @@ export class FlowCreateComponent implements OnInit {
   direction = "";
   submitted: boolean;
 
-  ngOnInit(): void {
-    // this.sidenav.close();
-    this.mainForm()
-    this.id = this.actRoute.snapshot.paramMap.get('id')
-    if (this.id == ""){
-      console.log("New Flow")
-    }
-    else
-    {
-      console.log("Populate Flow")
-      this.apiService.getFlow(this.id).subscribe(data => {
-        delete data.__v
-        delete data._id
-        data.steps = data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
-        this.flowForm.setValue(data)
-        this.steps=data.steps
-        console.log(this.steps)
-      });
-    }
-  }
+ 
   constructor(  
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     private sidenav: SidenavService,
     public fb: FormBuilder,
     private _snackBar: MatSnackBar,
@@ -80,7 +68,38 @@ export class FlowCreateComponent implements OnInit {
     }
     this.flowForm.get('steps').setValue(this.steps)
   }
+  ngOnInit(): void {
+    // this.sidenav.close();
+    this.Images = this.uploadService.getFiles()
+    this.uploadService.getFiles().subscribe(data=>{
+      
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
 
+    })
+    this.mainForm()
+    this.id = this.actRoute.snapshot.paramMap.get('id')
+    if (this.id == ""){
+      console.log("New Flow")
+    }
+    else
+    {
+      console.log("Populate Flow")
+      this.apiService.getFlow(this.id).subscribe(data => {
+        delete data.__v
+        delete data._id
+        this.flowForm.setValue(data)
+        this.steps= data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
+        console.log(this.steps)
+      });
+    }
+  }
   addItems(startIndex, endIndex, _method) {
 
     this.apiService.getInstances().subscribe((data) => {
@@ -134,7 +153,8 @@ export class FlowCreateComponent implements OnInit {
     this.flowForm = this.fb.group({
       name: ['', [Validators.required]],
       steps: [this.steps, [Validators.required]],
-      desc: ['']
+      desc: [''],
+      image: ['']
     })
   }
 
@@ -184,9 +204,18 @@ export class FlowCreateComponent implements OnInit {
           });
       }
       else
-      {
-        console.log(this.id,this.flowForm.value)
-        this.apiService.updateFlow(this.id,this.flowForm.value).subscribe(
+      { 
+        this.apiService.updateFlow(this.id,Object.assign({}, this.flowForm.value, {steps: this.flowForm.value.steps.map(step=>{return step.map(inst=>{
+          console.log(inst)
+          if (typeof inst == "string")
+          {
+            return {"num":JSON.parse(inst).num,"id":JSON.parse(inst).data._id} 
+          }
+          else
+          {
+            return {"num":step.indexOf(inst),"id":inst._id} 
+          }
+        })})})).subscribe(
           (res) => {
             this._snackBar.open('Flow updated successfully', 'Close', {
               duration: 3000

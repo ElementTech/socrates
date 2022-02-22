@@ -7,5 +7,6 @@ export class Instance {
    shared: [Object];
    booleans: [Object];
    multis: [Object];
-   desc: String
+   desc: String;
+   image?: string;
 }

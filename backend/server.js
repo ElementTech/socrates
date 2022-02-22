@@ -114,12 +114,12 @@ const fileRoute = require('./routes/file.route');
 const githubRoute = require('./routes/github.route');
 var routesApi = require('./routes/index');
 const UserRoute = require('./routes/users.route');
-
+const imageRoute = require('./routes/image.route');
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-   extended: false
+   extended: true
 }));
 app.use(passport.initialize());
 
@@ -138,8 +138,9 @@ app.use('/api/parameter', parameterRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)
 app.use('/api/user', UserRoute)
+app.use('/api/image', imageRoute)
 app.use('/api', routesApi);
-app.use(createNodeMiddleware(webhooks))
+app.use(createNodeMiddleware())
 // app.use('/api/web', webRequestsRoute)
 
 

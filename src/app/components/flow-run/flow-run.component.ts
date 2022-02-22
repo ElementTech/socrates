@@ -2,8 +2,10 @@ import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '
 import { Component, OnInit,NgZone, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { interval, map, switchMap, tap } from 'rxjs';
+import { interval, map, Observable, switchMap, tap } from 'rxjs';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 import { SidenavService } from 'src/app/service/sidenav.service';
 import { ApiService } from '../../service/api.service';
 
@@ -49,7 +51,11 @@ export class FlowRunComponent implements OnInit {
       console.log(this.steps)
     });
   }
+  Images?: Observable<any>;
+  imageUrls = {};
   constructor(  
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     private sidenav: SidenavService,
     public fb: FormBuilder,
     private _snackBar: MatSnackBar,
@@ -59,6 +65,18 @@ export class FlowRunComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private apiService: ApiService) {
     this.appendItems(0, this.sum);
+    this.uploadService.getFiles().subscribe(data=>{
+      
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
   }
 
 
@@ -501,7 +519,8 @@ export class FlowRunComponent implements OnInit {
     this.flowForm = this.fb.group({
       name: ['', [Validators.required]],
       steps: [this.steps, [Validators.required]],
-      desc: ['']
+      desc: [''],
+      image: ['']
     })
   }
 

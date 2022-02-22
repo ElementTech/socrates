@@ -12,12 +12,21 @@
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <mat-table [dataSource]="dataSource" matSort>
-    
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+          
+          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]"></mat-cell>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+        </ng-container>
         <ng-container matColumnDef="run" >
           <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.run">
             <mat-chip-list class="d-flex">
-              <button mat-button [routerLink]="['/flow-run/', row._id]"><i class="fa-solid fa-play-circle fa-3x" aria-hidden="true"></i></button>
+              <button mat-mini-fab style="margin-left:5px" color="primary" [routerLink]="['/flow-run/', row._id]"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
               <img *ngIf="row.lastrun == false" matListAvatar src="../../../assets/success.png">
               <img *ngIf="row.lastrun == true" matListAvatar src="../../../assets/fail.png">
               <img *ngIf="row.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
@@ -26,12 +35,7 @@
             </mat-chip-list>
           </mat-cell>
         </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
-        </ng-container>
+  
     
   
         <ng-container matColumnDef="desc">
@@ -44,7 +48,7 @@
           <mat-cell *matCellDef="let row" [style.color]="row.configure">
 
             <!-- Flow Edit Is Broken for some reason -->
-            <!-- <button mat-button [routerLink]="['/create-flow/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button> -->
+            <button mat-button [routerLink]="['/create-flow/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
             <button mat-button (click)="removeFlow(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
             <a [routerLink]="['/flow-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
           </mat-cell>

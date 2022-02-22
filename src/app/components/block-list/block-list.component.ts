@@ -3,7 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
 @Component({
   selector: 'app-block-list',
@@ -15,11 +18,13 @@ export class BlockListComponent implements OnInit {
 
   Block:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['name', 'lang','desc','parameters','configure'];
+  displayedColumns = ['image','name', 'lang','desc','parameters','configure'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  
+  imageUrls = {};
   constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     private router: Router,
     private ngZone: NgZone,
     private _snackBar: MatSnackBar,
@@ -30,21 +35,31 @@ export class BlockListComponent implements OnInit {
   }
   getBlock(id) {
     this.apiService.getBlock(id).subscribe(data => {
-      
       this.Block = data;
         
     });
     
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.uploadService.getFiles().subscribe(data=>{
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
+  }
    //rest of your code..
  
   readBlock(){
     this.apiService.getBlocks().subscribe((data) => {
      this.Block = data;
      this.dataSource = new MatTableDataSource(this.Block.reverse());
-     
      this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     })    

@@ -23,7 +23,11 @@ let Instance = new Schema({
    },
    block: {
       type: String
-   }
+   },
+   image: {
+      type: String,
+      required: false
+   },
 }, {
    collection: 'instances'
 })

@@ -23,6 +23,7 @@ import { AuthGuardService } from './service/auth-guard.service';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { BlockStatsComponent } from './components/block-stats/block-stats.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -92,6 +93,9 @@ const routes: Routes = [
     role: 'ROLE_ADMIN'
   } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  } },
+  { path: 'file-upload', component: FileUploadComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } }
 ];

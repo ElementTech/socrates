@@ -9,6 +9,9 @@ import { MatSort } from '@angular/material/sort';
 import { Block } from 'src/app/model/Block';
 import { MatStepper } from '@angular/material/stepper';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FileUploadService } from 'src/app/service/file-upload.service';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-instance-create',
   templateUrl: './instance-create.component.html',
@@ -26,7 +29,8 @@ export class InstanceCreateComponent implements OnInit {
   
   
   Block:any = [];
-  
+  Images?: Observable<any>;
+  imageUrls = {};
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['name', 'lang','parameters','desc'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,6 +52,8 @@ export class InstanceCreateComponent implements OnInit {
   booleans: FormArray;
   multis: FormArray;
   constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     public fb: FormBuilder,
     private router: Router,
     private ngZone: NgZone,
@@ -113,6 +119,19 @@ export class InstanceCreateComponent implements OnInit {
 
 
   ngOnInit() { 
+    this.Images = this.uploadService.getFiles()
+    this.uploadService.getFiles().subscribe(data=>{
+      
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
   //  this.apiService.getLangs().subscribe(
   //     (res) => {
   //       res = JSON.parse(res.toString())
@@ -141,6 +160,7 @@ export class InstanceCreateComponent implements OnInit {
       multis: this.fb.array([
       ]),
       desc: [''],
+      image: [''],
       block: ['',[Validators.required]]
     })
   }

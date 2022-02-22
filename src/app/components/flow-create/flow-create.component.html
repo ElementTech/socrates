@@ -55,6 +55,7 @@
         (cdkDropListDropped)="drop($event)">
         <div class="example-box" *ngFor="let i of array" cdkDrag>
          
+          <img width="50px" [src]="this.imageUrls[i.image]">
           {{i.name}}
           <mat-chip-list>
             <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
@@ -114,6 +115,7 @@
           <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="this.steps[i]" class="example-list-horiz" (cdkDropListDropped)="drop($event)">
             <div class="example-box-horiz" *ngFor="let item of this.steps[i]" cdkDrag>
               <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+              <img width="50px" [src]="this.imageUrls[item.image]">
               {{item.name}}</div>
           </div>
           <div class="border-end border-start border-1" style="width:3em;">
@@ -136,6 +138,15 @@
         <mat-label>Name</mat-label>
         <input matInput placeholder="My Flow" formControlName="name" required>
       </mat-form-field>
+      <mat-form-field class="w-100" appearance="fill">
+        <mat-label>Icon</mat-label>
+        <mat-select formControlName="image">
+          <mat-option [value]="image.name" *ngFor="let image of Images | async">
+            <img width="30px" [src]="this.imageUrls[image.name]"> {{image.name}}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix ><img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[this.flowForm.get('image').value]"></mat-icon>
+      </mat-form-field> 
       <mat-form-field class="w-100" appearance="fill">
         <mat-label>Description</mat-label>
         <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>

@@ -67,6 +67,8 @@ import { AuthGuardService } from './service/auth-guard.service';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { BlockStatsComponent } from './components/block-stats/block-stats.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { FileUploadService } from './service/file-upload.service';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -92,7 +94,8 @@ import { BlockStatsComponent } from './components/block-stats/block-stats.compon
     DialogContentExampleDialog,
     UnauthorizedComponent,
     UserListComponent,
-    BlockStatsComponent
+    BlockStatsComponent,
+    FileUploadComponent
     
   ],
   imports: [
@@ -152,7 +155,7 @@ import { BlockStatsComponent } from './components/block-stats/block-stats.compon
   //     ]
   //   }
   // },
-  ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService],
+  ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService,FileUploadService],
   bootstrap: [AppComponent]
 })
 

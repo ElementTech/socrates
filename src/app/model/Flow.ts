@@ -3,4 +3,5 @@ export class Flow {
    steps: [[String]];
    name: string;
    desc: string;
+   image?: string;
 }

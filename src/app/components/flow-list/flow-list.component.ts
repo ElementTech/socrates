@@ -2,7 +2,9 @@ import { Component, OnInit,NgZone, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
 
 @Component({
@@ -14,11 +16,13 @@ export class FlowListComponent implements OnInit {
 
   Flow:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['run','name','desc','configure'];
+  displayedColumns = ['image','name','run','desc','configure'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  
+  imageUrls = {};
   constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     private router: Router,
     private ngZone: NgZone,
     private apiService: ApiService) { 
@@ -34,7 +38,19 @@ export class FlowListComponent implements OnInit {
     
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.uploadService.getFiles().subscribe(data=>{
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
+  }
    //rest of your code..
  
   readFlow(){

@@ -100,56 +100,70 @@ blockRoute.route('/stats/:id').get((req, res,next) => {
       let instancesCount = 0
       instances.forEach(elementInstance => {
         instancesCount++
+        
         DockerInstance.find({ instance: elementInstance._id }).exec(function(error,data)
         { 
           if (error) {
             return next(error)
           } else {
-            runsLength += data.length
-            data.forEach(element => {
-              if (element.done == true){
-                if (element.error){
-                  numFail++
-                }
-                else
-                {
-                  numSuccess++
-                }
-                let tempTimeSeconds = 0
-                for (const key in element.runtime) {
-                    const timeElement = element.runtime[key];
-                    if (key == "seconds"){
-                      avgRun+=timeElement
-                      tempTimeSeconds+=timeElement
-                    }
-                    if (key == "minutes"){
-                      avgRun+=timeElement*60
-                      tempTimeSeconds+=timeElement*60
-                    }
-                    if (key == "hours"){
-                      avgRun+=timeElement*60*60
-                      tempTimeSeconds+=timeElement*60*60
-                    }
-                    if (key == "days"){
-                      avgRun+=timeElement*24*60*60
-                      tempTimeSeconds+=timeElement*24*60*60
-                    }
-                    if (key == "weekdays"){
-                      avgRun+=timeElement*7*24*60*60
-                      tempTimeSeconds+=timeElement*7*24*60*60
-                    }
-                }
-                runs.push({"name":data.indexOf(element),"value":tempTimeSeconds,"instance": elementInstance.name})   
-                if (runs.length == runsLength){
-                  instancesCount--
-                  
-                  if (instancesCount == 0){
-                    res.json({"fail": numFail,"success":numSuccess,"avg":secondsToHms(avgRun/runs.length),"runs":runs})
-                  }
-                } 
+             
+              if (data.length == 0)
+              {
+                instancesCount--
               }
+              else
+              {
+                runsLength += data.length
               
-            });
+                data.forEach(element => {
+                  if (element.done == true){
+                    if (element.error){
+                      numFail++
+                    }
+                    else
+                    {
+                      numSuccess++
+                    }
+                    let tempTimeSeconds = 0
+                    for (const key in element.runtime) {
+                        const timeElement = element.runtime[key];
+                        if (key == "seconds"){
+                          avgRun+=timeElement
+                          tempTimeSeconds+=timeElement
+                        }
+                        if (key == "minutes"){
+                          avgRun+=timeElement*60
+                          tempTimeSeconds+=timeElement*60
+                        }
+                        if (key == "hours"){
+                          avgRun+=timeElement*60*60
+                          tempTimeSeconds+=timeElement*60*60
+                        }
+                        if (key == "days"){
+                          avgRun+=timeElement*24*60*60
+                          tempTimeSeconds+=timeElement*24*60*60
+                        }
+                        if (key == "weekdays"){
+                          avgRun+=timeElement*7*24*60*60
+                          tempTimeSeconds+=timeElement*7*24*60*60
+                        }
+                    }
+                    runs.push({"name":data.indexOf(element),"value":tempTimeSeconds,"instance": elementInstance.name})  
+  
+                    if (runs.length == runsLength){
+                      instancesCount--
+                      if (instancesCount == 0){
+                        
+                        res.json({"fail": numFail,"success":numSuccess,"avg":secondsToHms(avgRun/runs.length),"runs":runs})
+                      }
+                    } 
+                  }
+                  
+                });
+              }
+            
+            
+            
           }    
          
         });

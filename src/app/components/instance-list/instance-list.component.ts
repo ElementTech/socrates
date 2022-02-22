@@ -3,8 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Instance } from 'src/app/model/Instance';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
 @Component({
   selector: 'app-instance-list',
@@ -16,12 +18,14 @@ export class InstanceListComponent implements OnInit {
 
   Instance:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['run','name','desc','parameters','configure','block'];
+  displayedColumns = ['image','name','run','desc','parameters','configure','block'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   blockSearch: string;
-  
+  imageUrls = {};
   constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     private router: Router,
     private ngZone: NgZone,
     private _snackBar: MatSnackBar,
@@ -33,7 +37,19 @@ export class InstanceListComponent implements OnInit {
   }
 
 
-  ngOnInit() {this.readInstance();}
+  ngOnInit() {this.readInstance();
+    this.uploadService.getFiles().subscribe(data=>{
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
+  }
    //rest of your code..
  
   readInstance(){

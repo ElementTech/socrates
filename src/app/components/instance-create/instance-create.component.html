@@ -40,21 +40,24 @@
               <ng-container matColumnDef="parameters">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
+                  <mat-chip-list>
+                    <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
                       <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
-                    </mat-chip-list>
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
                       <mat-chip *ngFor="let param of row.parameters">No Parameters</mat-chip>
-                    </mat-chip-list>
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.shared.length != 0'>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='row.shared.length != 0'>
                       <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
-                    </mat-chip-list>
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.booleans.length != 0'>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
                       <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
-                    </mat-chip-list>
-                    <mat-chip-list aria-label="Parameters" *ngIf='row.multis.length != 0'>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
                       <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
-                    </mat-chip-list>
+                    </ng-container>
+                  </mat-chip-list>
+          
                 </mat-cell>
               </ng-container>
 
@@ -95,6 +98,16 @@
               <mat-label>Name</mat-label>
               <input matInput placeholder="My Instance" formControlName="name" required>
             </mat-form-field>
+            
+            <mat-form-field class="col-4" appearance="fill">
+              <mat-label>Icon</mat-label>
+              <mat-select formControlName="image">
+                <mat-option [value]="image.name" *ngFor="let image of Images | async">
+                  <img width="30px" [src]="this.imageUrls[image.name]"> {{image.name}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix ><img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[this.instanceForm.get('image').value]"></mat-icon>
+            </mat-form-field> 
 
             <div class="col">
               <div class="d-flex justify-content-between pb-2">

@@ -104,12 +104,22 @@ export class SettingsComponent implements OnInit {
   updateSettings(){
 
     // ,"github": {"githubURL":this.githubURL,"githubBranch":this.githubBranch,"githubWebhook":this.githubWebhook}}
-    this.apiService.updateSetting(this.SettingsID,{"langs":this.ELEMENT_DATA}).subscribe(data=>{
+    if (this.ELEMENT_DATA.every(i => Object.values(i).every(v => v)))
+    {
+      this.apiService.updateSetting(this.SettingsID,{"langs":this.ELEMENT_DATA}).subscribe(data=>{
         this.getSettings()
         this._snackBar.open('Languages Saved', 'Close', {
           duration: 3000
         });
     });
+    }
+    else
+    {
+      this._snackBar.open('Fields Cannot be empty', 'Close', {
+        duration: 3000
+      });
+    }
+  
   }
 
   connectGithub(){

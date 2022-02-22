@@ -27,6 +27,9 @@ mat-grid-tile {
 .mat-column-configure {
     flex: 0 0 20% ;
 }
+.mat-column-image {
+    flex: 0 0 7% ;
+}
 
   mat-row:hover{
       background-color:white;

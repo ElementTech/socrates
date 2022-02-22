@@ -11,4 +11,5 @@ export class Block {
    github_path?: string;
    prescript: string;
    description: string
+   image?: string;
 }

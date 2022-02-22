@@ -6,6 +6,9 @@ import { FormArray } from '@angular/forms';
 import { CdkDragDrop, copyArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {MatAccordion} from '@angular/material/expansion';
+import { Observable } from 'rxjs';
+import { FileUploadService } from 'src/app/service/file-upload.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-block-create',
@@ -35,6 +38,8 @@ export class BlockCreateComponent implements OnInit {
   scrollDistance = 1.5;
   scrollUpDistance = 2;
   direction = "";
+  Images?: Observable<any>;
+  imageUrls = {};
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('CodeMirror') private cm: any;
@@ -54,6 +59,8 @@ export class BlockCreateComponent implements OnInit {
   }
 
   constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
     public fb: FormBuilder,
     private router: Router,
     private ngZone: NgZone,
@@ -96,6 +103,18 @@ export class BlockCreateComponent implements OnInit {
   }
 
   ngOnInit() { 
+    this.Images = this.uploadService.getFiles();
+    this.uploadService.getFiles().subscribe(data=>{
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+
+    })
     this.mainForm();
     this.appendItems(0, this.sum);
     this.id = this.actRoute.snapshot.paramMap.get('id')
@@ -121,6 +140,7 @@ export class BlockCreateComponent implements OnInit {
             this.blockForm.get('github').setValue(data.github)
             this.blockForm.get('desc').setValue(data.desc)
             this.blockForm.get('lang').setValue(data.lang)
+            this.blockForm.get('image').setValue(data.image)
             this.shared = this.blockForm.get('shared') as FormArray;
             data.shared.forEach(item=>{
               this.shared.push(this.fb.group({
@@ -177,6 +197,7 @@ export class BlockCreateComponent implements OnInit {
         this.Language.push(element["lang"])
       });
     });
+    
   }
   togglePass(i,checkbox) {
     try {
@@ -258,6 +279,7 @@ export class BlockCreateComponent implements OnInit {
       github_path: [''],
       prescript: ['false',this.prescript_enabled],
       desc: [''],
+      image: [''],
       lang: ['', [Validators.required]]
     })
   }

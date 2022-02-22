@@ -282,6 +282,16 @@ export class ApiService {
     )
   }
 
+  getBlockStatsByBlockID(id): Observable<any> {
+    let url = `${this.baseUri}/block/stats/${id}`;
+    return this.http.get(url, {headers: this.headers}).pipe(
+      map((res: Response) => {
+        return res || {}
+      }),
+      catchError(this.errorMgmt)
+    )
+  }
+
   getDockerInstanceStatsByInstanceID(id): Observable<any> {
     let url = `${this.baseUri}/docker/instance/read/stats/${id}`;
     return this.http.get(url, {headers: this.headers}).pipe(

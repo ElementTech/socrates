@@ -66,6 +66,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuardService } from './service/auth-guard.service';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { BlockStatsComponent } from './components/block-stats/block-stats.component';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { UserListComponent } from './components/user-list/user-list.component';
     ProfileComponent,
     DialogContentExampleDialog,
     UnauthorizedComponent,
-    UserListComponent
+    UserListComponent,
+    BlockStatsComponent
     
   ],
   imports: [

@@ -37,6 +37,7 @@
             <button mat-button [routerLink]="['/instance-list/', row.name]"><i class="fa fa-cubes"></i></button>
             <button mat-button [routerLink]="['/create-block/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
             <button mat-button (click)="removeBlock(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+            <a [routerLink]="['/block-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
           </mat-cell>
         </ng-container>
   

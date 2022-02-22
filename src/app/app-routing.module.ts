@@ -22,6 +22,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuardService } from './service/auth-guard.service';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { BlockStatsComponent } from './components/block-stats/block-stats.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -54,6 +55,9 @@ const routes: Routes = [
     role: 'ROLE_USER'
   }  },
   { path: 'instance-stats/:id', component: InstanceStatsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
+  { path: 'block-stats/:id', component: BlockStatsComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   }  },
   { path: 'flow-stats/:id', component: FlowStatsComponent, canActivate: [AuthGuardService], data: {

@@ -21,7 +21,7 @@
   </head>
   <body>
     
-    <mat-toolbar class="mat-elevation-z10" color="primary" fxLayout="row">
+    <mat-toolbar  *ngIf="auth.isLoggedIn()" class="mat-elevation-z10" color="primary" fxLayout="row">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -60,8 +60,8 @@
 
     </mat-toolbar>
     
-    <mat-sidenav-container>
-      <mat-sidenav #sidenav mode="side" opened>
+    <mat-sidenav-container >
+      <mat-sidenav #sidenav mode="side" opened  *ngIf="auth.isLoggedIn()">
         <mat-list>
           <div mat-header>Actions</div>
           

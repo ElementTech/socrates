@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService, TokenPayload } from '../../service/authentication.service';
+import {GoogleLoginProvider, SocialAuthService} from 'angularx-social-login';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,8 +15,19 @@ export class LoginComponent {
   };
   error: string;
 
-  constructor(private auth: AuthenticationService, private router: Router) {}
-
+  constructor(private auth: AuthenticationService, private router: Router
+    //,private socialAuthService: SocialAuthService
+    ) {}
+  // loginWithGoogle(): void {
+  //   this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+  //     .then(() => {
+  //       //this.credentials.email = 
+  //       this.socialAuthService.authState.subscribe(data=>{
+  //         console.log(data)
+  //       })
+  //       //this.login()
+  //     });
+  // }
   login() {
     this.auth.login(this.credentials).subscribe(() => {
       this.router.navigateByUrl('/profile');

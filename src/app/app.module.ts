@@ -66,7 +66,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuardService } from './service/auth-guard.service';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-
+// import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
     AppComponent,
@@ -135,8 +135,22 @@ import { UserListComponent } from './components/user-list/user-list.component';
     MatExpansionModule,
     MatNativeDateModule,
     MatDialogModule
+    // SocialLoginModule
   ],
-  providers: [ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService],
+  providers: [
+  //   {
+  //   provide: 'SocialAuthServiceConfig',
+  //   useValue: {
+  //     autoLogin: true, //keeps the user signed in
+  //     providers: [
+  //       {
+  //         id: GoogleLoginProvider.PROVIDER_ID,
+  //         provider: new GoogleLoginProvider('68690114620-49b1oeghknmcus8onj9blofd4av2pr8i.apps.googleusercontent.com') // your client id
+  //       }
+  //     ]
+  //   }
+  // },
+  ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService],
   bootstrap: [AppComponent]
 })
 

@@ -37,7 +37,7 @@ export class PortalComponent implements OnInit {
     });
   }
 
-  addFile(folder: { name: string, type: string, _id: string }) {
+  addFile(folder: { name: string, type: string, _id: string, image: string }) {
     // let action;
     // switch (folder.type) {
     //   case "block":
@@ -53,7 +53,7 @@ export class PortalComponent implements OnInit {
     //     break;
     // }
     const createFileList = [
-      this.fileService.add({ isFolder: false, name: folder.name, type: folder.type, fileid: folder._id, parent: this.currentRoot ? this.currentRoot.id : 'root' }).toPromise()
+      this.fileService.add({ isFolder: false, name: folder.name, type: folder.type, fileid: folder._id, image: folder.image, parent: this.currentRoot ? this.currentRoot.id : 'root' }).toPromise()
     ]
     Promise.all(createFileList).then(result=>{
       this.updateFileElementQuery();

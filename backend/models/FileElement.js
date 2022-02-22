@@ -23,6 +23,10 @@ let FileElement = new Schema({
       type: String,
       required: false
    },
+   image: {
+      type: String,
+      required: false
+   },
    action: {
       type: [String],
       required: false

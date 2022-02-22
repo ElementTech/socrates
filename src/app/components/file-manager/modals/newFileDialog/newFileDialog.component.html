@@ -22,11 +22,14 @@
                aria-label="Component"
                matInput
                [matAutocomplete]="auto" [(ngModel)]="fileID">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of options" [value]="option._id">
+               
+        <mat-autocomplete (optionSelected)="inputChanged($event)" #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of options" [value]="option">
+            <img width="30px" [src]="this.imageUrls[option.image]">
             {{option.name}}
           </mat-option>
         </mat-autocomplete>
+        <mat-icon matSuffix ><img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[fileID.image]"></mat-icon>
       </mat-form-field>
     </li>    
   </ul>
@@ -34,5 +37,5 @@
 
 <mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button [mat-dialog-close]="{'name': fileName,'type': fileType, '_id': fileID}" color="primary">OK</button>
+  <button mat-raised-button [mat-dialog-close]="{'name': fileName,'type': fileType, '_id': fileID._id,'image':fileImage}" color="primary">OK</button>
 </mat-dialog-actions>

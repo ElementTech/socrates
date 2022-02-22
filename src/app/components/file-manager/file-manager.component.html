@@ -17,10 +17,14 @@
         <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span>
         <div fxLayout="column" fxLayoutAlign="space-between center" (click)="navigate(element)" (contextmenu)="openMenu($event,element, menuTrigger)">
           <mat-icon color="primary" class="file-or-folder-icon pointer" *ngIf="element.isFolder">folder</mat-icon>
-        
-          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/create-block/', element.fileid]" *ngIf="element.type == 'block'"><i class="fa-solid fa-cube"></i></mat-icon>
-          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/instance-run/', element.fileid]" *ngIf="element.type == 'instance'"><i class="fa-solid fa-cubes"></i></mat-icon>
-          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/flow-run/', element.fileid]" *ngIf="element.type == 'flow'"><i class="fa-solid fa-chain"></i></mat-icon>
+          
+          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/create-block/', element.fileid]" *ngIf="element.type == 'block'">
+            <i class="fa-solid fa-cube"></i><img width="50px" *ngIf="element.image" [src]="this.imageUrls[element.image]">
+          </mat-icon>
+          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/instance-run/', element.fileid]" *ngIf="element.type == 'instance'">
+            <i class="fa-solid fa-cubes"></i><img width="50px" *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
+          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/flow-run/', element.fileid]" *ngIf="element.type == 'flow'">
+            <i class="fa-solid fa-chain"></i><img width="50px" *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
           <span>{{element.name}}</span>
         </div>
       </mat-grid-tile>

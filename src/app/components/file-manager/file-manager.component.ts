@@ -1,11 +1,12 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FileElement } from './model/element';
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
-import { Observable } from 'rxjs';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { NewFolderDialogComponent } from './modals/newFolderDialog/newFolderDialog.component';
 import { RenameDialogComponent } from './modals/renameDialog/renameDialog.component';
 import { NewFileDialogComponent } from './modals/newFileDialog/newFileDialog.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FileUploadService } from 'src/app/service/file-upload.service';
 
 @Component({
   selector: 'file-manager',
@@ -13,19 +14,39 @@ import { NewFileDialogComponent } from './modals/newFileDialog/newFileDialog.com
   styleUrls: ['./file-manager.component.css']
 })
 export class FileManagerComponent implements OnChanges {
-  constructor(public dialog: MatDialog) {}
+  
+  imageUrls = {};
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: FileUploadService,
+    public dialog: MatDialog
+  ) {}
 
   @Input() fileElements: FileElement[];
   @Input() canNavigateUp: string;
   @Input() path: string;
 
   @Output() folderAdded = new EventEmitter<{ name: string }>();
-  @Output() fileAdded = new EventEmitter<{ name: string, type: string, _id: string }>();
+  @Output() fileAdded = new EventEmitter<{ name: string, type: string, _id: string, image:string }>();
   @Output() elementRemoved = new EventEmitter<FileElement>();
   @Output() elementRenamed = new EventEmitter<FileElement>();
   @Output() navigatedDown = new EventEmitter<FileElement>();
   @Output() elementMoved = new EventEmitter<{ element: FileElement; moveTo: FileElement }>();
   @Output() navigatedUp = new EventEmitter();
+
+  ngOnInit() {
+    this.uploadService.getFiles().subscribe(data=>{
+      data.forEach(element => {
+        this.uploadService.getFileImage(element.name).subscribe(data => {
+            let unsafeImageUrl = URL.createObjectURL(data);
+            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }, error => {
+            console.log(error);
+        });
+      });
+    })
+  }
 
   ngOnChanges(changes: SimpleChanges): void {}
 
@@ -60,7 +81,7 @@ export class FileManagerComponent implements OnChanges {
     let dialogRef = this.dialog.open(NewFileDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        this.fileAdded.emit({ name: res.name, type: res.type, _id: res._id });
+        this.fileAdded.emit({ name: res.name, type: res.type, _id: res._id, image: res.image });
       }
     });
   }  

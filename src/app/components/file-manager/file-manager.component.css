@@ -23,6 +23,7 @@
   width: 80px;
   height: 80px;
   font-size: 80px;
+  
 }
 
 .file-icon {
@@ -30,7 +31,6 @@
   width: 80px;
   height: 80px;
   font-size: 60px;
-  
 
 }
 .file-or-folder-icon,.file-icon{
@@ -46,4 +46,14 @@
 
 .spacer {
   flex: 1 1 auto;
+}
+
+/* for block elements */
+.file-icon {
+  display:grid;
+}
+
+.file-icon > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
 }

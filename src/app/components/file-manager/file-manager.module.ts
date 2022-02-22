@@ -17,6 +17,7 @@ import { RenameDialogComponent } from './modals/renameDialog/renameDialog.compon
 import { NewFileDialogComponent } from './modals/newFileDialog/newFileDialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   declarations: [FileManagerComponent, NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
   exports: [FileManagerComponent],

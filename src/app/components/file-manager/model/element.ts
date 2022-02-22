@@ -7,4 +7,5 @@ export interface FileElement {
   type?: string;
   fileid?: string;
   action?: Array<any>;
+  image?: string;
 }

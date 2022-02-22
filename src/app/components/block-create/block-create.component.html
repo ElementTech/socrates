@@ -256,10 +256,7 @@
       <div class="d-flex flex-row">
         <ngx-codemirror class="flex-grow-1 "
         formControlName="script"
-          [options]="{
-            lineNumbers: true,
-            theme: 'material'
-          }"
+          [options]="ngxOptions"
         ></ngx-codemirror>
         <div class="centered-text">
           <mat-chip-list>

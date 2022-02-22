@@ -48,6 +48,10 @@ export class BlockCreateComponent implements OnInit {
   booleans: FormArray;
   multis: any;
   githubConnected: any;
+  ngxOptions:Object= {
+    lineNumbers: true,
+    theme: 'material'
+  }
 
   constructor(
     public fb: FormBuilder,
@@ -276,6 +280,11 @@ export class BlockCreateComponent implements OnInit {
     this.blockForm.get('github').setValue(true)
     document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
     document.getElementById(git.path).classList.add('bg-primary')
+    this.ngxOptions= {
+      lineNumbers: true,
+      theme: 'material',
+      readOnly: true
+    }
   }
 
   disconnectGit(){
@@ -283,6 +292,11 @@ export class BlockCreateComponent implements OnInit {
     this.blockForm.get('script').setValue('')
     this.blockForm.get('github').setValue(false)
     document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
+    this.ngxOptions= {
+      lineNumbers: true,
+      theme: 'material',
+      readOnly: false
+    }
   }
 
   createItem(): FormGroup {

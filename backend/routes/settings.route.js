@@ -3,6 +3,7 @@ const app = express();
 const settingsRoute = express.Router();
 const { Octokit } = require("@octokit/core");
 const path = require('path');
+const {Worker} = require("worker_threads");
 // Settings model
 let Settings = require('../models/Settings');
 const GithubElement = require('../models/GithubElement');
@@ -133,6 +134,20 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
   else
   {
     updateSetting(req.params.id,req.body,res,next)
+    
+    const worker = new Worker("./engine/image_puller.js", {workerData: {images:req.body.langs.map(item=>`${item.image}:${item.tag}`),settings:req.body,id:req.params.id}});
+
+    worker.once("message", result => {
+        console.log(`${result}`);
+    });
+    
+    worker.on("error", error => {
+        console.log(error);
+    });
+    
+    worker.on("exit", exitCode => {
+        console.log(`It exited with code ${exitCode}`);
+    })
   }
 
 })

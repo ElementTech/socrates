@@ -31,3 +31,10 @@
   :host ::ng-deep .mat-slide-toggle-label-before .mat-slide-toggle-bar {
     margin-left: 10px; /* Spacing from the icon and content */
   }
+ *{
+    word-wrap: break-word;
+    word-break:break-all;
+  }
+  .mat-column-configure{
+    flex: 0 0 10%;
+  }

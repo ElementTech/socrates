@@ -51,9 +51,15 @@
 /* for block elements */
 .file-icon {
   display:grid;
+  padding-top: 12px;
 }
 
 .file-icon > * {
   grid-column-start: 1;
   grid-row-start: 1;
+}
+.littleimage{
+  width: 40px;
+  padding-top:25px;
+  margin-left: 40px;
 }

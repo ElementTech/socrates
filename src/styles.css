@@ -11,3 +11,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .example-spacer {
     flex: 1 1 auto;
   }
+  .mat-cell {
+    word-wrap: break-word;
+    word-break:break-all;
+  }   

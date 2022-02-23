@@ -1,6 +1,10 @@
-.mat-column-image {
-    flex: 0 0 7% ;
+
+.mat-column-configure {
+    flex: 0 0 20% ;
 }
-.mat-column-name {
+.mat-column-image {
     flex: 0 0 10% ;
+}
+.mat-column-name{
+    flex: 0 0 15%;
 }

@@ -1,5 +1,5 @@
 
-  <div class="container">
+  <div class="">
     <mat-toolbar class="d-flex justify-content-center">
       <i class="fa-solid fa-cube" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Blocks</h1>
   </mat-toolbar>
@@ -11,7 +11,11 @@
     
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      <mat-table [dataSource]="dataSource" matSort>
+      <mat-table
+      style=" overflow: auto ;
+          display: table-cell;
+          width: 100vw;"
+      [dataSource]="dataSource" matSort >
 
         <!-- Name Column -->
         <ng-container matColumnDef="image">
@@ -41,10 +45,14 @@
         <ng-container matColumnDef="configure">
           <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.configure">
-            <button mat-button [routerLink]="['/instance-list/', row.name]"><i class="fa fa-cubes"></i></button>
-            <button mat-button [routerLink]="['/create-block/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
-            <button mat-button (click)="removeBlock(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
-            <a [routerLink]="['/block-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
+           
+            
+<mat-button-toggle-group multiple vertical="false">
+  <button mat-button [routerLink]="['/instance-list/', row.name]"><i class="fa fa-cubes"></i></button>
+  <button mat-button [routerLink]="['/create-block/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
+  <button mat-button (click)="removeBlock(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+  <a [routerLink]="['/block-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
+</mat-button-toggle-group>
           </mat-cell>
         </ng-container>
   
@@ -85,8 +93,6 @@
         <mat-row class="chosen-row" *matRowDef="let row; columns: displayedColumns;">
         </mat-row>
       </mat-table>
-    
-   
     </div>
   
   </div>

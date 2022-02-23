@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="">
   <mat-toolbar class="d-flex justify-content-center">
     <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
 </mat-toolbar>
@@ -26,12 +26,14 @@
           <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.run">
             <mat-chip-list class="d-flex">
+              <mat-button-toggle-group multiple vertical="false">
               <button mat-mini-fab style="margin-left:5px" color="primary" [routerLink]="['/instance-run/', row._id]"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
               <img *ngIf="row.lastrun == false" matListAvatar src="../../../assets/success.png">
               <img *ngIf="row.lastrun == true" matListAvatar src="../../../assets/fail.png">
               <img *ngIf="row.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
               <img *ngIf="row.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
               <mat-chip class="flex-fill">{{row.numruns}}</mat-chip>
+            </mat-button-toggle-group>
             </mat-chip-list>
           </mat-cell>
         </ng-container>
@@ -44,9 +46,11 @@
         <ng-container matColumnDef="configure">
           <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.configure">
+            <mat-button-toggle-group multiple vertical="false">
             <button mat-button [routerLink]="['/create-instance/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
             <button mat-button (click)="removeInstance(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
             <a [routerLink]="['/instance-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
+          </mat-button-toggle-group>
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="block">

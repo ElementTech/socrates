@@ -28,9 +28,14 @@ mat-grid-tile {
     flex: 0 0 20% ;
 }
 .mat-column-image {
-    flex: 0 0 7% ;
+    flex: 0 0 10% ;
 }
-
+.mat-column-name{
+    flex: 0 0 15%;
+}
+.mat-column-lang {
+    flex: 0 0 10% ;
+}
   mat-row:hover{
       background-color:white;
   }

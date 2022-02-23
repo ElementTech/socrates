@@ -61,24 +61,15 @@
             <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
            
               <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
-                <ng-container *ngIf="param.secret == true">
-                  {{param.key}}=***
-                </ng-container>
-                <ng-container *ngIf="param.secret == false">
-                  {{param.key}}={{param.value}}
-                </ng-container>
+     
+                  {{param.key}}
               </mat-chip>
            
             </ng-container>
             <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
              
               <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
-                <ng-container *ngIf="param.secret == true">
-                  {{param.key}}=***
-                </ng-container>
-                <ng-container *ngIf="param.secret == false">
-                  {{param.key}}={{param.value}}
-                </ng-container>
+                {{param.key}}
               </mat-chip>
            
             </ng-container>

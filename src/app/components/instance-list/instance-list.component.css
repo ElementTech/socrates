@@ -20,21 +20,3 @@
 mat-row:hover{
     background-color:white;
 }
-.mat-column-configure {
-    flex: 0 0 10% ;
-}
-.mat-column-desc {
-    flex: 0 0 15% ;
-}
-.mat-column-image {
-    flex: 0 0 10% ;
-}
-.mat-column-name{
-    flex: 0 0 10%;
-}
-.mat-column-block{
-    flex: 0 0 15%;
-}
-.mat-column-run{
-    flex: 0 0 10%;
-}

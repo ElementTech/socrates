@@ -70,6 +70,7 @@ import { BlockStatsComponent } from './components/block-stats/block-stats.compon
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FileUploadService } from './service/file-upload.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { DescDialogComponent } from './components/desc-dialog/desc-dialog.component';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     InstanceRunComponent,
     SettingsComponent,
     InstanceStatsComponent,
+    DescDialogComponent,
     FlowListComponent,
     FlowCreateComponent,
     FlowRunComponent,
@@ -96,7 +98,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     UnauthorizedComponent,
     UserListComponent,
     BlockStatsComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    DescDialogComponent
     
   ],
   imports: [

@@ -41,3 +41,12 @@
   .dockerform{
     padding-bottom: 1em;
   }
+  .mat-column-lang{
+    flex: 0 0 20% !important;
+}
+.mat-column-image{
+  flex: 0 0 15% !important;
+}
+.mat-column-type{
+  flex: 0 0 10% !important;
+}

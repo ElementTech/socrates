@@ -12,6 +12,32 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     flex: 1 1 auto;
   }
   .mat-cell {
-    word-wrap: break-word;
-    word-break:break-all;
+    height: 4em;
   }   
+  .mat-chip{
+    border-radius: 3px !important;
+  }
+  .mat-column-image{
+    flex: 0 0 7%;
+    
+  }
+
+  .mat-column-run{
+    flex: 0 0 15%;
+  }
+  .mat-column-name{
+    flex: 0 0 15%;
+    }
+    /* .mat-column-name[role="cell"]{
+
+    } */
+
+  .mat-column-lang{
+    flex: 0 0 10%;
+  }
+  .mat-column-configure{
+    flex: 0 0 15%;
+  }
+  .mat-column-block{
+    flex: 0 0 12%;
+  }

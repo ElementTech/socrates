@@ -4,3 +4,9 @@
 .disconnected{
     color: maroon;
 }
+.mat-column-prefix{
+    flex: 0 0 10%;
+}
+.mat-column-content{
+    flex: 0 0 10%;
+}

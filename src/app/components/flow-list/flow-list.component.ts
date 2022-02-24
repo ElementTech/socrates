@@ -1,4 +1,5 @@
 import { Component, OnInit,NgZone, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
+import { DescDialogComponent } from '../desc-dialog/desc-dialog.component';
 
 @Component({
   selector: 'app-flow-list',
@@ -16,7 +18,7 @@ export class FlowListComponent implements OnInit {
 
   Flow:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['image','name','run','desc','configure'];
+  displayedColumns = ['run','name','steps','instances','configure'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   imageUrls = {};
@@ -25,6 +27,7 @@ export class FlowListComponent implements OnInit {
     private uploadService: FileUploadService,
     private router: Router,
     private ngZone: NgZone,
+    public dialog: MatDialog,
     private apiService: ApiService) { 
     this.readFlow();
 
@@ -63,7 +66,13 @@ export class FlowListComponent implements OnInit {
   
     })    
   }
+  openDialog(content) {
+    const dialogRef = this.dialog.open(DescDialogComponent,{data: {content:content}});
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

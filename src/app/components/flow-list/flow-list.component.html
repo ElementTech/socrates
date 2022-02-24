@@ -12,15 +12,13 @@
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="image">
-          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-          
-          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]"></mat-cell>
-        </ng-container>
+
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]">
+            <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
+          </mat-cell>
         </ng-container>
         <ng-container matColumnDef="run" >
           <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
@@ -44,7 +42,30 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.desc">{{row.desc}}</mat-cell>
         </ng-container>
-  
+
+        <ng-container matColumnDef="steps">
+          <mat-header-cell *matHeaderCellDef>Steps</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.steps">
+            <mat-chip-list>
+                <mat-chip>
+                  {{row.steps.length}}
+                </mat-chip>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="instances">
+          <mat-header-cell *matHeaderCellDef>Instances</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.steps">
+            <mat-chip-list>
+                <mat-chip>
+                  {{row.steps.flat().length}}
+                </mat-chip>
+            </mat-chip-list>
+           
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="configure">
           <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.configure">

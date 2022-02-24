@@ -1,4 +1,5 @@
 import { Component, OnInit,NgZone, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Instance } from 'src/app/model/Instance';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
+import { DescDialogComponent } from '../desc-dialog/desc-dialog.component';
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',
@@ -18,7 +20,7 @@ export class InstanceListComponent implements OnInit {
 
   Instance:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['image','name','run','desc','parameters','configure','block'];
+  displayedColumns = ['run','name','parameters','configure','block'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   blockSearch: string;
@@ -30,6 +32,7 @@ export class InstanceListComponent implements OnInit {
     private ngZone: NgZone,
     private _snackBar: MatSnackBar,
     private apiService: ApiService,
+    public dialog: MatDialog,
     private actRoute: ActivatedRoute
     ) { 
     
@@ -49,6 +52,15 @@ export class InstanceListComponent implements OnInit {
       });
 
     })
+  }
+
+
+  openDialog(content) {
+    const dialogRef = this.dialog.open(DescDialogComponent,{data: {content:content}});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
    //rest of your code..
  

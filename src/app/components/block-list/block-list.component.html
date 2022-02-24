@@ -12,23 +12,23 @@
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <mat-table
-      style=" overflow: auto ;
-          display: table-cell;
-          width: 100vw;"
+
       [dataSource]="dataSource" matSort >
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="image">
-          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-          
-          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]"></mat-cell>
-        </ng-container>
+
     
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
      
-          <mat-cell *matCellDef="let row"><div *ngIf="row.github_path != ''"><i class="fa fa-github" aria-hidden="true"></i>&nbsp;</div>{{row.name}}</mat-cell>
+          <mat-cell *matCellDef="let row" class="d-flex justify-content-between">
+            <div  class="d-flex justify-content-start">
+              <img width="50px" [src]="this.imageUrls[row.image]">
+                <i style="padding-top: 0.5em;" *ngIf="row.github_path != ''" class="fa fa-github fa-2x" aria-hidden="true"></i>
+            </div>
+      
+            <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
+          </mat-cell>
         </ng-container>
     
         <!-- Color Column -->
@@ -48,7 +48,7 @@
            
             
 <mat-button-toggle-group multiple vertical="false">
-  <button mat-button [routerLink]="['/instance-list/', row.name]"><i class="fa fa-cubes"></i></button>
+  <button mat-button ><i [routerLink]="['/instance-list/', row.name]" class="fa fa-cubes"></i></button>
   <button mat-button [routerLink]="['/create-block/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
   <button mat-button (click)="removeBlock(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
   <a [routerLink]="['/block-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
@@ -71,10 +71,10 @@
                 <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
               </ng-container>
               <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
-                <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
+                <mat-chip color="primary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
               </ng-container>
               <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
-                <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
+                <mat-chip color="primary" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
               </ng-container>
             </mat-chip-list>
     

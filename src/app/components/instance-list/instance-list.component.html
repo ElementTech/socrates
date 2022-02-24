@@ -12,15 +12,12 @@
     <div class="example-container mat-elevation-z8">
       <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       <mat-table [dataSource]="dataSource" matSort>
-    
-        <ng-container matColumnDef="image">
-          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-          
-          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]"></mat-cell>
-        </ng-container>
+
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]">
+            <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
+          </mat-cell>
         </ng-container>
         <ng-container matColumnDef="run" >
           <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
@@ -58,7 +55,7 @@
           <mat-cell *matCellDef="let row" [style.color]="row.block.name"><button mat-button color="primary" [routerLink]="['/create-block/', row.block._id]"><i class="fa-solid fa-edit" aria-hidden="true"></i>&nbsp;{{row.block.name}}</button></mat-cell>
         </ng-container>
         <ng-container matColumnDef="parameters">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Values</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
           <mat-chip-list>
 
@@ -66,10 +63,12 @@
             
                 <mat-chip color="primary" selected *ngFor="let param of row.parameters">
                   <ng-container *ngIf="param.secret == true">
-                    {{param.key}}=***
+                    <!-- {{param.key}}= -->
+                    ***
                   </ng-container>
                   <ng-container *ngIf="param.secret == false">
-                    {{param.key}}={{param.value}}
+                    <!-- {{param.key}}= -->
+                    {{param.value}}
                   </ng-container>
                 </mat-chip>
             
@@ -78,10 +77,12 @@
               
                 <mat-chip color="accent" selected *ngFor="let param of row.shared">
                   <ng-container *ngIf="param.secret == true">
-                    {{param.key}}=***
+                    <!-- {{param.key}}= -->
+                    ***
                   </ng-container>
                   <ng-container *ngIf="param.secret == false">
-                    {{param.key}}={{param.value}}
+                    <!-- {{param.key}}= -->
+                    {{param.value}}
                   </ng-container>
                 </mat-chip>
             
@@ -90,10 +91,14 @@
               <mat-chip>No Parameters</mat-chip>
             </ng-container>
             <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
-              <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}={{param.value}}</mat-chip>
+              <mat-chip color="primary" selected *ngFor="let param of row.booleans">
+                <!-- {{param.key}}= -->
+                {{param.value}}</mat-chip>
             </ng-container>
             <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
-              <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}={{param.value}}</mat-chip>
+              <mat-chip color="primary" selected *ngFor="let param of row.multis">
+                <!-- {{param.key}}= -->
+                {{param.value}}</mat-chip>
             </ng-container>
           </mat-chip-list>
         </mat-cell>

@@ -34,7 +34,7 @@
               <ng-container matColumnDef="lang">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Langauge</mat-header-cell>
                 
-                <mat-cell *matCellDef="let row" [style.color]="row.lang"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{row.lang}}/{{row.lang}}-original.svg" width="20" height="20">&nbsp;{{row.lang}}</mat-cell>
+                <mat-cell *matCellDef="let row" [style.color]="row.lang"><img  onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{row.lang}}/{{row.lang}}-original.svg" width="20" height="20">&nbsp;{{row.lang}}</mat-cell>
               </ng-container>
         
               <ng-container matColumnDef="parameters">
@@ -236,10 +236,10 @@
                     <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}={{param.value}}</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["booleans"].value.length != 0'>
-                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['booleans'].value">{{param.key}}={{param.value}}</mat-chip>
+                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['booleans'].value">{{param.key}}={{param.value}}</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["multis"].value.length != 0'>
-                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['multis'].value">{{param.key}}={{param.value}}</mat-chip>
+                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['multis'].value">{{param.key}}={{param.value}}</mat-chip>
                   </ng-container>
                 </mat-chip-list>
 

@@ -32,7 +32,7 @@ export class InstanceCreateComponent implements OnInit {
   Images?: Observable<any>;
   imageUrls = {};
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['name', 'lang','parameters','desc'];
+  displayedColumns = ['name', 'lang','parameters'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   clickedRows = Block;

@@ -1,4 +1,5 @@
 import { Component, OnInit,NgZone, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
+import { DescDialogComponent } from '../desc-dialog/desc-dialog.component';
 @Component({
   selector: 'app-block-list',
   templateUrl: './block-list.component.html',
@@ -18,7 +20,7 @@ export class BlockListComponent implements OnInit {
 
   Block:any;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['image','name', 'lang','desc','parameters','configure'];
+  displayedColumns = ['name', 'lang','parameters','configure'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   imageUrls = {};
@@ -29,6 +31,7 @@ export class BlockListComponent implements OnInit {
     private ngZone: NgZone,
     private _snackBar: MatSnackBar,
     private apiService: ApiService,
+    public dialog: MatDialog,
     private actRoute: ActivatedRoute) { 
     this.readBlock();
 
@@ -40,6 +43,16 @@ export class BlockListComponent implements OnInit {
     });
     
   }
+
+
+  openDialog(content) {
+    const dialogRef = this.dialog.open(DescDialogComponent,{data: {content:content}});
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
 
   ngOnInit() {
     this.uploadService.getFiles().subscribe(data=>{
@@ -60,14 +73,14 @@ export class BlockListComponent implements OnInit {
     this.apiService.getBlocks().subscribe((data) => {
      this.Block = data;
      this.dataSource = new MatTableDataSource(this.Block.reverse());
-     this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+
     })    
   }
   ngAfterViewInit() {
     this.applyFilter(this.actRoute.snapshot.paramMap.get('name'))
  
-
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {

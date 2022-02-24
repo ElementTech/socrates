@@ -171,7 +171,7 @@
 
                       </tr>
                       <tr formArrayName="multis"
-                      *ngFor="let item of instanceForm.get('multis')['controls']; let i = index;"
+                      *ngFor="let item of multisOptions; let i = index;"
                       >
                   
                         <td [formGroupName]="i" class="">
@@ -179,7 +179,7 @@
                         </td>
                         <td [formGroupName]="i" class="text-center align-middle">
                           <mat-select formControlName="value" placeholder="value">
-                              <mat-option *ngFor="let choice of item.value.value.split(',')" [value]="choice">
+                              <mat-option *ngFor="let choice of item.value.split(',')" [value]="choice">
                                   {{choice}}
                               </mat-option>
                           </mat-select>

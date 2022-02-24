@@ -51,6 +51,7 @@ export class InstanceCreateComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
   booleans: FormArray;
   multis: FormArray;
+  multisOptions: Array<any>;
   constructor(
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,
@@ -98,6 +99,7 @@ export class InstanceCreateComponent implements OnInit {
         });
 
         this.multis = this.instanceForm.get('multis') as FormArray;
+        this.multisOptions = data.multis
         data.multis.forEach(item=>{
           this.multis.push(this.fb.group({
             key: item.key,
@@ -258,6 +260,7 @@ export class InstanceCreateComponent implements OnInit {
     this.isDisabled = false;
 
     this.instanceForm.get('block').setValue(row._id);
+    this.stepper.next()
     row.parameters.forEach(element => {
       if (element)
       {
@@ -281,7 +284,7 @@ export class InstanceCreateComponent implements OnInit {
         this.paramCount+=1
       } 
     });
-
+    this.multisOptions = row.multis
     row.multis.forEach(element => {
       if (element.key){
         this.multis.push(this.createMultisKeyValue(element.key,element.value));

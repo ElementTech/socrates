@@ -32,7 +32,7 @@
 					<ng-container matColumnDef="lang">
 						<mat-header-cell *matHeaderCellDef> Language </mat-header-cell>
 						<mat-cell *matCellDef="let element">
-							<img width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{element.lang}}/{{element.lang}}-original.svg" alt="">
+							<img width="40" onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{element.lang}}/{{element.lang}}-original.svg" alt="">
 							<mat-form-field floatLabel="never">
 								<input matInput placeholder="Language" [value]="element.lang" [(ngModel)]="element.lang">
 							</mat-form-field>

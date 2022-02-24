@@ -32,7 +32,7 @@
             <mat-label>Language</mat-label>
             <mat-select formControlName="lang">
               <mat-option [value]="lang" *ngFor="let lang of Language">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{lang}}/{{lang}}-original.svg" width="30" height="30">{{lang}}
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{lang}}/{{lang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30">{{lang}}
               </mat-option>
             </mat-select>
 

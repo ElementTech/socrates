@@ -69,6 +69,7 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { BlockStatsComponent } from './components/block-stats/block-stats.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FileUploadService } from './service/file-upload.service';
+import {MatTabsModule} from '@angular/material/tabs';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -139,7 +140,8 @@ import { FileUploadService } from './service/file-upload.service';
     MatDatepickerModule,
     MatExpansionModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule
     // SocialLoginModule
   ],
   providers: [

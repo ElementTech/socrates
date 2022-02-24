@@ -5,20 +5,20 @@ var docker = new Docker();
 const images = workerData.images
 const settings = workerData.settings
 const id = workerData.id
+const auth = workerData.auth
 dbConfig = require('../database/db');
 mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
    useNewUrlParser: true
 }).then(() => {
-      
     docker.listImages(function (err, result) {
         currentImages = result.map(item=>item.RepoTags? item.RepoTags[0] : '')
         images.forEach(image=>{
             if (!currentImages.includes(image))
             {
                 console.log("Pulling "+image)
-                docker.pull(image, function (err, stream) {
+                docker.pull(image, {'authconfig': auth},function (err, stream) {
                     if (err)
                     {
                         Settings.findByIdAndUpdate(id,

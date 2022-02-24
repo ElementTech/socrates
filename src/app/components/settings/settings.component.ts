@@ -15,6 +15,12 @@ export class SettingsComponent implements OnInit {
   githubBranch = "main"
   hide = true;
 
+  dockerAuth = ""
+  dockerUsername = ""
+  dockerPassword = ""
+  dockerEmail = ""
+  dockerHost = "https://index.docker.io/v1"
+
   githubWebhook = true
   githubToken = ""
   githubConnected = false
@@ -70,6 +76,14 @@ export class SettingsComponent implements OnInit {
       this.githubConnected = data[0].github[0].githubConnected
       this.sha = data[0].github[0].sha
       this.githubToken = data[0].github[0].githubToken
+
+      this.dockerAuth = data[0].docker_auth[0].auth
+      this.dockerUsername = data[0].docker_auth[0].username
+      this.dockerPassword = data[0].docker_auth[0].password
+      this.dockerEmail = data[0].docker_auth[0].email
+      this.dockerHost = data[0].docker_auth[0].host
+
+
       if (data[0].github[0].githubConnected){
         this.startTimer(60)
       }
@@ -106,12 +120,23 @@ export class SettingsComponent implements OnInit {
     // ,"github": {"githubURL":this.githubURL,"githubBranch":this.githubBranch,"githubWebhook":this.githubWebhook}}
     if (this.ELEMENT_DATA.every(i => Object.values(i).every(v => v)))
     {
-      this.apiService.updateSetting(this.SettingsID,{"langs":this.ELEMENT_DATA}).subscribe(data=>{
-        this.getSettings()
+      if ((this.dockerUsername != "" || this.dockerEmail != "") && this.dockerPassword == "")
+      {
+        this._snackBar.open('You must specify a Docker Password', 'Close', {
+          duration: 3000
+        });
+      }
+      else
+      {
         this._snackBar.open('Languages Saved', 'Close', {
           duration: 3000
         });
-    });
+        this.apiService.updateSetting(this.SettingsID,{"langs":this.ELEMENT_DATA,"docker_auth":{"username":this.dockerUsername,"password":this.dockerPassword,
+        "auth":this.dockerAuth,"host":this.dockerHost,"email":this.dockerEmail}}).subscribe(data=>{
+         this.getSettings()
+         
+       });
+      }
     }
     else
     {

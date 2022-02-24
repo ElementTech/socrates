@@ -96,6 +96,7 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
     if (req.body.github.githubConnected == false)
     {
       updateSetting(req.params.id,req.body,res,next)
+      pullImages(req.body.langs,req.body,req.params.id,req.body.docker_auth)
     }
     else
     {
@@ -134,23 +135,28 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
   else
   {
     updateSetting(req.params.id,req.body,res,next)
-    
-    const worker = new Worker("./engine/image_puller.js", {workerData: {images:req.body.langs.map(item=>`${item.image}:${item.tag}`),settings:req.body,id:req.params.id}});
+    pullImages(req.body.langs,req.body,req.params.id,req.body.docker_auth)
 
-    worker.once("message", result => {
-        console.log(`${result}`);
-    });
-    
-    worker.on("error", error => {
-        console.log(error);
-    });
-    
-    worker.on("exit", exitCode => {
-        console.log(`It exited with code ${exitCode}`);
-    })
   }
 
 })
+
+function pullImages(langs,settings,id,auth)
+{
+  const worker = new Worker("./engine/image_puller.js", {workerData: {images:langs.map(item=>`${item.image}:${item.tag}`),settings:settings,id:id,auth:auth}});
+
+  worker.once("message", result => {
+      console.log(`${result}`);
+  });
+  
+  worker.on("error", error => {
+      console.log(error);
+  });
+  
+  worker.on("exit", exitCode => {
+      console.log(`It exited with code ${exitCode}`);
+  })
+}
 
 function updateSetting(id,body,res,next){
   Settings.findByIdAndUpdate(id, {

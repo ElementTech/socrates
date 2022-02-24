@@ -38,3 +38,6 @@
   .mat-column-configure{
     flex: 0 0 10%;
   }
+  .dockerform{
+    padding-bottom: 1em;
+  }

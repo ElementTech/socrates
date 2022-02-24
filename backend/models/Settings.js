@@ -8,6 +8,10 @@ let Settings = new Schema({
    },
    github: {
       type: [Object]
+   },
+   docker_auth: {
+      type: [Object],
+      required: false
    }
 }, {
    collection: 'settings'

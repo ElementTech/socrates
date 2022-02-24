@@ -31,7 +31,7 @@ Settings.find((error, data) => {
     console.log(error)
     throw error
   } else {
-    docker.pull(`${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`, function (err, stream) {
+    docker.pull(`${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,{'authconfig': data[0].docker_auth[0]}, function (err, stream) {
       docker.modem.followProgress(stream, onFinished);
       function onFinished(err, output) {
         tmp.file(function _tempFileCreated(err, path, fd) {

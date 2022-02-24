@@ -1,5 +1,5 @@
 
-<form [formGroup]="blockForm" class="" (ngSubmit)="onSubmit()">
+<form [formGroup]="blockForm" class="container" (ngSubmit)="onSubmit()">
   <mat-stepper [linear]="isLinear" #stepper>
     <mat-step [stepControl]="blockForm" errorMessage="Name and Language are required.">
 
@@ -60,7 +60,7 @@
           </div>
 
           </div>
-            <mat-form-field  class="w-100 pt-2 h-25" appearance="fill">
+            <mat-form-field  class="w-100 pt-2" style="max-height: 10em;" appearance="fill">
               <mat-label>Description</mat-label>
               <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
             </mat-form-field>

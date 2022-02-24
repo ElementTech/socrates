@@ -159,3 +159,6 @@ div:has(input.text) {
   .bg-primary:hover{
     color: white;
   }
+  #compact-input{
+    width: 100%;
+  }

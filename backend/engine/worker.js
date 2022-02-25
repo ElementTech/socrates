@@ -54,14 +54,6 @@ Settings.find((error, data) => {
           {
             writeAndRun(path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
           }
-      
-          // 'some-python-image', ['python', 'main.py', arg]
-        
-          
-          // If we don't need the file anymore we could manually call the cleanupCallback
-          // But that is not necessary if we didn't pass the keep option because the library
-          // will clean after itself.
-  
         });  
       }
      

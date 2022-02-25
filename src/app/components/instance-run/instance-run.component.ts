@@ -109,12 +109,12 @@ export class InstanceRunComponent implements OnInit {
         {
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('position','fixed')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('top','10vh')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('left','0')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('right','0')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('left','12em')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('right','1.2em')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('bottom','0')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('height','auto')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('z-index','9999')
-          this.sidenav.close();
+          // this.sidenav.close();
           this.fullScreenToggle = false;
         }
         else{

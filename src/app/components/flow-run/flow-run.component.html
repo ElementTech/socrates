@@ -1,7 +1,11 @@
 
-   <div class="row">
+<mat-toolbar class="d-flex justify-content-center">
+  <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp; {{this.flowForm.get("name").value}}</h1>
+  <a class="play-btn" id="play-btn" (click)="ani();"></a>
+</mat-toolbar>
+<div class="row  w-100">
     <div class="col-3">
-      <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content" style="background-color:white;border: 1px solid black; border-radius: 3px;">
+      <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
           <mat-list class="infinitelist">
               <ng-container *cdkVirtualFor="let item of listItems">
        
@@ -41,12 +45,7 @@
     </div>
   
     <div class="col-9">
-      <mat-toolbar class="d-flex justify-content-between">
-             
-      
-        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
-        <a class="play-btn" id="play-btn" (click)="ani();"></a>
-      </mat-toolbar>
+
 
       <div class="d-flex flex-row" *ngFor="let num of this.steps; let i = index">
           <div class="align-middle border-end border-start border-1">

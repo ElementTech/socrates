@@ -37,3 +37,12 @@ mat-cell.mat-column-name:hover {
   mat-row:hover{
       background-color:white;
   }
+.mat-column-value{
+    flex: 0 0 60%;
+}
+.mat-column-secret{
+    flex: 0 0 5%;
+}
+.mat-column-name{
+    flex: 0 0 5%;
+}

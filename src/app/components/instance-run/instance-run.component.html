@@ -1,9 +1,13 @@
 
 
-
-<div class="row">
+<mat-toolbar class="d-flex justify-content-center">
+  <i class="fa-solid fa-cubes" aria-hidden="true"></i> &nbsp; <h1 style="margin-right: 1em;">{{this.Instance.name}} </h1>
+  <a class="play-btn" id="play-btn" (click)="ani();"></a>
+</mat-toolbar>
+<div class="row w-100">
+  
     <div class="col-3">
-        <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content" style="background-color:white;border: 1px solid black; border-radius: 3px;">
+        <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
             <mat-list class="infinitelist">
                 <ng-container *cdkVirtualFor="let item of listItems" >
          
@@ -42,11 +46,7 @@
 
     </div>
     <div class="col-9">
-        <mat-toolbar class="d-flex justify-content-center">
-            <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">{{this.Instance.name}} </h1>
-            <a class="play-btn" id="play-btn" (click)="ani();"></a>
-        </mat-toolbar>
-        <mat-divider style="height: 1em;"></mat-divider>
+
         <div class="d-flex flex-row">
             <div class="col-3">
                 <ul class="list-group container">

@@ -1,5 +1,3 @@
-
-  <div class="container">
     <mat-toolbar class="d-flex justify-content-center">
       <i class="fa-solid fa-th-list" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Parameters</h1>
       <button color="primary" mat-button (click)="addParam()"><i class="fa-solid fa-plus-circle fa-2x" aria-hidden="true"></i></button>
@@ -19,7 +17,7 @@
         <ng-container matColumnDef="key">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Key</mat-header-cell>
           <mat-cell *matCellDef="let row">
-            <mat-form-field floatLabel="never">
+            <mat-form-field floatLabel="never" class="w-100">
                 <input matInput placeholder="key" [value]="row.key" [(ngModel)]="row.key">
             </mat-form-field>    
            </mat-cell>
@@ -29,7 +27,8 @@
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.value">
-            <mat-form-field floatLabel="never">
+            <mat-form-field floatLabel="never" class="w-100">
+          
                 <input matInput placeholder="value" [id]="row.key" [value]="row.value" [(ngModel)]="row.value">
             </mat-form-field>  
             </mat-cell>
@@ -58,4 +57,3 @@
    
     </div>
   
-  </div>

@@ -45,3 +45,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-right: 1em;
   margin-left: 1em;
 }
+.infinitelist{
+  margin-left:2em !important;
+  margin-right:2em !important;
+}
+.content {
+  height: calc(100vh - 64px);
+  overflow: auto;
+  border-right: 5px solid #3f51b5;
+}

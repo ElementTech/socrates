@@ -36,24 +36,27 @@ Settings.find((error, data) => {
       function onFinished(err, output) {
         tmp.file(function _tempFileCreated(err, path, fd) {
           if (err) throw err;
-          if (workerData.instance.block.github){
-            if (data[0].github[0].githubConnected){
-              GithubElement.findOne({path:workerData.instance.block.github_path},(error, git) => {
-                if ((git.content != null) && (git.content != undefined))
-                {
-                  writeAndRun(path,data=data,Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
-                }
-              });
+          tmp.dir(function _tempDirCreated(err, folder_path) {
+            if (err) throw err;
+            if (workerData.instance.block.github){
+              if (data[0].github[0].githubConnected){
+                GithubElement.findOne({path:workerData.instance.block.github_path},(error, git) => {
+                  if ((git.content != null) && (git.content != undefined))
+                  {
+                    writeAndRun(path,folder_path,data=data,Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+                  }
+                });
+              }
+              else
+              {
+                writeAndRun(path,folder_path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+              }
             }
             else
             {
-              writeAndRun(path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+              writeAndRun(path,folder_path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
             }
-          }
-          else
-          {
-            writeAndRun(path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
-          }
+          });
         });  
       }
      
@@ -61,7 +64,7 @@ Settings.find((error, data) => {
   }
 })
 
-function writeAndRun(path,data,script)
+function writeAndRun(path,folder_path,data,script)
 {
   fs.writeFile(path, script, err => {
     if (err) {
@@ -90,10 +93,12 @@ function writeAndRun(path,data,script)
           }
           return `${doc.key.toString()}=${doc.value}`
         }),
+        WorkingDir: "/run",
         HostConfig: {
           AutoRemove: false,
           Binds: [
-              `${require("path").dirname(path)}:/tmp`
+              `${require("path").dirname(path)}:/tmp`,
+              `${folder_path}:/run`
           ]
         }, 
         Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
@@ -111,12 +116,12 @@ function writeAndRun(path,data,script)
             done:false
           }
         )
-        containerLogs(auxContainer,workerData.custom_id);
+        containerLogs(auxContainer,workerData.custom_id,folder_path);
       })
   })
 }
 
-function containerLogs(container,generated_id) {
+function containerLogs(container,generated_id,folder_path) {
 
     container.inspect(function (err, data) {
       const startTime = data["State"]["StartedAt"];
@@ -152,23 +157,63 @@ function containerLogs(container,generated_id) {
         stream.on('end', function(){
           clearInterval(refreshTime);
           logStream.end('DONE');
-            container.inspect(function (err, data) {
-              const finishedAt = data["State"]["FinishedAt"];
-              if (data.State.ExitCode != 0)
-              {
-                set_docker_instance_in_database(generated_id,
-                  { done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                )
-              }
-              else
-              {
-                set_docker_instance_in_database(generated_id,
-                  { done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                )
-              }
-            container.remove()
-            parentPort.postMessage("Done")
+
+          container.inspect(function (err, data) {
+            const finishedAt = data["State"]["FinishedAt"];
+            fs.readdir(folder_path, function(err, files) {
+                if (err) {
+                  console.log(err)
+                } else {
+                  if (files.length != 0) {
+                      console.log(files)
+                      console.log("Docker Run ID: " +generated_id)
+                      console.log("Instance ID: " +workerData.instance._id)
+                      var dir = require('path').join(__dirname, '..') + '/resources/artifacts/' + workerData.instance._id + "/" + generated_id;
+                      console.log(dir)
+                      if (!fs.existsSync(dir)) {
+                        fs.mkdir(dir, { recursive: true }, (err) => {
+                            if (err) throw err;
+                            fs.cp(folder_path, dir, {recursive: true},(err)=>{
+                              if (err) throw err;
+                              if (data.State.ExitCode != 0)
+                              {
+                                set_docker_instance_in_database(generated_id,
+                                  { artifacts: files,done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                                )
+                              }
+                              else
+                              {
+                                set_docker_instance_in_database(generated_id,
+                                  { artifacts: files,done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                                )
+                              }
+                            });
+                        });
+                      }
+                  }
+                  else
+                  {
+                    if (data.State.ExitCode != 0)
+                    {
+                      set_docker_instance_in_database(generated_id,
+                        { artifacts: [],done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                      )
+                    }
+                    else
+                    {
+                      set_docker_instance_in_database(generated_id,
+                        { artifacts: [],done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                      )
+                    }
+                  }
+                }
+            });
+
+              
+              container.remove()
+              parentPort.postMessage("Done")
           });
+
         });
       });
     });

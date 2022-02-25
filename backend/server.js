@@ -115,6 +115,7 @@ const githubRoute = require('./routes/github.route');
 var routesApi = require('./routes/index');
 const UserRoute = require('./routes/users.route');
 const imageRoute = require('./routes/image.route');
+const artifactRoute = require('./routes/artifact.route');
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
@@ -139,6 +140,7 @@ app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)
 app.use('/api/user', UserRoute)
 app.use('/api/image', imageRoute)
+app.use('/api/artifact', artifactRoute)
 app.use('/api', routesApi);
 app.use(createNodeMiddleware())
 // app.use('/api/web', webRequestsRoute)

@@ -23,6 +23,9 @@ let DockerInstance = new Schema({
    },
    runtime:{
       type: Object
+   },
+   artifacts:{
+      type: [String]
    }
 }, {
    collection: 'docker'

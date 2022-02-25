@@ -1,7 +1,7 @@
 <mat-toolbar class="justify-content-center" style="margin-bottom: 2em;">
     <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">Statistics </h1>
 </mat-toolbar>
-<div class="d-flex justify-content-center">
+<div class="d-flex flex-wrap justify-content-center" style="gap: 10px">
   <mat-card>
     <ngx-charts-pie-chart
       [view]="view"
@@ -18,7 +18,7 @@
       >
     </ngx-charts-pie-chart>
   </mat-card>
-  <mat-card style="margin-left: 1em">
+  <mat-card>
     <div class="text-center">
     <h3>Average: {{this.avg}}</h3>
     <ngx-charts-line-chart

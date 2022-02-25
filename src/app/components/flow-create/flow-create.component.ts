@@ -200,7 +200,11 @@ export class FlowCreateComponent implements OnInit {
             });
             this.ngZone.run(() => this.router.navigateByUrl('/flow-list'))
           }, (error) => {
-            console.log(error);
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
       else
@@ -223,7 +227,11 @@ export class FlowCreateComponent implements OnInit {
             console.log(res)
             this.ngZone.run(() => this.router.navigateByUrl('/flow-list'))
           }, (error) => {
-            console.log(error);
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
 

@@ -23,6 +23,7 @@ flowRoute.route('/create').post((req, res, next) => {
   req.body.steps = newSteps
   Flow.create(req.body, (error, data) => {
     if (error) {
+      res.status(400).json(error)
       return next(error)
     } else {
       res.json(data)
@@ -76,7 +77,7 @@ flowRoute.route('/update/:id').put((req, res, next) => {
     $set: req.body
   }, (error, data) => {
     if (error) {
-      console.log(error)
+      res.error(error)
       return next(error);
     } else {
       res.json(data)

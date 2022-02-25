@@ -12,6 +12,7 @@ instanceRoute.use(auth)
 instanceRoute.route('/create').post((req, res, next) => {
   Instance.create(req.body, (error, data) => {
     if (error) {
+      res.status(400).json(error)
       return next(error)
     } else {
       res.json(data)
@@ -63,6 +64,7 @@ instanceRoute.route('/update/:id').put((req, res, next) => {
     $set: req.body
   }, (error, data) => {
     if (error) {
+      res.error(error)
       return next(error);
     } else {
       res.json(data)

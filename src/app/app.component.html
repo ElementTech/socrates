@@ -115,7 +115,7 @@
           </span>
           <button class="btn btn-light"  routerLink="/profile" *ngIf="auth.isLoggedIn()">{{auth.getUserDetails().name}}</button>
         </mat-toolbar>
-        <div class="p-4">
+        <div>
           <router-outlet></router-outlet>
         </div>
       </mat-sidenav-content>

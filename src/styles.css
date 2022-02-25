@@ -41,3 +41,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .mat-column-block{
     flex: 0 0 12%;
   }
+.example-container, .example-header{
+  margin-right: 1em;
+  margin-left: 1em;
+}

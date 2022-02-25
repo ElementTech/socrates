@@ -14,9 +14,9 @@ import { interval, Subscription } from 'rxjs';
 export class InstanceStatsComponent implements OnInit {
   instance_id: string;
   single: any[];
-  view: any[] = [700, 400];
+  view: any[] = [400, 300];
   multi: any[];
-  viewLine: any[] = [700, 300];
+  viewLine: any[] = [1000, 300];
   avg: any;
   subscription: Subscription;
   constructor(

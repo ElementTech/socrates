@@ -9,6 +9,7 @@ import {MatAccordion} from '@angular/material/expansion';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-block-create',
@@ -62,6 +63,7 @@ export class BlockCreateComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,
     public fb: FormBuilder,
+    private _snackBar: MatSnackBar,
     private router: Router,
     private ngZone: NgZone,
     private apiService: ApiService,
@@ -388,7 +390,12 @@ export class BlockCreateComponent implements OnInit {
             console.log('Block successfully created!')
             this.ngZone.run(() => this.router.navigateByUrl('/blocks-list'))
           }, (error) => {
-            console.log(error);
+            console.log(error)
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
       else
@@ -398,7 +405,12 @@ export class BlockCreateComponent implements OnInit {
             console.log(res)
             this.ngZone.run(() => this.router.navigateByUrl('/blocks-list'))
           }, (error) => {
-            console.log(error);
+            console.log(error)
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
     }

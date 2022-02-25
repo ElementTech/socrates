@@ -12,6 +12,7 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-instance-create',
   templateUrl: './instance-create.component.html',
@@ -58,6 +59,7 @@ export class InstanceCreateComponent implements OnInit {
     public fb: FormBuilder,
     private router: Router,
     private ngZone: NgZone,
+    private _snackBar: MatSnackBar,
     private apiService: ApiService,
     private actRoute: ActivatedRoute
   ) { 
@@ -310,7 +312,11 @@ export class InstanceCreateComponent implements OnInit {
             console.log('Instance successfully created!')
             this.ngZone.run(() => this.router.navigateByUrl('/instance-list'))
           }, (error) => {
-            console.log(error);
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
       else
@@ -320,7 +326,11 @@ export class InstanceCreateComponent implements OnInit {
             console.log(res)
             this.ngZone.run(() => this.router.navigateByUrl('/instance-list'))
           }, (error) => {
-            console.log(error);
+            if (error.includes("Error Code: 400")){
+              this._snackBar.open('Duplicate Names Not Allowed', 'Close', {
+                duration: 3000
+              });
+            }
           });
       }
     }

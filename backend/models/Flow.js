@@ -7,7 +7,8 @@ let Flow = new Schema({
       type: [[Object]]
    },
    name: {
-      type: String
+      type: String,
+      unique: true
    },
    desc: {
       type: String

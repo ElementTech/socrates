@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 // Define collection and schema
 let Block = new Schema({
    name: {
-      type: String
+      type: String,
+      unique: true
    },
    parameters: {
       type: [Object]

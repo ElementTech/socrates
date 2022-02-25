@@ -5,3 +5,4 @@ client
 .gitignore
 *.md
 resources/static/assets/uploads/*
+resources/static/assets/artifacts/*

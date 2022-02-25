@@ -63,3 +63,8 @@
   padding-top:25px;
   margin-left: 40px;
 }
+.content2 {
+  height: calc(100vh - 64px);
+  overflow: auto;
+
+}

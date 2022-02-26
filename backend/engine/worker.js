@@ -10,6 +10,7 @@ const tmp = require('tmp');
 const fs = require('fs');
 dbConfig = require('../database/db');
 var engine = require('./docker');
+const cupr = require('cup-readdir')
 
 mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
@@ -158,57 +159,53 @@ function containerLogs(container,generated_id,folder_path) {
           clearInterval(refreshTime);
           logStream.end('DONE');
 
-          container.inspect(function (err, data) {
-            const finishedAt = data["State"]["FinishedAt"];
-            fs.readdir(folder_path, function(err, files) {
-                if (err) {
-                  console.log(err)
-                } else {
-                  if (files.length != 0) {
-                      console.log(files)
-                      console.log("Docker Run ID: " +generated_id)
-                      console.log("Instance ID: " +workerData.instance._id)
-                      var dir = require('path').join(__dirname, '..') + '/resources/artifacts/' + workerData.instance._id + "/" + generated_id;
-                      console.log(dir)
-                      if (!fs.existsSync(dir)) {
-                        fs.mkdir(dir, { recursive: true }, (err) => {
-                            if (err) throw err;
-                            fs.cp(folder_path, dir, {recursive: true},(err)=>{
-                              if (err) throw err;
-                              if (data.State.ExitCode != 0)
-                              {
-                                set_docker_instance_in_database(generated_id,
-                                  { artifacts: files,done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                                )
-                              }
-                              else
-                              {
-                                set_docker_instance_in_database(generated_id,
-                                  { artifacts: files,done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                                )
-                              }
-                            });
+          container.inspect(async function (err, data) {
+              const finishedAt = data["State"]["FinishedAt"];
+              console.log(folder_path)
+              cupr.getAllFilePaths(folder_path).then(files => {
+                if (files.length != 0) {
+                  console.log("Docker Run ID: " +generated_id)
+                  console.log("Instance ID: " +workerData.instance._id)
+                  var dir = require('path').join(__dirname, '..') + '/resources/artifacts/' + workerData.instance._id + "/" + generated_id;
+                  if (!fs.existsSync(dir)) {
+                    fs.mkdir(dir, { recursive: true }, (err) => {
+                        if (err) throw err;
+                        fs.cp(folder_path, dir, {recursive: true},(err)=>{
+                          if (err) throw err;
+                          if (data.State.ExitCode != 0)
+                          {
+                            set_docker_instance_in_database(generated_id,
+                              { artifacts: files.map(file=>file.replace(folder_path + "/","")),done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                            )
+                          }
+                          else
+                          {
+                            set_docker_instance_in_database(generated_id,
+                              { artifacts: files.map(file=>file.replace(folder_path + "/","")),done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                            )
+                          }
                         });
-                      }
+                    });
+                  }
+                }
+                else
+                {
+                  if (data.State.ExitCode != 0)
+                  {
+                    set_docker_instance_in_database(generated_id,
+                      { artifacts: [],done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                    )
                   }
                   else
                   {
-                    if (data.State.ExitCode != 0)
-                    {
-                      set_docker_instance_in_database(generated_id,
-                        { artifacts: [],done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                      )
-                    }
-                    else
-                    {
-                      set_docker_instance_in_database(generated_id,
-                        { artifacts: [],done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                      )
-                    }
+                    set_docker_instance_in_database(generated_id,
+                      { artifacts: [],done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                    )
                   }
                 }
-            });
-
+                }
+              )
+           
               
               container.remove()
               parentPort.postMessage("Done")

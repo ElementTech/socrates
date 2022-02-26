@@ -34,7 +34,7 @@ export class ArtifactUploadService {
     return this.http.get(`${this.baseUri}/artifact/files/${instance}/${docker}`,{headers: this.headers});
   }
   downloadFile(instance,docker,name): any {
-    return this.http.get(`${this.baseUri}/artifact/files/${instance}/${docker}/${name}`,{responseType: 'blob',headers: this.headers}).subscribe(res => {
+    return this.http.get(`${this.baseUri}/artifact/files/${instance}/${docker}/${name.replace("/","%2F")}`,{responseType: 'blob',headers: this.headers}).subscribe(res => {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style.display = 'none';

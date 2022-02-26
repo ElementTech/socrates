@@ -2,6 +2,7 @@ const uploadFile = require("../middleware/upload_artifact");
 const fs = require("fs");
 const path = require("path")
 const DockerInstance = require("../models/DockerInstance")
+const cupr = require('cup-readdir')
 const upload = async (req, res) => {
   try {
     await uploadFile(req, res);
@@ -34,23 +35,21 @@ const getListFiles = (req, res) => {
   const instanceID = req.params.instance;
   const dockerID = req.params.docker;
   const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID)
-  fs.readdir(directoryPath, function (err, files) {
-    if (err) {
-      res.status(500).send({
-        message: "Unable to scan files!",
-      });
-    }
-
+  cupr.getAllFilePaths(directoryPath).then((files) => {
     let fileInfos = [];
 
     files.forEach((file) => {
       fileInfos.push({
-        name: file
+        name: file.replace(directoryPath + "/","")
       });
     });
 
     res.status(200).send(fileInfos);
-  });
+  },(err)=>{
+    res.status(500).send({
+      message: "Unable to scan files!",
+    });
+  })
 };
 
 const download = (req, res) => {
@@ -58,6 +57,7 @@ const download = (req, res) => {
   const instanceID = req.params.instance;
   const dockerID = req.params.docker;
   const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID + "/")
+  console.log(directoryPath+ fileName)
   res.download(directoryPath + fileName, fileName, (err) => {
     if (err) {
       res.status(500).send({

@@ -27,7 +27,7 @@ modules/.vscode
 .vimrc
 .nvimrc
 backend/resources/static/assets/uploads/*
-backend/resources/static/assets/artifacts/*
+backend/resources/artifacts/*
 # Don't check in secret files
 *secret.js
 

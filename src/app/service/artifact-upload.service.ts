@@ -45,10 +45,10 @@ export class ArtifactUploadService {
     });
   }
   getFileImage(instance,docker,name): Observable<any>{
-    return this.http.get(`${this.baseUri}/artifact/files/${name}`,{responseType: 'blob',headers: this.headers})
+    return this.http.get(`${this.baseUri}/artifact/files/${name.replace("/","%2F")}`,{responseType: 'blob',headers: this.headers})
   }
   deleteFile(instance,docker,name): Observable<any> {
-    let url = `${this.baseUri}/artifact/files/delete/${instance}/${docker}/${name}`;
+    let url = `${this.baseUri}/artifact/files/delete/${instance}/${docker}/${name.replace("/","%2F")}`;
     return this.http.delete(url, { headers: this.headers })
   }
 

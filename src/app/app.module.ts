@@ -71,6 +71,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { FileUploadService } from './service/file-upload.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import { DescDialogComponent } from './components/desc-dialog/desc-dialog.component';
+import { ArtifactsComponent } from './components/artifacts/artifacts.component';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { DescDialogComponent } from './components/desc-dialog/desc-dialog.compon
     UserListComponent,
     BlockStatsComponent,
     FileUploadComponent,
-    DescDialogComponent
+    DescDialogComponent,
+    ArtifactsComponent
     
   ],
   imports: [

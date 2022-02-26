@@ -1,6 +1,7 @@
-const uploadFile = require("../middleware/upload");
+const uploadFile = require("../middleware/upload_artifact");
 const fs = require("fs");
 const path = require("path")
+const DockerInstance = require("../models/DockerInstance")
 const upload = async (req, res) => {
   try {
     await uploadFile(req, res);
@@ -15,11 +16,6 @@ const upload = async (req, res) => {
   } catch (err) {
     console.log(err);
 
-    if (err.code == "LIMIT_FILE_SIZE") {
-      return res.status(500).send({
-        message: "File size cannot be larger than 2MB!",
-      });
-    }
     try {
         res.status(500).send({
             message: `Could not upload the file: ${req.file.originalname}. ${err}`,
@@ -34,7 +30,10 @@ const upload = async (req, res) => {
 };
 
 const getListFiles = (req, res) => {
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/")
+  console.log(req)
+  const instanceID = req.params.instance;
+  const dockerID = req.params.docker;
+  const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID)
   fs.readdir(directoryPath, function (err, files) {
     if (err) {
       res.status(500).send({
@@ -56,7 +55,9 @@ const getListFiles = (req, res) => {
 
 const download = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/")
+  const instanceID = req.params.instance;
+  const dockerID = req.params.docker;
+  const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID + "/")
   res.download(directoryPath + fileName, fileName, (err) => {
     if (err) {
       res.status(500).send({
@@ -68,16 +69,32 @@ const download = (req, res) => {
 
 const deleteFile = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/" + req.params.name)
+  const instanceID = req.params.instance;
+  const dockerID = req.params.docker;
+  const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID + "/" + fileName)
   fs.unlink(directoryPath, (err) => {
     if (err) {
       res.status(500).send({
         message: "Unable to scan files!",
       });
     }
-    res.status(200).send({
-      message: "Delete the file successfully: " + fileName,
-    });
+
+    DockerInstance.findByIdAndUpdate(dockerID, {
+      $pull:  { artifacts: fileName }
+    }, (error, data) => {
+      if (error) {
+        console.log(error)
+        res.status(500).send({
+          message: "Unable to update instance run",
+        });
+      } else {
+        res.status(200).send({
+          message: "Delete the file successfully: " + fileName,
+        });
+      }
+    })
+
+    
     //file removed
   })
 };

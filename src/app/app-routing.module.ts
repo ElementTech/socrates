@@ -24,6 +24,7 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
 import { UserListComponent } from './components/user-list/user-list.component';
 import { BlockStatsComponent } from './components/block-stats/block-stats.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { ArtifactsComponent } from './components/artifacts/artifacts.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -96,6 +97,9 @@ const routes: Routes = [
     role: 'ROLE_USER'
   } },
   { path: 'file-upload', component: FileUploadComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  } },
+  { path: 'artifacts/:instance/:docker', component: ArtifactsComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } }
 ];

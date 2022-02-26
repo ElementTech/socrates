@@ -9,13 +9,18 @@
     <div class="col-3">
         <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
             <mat-list class="infinitelist">
-                <ng-container *cdkVirtualFor="let item of listItems" >
+                <ng-container *cdkVirtualFor="let item of listItems">
          
-                        <mat-list-item>
+                        <mat-list-item [ngStyle]="{'height': (item.artifacts.length!=0) ? '5.5em' : 'initial'}">
                         <img matListAvatar [src]="item.image">
                         <h3 matLine> {{item.title}} </h3>
                         <p matLine>
-                            <span> {{item.content}}: &nbsp; <code>{{item.runtime}}</code> </span>
+                            <span> {{item.content}}: <code>{{item.runtime}}</code>
+                              <mat-chip-list *ngIf="item.artifacts.length != 0" >
+                                <mat-chip [routerLink]="['/artifacts/', this.id , item.id]" style="min-height: 22px !important; cursor: pointer;">Artifacts {{item.artifacts.length}}</mat-chip>
+                            </mat-chip-list> 
+                          </span>
+                            
                         </p>
                         <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id}">
                             <mat-icon>
@@ -47,9 +52,9 @@
     </div>
     <div class="col-9">
 
-        <div class="d-flex flex-row">
+        <div class="d-flex">
             <div class="col-3">
-                <ul class="list-group container">
+                <ul class="list-group">
             
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <mat-list-item>

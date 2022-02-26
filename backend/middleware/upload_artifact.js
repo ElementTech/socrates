@@ -1,11 +1,14 @@
 const util = require("util");
 const multer = require("multer");
 const path = require("path")
-const maxSize = 2 * 1024 * 1024;
+// const maxSize = 2 * 1024 * 1024;
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../resources/static/assets/uploads/"));
+    const instanceID = req.params.instance;
+    const dockerID = req.params.docker;
+    const directoryPath = path.join(__dirname, "../resources/artifacts/" + instanceID + "/" + dockerID)
+    cb(null, directoryPath);
   },
   filename: (req, file, cb) => {
     console.log(file.originalname);
@@ -14,15 +17,7 @@ let storage = multer.diskStorage({
 });
 
 let uploadFile = multer({
-  storage: storage,
-  fileFilter: function (req, file, callback) {
-    var ext = path.extname(file.originalname);
-    if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-        return callback(new Error('Only images are allowed'))
-    }
-    callback(null, true)
-    },
-  limits: { fileSize: maxSize },
+  storage: storage
 }).single("file");
 
 let uploadFileMiddleware = util.promisify(uploadFile);

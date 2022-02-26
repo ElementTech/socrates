@@ -377,6 +377,7 @@ export class InstanceRunComponent implements OnInit {
               this.listItems.push({
                 id: data[this.alreadyLoaded+i]._id,
                 run_number: data.length-(this.alreadyLoaded+i),
+                artifacts: data[this.alreadyLoaded+i].artifacts,
                 title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
                 content: content,
                 runtime: runtime,
@@ -436,6 +437,7 @@ export class InstanceRunComponent implements OnInit {
             }
             this.listItems.push({
               id: data[this.alreadyLoaded+i]._id,
+              artifacts: data[this.alreadyLoaded+i].artifacts,
               run_number: data.length-(this.alreadyLoaded+i),
               title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
               content: content,

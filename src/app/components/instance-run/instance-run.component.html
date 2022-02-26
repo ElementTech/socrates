@@ -22,7 +22,7 @@
                           </span>
                             
                         </p>
-                        <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id}">
+                        <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id, instance:this.id,docker:item.id,length:item.artifacts.length}">
                             <mat-icon>
                             more_vert
                             </mat-icon>
@@ -39,10 +39,13 @@
         </cdk-virtual-scroll-viewport>
                 
         <mat-menu #itemMenu="matMenu" >
-            <ng-template matMenuContent let-name="name">
+            <ng-template matMenuContent let-name="name" let-instance="instance" let-docker="docker" let-length="length">
             <button mat-menu-item (click)="showConsole(name)">
                 <i class="fa-solid fa-code" aria-hidden="true"></i> Console Log
             </button>
+            <button mat-menu-item *ngIf="length != 0" [routerLink]="['/artifacts/', instance , docker]">
+              <i class="fa-solid fa-file-archive" aria-hidden="true"></i> Artifacts
+          </button>
             <button mat-menu-item (click)="deleteDockerInstance(name)">
                 <i class="fa-solid fa-times-circle" style="color: red;" aria-hidden="true"></i> Delete
             </button>

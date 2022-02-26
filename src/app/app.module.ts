@@ -72,6 +72,8 @@ import { FileUploadService } from './service/file-upload.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import { DescDialogComponent } from './components/desc-dialog/desc-dialog.component';
 import { ArtifactsComponent } from './components/artifacts/artifacts.component';
+import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
+import {NgxGraphModule} from '@swimlane/ngx-graph'
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -101,7 +103,8 @@ import { ArtifactsComponent } from './components/artifacts/artifacts.component';
     BlockStatsComponent,
     FileUploadComponent,
     DescDialogComponent,
-    ArtifactsComponent
+    ArtifactsComponent,
+    FlowVizComponent
     
   ],
   imports: [
@@ -146,7 +149,8 @@ import { ArtifactsComponent } from './components/artifacts/artifacts.component';
     MatExpansionModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    NgxGraphModule
     // SocialLoginModule
   ],
   providers: [

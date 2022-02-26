@@ -1,0 +1,5 @@
+.chart-container{
+    border: 1px solid black !important;
+    margin: 1em;
+    height: 50vh;
+}

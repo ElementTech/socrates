@@ -25,6 +25,7 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { BlockStatsComponent } from './components/block-stats/block-stats.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ArtifactsComponent } from './components/artifacts/artifacts.component';
+import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -100,6 +101,9 @@ const routes: Routes = [
     role: 'ROLE_USER'
   } },
   { path: 'artifacts/:instance/:docker', component: ArtifactsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  } },
+  { path: 'flow-viz', component: FlowVizComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } }
 ];

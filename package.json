@@ -25,6 +25,8 @@
     "@angular/router": "~13.2.0",
     "@ctrl/ngx-codemirror": "^5.1.1",
     "@swimlane/ngx-charts": "^20.0.1",
+    "@swimlane/ngx-graph": "^8.0.0",
+    "@types/dagre": "^0.7.47",
     "angular-infinite-list": "^0.5.6",
     "angularx-social-login": "^4.0.1",
     "bootstrap": "^5.1.3",

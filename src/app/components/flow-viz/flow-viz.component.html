@@ -4,7 +4,8 @@
     [nodes]="nodes"
     [layout]="layout"
     [curve]="curve"
-    [enableZoom]="false"
+    [enableZoom]="true"
+    [draggingEnabled]="false"
   >
     <ng-template #defsTemplate>
         <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
@@ -25,9 +26,9 @@
     </ng-template>
 
     <ng-template #nodeTemplate let-node>
-        <svg:g
+        <svg:g *ngIf="node.label != '+'"
         (click)="onNodeClick($event)"
-        (dblclick)="onNodeClick($event)"
+        (dblclick)="onNodeDblClick($event)"
         class="node"
         ngx-tooltip
         [tooltipPlacement]="'top'"
@@ -43,6 +44,25 @@
             {{node.label}}
         </svg:text>
         </svg:g>
+        <svg:g *ngIf="node.label == '+'"
+        (click)="onPlusClick(node)"
+       
+        class="plus"
+        ngx-tooltip
+        [tooltipPlacement]="'top'"
+        [tooltipType]="'tooltip'"
+        [tooltipTitle]="node.label"
+        >
+        <svg:rect class="rect"
+            [attr.width]="node.dimension.width"
+            [attr.height]="node.dimension.height"
+            [attr.fill]="node.data.color"
+            
+        />
+        <svg:text class="text" alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+            {{node.label}}
+        </svg:text>
+        </svg:g>
     </ng-template>
 
     <ng-template #linkTemplate let-link>
@@ -55,7 +75,7 @@
             [style.dominant-baseline]="link.dominantBaseline"
             startOffset="50%"
             >
-            {{link.label}}
+            <!-- {{link.label}} -->
             </textPath>
         </svg:text>
         </svg:g>

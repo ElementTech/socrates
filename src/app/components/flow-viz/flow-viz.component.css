@@ -1,5 +1,16 @@
 .chart-container{
     border: 1px solid black !important;
     margin: 1em;
-    height: 50vh;
+    height: 80vh;
+}
+.rect {
+    fill: whitesmoke;
+    outline: 1px solid black !important;
+    cursor: pointer;
+}
+.text{
+    cursor: pointer;
+}
+.plus:hover > .rect{
+    fill: #3f51b579 !important;
 }

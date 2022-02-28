@@ -23,8 +23,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
   .mat-column-run{
-    flex: 0 0 15%;
+    flex: 0 0 12%;
+  
   }
+  mat-cell.mat-column-run{
+    border-right: 2px solid black;
+  }
+
   .mat-column-name{
     flex: 0 0 15%;
     }
@@ -40,6 +45,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
   .mat-column-block{
     flex: 0 0 12%;
+  }
+  .mat-row:hover{
+    background-color: lightgray !important;
+    transition: 0.2s;
   }
 .example-container, .example-header{
   margin-right: 1em;

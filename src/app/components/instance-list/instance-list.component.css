@@ -20,3 +20,6 @@
 mat-row:hover{
     background-color:white;
 }
+mat-cell.mat-column-run{
+    cursor:auto !important;
+  }

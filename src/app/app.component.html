@@ -93,8 +93,9 @@
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-list'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
           <span class="example-spacer"></span>
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/github-list'"> <i class="fa fa-github fa-lg" aria-hidden="true"></i>  Github </a>
+          <div class="vl"></div>
           <span class="fill-remaining-space">
-            <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
+            <!-- <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
               <i class="fa fa-user-circle fa-2x" [ngStyle]="{'color': (auth.isLoggedIn()) ? 'lightgreen' : 'white'}" aria-hidden="true"></i>
             </button>
             
@@ -111,9 +112,13 @@
                 <mat-icon>account_circle</mat-icon>
                 <span>Profile</span>
               </button>
-            </mat-menu>
+            </mat-menu> -->
+            
+            <button class="btn btn-outline-light"  routerLink="/profile" *ngIf="auth.isLoggedIn()"><i class="fa fa-user" aria-hidden="true"></i> {{auth.getUserDetails().name}}</button>
+            <a mat-button (click)="auth.logout()"> <mat-icon>logout</mat-icon>  </a>
+  
           </span>
-          <button class="btn btn-light"  routerLink="/profile" *ngIf="auth.isLoggedIn()">{{auth.getUserDetails().name}}</button>
+        
         </mat-toolbar>
         <div>
           <router-outlet></router-outlet>

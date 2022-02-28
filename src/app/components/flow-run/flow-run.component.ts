@@ -120,7 +120,7 @@ export class FlowRunComponent implements OnInit {
             this.listItems.push({
               id: data[this.alreadyLoaded+i]._id,
               run_number: data.length-(this.alreadyLoaded+i),
-              title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
+              title: `${data.length-(this.alreadyLoaded+i)}`,
               content: content,
               runtime: runtime,
               done: data[this.alreadyLoaded+i].done,
@@ -173,6 +173,22 @@ export class FlowRunComponent implements OnInit {
           this.updateConsole(id)
         }
     });
+  }
+
+
+  getBorder(content){
+    if (content == "Success")
+    {
+      return '8px solid green'
+    }
+    if (content == "Fail")
+    {
+      return '8px solid red'
+    }
+    if (content == "Running...")
+    {
+      return '8px solid grey'
+    }
   }
 
   deleteFlowInstance(id)
@@ -445,7 +461,7 @@ export class FlowRunComponent implements OnInit {
               this.listItems.push({
                 id: data[this.alreadyLoaded+i]._id,
                 run_number: data.length-(this.alreadyLoaded+i),
-                title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
+                title: `${data.length-(this.alreadyLoaded+i)}`,
                 content: content,
                 runtime: runtime,
                 done: data[this.alreadyLoaded+i].done,

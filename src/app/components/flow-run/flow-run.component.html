@@ -6,30 +6,33 @@
 <div class="row  w-100">
     <div class="col-3">
       <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
-          <mat-list class="infinitelist">
-              <ng-container *cdkVirtualFor="let item of listItems">
-       
-                      <mat-list-item>
-                      <img matListAvatar [src]="item.image">
-                      <h3 matLine> {{item.title}} </h3>
-                      <p matLine>
-                          <span> {{item.content}}: &nbsp; <code>{{item.runtime}}</code> </span>
-                      </p>
-                      <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id}">
-                          <mat-icon>
-                          more_vert
-                          </mat-icon>
-                      </button>
-                      <mat-divider></mat-divider>
-                      </mat-list-item>
-          
-              </ng-container>
-              <div class="spinner-item">
-                  <mat-progress-spinner [mode]="'indeterminate'" [diameter]="50" *ngIf="loading != false">     
-            </mat-progress-spinner>
-                </div>
-          </mat-list>
-      </cdk-virtual-scroll-viewport>
+        <mat-list class="infinitelist">
+            <ng-container *cdkVirtualFor="let item of listItems">
+              <mat-divider></mat-divider>
+                    <mat-list-item  class="listitem" [style.border-left]="getBorder(item.content)">
+                     
+                    <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> </h3>
+                    <p matLine>
+                        <span> <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Duration: <code>{{item.runtime}}</code>
+                    
+                      </span>
+                        
+                    </p>
+                    <button mat-icon-button [matMenuTriggerFor]="itemMenu" [matMenuTriggerData]="{name: item.id, instance:this.id,docker:item.id}">
+                        <mat-icon>
+                        more_vert
+                        </mat-icon>
+                    </button>
+                    <mat-divider></mat-divider>
+                    </mat-list-item>
+        
+            </ng-container>
+            <div class="spinner-item">
+                <mat-progress-spinner [mode]="'indeterminate'" [diameter]="50" *ngIf="loading != false">     
+          </mat-progress-spinner>
+              </div>
+        </mat-list>
+    </cdk-virtual-scroll-viewport>
               
       <mat-menu #itemMenu="matMenu" >
           <ng-template matMenuContent let-name="name">

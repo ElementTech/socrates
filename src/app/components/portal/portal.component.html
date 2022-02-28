@@ -1,7 +1,9 @@
-<div style="height: 100%; box-sizing: border-box;">
-    <mat-card style="height: 100%; box-sizing: border-box; padding:0; overflow-y: scroll;">
+<div class="container">
+  <div style="height: 100%; box-sizing: border-box;">
+    <mat-card style="height: 100%; box-sizing: border-box; padding:0; overflow-y: scroll; ">
       <file-manager [fileElements]="fileElements | async" [path]="currentPath" [canNavigateUp]="canNavigateUp" (folderAdded)="addFolder($event)" (fileAdded)="addFile($event)"
         (elementRemoved)="removeElement($event)" (navigatedDown)="navigateToFolder($event)" (navigatedUp)="navigateUp()" (elementRenamed)="renameElement($event)"
         (elementMoved)="moveElement($event)"></file-manager>
     </mat-card>
   </div>
+</div>

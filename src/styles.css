@@ -47,8 +47,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .content {
-  height: calc(100vh);
+  height: calc(100vh + 64px);
   overflow: auto;
   border-right: 5px solid #3f51b5;
-  border-left: 5px solid #3f51b5;
+}
+.artlist{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.listitem{
+  margin-bottom: 0.3em;
+  padding-left: 0.5em !important;
+  background-color: white;
 }

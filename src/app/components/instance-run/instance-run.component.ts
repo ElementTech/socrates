@@ -101,6 +101,22 @@ export class InstanceRunComponent implements OnInit {
    
   }// Good
   fullScreenToggle = true;
+
+  getBorder(content){
+    if (content == "Success")
+    {
+      return '8px solid green'
+    }
+    if (content == "Fail")
+    {
+      return '8px solid red'
+    }
+    if (content == "Running...")
+    {
+      return '8px solid grey'
+    }
+  }
+
   fullScreen(evt, input) {
       var code = evt.charCode || evt.keyCode;
       console.log("before")
@@ -378,7 +394,7 @@ export class InstanceRunComponent implements OnInit {
                 id: data[this.alreadyLoaded+i]._id,
                 run_number: data.length-(this.alreadyLoaded+i),
                 artifacts: data[this.alreadyLoaded+i].artifacts,
-                title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
+                title: `${data.length-(this.alreadyLoaded+i)}`,
                 content: content,
                 runtime: runtime,
                 done: data[this.alreadyLoaded+i].done,
@@ -439,7 +455,7 @@ export class InstanceRunComponent implements OnInit {
               id: data[this.alreadyLoaded+i]._id,
               artifacts: data[this.alreadyLoaded+i].artifacts,
               run_number: data.length-(this.alreadyLoaded+i),
-              title: `Run Number: ${data.length-(this.alreadyLoaded+i)}`,
+              title: `${data.length-(this.alreadyLoaded+i)}`,
               content: content,
               runtime: runtime,
               done: data[this.alreadyLoaded+i].done,

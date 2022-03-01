@@ -34,6 +34,25 @@ const run_flow = async (flow,flow_run_id) => {
   })
 }
 
+const run_flowviz = async (flowviz,flowviz_run_id) => {
+  
+  console.log(flowviz,flowviz_run_id)
+  // const worker = new Worker("./engine/flower.js", {workerData: {flow:JSON.parse(JSON.stringify(flow)),flow_run_id:flow_run_id}});
+
+  // worker.once("message", result => {
+  //     console.log(`${result}`);
+  // });
+  
+  // worker.on("error", error => {
+  //     console.log(error);
+  // });
+  
+  // worker.on("exit", exitCode => {
+  //     console.log(`It exited with code ${exitCode}`);
+  // })
+}
+
+
 function duration(t0, t1){
   let d = (new Date(t1)) - (new Date(t0));
   let weekdays     = Math.floor(d/1000/60/60/24/7);
@@ -49,4 +68,4 @@ function duration(t0, t1){
   return t;
 }
 
-module.exports = {run, run_flow, duration}
+module.exports = {run, run_flow, run_flowviz, duration}

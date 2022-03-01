@@ -1,7 +1,7 @@
 .chart-container{
     border: 1px solid black !important;
-    margin: 1em;
-    height: 80vh;
+  
+    height: 82vh;
 }
 .rect {
     fill: whitesmoke;
@@ -32,8 +32,9 @@
     display: block;
   }
   .infinite{
-    max-height: 80vh;
+    height: 82vh;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
   
   .example-box {
@@ -122,3 +123,40 @@
     width: 20%;
   }
   
+
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+
+  
+  .example-option-img {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  [dir='rtl'] .example-option-img {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-prefix,
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+      top: 0 !important;
+  }
+  .institem{
+    margin-top: 1em;
+    margin-left: 0.6em;
+  }
+  .firstitem{
+    margin-left: 0.6em;
+  }
+  .glow{
+    box-shadow: 120px 80px 40px 20px #0ff !important;
+    background-color: #fff !important;
+    width: 150px !important;
+    height: 150px !important; 
+    /* in order: x offset, y offset, blur size, spread size, color */
+    /* blur size and spread size are optional (they default to 0) */
+  }

@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Block } from '../model/Block';
 import { Instance } from '../model/Instance';
 import { Flow } from '../model/Flow';
+import { Flowviz } from '../model/Flowviz';
 import { environment } from 'src/environments/environment';
 
 
@@ -196,6 +197,13 @@ export class ApiService {
         catchError(this.errorMgmt)
       )
   }
+  runFlowviz(data): Observable<any> {
+    let url = `${this.baseUri}/flowviz/run`;
+    return this.http.post(url,data,{headers: this.headers})
+      .pipe(
+        catchError(this.errorMgmt)
+      )
+  }
 
   // Docker
 
@@ -226,7 +234,16 @@ export class ApiService {
         catchError(this.errorMgmt)
       )
     }
-  
+      // Get block
+      getFlowvizInstance(id): Observable<any> {
+        let url = `${this.baseUri}/flowviz/instance/one/read/${id}`;
+        return this.http.get(url, {headers: this.headers}).pipe(
+          map((res: Response) => {
+            return res || {}
+          }),
+          catchError(this.errorMgmt)
+        )
+      }
 
     // Get block
     getBlockInstances(id): Observable<any> {
@@ -270,6 +287,22 @@ export class ApiService {
         catchError(this.errorMgmt)
       )
     }
+
+        // Update block
+      updateFlowvizInstance(id, data): Observable<any> {
+        let url = `${this.baseUri}/flowviz/instance/update/${id}`;
+        return this.http.put(url, data, { headers: this.headers }).pipe(
+          catchError(this.errorMgmt)
+        )
+      }
+    
+      // Delete block
+      deleteFlowvizInstance(id): Observable<any> {
+        let url = `${this.baseUri}/flowviz/instance/delete/${id}`;
+        return this.http.delete(url, { headers: this.headers }).pipe(
+          catchError(this.errorMgmt)
+        )
+      }
 
   // Get block
   getDockerInstanceByInstanceID(id): Observable<any> {
@@ -322,6 +355,27 @@ export class ApiService {
         catchError(this.errorMgmt)
       )
     }
+
+        // Get block
+        getFlowvizInstanceByFlowvizID(id): Observable<any> {
+          let url = `${this.baseUri}/flowviz/instance/read/${id}`;
+          return this.http.get(url, {headers: this.headers}).pipe(
+            map((res: Response) => {
+              return res || {}
+            }),
+            catchError(this.errorMgmt)
+          )
+        }
+      
+        getFlowvizInstanceStatsByFlowvizID(id): Observable<any> {
+          let url = `${this.baseUri}/flowviz/instance/read/stats/${id}`;
+          return this.http.get(url, {headers: this.headers}).pipe(
+            map((res: Response) => {
+              return res || {}
+            }),
+            catchError(this.errorMgmt)
+          )
+        }
 
   // Settings
 
@@ -398,6 +452,58 @@ export class ApiService {
       catchError(this.errorMgmt)
     )
   }
+
+
+
+
+
+
+  // Create
+  createFlowviz(data): Observable<any> {
+    let url = `${this.baseUri}/flowviz/create`;
+    return this.http.post(url,data,{headers: this.headers})
+      .pipe(
+        catchError(this.errorMgmt)
+      )
+  }
+
+  // Get all blocks
+  getFlowvizs() {
+    return this.http.get<[Flow]>(`${this.baseUri}/flowviz`,{headers: this.headers});
+  }
+
+  // Get block
+  getFlowviz(id): Observable<any> {
+    let url = `${this.baseUri}/flowviz/readviz/${id}`;
+    return this.http.get(url, {headers: this.headers}).pipe(
+      map((res: Response) => {
+        return res || {}
+      }),
+      catchError(this.errorMgmt)
+    )
+  }
+
+  // Update block
+  updateFlowviz(id, data): Observable<any> {
+    let url = `${this.baseUri}/flowviz/update/${id}`;
+    return this.http.put(url, data, { headers: this.headers }).pipe(
+      catchError(this.errorMgmt)
+    )
+  }
+
+  // Delete block
+  deleteFlowviz(id): Observable<any> {
+    let url = `${this.baseUri}/flowviz/delete/${id}`;
+    return this.http.delete(url, { headers: this.headers }).pipe(
+      catchError(this.errorMgmt)
+    )
+  }
+
+
+
+
+
+
 
 // Get all blocks
 getGithubElements() {

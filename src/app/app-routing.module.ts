@@ -103,9 +103,10 @@ const routes: Routes = [
   { path: 'artifacts/:instance/:docker', component: ArtifactsComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } },
-  { path: 'flow-viz', component: FlowVizComponent, canActivate: [AuthGuardService], data: {
+  { path: 'flow-viz/:id', component: FlowVizComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
-  } }
+  }   },
+  { path: 'flow-viz',redirectTo: 'flow-viz/', pathMatch: 'full'}
 ];
 
 @NgModule({

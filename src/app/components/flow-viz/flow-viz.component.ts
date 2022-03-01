@@ -7,7 +7,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { SidenavService } from 'src/app/service/sidenav.service';
 import { ApiService } from '../../service/api.service';
@@ -19,42 +19,14 @@ import { ApiService } from '../../service/api.service';
 export class FlowVizComponent {
   public curve: any = stepRound;
   public layout: Layout = new DagreNodesOnlyLayout();
-  public links: Edge[] = [
-    {
-      id: 'a',
-      source: '1',
-      target: '2',
-      label: 'is parent of'
-    },
-    {
-      id: 'b',
-      source: '1',
-      target: '3',
-      label: 'custom label'
-    },
-    {
-      id: 'c',
-      source: '1',
-      target: '4',
-      label: 'custom label'
-    }
+  lastNum = 0
+  public links: any[] = [
+ 
   ];
-  public nodes: Node[] = [
+  public nodes: any[] = [
     {
-      id: '1',
-      label: 'A'
-    },
-    {
-      id: '2',
-      label: 'B'
-    },
-    {
-      id: '3',
-      label: 'C'
-    },
-    {
-      id: '4',
-      label: 'D'
+      id: 'node0',
+      label: 'Start'
     }
   ];
 
@@ -66,32 +38,38 @@ export class FlowVizComponent {
     console.log(event)
   }
   onPlusClick(event){
-    const id = event.id.split("_").slice(1).join("_")
-    const num = btoa(Math.random().toString()).substr(10, 5);
+    const id = "node"+(this.lastNum+1).toString()
+    // const num = btoa(Math.random().toString()).substr(10, 3);
+    const newLabel = (this.lastNum+1).toString()
 
-    this.nodes.push({id:`${num}_${id}`,label:num})
+    this.nodes.push({id:`${id}`,label:newLabel})
 
-    this.nodes.push({id:`plus_${num}_${id}`,label:"+"})
+    this.nodes.push({id:`plus_${id}`,label:"+"})
 
     this.nodes = [...this.nodes];
 
     this.links.push({
-      id:`${num}_${id}`,
-      source: id,
-      target: `${num}_${id}`,
-      label: num
+      id:`${id}`,
+      source: event.id.split("_").slice(1).join("_"),
+      target: `${id}`,
+      label: newLabel
     })
 
     this.links.push({
-      id:`plus_${num}_${id}`,
-      source: `${num}_${id}`,
-      target: `plus_${num}_${id}`,
+      id:`plus_${id}`,
+      source: `${id}`,
+      target: `plus_${id}`,
       label: '+'
     })
 
-    console.log(`Pushing Node ${num}_${id} to be connected to ${id}. Giving it plus_${num}_${id}, it will be connected to ${num}_${id}`)
+    console.log(`Pushing Node ${id} to be connected to ${event.id.split("_").slice(1).join("_")}. Giving it plus_${id}, it will be connected to ${id}`)
 
     this.links = [...this.links];
+    this.lastNum++
+    this.hidePlus()
+    this.flowForm.get("nodes").setValue(this.nodes)
+    this.flowForm.get("links").setValue(this.links)
+    this.showPlus()
   }
 
   // Flow Create
@@ -123,45 +101,29 @@ export class FlowVizComponent {
     private ngZone: NgZone,
     private cdRef: ChangeDetectorRef,
     private apiService: ApiService) {
-    this.appendItems(0, this.sum);
   }
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      if (event.previousContainer.id != "initial-list")
-      {
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex,
-        );
-      }
-      else
-      {
-        copyArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex,
-        );
-      }
-    }
-    this.flowForm.get('steps').setValue(this.steps)
+
+  instances: any;
+
+  inputChanged(event,nodeObject){
+    console.log(event.value,nodeObject)
+    nodeObject.data.name = event.value
+    nodeObject.data.image = this.instanceList.find(inst=>inst.name==event.value).image
+    // document.querySelector(`img[id=img${nodeObject.label}]`).setAttribute("src",this.imageUrls[this.instanceList.find(inst=>inst.name==event.option.value).image])
+    this.nodes[this.nodes.indexOf(nodeObject)] = nodeObject
+    this.flowForm.get("nodes").setValue(this.nodes)
   }
+  enter(i) {
+    document.getElementById(i.label+"rect").setAttribute("filter","url(#neon)")
+  }
+
+  leave(i) {
+    document.getElementById(i.label+"rect").removeAttribute("filter")
+  }
+
   ngOnInit(): void {
-    this.nodes.forEach(node=>{
-      this.nodes.push({id:`plus_${node.id}`,label:"+"})
-      this.nodes = [...this.nodes];
-      this.links.push({
-        id:`plus_${node.id}`,
-        source: node.id,
-        target: `plus_${node.id}`,
-        label: '+'
-      })
-      this.links = [...this.links];
-    })
+
+    this.showPlus()
     // this.sidenav.close();
     this.Images = this.uploadService.getFiles()
     this.uploadService.getFiles().subscribe(data=>{
@@ -178,6 +140,7 @@ export class FlowVizComponent {
     })
     this.mainForm()
     this.id = this.actRoute.snapshot.paramMap.get('id')
+    console.log(this.id)
     if (this.id == ""){
       console.log("New Flow")
     }
@@ -188,64 +151,52 @@ export class FlowVizComponent {
         delete data.__v
         delete data._id
         this.flowForm.setValue(data)
-        this.steps= data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
-        console.log(this.steps)
       });
     }
-  }
-  addItems(startIndex, endIndex, _method) {
-
-    this.apiService.getInstances().subscribe((data) => {
-      this.data=data
-      for (let i = startIndex; i < endIndex && i < this.data.length; ++i) {
-        this.array[_method](data[i]);
-       
-      }
-    })
-
     
   }
-
-  appendItems(startIndex, endIndex) {
-    this.addItems(startIndex, endIndex, "push");
+  instanceList: any;
+  ngAfterContentInit(){
+    this.instances = this.apiService.getInstances().pipe(tap(data=>this.instanceList=data))
   }
 
-  prependItems(startIndex, endIndex) {
-    this.addItems(startIndex, endIndex, "unshift");
-  }
-
-  onScrollDown(ev) {
-    // add another 20 items
-    const start = this.sum;
-    this.sum += 20;
-    this.appendItems(start, this.sum);
-
-    this.direction = "down";
-  }
-
-  onUp(ev) {
-    const start = this.sum;
-    this.sum += 20;
-    this.prependItems(start, this.sum);
-    this.direction = "up";
-  }
   // generateWord() {
   //   return "bla";
   // }
   // ngAfterViewChecked() {
   //   this.cdRef.detectChanges();
   // }
-  addStep(){
-    this.steps.push([])
-    this.flowForm.get("steps").setValue(this.steps);
+  showPlusEnabled = true;
+  hidePlus(){
+    this.nodes = this.nodes.filter(item=>item.label != "+")
+    this.links = this.links.filter(link=>!link.label.includes("+"))
+    this.showPlusEnabled = true;
     // this.cdRef.detectChanges();
+  }
+  showPlus(){
+    if (this.showPlusEnabled)
+    {
+      this.nodes.forEach(node=>{
+        this.nodes.push({id:`plus_${node.id}`,label:"+"})
+        this.nodes = [...this.nodes];
+        this.links.push({
+          id:`plus_${node.id}`,
+          source: node.id,
+          target: `plus_${node.id}`,
+          label: '+'
+        })
+        this.links = [...this.links];
+      })
+      this.showPlusEnabled = false
+    }
   }
 
 
   mainForm() {
     this.flowForm = this.fb.group({
       name: ['', [Validators.required]],
-      steps: [this.steps, [Validators.required]],
+      nodes: [this.nodes, [Validators.required]],
+      links: [this.links, [Validators.required]],
       desc: [''],
       image: ['']
     })
@@ -280,13 +231,14 @@ export class FlowVizComponent {
 
   onSubmit() {
     this.submitted = true;
-    if (!this.flowForm.valid || (this.validateArray(this.flowForm.get('steps').value) == false)) {
+    this.hidePlus()
+    if (!this.flowForm.valid) {
       
       return false;
     } else {
       if (this.id == "")
       {
-        this.apiService.createFlow(this.flowForm.value).subscribe(
+        this.apiService.createFlowviz(this.flowForm.value).subscribe(
           (res) => {
             this._snackBar.open('Flow created successfully', 'Close', {
               duration: 3000
@@ -302,17 +254,7 @@ export class FlowVizComponent {
       }
       else
       { 
-        this.apiService.updateFlow(this.id,Object.assign({}, this.flowForm.value, {steps: this.flowForm.value.steps.map(step=>{return step.map(inst=>{
-          console.log(inst)
-          if (typeof inst == "string")
-          {
-            return {"num":JSON.parse(inst).num,"id":JSON.parse(inst).data._id} 
-          }
-          else
-          {
-            return {"num":step.indexOf(inst),"id":inst._id} 
-          }
-        })})})).subscribe(
+        this.apiService.updateFlowviz(this.id,this.flowForm.value).subscribe(
           (res) => {
             this._snackBar.open('Flow updated successfully', 'Close', {
               duration: 3000

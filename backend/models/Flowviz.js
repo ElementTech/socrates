@@ -1,0 +1,27 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+// Define collection and schema
+let Flowviz = new Schema({
+   nodes:{
+      type: [Object]
+   },
+   links:{
+      type: [Object]
+   },
+   name: {
+      type: String,
+      unique: true
+   },
+   desc: {
+      type: String
+   },
+   image: {
+      type: String,
+      required: false
+   },
+}, {
+   collection: 'flows_viz'
+})
+
+module.exports = mongoose.model('Flowviz', Flowviz)

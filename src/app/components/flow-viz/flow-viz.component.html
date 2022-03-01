@@ -6,52 +6,102 @@
     <div class="example-container">
       <mat-toolbar class="d-flex justify-content-center">
         <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
-    </mat-toolbar>
+      </mat-toolbar>
   
+        <!-- <div
+                infinite-scroll
+                [infiniteScrollDistance]="scrollDistance"
+                [scrollWindow]="false"
+                [horizontal]="false"
+                [infiniteScrollUpDistance]="scrollUpDistance"
+                [infiniteScrollThrottle]="throttle"
+                (scrolled)="onScrollDown($event)"
+                (scrolledUp)="onUp($event)"
+                cdkDropList
+                [cdkDropListData]="array"
+                class="example-list infinite"
+                id="initial-list"
+              
+                (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let i of array" cdkDrag>
+                
+                  <img width="50px" [src]="this.imageUrls[i.image]">
+                  {{i.name}}
+                  <mat-chip-list>
+                    <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
+                  
+                      <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
+            
+                          {{param.key}}
+                      </mat-chip>
+                  
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
+                    
+                      <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
+                        {{param.key}}
+                      </mat-chip>
+                  
+                    </ng-container>
+                  </mat-chip-list>
 
-    
-      <div
-        infinite-scroll
-        [infiniteScrollDistance]="scrollDistance"
-        [scrollWindow]="false"
-        [horizontal]="false"
-        [infiniteScrollUpDistance]="scrollUpDistance"
-        [infiniteScrollThrottle]="throttle"
-        (scrolled)="onScrollDown($event)"
-        (scrolledUp)="onUp($event)"
-        cdkDropList
-        [cdkDropListData]="array"
-        class="example-list infinite"
-        id="initial-list"
-       
-        (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let i of array" cdkDrag>
-         
-          <img width="50px" [src]="this.imageUrls[i.image]">
-          {{i.name}}
-          <mat-chip-list>
-            <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
-           
-              <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
-     
-                  {{param.key}}
-              </mat-chip>
-           
-            </ng-container>
-            <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
-             
-              <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
-                {{param.key}}
-              </mat-chip>
-           
-            </ng-container>
-          </mat-chip-list>
+                </div>
+              </div> -->
+          <div>
+                               
 
-        </div>
-      </div>
+
+
+            <mat-list class="infinite">
+              <ng-container  *ngFor="let i of nodes">
+                <!-- <mat-list-item  *ngIf="i.label != '+'" class="firstitem w-100">
+                  <div class="list-group w-100">
+                    <a class="list-group-item list-group-item-action">{{i.label}}</a>
+                  </div>
+                </mat-list-item> -->
+                <mat-list-item  *ngIf="i.label != '+' && i.label != 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
+                  <mat-form-field appearance="fill" class="w-100"  appearance="outline">
+                   
+                  
+                    <mat-label>Instance</mat-label>
+                    <!-- <mat-icon matPrefix style="margin-right:10px;"><i class="fa fa-cubes" aria-hidden="true"></i></mat-icon> -->
+
+                    <mat-select (selectionChange)="inputChanged($event,i)" >
+                      <mat-option *ngFor="let instance of instances | async"  (mouseover)="enter(i)" (mouseout)="leave(i)" [value]="instance.name">
+                        <img width="50px" class="example-option-img" [src]="this.imageUrls[instance.image]">
+                        <span>{{instance.name}}</span>
+                        <!-- <small>ID: {{instance._id}}</small> -->
+                      </mat-option>
+                    </mat-select>
+
+
+                        <span matSuffix><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;{{i.label}}</span>
+                  </mat-form-field>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+
+          </div>
+
     </div>
   
-    <div class="chart-container" style="min-width: 60%;">
+    <div style="min-width: 60%;">
+      <mat-toolbar class="d-flex justify-content-between" style="gap:10px">
+        <div>
+          <button mat-stroked-button color="primary" (click)="hidePlus()">
+            <i class="fa-solid fa-minus-square" aria-hidden="true"></i> Hide Plus
+          </button>
+          <button mat-stroked-button color="primary" (click)="showPlus()">
+            <i class="fa-solid fa-plus-square" aria-hidden="true"></i> Show Plus
+          </button>
+          
+        </div>
+
+        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
+        <div></div>
+      </mat-toolbar>
+      <div class="chart-container card">
+
         <ngx-graph
           [links]="links"
           [nodes]="nodes"
@@ -79,7 +129,7 @@
           </ng-template>
       
           <ng-template #nodeTemplate let-node>
-              <svg:g *ngIf="node.label != '+'"
+              <svg:g *ngIf="node.label != '+' && node.label != 'Start'"
               (click)="onNodeClick($event)"
               (dblclick)="onNodeDblClick($event)"
               class="node"
@@ -88,14 +138,73 @@
               [tooltipType]="'tooltip'"
               [tooltipTitle]="node.label"
               >
-              <svg:rect
-                  [attr.width]="node.dimension.width"
-                  [attr.height]="node.dimension.height"
-                  [attr.fill]="node.data.color"
-              />
-              <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+              <filter id="neon" height="300%" width="300%" x="-75%" y="-75%">
+                <!-- Thicken out the original shape -->
+                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
+            
+                <!-- Use a gaussian blur to create the soft blurriness of the glow -->
+                <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
+            
+                <!-- Change the colour -->
+                <feFlood flood-color="rgb(63, 81, 181)" result="glowColor" />
+            
+                <!-- Color in the glows -->
+                <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
+            
+                <!--	Layer the effects together -->
+                <feMerge>
+                  <feMergeNode in="softGlow_colored"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            
+              </filter>
+                <svg:rect
+                    [attr.width]="'5em'"
+                    [attr.height]="'5em'"
+                    [attr.fill]="'lightgrey'"
+                    id="{{node.label}}rect"
+                />
+                <svg xmlns="http://www.w3.org/2000/svg">
+                  <!-- Common use case: embed HTML text into SVG -->
+                  <foreignObject x="0" y="0" width="5em" height="5em">
+                    <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
+                     
+                        {{node.label}}
+                    </div>
+                    <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
+                     
+                      <p>{{node.data.name}}</p>
+                     
+                    </div>
+                      <img width="30px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0">
+                  </foreignObject>
+                </svg>
+                <!-- <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+                  
+                </svg:text>
+                <svg:text alignment-baseline="central" [attr.x]="20" [attr.y]="node.dimension.height / 2">
+                  
+                </svg:text> -->
+              </svg:g>
+              <svg:g *ngIf="node.label == 'Start'"
+              class="node"
+              ngx-tooltip
+              [tooltipPlacement]="'top'"
+              [tooltipType]="'tooltip'"
+              [tooltipTitle]="node.label"
+              >
+         
+                <svg:rect
+                    [attr.width]="'5em'"
+                    [attr.height]="'5em'"
+                    [attr.fill]="'black'"
+                    id="{{node.label}}rect"
+                />
+    
+                <svg:text alignment-baseline="central" [attr.x]="14" [attr.y]="node.dimension.height / 2" [attr.fill]="'white'" style="font-size:x-large;">
                   {{node.label}}
-              </svg:text>
+                </svg:text>
+          
               </svg:g>
               <svg:g *ngIf="node.label == '+'"
               (click)="onPlusClick(node)"
@@ -136,6 +245,8 @@
       
         </ngx-graph>
       </div>
+    </div>
+
       
     <div class="details text-center">
      

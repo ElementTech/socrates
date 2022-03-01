@@ -110,6 +110,7 @@ const dockerRoute = require('./routes/docker.route');
 const parameterRoute = require('./routes/parameter.route');
 // const webRequestsRoute = require('../backend/routes/web-requests.route')
 const flowRoute = require('./routes/flow.route');
+const flowvizRoute = require('./routes/flow-viz.route');
 const fileRoute = require('./routes/file.route');
 const githubRoute = require('./routes/github.route');
 var routesApi = require('./routes/index');
@@ -135,6 +136,7 @@ app.use('/api/instance', instanceRoute)
 app.use('/api/docker', dockerRoute)
 app.use('/api/settings', settingsRoute.settingsRoute)
 app.use('/api/flow', flowRoute)
+app.use('/api/flowviz', flowvizRoute)
 app.use('/api/parameter', parameterRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)

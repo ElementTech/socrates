@@ -74,6 +74,7 @@ import { DescDialogComponent } from './components/desc-dialog/desc-dialog.compon
 import { ArtifactsComponent } from './components/artifacts/artifacts.component';
 import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
 import {NgxGraphModule} from '@swimlane/ngx-graph'
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -150,7 +151,8 @@ import {NgxGraphModule} from '@swimlane/ngx-graph'
     MatNativeDateModule,
     MatDialogModule,
     MatTabsModule,
-    NgxGraphModule
+    NgxGraphModule,
+    MatAutocompleteModule
     // SocialLoginModule
   ],
   providers: [

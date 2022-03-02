@@ -1,0 +1,90 @@
+
+  <div class="">
+    <mat-toolbar class="d-flex justify-content-center">
+      <i class="fa-solid fa-chain" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Flows</h1>
+  </mat-toolbar>
+    <div class="example-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    
+    <div class="example-container mat-elevation-z8">
+      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let row"><img width="50px" [src]="this.imageUrls[row.image]">
+            <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="run" >
+          <mat-header-cell *matHeaderCellDef>Run</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.run">
+            <mat-chip-list class="d-flex">
+              <mat-button-toggle-group multiple vertical="false">
+                <button mat-mini-fab style="margin-left:5px" color="primary" [routerLink]="['/flow-viz-run/', row._id]"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+                <img *ngIf="row.lastrun == false" matListAvatar src="../../../assets/success.png">
+                <img *ngIf="row.lastrun == true" matListAvatar src="../../../assets/fail.png">
+                <img *ngIf="row.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
+                <img *ngIf="row.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
+                <mat-chip class="flex-fill">{{row.numruns}}</mat-chip>
+              </mat-button-toggle-group>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+  
+    
+  
+        <ng-container matColumnDef="desc">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.desc">{{row.desc}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nodes">
+          <mat-header-cell *matHeaderCellDef>Nodes</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.nodes">
+            <mat-chip-list>
+                <mat-chip>
+                  {{row.nodes.length}}
+                </mat-chip>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="configure">
+          <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.configure">
+            <mat-button-toggle-group multiple vertical="false">
+              <!-- Flow Edit Is Broken for some reason -->
+              <button mat-button [routerLink]="['/flow-viz/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
+              <button mat-button (click)="removeFlowviz(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+              <a [routerLink]="['/flow-viz-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
+            </mat-button-toggle-group>
+          </mat-cell>
+        </ng-container>
+  
+        <!-- <ng-container matColumnDef="parameters">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
+          <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
+            <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
+          </mat-chip-list>
+          <mat-chip-list aria-label="Parameters" *ngIf='row.parameters[0].key == ""'>
+            <mat-chip color="accent" selected *ngFor="let param of row.parameters">No Parameters</mat-chip>
+          </mat-chip-list>
+        </mat-cell>
+        </ng-container>
+   -->
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    
+   
+    </div>
+  
+  </div>

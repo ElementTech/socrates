@@ -26,6 +26,7 @@ import { BlockStatsComponent } from './components/block-stats/block-stats.compon
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ArtifactsComponent } from './components/artifacts/artifacts.component';
 import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
+import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -106,7 +107,10 @@ const routes: Routes = [
   { path: 'flow-viz/:id', component: FlowVizComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   }   },
-  { path: 'flow-viz',redirectTo: 'flow-viz/', pathMatch: 'full'}
+  { path: 'flow-viz',redirectTo: 'flow-viz/', pathMatch: 'full'},
+  { path: 'flow-viz-list', component: FlowVizListComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
 ];
 
 @NgModule({

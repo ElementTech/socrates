@@ -232,6 +232,8 @@ export class FlowVizComponent {
   onSubmit() {
     this.submitted = true;
     this.hidePlus()
+    this.flowForm.get('nodes').setValue(this.flowForm.get('nodes').value.filter(node=>node.label!="+"))
+    this.flowForm.get('links').setValue(this.flowForm.get('links').value.filter(node=>node.label!="+"))
     if (!this.flowForm.valid) {
       
       return false;

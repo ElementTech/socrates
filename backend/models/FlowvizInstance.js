@@ -6,7 +6,7 @@ let FlowvizInstance = new Schema({
    nodes:{
       type: [Object] 
    },
-   link:{
+   links:{
       type: [Object]
    },
    flow:{

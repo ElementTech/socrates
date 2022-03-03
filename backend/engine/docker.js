@@ -19,7 +19,7 @@ const run = (instance,custom_id,custom_env=false) => {
 
 const run_flow = async (flow,flow_run_id) => {
   
-  const worker = new Worker("./engine/flower.js", {workerData: {flow:JSON.parse(JSON.stringify(flow)),flow_run_id:flow_run_id}});
+  const worker = new Worker("./engine/flower.js", {workerData: {flow: JSON.parse(JSON.stringify(flow)),flow_run_id: flow_run_id}});
 
   worker.once("message", result => {
       console.log(`${result}`);
@@ -36,20 +36,19 @@ const run_flow = async (flow,flow_run_id) => {
 
 const run_flowviz = async (flowviz,flowviz_run_id) => {
   
-  console.log(flowviz,flowviz_run_id)
-  // const worker = new Worker("./engine/flower.js", {workerData: {flow:JSON.parse(JSON.stringify(flow)),flow_run_id:flow_run_id}});
+  const worker = new Worker("./engine/flower-viz.js", {workerData: {flow: JSON.parse(JSON.stringify(flowviz)),flow_run_id: flowviz_run_id}});
 
-  // worker.once("message", result => {
-  //     console.log(`${result}`);
-  // });
+  worker.once("message", result => {
+      console.log(`${result}`);
+  });
   
-  // worker.on("error", error => {
-  //     console.log(error);
-  // });
+  worker.on("error", error => {
+      console.log(error);
+  });
   
-  // worker.on("exit", exitCode => {
-  //     console.log(`It exited with code ${exitCode}`);
-  // })
+  worker.on("exit", exitCode => {
+      console.log(`It exited with code ${exitCode}`);
+  })
 }
 
 

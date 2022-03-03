@@ -27,6 +27,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { ArtifactsComponent } from './components/artifacts/artifacts.component';
 import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
 import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.component';
+import { FlowvizRunComponent } from './components/flow-viz-run/flow-viz-run.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -111,6 +112,9 @@ const routes: Routes = [
   { path: 'flow-viz-list', component: FlowVizListComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   }  },
+  { path: 'flow-viz-run/:id', component: FlowvizRunComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  }
 ];
 
 @NgModule({

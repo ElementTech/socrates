@@ -147,10 +147,17 @@ export class FlowVizComponent {
     else
     {
       console.log("Populate Flow")
-      this.apiService.getFlow(this.id).subscribe(data => {
+      this.apiService.getFlowviz(this.id).subscribe(data => {
         delete data.__v
         delete data._id
+        console.log(data)
+        this.nodes = data.nodes
+        this.nodes = [...this.nodes]
+        this.links = data.links
+        this.links = [...this.links]
         this.flowForm.setValue(data)
+        this.lastNum = parseInt(data.nodes.reduce((prev, current)=> ( (parseInt(prev.id)  > parseInt(current.id)) ? prev : current),0).label)
+        this.hidePlus()
       });
     }
     

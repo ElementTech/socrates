@@ -76,6 +76,7 @@ import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
 import {NgxGraphModule} from '@swimlane/ngx-graph'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.component';
+import { FlowvizRunComponent } from './components/flow-viz-run/flow-viz-run.component';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -107,7 +108,8 @@ import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.c
     DescDialogComponent,
     ArtifactsComponent,
     FlowVizComponent,
-    FlowVizListComponent
+    FlowVizListComponent,
+    FlowvizRunComponent
     
   ],
   imports: [

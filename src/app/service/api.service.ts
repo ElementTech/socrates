@@ -474,7 +474,7 @@ export class ApiService {
 
   // Get block
   getFlowviz(id): Observable<any> {
-    let url = `${this.baseUri}/flowviz/readviz/${id}`;
+    let url = `${this.baseUri}/flowviz/read/${id}`;
     return this.http.get(url, {headers: this.headers}).pipe(
       map((res: Response) => {
         return res || {}

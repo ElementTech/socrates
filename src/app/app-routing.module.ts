@@ -29,6 +29,7 @@ import { FlowVizComponent } from './components/flow-viz/flow-viz.component';
 import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.component';
 import { FlowvizRunComponent } from './components/flow-viz-run/flow-viz-run.component';
 import { FlowPortalComponent } from './components/flow-portal/flow-portal.component';
+import { FlowvizStatsComponent } from './components/flow-viz-stats/flow-viz-stats.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'portal' },
@@ -119,6 +120,9 @@ const routes: Routes = [
   { path: 'flow-portal', component: FlowPortalComponent, canActivate: [AuthGuardService], data: {
     role: 'ROLE_USER'
   } },
+  { path: 'flow-viz-stats/:id', component: FlowvizStatsComponent, canActivate: [AuthGuardService], data: {
+    role: 'ROLE_USER'
+  }  },
 ];
 
 @NgModule({

@@ -440,6 +440,7 @@ export class InstanceRunComponent implements OnInit {
               break
           
             }
+            this.showConsole(data[0]._id)
 
             let imageToShow = "../../assets/loading.gif"
             let content = "Running..."
@@ -465,7 +466,7 @@ export class InstanceRunComponent implements OnInit {
               done: data[this.alreadyLoaded+i].done,
               image: imageToShow
             });
-            this.showConsole(data[this.alreadyLoaded+i]._id)
+            
     
             
           }

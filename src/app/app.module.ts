@@ -78,6 +78,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FlowVizListComponent } from './components/flow-viz-list/flow-viz-list.component';
 import { FlowvizRunComponent } from './components/flow-viz-run/flow-viz-run.component';
 import { FlowPortalComponent } from './components/flow-portal/flow-portal.component';
+import { FlowvizStatsComponent } from './components/flow-viz-stats/flow-viz-stats.component';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { FlowPortalComponent } from './components/flow-portal/flow-portal.compon
     FlowVizComponent,
     FlowVizListComponent,
     FlowvizRunComponent,
-    FlowPortalComponent
+    FlowPortalComponent,
+    FlowvizStatsComponent
     
   ],
   imports: [

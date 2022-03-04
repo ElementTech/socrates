@@ -23,7 +23,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
   .mat-column-run{
-    flex: 0 0 12%;
+    flex: 0 0 15%;
   
   }
   mat-cell.mat-column-run{

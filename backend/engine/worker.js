@@ -78,11 +78,11 @@ function writeAndRun(path,folder_path,data,script)
         workerData.instance.block.prescript = "echo No Pre-Script"
       }
       if (workerData.custom_env){
-        workerData.instance.parameters = workerData.custom_env
+        workerData.instance.parameters = workerData.custom_env.contact(workerData.extra_env ? workerData.extra_env : [])
       }
       else
       {
-        workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared).concat(workerData.instance.multis).concat(workerData.instance.booleans)
+        workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared).concat(workerData.instance.multis).concat(workerData.instance.booleans).contact(workerData.extra_env ? workerData.extra_env : [])
       }
       var auxContainer;
       docker.createContainer({
@@ -114,6 +114,7 @@ function writeAndRun(path,folder_path,data,script)
             container_id: auxContainer.id,
             instance: workerData.instance._id,
             console: [],
+            output: [],
             done:false
           }
         )
@@ -134,10 +135,23 @@ function containerLogs(container,generated_id,folder_path) {
       // create a single stream for stdin and stdout
       var logStream = new stream.PassThrough();
       logStream.on('data', function(chunk){
+        chunkLine = chunk.toString('utf8').replace("\n","")
+        if (chunkLine.includes("::set-output"))
+        {
+          console.log("Line Is",chunkLine)
+          var str = chunkLine.split("::set-output ")[1];
+          var index = str.indexOf('=');
+          let keyval = [str.slice(0, index), str.slice(index + 1)]
+          console.log(keyval)
+          let key = keyval[0]
+          let val = keyval[1]
+          update_docker_instance_console_in_database(generated_id,
+            { output: {"key":key,"value":val} }
+          )
+        }
         update_docker_instance_console_in_database(generated_id,
           { console: chunk.toString('utf8').replace("\n","") }
         )
-      
       });
       container.logs({
         follow: true,

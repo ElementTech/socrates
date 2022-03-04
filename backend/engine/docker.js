@@ -1,8 +1,8 @@
 const {Worker} = require("worker_threads");
 
-const run = (instance,custom_id,custom_env=false) => {
+const run = (instance,custom_id,custom_env=false,extra_env=false) => {
 
-  const worker = new Worker("./engine/worker.js", {workerData: {instance:JSON.parse(JSON.stringify(instance)),custom_id:custom_id,custom_env:custom_env}});
+  const worker = new Worker("./engine/worker.js", {workerData: {instance:JSON.parse(JSON.stringify(instance)),custom_id:custom_id,custom_env:custom_env,extra_env:extra_env}});
 
   worker.once("message", result => {
       console.log(`${result}`);

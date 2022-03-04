@@ -24,7 +24,9 @@
           <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/instance-run/', element.fileid]" *ngIf="element.type == 'instance'">
             <i class="fa-solid fa-cubes"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
           <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/flow-run/', element.fileid]" *ngIf="element.type == 'flow'">
-            <i class="fa-solid fa-chain"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
+            <i class="fa-solid fa-stairs"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
+          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/flow-viz-run/', element.fileid]" *ngIf="element.type == 'viz'">
+            <i class="fa-solid fa-diagram-project"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>            
           <span>{{element.name}}</span>
         </div>
       </mat-grid-tile>

@@ -113,7 +113,7 @@ export class FlowvizRunComponent implements OnInit {
               done: data[this.alreadyLoaded+i].done,
               image: imageToShow
             });
-    
+            this.showConsole(data[this.alreadyLoaded+i]._id)
             
           }
           this.alreadyLoaded+=15

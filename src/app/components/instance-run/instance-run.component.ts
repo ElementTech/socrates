@@ -43,6 +43,7 @@ export class InstanceRunComponent implements OnInit {
   alreadyLoaded=0;
   fetchedLatestRun = false;
   SubscribeNow = true;
+  dockerOutput: any;
   // ----
 
   constructor(
@@ -282,6 +283,7 @@ export class InstanceRunComponent implements OnInit {
       if (element.id == id)
       {
         this.runNumber = element.run_number;
+        this.dockerOutput = element.output
       }
     }
   }
@@ -397,6 +399,7 @@ export class InstanceRunComponent implements OnInit {
                 title: `${data.length-(this.alreadyLoaded+i)}`,
                 content: content,
                 runtime: runtime,
+                output: data[this.alreadyLoaded+i].output,
                 done: data[this.alreadyLoaded+i].done,
                 image: imageToShow
               });
@@ -458,9 +461,11 @@ export class InstanceRunComponent implements OnInit {
               title: `${data.length-(this.alreadyLoaded+i)}`,
               content: content,
               runtime: runtime,
+              output: data[this.alreadyLoaded+i].output,
               done: data[this.alreadyLoaded+i].done,
               image: imageToShow
             });
+            this.showConsole(data[this.alreadyLoaded+i]._id)
     
             
           }

@@ -66,7 +66,12 @@ export class NewFileDialogComponent implements OnInit {
         this.apiService.getFlows().subscribe(data=>{
           this.options = data.map(item=>Object.assign({"name":item.name,"_id":item._id,"image":item.image}))
         })        
-        break;                  
+        break;
+      case "viz":
+        this.apiService.getFlowvizs().subscribe(data=>{
+          this.options = data.map(item=>Object.assign({"name":item.name,"_id":item._id,"image":item.image}))
+        })        
+        break;                           
       default:
         break;
     }

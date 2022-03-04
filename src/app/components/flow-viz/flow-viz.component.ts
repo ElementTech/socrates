@@ -269,7 +269,7 @@ export class FlowVizComponent {
               duration: 3000
             });
             console.log(res)
-            this.ngZone.run(() => this.router.navigateByUrl('/flow-list'))
+            this.ngZone.run(() => this.router.navigateByUrl('/flow-viz-list'))
           }, (error) => {
             if (error.includes("Error Code: 400")){
               this._snackBar.open('Duplicate Names Not Allowed', 'Close', {

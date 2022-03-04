@@ -59,16 +59,16 @@ async function get_instance_obj(instance_name)
   })
 }
 
-async function run_node(node_name,instance_name,next_nodes,refreshTime) {
+async function run_node(node_name,instance_name,next_nodes,refreshTime,extraEnv) {
   const run_id = new mongoose.Types.ObjectId().toHexString()
   const inst_obj = await Promise.resolve(get_instance_obj(instance_name))
   console.log("Running node",node_name,"with",instance_name,"run_id",run_id,"inst_obj",inst_obj)
-  engine.run(inst_obj,run_id)
-  await Promise.resolve(run_finished(node_name,run_id));
+  engine.run(inst_obj,run_id,false,extraEnv)
+  extra_env = await Promise.resolve(run_finished(node_name,run_id));
   if (next_nodes.length != 0)
   {
     next_nodes.forEach(next_node => {
-      run_node(next_node,workerData.flow.nodes.filter(node=>node.id==next_node)[0].data.name,workerData.flow.links.filter(link=>link.source==next_node).map(link_node=>link_node.target),refreshTime)
+      run_node(next_node,workerData.flow.nodes.filter(node=>node.id==next_node)[0].data.name,workerData.flow.links.filter(link=>link.source==next_node).map(link_node=>link_node.target),refreshTime,extra_env)
     });
   }
   else
@@ -137,7 +137,9 @@ async function run_finished(node_name,run_id) {
                     )
                   }
                   clearInterval(nodeTime);
-                  resolve(true)
+                  DockerInstance.findById(run_id, (error, dockerinst) => {
+                    resolve(dockerinst.output)
+                  });
                 }
               }
             }

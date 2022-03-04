@@ -11,7 +11,8 @@
       <mat-button-toggle-group name="type" [(ngModel)]="fileType" (change)="onValChange($event.value)">
         <mat-button-toggle value="block"><i class="fa-solid fa-cube" aria-hidden="true"></i> Block</mat-button-toggle>
         <mat-button-toggle value="instance"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Instance</mat-button-toggle>
-        <mat-button-toggle value="flow"><i class="fa-solid fa-chain" aria-hidden="true"></i> Flow</mat-button-toggle>
+        <mat-button-toggle value="flow"><i class="fa-solid fa-chain" aria-hidden="true"></i>Steps Flow</mat-button-toggle>
+        <mat-button-toggle value="viz"><i class="fa-solid fa-chain" aria-hidden="true"></i>DAG Flow</mat-button-toggle>
       </mat-button-toggle-group>
     </li>
     <li>

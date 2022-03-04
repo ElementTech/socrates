@@ -15,6 +15,9 @@ let DockerInstance = new Schema({
    console: {
       type: [String]
    },
+   output: {
+      type: [Object]
+   },
    done:{
       type: Boolean
    },

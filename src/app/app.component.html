@@ -49,9 +49,13 @@
           </mat-list-item>
           <mat-divider style="color: white; background-color: white;"></mat-divider>
           <mat-list-item routerLinkActive="activeitem" [routerLink]="'/create-flow'">
-            <mat-icon mat-list-icon><i class="fa-solid fa-chain" aria-hidden="true"></i></mat-icon>
-            <div mat-line>Flow</div>
-          </mat-list-item>          
+            <mat-icon mat-list-icon><i class="fa-solid fa-stairs" aria-hidden="true"></i></mat-icon>
+            <div mat-line> Steps Flow</div>
+          </mat-list-item>     
+          <mat-list-item routerLinkActive="activeitem" [routerLink]="'/flow-viz'">
+            <mat-icon mat-list-icon><i class="fa-solid fa-diagram-project"></i></mat-icon>
+            <div mat-line>DAG Flow</div>
+          </mat-list-item>       
           <mat-divider style="color: white; background-color: white;"></mat-divider>
           <mat-list-item routerLinkActive="activeitem" [routerLink]="'/parameters'">
             <mat-icon mat-list-icon><i class="fa-solid fa-th-list" aria-hidden="true"></i></mat-icon>
@@ -83,14 +87,14 @@
         </mat-list>
       </mat-sidenav>
     
-      <mat-sidenav-content style="overflow-y: scroll;">
+      <mat-sidenav-content>
         <mat-toolbar *ngIf="auth.isLoggedIn()" color="primary" fxLayout="row">
        
          
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/portal'"> <i class="fa-solid fa-users fa-lg" aria-hidden="true"></i> Portal </a>
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/blocks-list'"> <i class="fa-solid fa-cube fa-lg" aria-hidden="true"></i> Blocks </a>
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/instance-list'"> <i class="fa-solid fa-cubes fa-lg" aria-hidden="true"></i> Instances </a>
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-list'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
+          <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-portal'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
           <span class="example-spacer"></span>
           <a mat-button routerLinkActive="activebutton" [routerLink]="'/github-list'"> <i class="fa fa-github fa-lg" aria-hidden="true"></i>  Github </a>
           <div class="vl"></div>

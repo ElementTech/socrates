@@ -43,7 +43,7 @@ function run_flow(){
   }, 1000);
   const first_linked_nodes = workerData.flow.links.filter(link=>link.source=="node0").map(link_node=>link_node.target)
   first_linked_nodes.forEach(node_name => {
-    run_node(node_name,workerData.flow.nodes.filter(node=>node.id==node_name)[0].data.name,workerData.flow.links.filter(link=>link.source==node_name).map(link_node=>link_node.target),refreshTime)
+    run_node(node_name,workerData.flow.nodes.filter(node=>node.id==node_name)[0].data.name,workerData.flow.links.filter(link=>link.source==node_name).map(link_node=>link_node.target),refreshTime,[])
   });
 }
 
@@ -62,9 +62,9 @@ async function get_instance_obj(instance_name)
 async function run_node(node_name,instance_name,next_nodes,refreshTime,extraEnv) {
   const run_id = new mongoose.Types.ObjectId().toHexString()
   const inst_obj = await Promise.resolve(get_instance_obj(instance_name))
-  console.log("Running node",node_name,"with",instance_name,"run_id",run_id,"inst_obj",inst_obj)
-  engine.run(inst_obj,run_id,false,extraEnv)
-  extra_env = await Promise.resolve(run_finished(node_name,run_id));
+  console.log("Running node",node_name,"with",instance_name,"run_id",run_id,"extraEnv",extraEnv)
+  engine.run(inst_obj,run_id,JSON.parse(JSON.stringify(extraEnv)))
+  const extra_env = await Promise.resolve(run_finished(node_name,run_id));
   if (next_nodes.length != 0)
   {
     next_nodes.forEach(next_node => {
@@ -138,7 +138,7 @@ async function run_finished(node_name,run_id) {
                   }
                   clearInterval(nodeTime);
                   DockerInstance.findById(run_id, (error, dockerinst) => {
-                    resolve(dockerinst.output)
+                    resolve(dockerinst.parameters.concat(dockerinst.output))
                   });
                 }
               }

@@ -40,9 +40,11 @@ async function run_flow(){
   // Calculate Env
   
   // Before
+  let extraEnv = []
   for (const step of run_ids) // During
   {
     let stepRunIds = []
+    // let extraEnv = await Promise.resolve(get_outputs_and_envs(stepRunIds));
     for (const run_object of step) 
     {
       Instance.findById(run_object.id).populate({
@@ -54,11 +56,12 @@ async function run_flow(){
           return error
         } else {
           stepRunIds.push(run_object.run_id)
-          engine.run(data,run_object.run_id,generalEnv)
+          engine.run(data,run_object.run_id,generalEnv.concat(extraEnv))
+          
         }
       })
     }
-    await Promise.resolve(wait_for_equal(stepRunIds,workerData.flow_run_id));
+    extraEnv = await Promise.resolve(wait_for_equal(stepRunIds,workerData.flow_run_id));
   }
   //After
   clearInterval(refreshTime);
@@ -111,6 +114,7 @@ async function calculate_general_envs(run_ids){
 async function wait_for_equal(stepRunIds,flow_run_id) {
   return new Promise(resolve => {
       let finished = 0
+      let collectedOutputs = []
       DockerInstance.watch().
         on('change', data => {
           if ("updateDescription" in data)
@@ -128,9 +132,12 @@ async function wait_for_equal(stepRunIds,flow_run_id) {
                     )
                   }
                   if ((finished+1) == stepRunIds.length) {
-                    resolve(true)
+                    resolve(collectedOutputs)
                   }
                   else{
+                    DockerInstance.findById(data.documentKey._id.toString(), (error, dockerinst) => {
+                      collectedOutputs = collectedOutputs.concat(dockerinst.parameters).concat(dockerinst.output)
+                    });
                     finished++
                   }
                 }

@@ -77,13 +77,9 @@ function writeAndRun(path,folder_path,data,script)
       {
         workerData.instance.block.prescript = "echo No Pre-Script"
       }
-      if (workerData.custom_env){
-        workerData.instance.parameters = workerData.custom_env.contact(workerData.extra_env ? workerData.extra_env : [])
-      }
-      else
-      {
-        workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared).concat(workerData.instance.multis).concat(workerData.instance.booleans).contact(workerData.extra_env ? workerData.extra_env : [])
-      }
+ 
+      workerData.instance.parameters = workerData.instance.parameters.concat(workerData.instance.shared).concat(workerData.instance.multis).concat(workerData.instance.booleans).concat(workerData.custom_env.length != 0 ? workerData.custom_env : [])
+  
       var auxContainer;
       docker.createContainer({
         Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,

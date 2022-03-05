@@ -1,102 +1,5 @@
-<!-- 
-  <div class="">
-    <mat-toolbar class="d-flex justify-content-center">
-      <i class="fa-solid fa-cube" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Blocks</h1>
-  </mat-toolbar>
-    <div class="example-header">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" [(ngModel)]="this.dataSource.filter">
-      </mat-form-field>
-    </div>
-    
-    <div class="example-container mat-elevation-z8">
-      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      <mat-table
-
-      [dataSource]="dataSource" matSort >
-
-
-    
-    
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-     
-          <mat-cell *matCellDef="let row" class="d-flex justify-content-between">
-            <div  class="d-flex justify-content-start">
-              <img width="50px" [src]="this.imageUrls[row.image]">
-                <i style="padding-top: 0.5em;" *ngIf="row.github_path != ''" class="fa fa-github fa-2x" aria-hidden="true"></i>
-            </div>
-      
-            <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
-          </mat-cell>
-        </ng-container>
- 
-        <ng-container matColumnDef="lang">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Langauge</mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.lang"> <img onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{row.lang | lowercase}}/{{row.lang | lowercase}}-original.svg" width="30" height="30">&nbsp;{{row.lang}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="desc">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.desc">{{row.desc}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="configure">
-          <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.configure">
-           
-            
-<mat-button-toggle-group multiple vertical="false">
-  <button mat-button ><i [routerLink]="['/instance-list/', row.name]" class="fa fa-cubes"></i></button>
-  <button mat-button [routerLink]="['/create-block/', row._id]"><mat-icon aria-hidden="false" style="color:darkslateblue;">edit</mat-icon></button>
-  <button mat-button (click)="removeBlock(row._id)"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
-  <a [routerLink]="['/block-stats/', row._id]" mat-button><i class="fa-solid fa-bar-chart" aria-hidden="true"></i></a>
-</mat-button-toggle-group>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="parameters">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
-          
-            <mat-chip-list aria-label="Parameters">
-              <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
-                <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
-              </ng-container>
-              <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
-                <mat-chip   *ngFor="let param of row.parameters">No Parameters</mat-chip>
-              </ng-container>
-              <ng-container aria-label="Parameters" *ngIf='row.shared.length != 0'>
-                <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
-              </ng-container>
-              <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
-                <mat-chip color="primary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
-              </ng-container>
-              <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
-                <mat-chip color="primary" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
-              </ng-container>
-            </mat-chip-list>
-    
-      
-
-
-          </mat-cell>
-
-   
-
-
-        </ng-container>
-  
-  
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row class="chosen-row" *matRowDef="let row; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-    </div>
-  
-  </div> -->
   <p-toast></p-toast>
-  <p-toolbar styleClass="mb-4">
+  <p-toolbar>
     <ng-template pTemplate="left">
         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/create-block'"></button>
         <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedBlocks()" [disabled]="!selectedBlocks || !selectedBlocks.length"></button>
@@ -234,9 +137,11 @@
               <p-progressBar [value]="block.activity" [showValue]="false"></p-progressBar>
           </td> -->
           <td style="text-align: center">
-              <!-- <button pButton pRipple [routerLink]="['/create-block/', block._id]" class="p-button-rounded  p-button-primary" icon="pi pi-cog"></button>
-              <button pButton pRipple [routerLink]="['/instance-list/', block.name]"  class="p-button-rounded  p-button-info" icon="pi pi-bars"></button>
-              <button pButton pRipple [routerLink]="['/block-stats/', block._id]"  class="p-button-rounded p-button-secondary" icon="pi pi-chart-line"></button> -->
+      
+
+              <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Edit" tooltipPosition="top" [routerLink]="['/create-block/', block._id]" class="p-button-rounded  p-button-info" icon="pi pi-cog"></button>
+              <button pButton pRipple class="p-button" style="height:30px;width: 70px;" pTooltip="Instances Attached to this Block" tooltipPosition="top"  [routerLink]="['/instance-list/', block.name]"  icon="pi pi-th-large"><p-badge [value]="block.instance_count" severity="primary" style="margin-right:1em"></p-badge></button>
+              <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Statistics"  tooltipPosition="top"  [routerLink]="['/block-stats/', block._id]"  class="p-button-rounded p-button-secondary" icon="pi pi-chart-line"></button>
 
           </td>
       </tr>

@@ -96,8 +96,10 @@ import {RatingModule} from 'primeng/rating';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {InputNumberModule} from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import {TooltipModule} from 'primeng/tooltip';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import {BadgeModule} from 'primeng/badge';
+import { ChipModule } from 'primeng/chip';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -136,13 +138,15 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     
   ],
   imports: [
+    ChipModule,
+    BadgeModule,
     FileUploadModule,
     ToolbarModule,
     RatingModule,
     RadioButtonModule,
     InputNumberModule,
     ConfirmDialogModule,
-
+    TooltipModule,
     InputTextareaModule,
     CalendarModule,
     SliderModule,

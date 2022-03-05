@@ -26,7 +26,11 @@ blockRoute.route('/').get((req, res, next) => {
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      Instance.find((error,instances)=>{
+        res.json(data.map(block=>
+          ({...block.toJSON(),instance_count: instances.filter(instance=>instance.block==block._id).length})
+        ))
+      })
     }
   })
 })

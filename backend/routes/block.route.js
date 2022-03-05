@@ -62,12 +62,18 @@ blockRoute.route('/update/:id').put((req, res, next) => {
 blockRoute.route('/delete/:id').delete((req, res, next) => {
   Instance.find({block: req.params.id}).exec(function(error,instance_data){
     if (error) {
+      res.status(500).json({
+        msg: error
+      })
       return next(error);
     } else {
       if (instance_data.length == 0){
         Block.findByIdAndRemove(req.params.id, (error, data) => {
           console.log("Removing: " + req.params.id)
           if (error) {
+            res.status(500).json({
+              msg: error
+            })
             return next(error);
           } else {
             res.status(200).json({

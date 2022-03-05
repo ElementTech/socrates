@@ -169,11 +169,12 @@
                   <foreignObject x="0" y="0" width="5em" height="5em">
                     <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
                      
-                        {{node.label}}
+                        {{node.label}} 
                     </div>
                     <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
                      
                       <p>{{node.data.name}}</p>
+                      <button type="button" class="btn btn-outline-warning btn-sm" style="top:0;position:absolute;right:0;height:1.7em;border-radius:0" (click)="remvoeNode(node)"><i class="fa fa-minus" aria-hidden="true"></i></button>
                      
                     </div>
                       <img width="30px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0">

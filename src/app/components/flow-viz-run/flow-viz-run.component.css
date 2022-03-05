@@ -396,7 +396,7 @@
     /* blur size and spread size are optional (they default to 0) */
   }
   .pulsing{
-      fill: #0ff;
+      fill: #008cffcc;
   }
   .error{
     fill: red;

@@ -13,7 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.2.0",
-    "@angular/cdk": "^13.2.0",
+    "@angular/cdk": "^13.2.5",
     "@angular/common": "^13.2.1",
     "@angular/compiler": "~13.2.0",
     "@angular/core": "~13.2.0",
@@ -39,6 +39,8 @@
     "monaco-editor": "^0.31.1",
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-pagination": "^5.1.1",
+    "primeicons": "^5.0.0",
+    "primeng": "^13.2.1",
     "Prism": "^2.0.0",
     "prismjs": "^1.26.0",
     "process": "^0.11.10",

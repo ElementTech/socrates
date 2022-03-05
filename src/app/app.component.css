@@ -64,3 +64,6 @@ div[mat-header]{
 .activeitem{
   color: rgb(63, 81, 181) !important;
 }
+.mat-list-item{
+  height: 2.5em !important;
+}

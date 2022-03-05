@@ -7,7 +7,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { SidenavService } from 'src/app/service/sidenav.service';
 import { ApiService } from '../../service/api.service';
@@ -119,6 +119,32 @@ export class FlowVizComponent {
 
   leave(i) {
     document.getElementById(i.label+"rect").removeAttribute("filter")
+  }
+
+  remvoeNode(node){
+    this.nodes=this.nodes.filter(tempNode=>{
+      if (tempNode.id.includes(node.label))
+      {
+        return false
+      }
+      else
+      {
+        return true
+      }
+    })
+    this.links=this.links.filter(link=>{
+      if (link.source==node.label){
+        this.remvoeNode(link.source)
+      }
+      if (link.id.includes(node.label))
+      {
+        return false
+      }
+      else
+      {
+        return true
+      }
+    })
   }
 
   ngOnInit(): void {

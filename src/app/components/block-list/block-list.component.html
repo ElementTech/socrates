@@ -1,4 +1,4 @@
-
+<!-- 
   <div class="">
     <mat-toolbar class="d-flex justify-content-center">
       <i class="fa-solid fa-cube" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Blocks</h1>
@@ -17,7 +17,7 @@
 
 
     
-        <!-- Name Column -->
+    
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
      
@@ -30,8 +30,7 @@
             <a class="nav-link" style="cursor: pointer;" (click)="openDialog(row.desc)">{{row.name}}</a>
           </mat-cell>
         </ng-container>
-    
-        <!-- Color Column -->
+ 
         <ng-container matColumnDef="lang">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Langauge</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.lang"> <img onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{row.lang | lowercase}}/{{row.lang | lowercase}}-original.svg" width="30" height="30">&nbsp;{{row.lang}}</mat-cell>
@@ -95,4 +94,158 @@
       </mat-table>
     </div>
   
-  </div>
+  </div> -->
+  <p-toast></p-toast>
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/create-block'"></button>
+        <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedBlocks()" [disabled]="!selectedBlocks || !selectedBlocks.length"></button>
+    </ng-template>
+
+    <!-- <ng-template pTemplate="right">
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+    </ng-template> -->
+</p-toolbar>
+  <p-table 
+  #dt [value]="blocks" [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+  [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
+  [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [filterDelay]="0" [globalFilterFields]="['name','lang','github']">
+  <ng-template pTemplate="caption">
+      <div class="table-header">
+          List of Blocks
+          <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+          </span>
+      </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+      <tr>
+          <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name">
+              <div class="flex justify-content-between align-items-center">
+                  Name
+                  <p-sortIcon field="name"></p-sortIcon>
+                  <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+          </th>
+          <th pSortableColumn="lang">
+              <div class="flex justify-content-between align-items-center">
+                  Language
+                  <p-sortIcon field="lang"></p-sortIcon>
+                  <p-columnFilter field="lang" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" class="ml-auto">
+                    <ng-template pTemplate="header">
+                        <div class="px-3 pt-3 pb-0">
+                            <span class="font-bold">Language Picker</span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-multiSelect [ngModel]="value" [options]="langs" placeholder="Any" (onChange)="filter($event?.value)" display="chip" [optionValue]="'value'" [optionLabel]="'id'">
+                            <ng-template let-option pTemplate="item">
+                                <div class="p-multiselect-block-option">
+                                    <img [alt]="option" onerror="this.src='../../../assets/no_code.png'"  style="vertical-align: middle" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{option.value | lowercase}}/{{option.value | lowercase}}-original.svg" width="32">
+                                    <span class="ml-1">{{option.value}}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                </p-columnFilter>
+              </div>
+          </th>
+          <!-- <th pSortableColumn="date">
+              <div class="flex justify-content-between align-items-center">
+                  Date
+                  <p-sortIcon field="date"></p-sortIcon>
+                  <p-columnFilter type="date" field="date" display="menu" class="ml-auto"></p-columnFilter>
+              </div>
+          </th> -->
+          <!-- <th pSortableColumn="balance">
+              <div class="flex justify-content-between align-items-center">
+                  Balance
+                  <p-sortIcon field="balance"></p-sortIcon>
+                  <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" class="ml-auto"></p-columnFilter>
+              </div>
+          </th> -->
+          <th pSortableColumn="github">
+            <div class="flex justify-content-between align-items-center">
+                Github
+                <p-sortIcon field="github"></p-sortIcon>
+                <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="github" matchMode="equals" display="menu" class="ml-auto">
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-dropdown [ngModel]="value" [options]="githubOptions" (onChange)="filter($event.value)" placeholder="Any">
+                            <ng-template let-option pTemplate="item">
+                                <span [class]="'customer-badge github-' + option">{{option}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </ng-template>
+                </p-columnFilter>
+            </div>
+          </th>
+          <!-- <th pSortableColumn="activity">
+              <div class="flex justify-content-between align-items-center">
+                  Activity
+                  <p-sortIcon field="activity"></p-sortIcon>
+                  <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" class="ml-auto">
+                      <ng-template pTemplate="filter" let-filter="filterCallback">
+                          <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3"></p-slider>
+                          <div class="flex align-items-center justify-content-between px-2">
+                              <span>{{activityValues[0]}}</span>
+                              <span>{{activityValues[1]}}</span>
+                          </div>
+                      </ng-template>
+                  </p-columnFilter>
+              </div>
+          </th> -->
+          <th></th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-block>
+      <tr class="p-selectable-row">
+          <td>
+              <p-tableCheckbox [value]="block"></p-tableCheckbox>
+          </td>
+          <td>
+              <span class="p-column-title">Name</span>
+              <img width="30px" [src]="this.imageUrls[block.image]">
+              {{block.name}}
+          </td>
+          <td>
+              <span class="p-column-title">Lang</span>
+              <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + block.country.code" width="30"> -->
+              <img onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{block.lang | lowercase}}/{{block.lang | lowercase}}-original.svg" width="30">
+              <span class="image-text">{{block.lang}}</span>
+          </td>
+          <!-- <td>
+              <span class="p-column-title">Date</span>
+              {{block.date | date: 'MM/dd/yyyy'}}
+          </td> -->
+          <!-- <td>
+              {{block.balance | currency:'USD':'symbol'}}
+          </td> -->
+          <td>
+              <span class="p-column-title">Github</span>
+              <span [class]="'block-badge github-' + block.github">{{block.github}}</span>
+          </td>
+          <!-- <td>
+              <span class="p-column-title">Activity</span>
+              <p-progressBar [value]="block.activity" [showValue]="false"></p-progressBar>
+          </td> -->
+          <td style="text-align: center">
+              <button pButton pRipple [routerLink]="['/create-block/', block._id]" class="p-button-rounded  p-button-primary" icon="pi pi-cog"></button>
+              <button pButton pRipple [routerLink]="['/instance-list/', block.name]"  class="p-button-rounded  p-button-info" icon="pi pi-bars"></button>
+              <button pButton pRipple [routerLink]="['/block-stats/', block._id]"  class="p-button-rounded p-button-secondary" icon="pi pi-chart-line"></button>
+
+          </td>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+      <tr>
+          <td colspan="4">No blocks found.</td>
+      </tr>
+  </ng-template>
+</p-table>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -39,18 +39,14 @@ export class ApiService {
   bulkParameter(data): Observable<any> {
     let url = `${this.baseUri}/parameter/bulk`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Create
   createParameter(data): Observable<any> {
     let url = `${this.baseUri}/parameter/create`;
     return this.http.post(url, data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Get all blocks
@@ -72,17 +68,13 @@ export class ApiService {
   // Update block
   updateParameter(id, data): Observable<any> {
     let url = `${this.baseUri}/parameter/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteParameter(id): Observable<any> {
     let url = `${this.baseUri}/parameter/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers })
   }
 
 
@@ -90,9 +82,7 @@ export class ApiService {
   createBlock(data): Observable<any> {
     let url = `${this.baseUri}/block/create`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Get all blocks
@@ -114,17 +104,13 @@ export class ApiService {
   // Update block
   updateBlock(id, data): Observable<any> {
     let url = `${this.baseUri}/block/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteBlock(id): Observable<any> {
     let url = `${this.baseUri}/block/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers }) as Observable<Block>
   }
 
   // Error handling 
@@ -145,9 +131,7 @@ export class ApiService {
   createInstance(data): Observable<any> {
     let url = `${this.baseUri}/instance/create`;
     return this.http.post(url, data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Get all blocks
@@ -169,40 +153,30 @@ export class ApiService {
   // Update block
   updateInstance(id, data): Observable<any> {
     let url = `${this.baseUri}/instance/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteInstance(id): Observable<any> {
     let url = `${this.baseUri}/instance/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers })
   }
 
   runInstance(data): Observable<any> {
     let url = `${this.baseUri}/instance/run`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   runFlow(data): Observable<any> {
     let url = `${this.baseUri}/flow/run`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
   runFlowviz(data): Observable<any> {
     let url = `${this.baseUri}/flowviz/run`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Docker
@@ -259,33 +233,25 @@ export class ApiService {
   // Update block
   updateDockerInstance(id, data): Observable<any> {
     let url = `${this.baseUri}/docker/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteDockerInstance(id): Observable<any> {
     let url = `${this.baseUri}/docker/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers })
   }
 
     // Update block
     updateFlowInstance(id, data): Observable<any> {
       let url = `${this.baseUri}/flow/instance/update/${id}`;
-      return this.http.put(url, data, { headers: this.headers }).pipe(
-        catchError(this.errorMgmt)
-      )
+      return this.http.put(url, data, { headers: this.headers })
     }
   
     // Delete block
     deleteFlowInstance(id): Observable<any> {
       let url = `${this.baseUri}/flow/instance/delete/${id}`;
-      return this.http.delete(url, { headers: this.headers }).pipe(
-        catchError(this.errorMgmt)
-      )
+      return this.http.delete(url, { headers: this.headers })
     }
 
         // Update block
@@ -407,18 +373,14 @@ export class ApiService {
     // Update block
     updateSetting(id, data): Observable<any> {
       let url = `${this.baseUri}/settings/update/${id}`;
-      return this.http.put(url, data, { headers: this.headers }).pipe(
-        catchError(this.errorMgmt)
-      )
+      return this.http.put(url, data, { headers: this.headers })
     }
   
   // Create
   createFlow(data): Observable<any> {
     let url = `${this.baseUri}/flow/create`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Get all blocks
@@ -440,17 +402,13 @@ export class ApiService {
   // Update block
   updateFlow(id, data): Observable<any> {
     let url = `${this.baseUri}/flow/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteFlow(id): Observable<any> {
     let url = `${this.baseUri}/flow/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers })
   }
 
 
@@ -462,9 +420,7 @@ export class ApiService {
   createFlowviz(data): Observable<any> {
     let url = `${this.baseUri}/flowviz/create`;
     return this.http.post(url,data,{headers: this.headers})
-      .pipe(
-        catchError(this.errorMgmt)
-      )
+      
   }
 
   // Get all blocks
@@ -486,17 +442,13 @@ export class ApiService {
   // Update block
   updateFlowviz(id, data): Observable<any> {
     let url = `${this.baseUri}/flowviz/update/${id}`;
-    return this.http.put(url, data, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.put(url, data, { headers: this.headers })
   }
 
   // Delete block
   deleteFlowviz(id): Observable<any> {
     let url = `${this.baseUri}/flowviz/delete/${id}`;
-    return this.http.delete(url, { headers: this.headers }).pipe(
-      catchError(this.errorMgmt)
-    )
+    return this.http.delete(url, { headers: this.headers })
   }
 
 

@@ -10,7 +10,7 @@
     </ng-template> -->
 </p-toolbar>
   <p-table 
-  #dt [value]="blocks" [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+  #dt [value]="blocks" stateStorage="session" stateKey="statedemo-session"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
   [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
   [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [filterDelay]="0" [globalFilterFields]="['name','lang','github']">
@@ -25,17 +25,20 @@
   </ng-template>
   <ng-template pTemplate="header">
       <tr>
-          <th style="width: 3rem">
+          <th  style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th pSortableColumn="name">
+          <th  style="width: 3rem">
+              Description
+          </th>
+          <th  pSortableColumn="name">
               <div class="flex justify-content-between align-items-center">
                   Name
                   <p-sortIcon field="name"></p-sortIcon>
                   <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
               </div>
           </th>
-          <th pSortableColumn="lang">
+          <th  pSortableColumn="lang">
               <div class="flex justify-content-between align-items-center">
                   Language
                   <p-sortIcon field="lang"></p-sortIcon>
@@ -72,7 +75,7 @@
                   <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" class="ml-auto"></p-columnFilter>
               </div>
           </th> -->
-          <th pSortableColumn="github">
+          <th  pSortableColumn="github">
             <div class="flex justify-content-between align-items-center">
                 Github
                 <p-sortIcon field="github"></p-sortIcon>
@@ -85,6 +88,11 @@
                         </p-dropdown>
                     </ng-template>
                 </p-columnFilter>
+            </div>
+          </th>
+          <th  pSortableColumn="parameters">
+            <div class="flex justify-content-between align-items-center">
+                Parameters
             </div>
           </th>
           <!-- <th pSortableColumn="activity">
@@ -102,13 +110,16 @@
                   </p-columnFilter>
               </div>
           </th> -->
-          <th></th>
+          <th ></th>
       </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-block>
+  <ng-template pTemplate="body" let-block let-expanded="expanded">
       <tr class="p-selectable-row">
           <td>
               <p-tableCheckbox [value]="block"></p-tableCheckbox>
+          </td>
+          <td>
+            <button style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="block" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
           </td>
           <td>
               <span class="p-column-title">Name</span>
@@ -132,6 +143,11 @@
               <span class="p-column-title">Github</span>
               <span [class]="'block-badge github-' + block.github">{{block.github}}</span>
           </td>
+          <td>
+              <ng-container *ngFor="let param of block.parameters.concat(block.shared).concat(block.shared).concat(block.multis)">
+                <p-tag *ngIf="param.key" [style.margin-right]="'.5rem'" value="{{param.key}}"></p-tag>
+              </ng-container>
+          </td>
           <!-- <td>
               <span class="p-column-title">Activity</span>
               <p-progressBar [value]="block.activity" [showValue]="false"></p-progressBar>
@@ -140,12 +156,20 @@
       
 
               <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Edit" tooltipPosition="top" [routerLink]="['/create-block/', block._id]" class="p-button-rounded  p-button-info" icon="pi pi-cog"></button>
-              <button pButton pRipple class="p-button" style="height:30px;width: 70px;" pTooltip="Instances Attached to this Block" tooltipPosition="top"  [routerLink]="['/instance-list/', block.name]"  icon="pi pi-th-large"><p-badge [value]="block.instance_count" severity="primary" style="margin-right:1em"></p-badge></button>
+              <button pButton pRipple  class="p-button" style="height:30px;width: 70px;" pTooltip="Instances Attached to this Block" tooltipPosition="top"  [routerLink]="['/instance-list/', block.name]"><i class="fa fa-cubes" aria-hidden="true"></i> <p-badge [value]="block.instance_count" severity="primary" [style.margin-right]="'1em'"></p-badge></button>
               <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Statistics"  tooltipPosition="top"  [routerLink]="['/block-stats/', block._id]"  class="p-button-rounded p-button-secondary" icon="pi pi-chart-line"></button>
 
           </td>
       </tr>
   </ng-template>
+  <ng-template pTemplate="rowexpansion" let-block>
+    <tr>
+        <td colspan="20">
+            {{block.desc}}
+      
+          </td>
+    </tr>
+</ng-template>
   <ng-template pTemplate="emptymessage">
       <tr>
           <td colspan="4">No blocks found.</td>

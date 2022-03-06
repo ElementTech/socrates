@@ -80,6 +80,9 @@ export class InstanceCreateComponent implements OnInit {
         this.instanceForm.get('name').setValue(data.name)
         this.instanceForm.get('desc').setValue(data.desc)
         this.instanceForm.get('block').setValue(data.block)
+        this.apiService.getBlock(data.block).subscribe(block=>{
+          this.multisOptions=block.multis
+        })
         this.shared = this.instanceForm.get('shared') as FormArray;
         data.shared.forEach(item=>{
           console.log(item)

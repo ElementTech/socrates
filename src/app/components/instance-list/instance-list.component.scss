@@ -1,10 +1,9 @@
 :host ::ng-deep .p-button {
     margin-right: .5rem;
 }
-
 :host ::ng-deep {
 
-    .github-true {
+    .lastrun-true {
         border-radius: 2px;
         padding: .25em .5rem;
         text-transform: uppercase;
@@ -14,7 +13,7 @@
         background-color: rgb(63, 81, 181);
         color:white
     }
-    .github-false {
+    .lastrun-false {
         border-radius: 2px;
         padding: .25em .5rem;
         text-transform: uppercase;

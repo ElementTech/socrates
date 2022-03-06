@@ -6,6 +6,7 @@ let mongoose = require('mongoose');
 // Instance model
 let Instance = require('../models/Instance');
 let Flow = require('../models/Flow');
+let Flowviz = require('../models/Flowviz');
 const auth = require("../middleware/auth");
 instanceRoute.use(auth)
 // Add Instance
@@ -29,7 +30,17 @@ instanceRoute.route('/').get((req, res,next) => {
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      Flow.find((error,flows)=>{
+        Flowviz.find((error,flows_viz)=>{
+          res.json(data.map(instance=>
+            ({...instance.toJSON(),flow_count: flows.filter(flow=>
+              flow.steps.flat().map(step=>step.id).includes(instance._id.toString())
+            ).length,flowviz_count: flows_viz.filter(flow=>
+              flow.nodes.map(node=>node.data.name).includes(instance.name)
+            ).length})
+          ))
+        })
+      })
     }
   })
 })
@@ -76,15 +87,26 @@ instanceRoute.route('/update/:id').put((req, res, next) => {
 // Delete instance
 instanceRoute.route('/delete/:id').delete((req, res, next) => {
 
-
-  Flow.find({'steps':{$elemMatch:{$elemMatch:{$in:[req.params.id]}}}}).exec(function(error,flows){
+ Instance.findById(req.params.id).exec().then(inst=>{
+  Flow.find().exec(async function(error,flows){
+    Flowviz.find().exec(async function(error,flows_viz){
+      const flowLength = flows.filter(flow=>
+        flow.steps.flat().map(step=>step.id).includes(req.params.id.toString())
+      ).length
+      const flowvizLength = flows_viz.filter(flow=>
+        flow.nodes.map(node=>node.data.name).includes(inst.name)
+      ).length
     if (error) {
       return next(error);
     } else {
-      if (flows.length == 0){
+      console.log(flowLength,flowvizLength)
+      if (flowLength == 0 && flowvizLength == 0){
         Instance.findByIdAndRemove(req.params.id, (error, data) => {
           console.log("Removing: " + req.params.id)
           if (error) {
+            res.status(500).json({
+              msg: error
+            })
             return next(error);
           } else {
             res.status(200).json({
@@ -100,7 +122,10 @@ instanceRoute.route('/delete/:id').delete((req, res, next) => {
         })
       }
     }
+    });
   });
+ })
+
 
 
 })

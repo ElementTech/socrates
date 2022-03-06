@@ -6,111 +6,21 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Instance } from 'src/app/model/Instance';
+import { Observable, tap } from 'rxjs';
 import { FileUploadService } from 'src/app/service/file-upload.service';
 import { ApiService } from '../../service/api.service';
 import { DescDialogComponent } from '../desc-dialog/desc-dialog.component';
+import { Table } from 'primeng/table';
+import { PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',
-  styleUrls: ['./instance-list.component.css']
+  styleUrls: ['./instance-list.component.scss']
 })
 
 export class InstanceListComponent implements OnInit {
-
-  Instance:any;
-  dataSource: MatTableDataSource<any>;
-  displayedColumns = ['run','name','parameters','configure','block'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  blockSearch: string;
-  imageUrls = {};
-  constructor(
-    private sanitizer: DomSanitizer,
-    private uploadService: FileUploadService,
-    private router: Router,
-    private ngZone: NgZone,
-    private _snackBar: MatSnackBar,
-    private apiService: ApiService,
-    public dialog: MatDialog,
-    private actRoute: ActivatedRoute
-    ) { 
-    
-      
-  }
-
-
-  ngOnInit() {this.readInstance();
-    this.uploadService.getFiles().subscribe(data=>{
-      data.forEach(element => {
-        this.uploadService.getFileImage(element.name).subscribe(data => {
-            let unsafeImageUrl = URL.createObjectURL(data);
-            this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-        }, error => {
-            console.log(error);
-        });
-      });
-
-    })
-  }
-
-
-  openDialog(content) {
-    const dialogRef = this.dialog.open(DescDialogComponent,{data: {content:content}});
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-   //rest of your code..
- 
-  readInstance(){
-    this.apiService.getInstances().subscribe((data) => {
-      console.log(data)
-     this.dataSource = new MatTableDataSource(this.fetchLastBuild(data));
-     
-     this.dataSource.filterPredicate = function(data, filter: string): boolean {
-        return data.name.toLowerCase().includes(filter.toLowerCase()) || data.desc.toLowerCase().includes(filter.toLowerCase()) || data.block["name"].toString().toLowerCase().includes(filter.toString().toLowerCase());
-      };
-    })    
-  }
-  ngAfterViewInit(){
-    //this.fetchLastBuild()
-    this.applyFilter(this.actRoute.snapshot.paramMap.get('name'))
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  removeInstance(id) {
-
-    if(window.confirm('Are you sure?')) {
-    
-        this.apiService.deleteInstance(id).subscribe(
-          result => {
-            // Handle result
-            this.readInstance()
-          },
-          error => {
-            if (error.includes("406"))
-            {
-              this._snackBar.open('Instance Has Flows Attached', 'Close', {
-                duration: 3000
-              });
-            }
-          },
-          () => {
-            // 'onCompleted' callback.
-            // No errors, route to new page here
-          }
-        );
-
-    }
-  }
 
   fetchLastBuild(thisInstance) {
   
@@ -123,7 +33,7 @@ export class InstanceListComponent implements OnInit {
           thisInstance[index].numruns = data.length
           if (data[0].done == true)
           {
-            thisInstance[index].lastrun = data[0].error
+            thisInstance[index].lastrun = !data[0].error
           }
           else
           {
@@ -140,5 +50,105 @@ export class InstanceListComponent implements OnInit {
   
     return thisInstance
   }
+
+
+  instances: any[];
+
+  selectedInstances: any[];
+
+  langs: any;
+
+  statuses: any[];
+
+  loading: boolean = true;
+
+  activityValues: number[] = [0, 100];
+
+  lastRunOptions = ['true','false','running','none']
+
+  imageUrls = {};
+
+  constructor(
+    private apiService: ApiService,
+    private uploadService: FileUploadService,
+    private sanitizer: DomSanitizer,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService) { }
+
+  deleteSelectedInstances() {
+    this.confirmationService.confirm({
+        message: 'Are you sure you want to delete the selected products?',
+        header: 'Confirm',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+
+            const runs = []; 
+       
+            this.selectedInstances.forEach(instanceToDelete=>{
+              runs.push(this.apiService.deleteInstance(instanceToDelete._id.toString()).toPromise());
+            });
+            Promise.allSettled(runs).then(promiseResult => {
+              console.log(promiseResult)
+              if (promiseResult.map(res=>res.status).includes("rejected") && promiseResult.map(res=>res.status).includes("fulfilled"))
+              {
+                this.messageService.add({severity:'warn', summary: 'Warning', detail: 'Some Instances have Flows Attached. Deleted Unattached.', life: 3000});
+              }
+              if (!promiseResult.map(res=>res.status).includes("rejected"))
+              {
+                this.messageService.add({severity:'success', summary: 'Successful', detail: 'Instances Deleted', life: 3000});
+              }
+              if (!promiseResult.map(res=>res.status).includes("fulfilled"))
+              {
+                this.messageService.add({severity:'error', summary: 'Error', detail: 'All Instances chosen have Flows attached', life: 3000});
+              }
+              promiseResult.filter(res=>res.status=="fulfilled").forEach(toRemove=>{
+                console.log(toRemove)
+                // @ts-ignore
+                if (Object.keys(toRemove).includes('msg'))
+                {
+                  console.log("first")
+                  // @ts-ignore
+                  this.instances = this.instances.filter(val => val._id!=toRemove.msg._id);
+                }
+                // @ts-ignore
+                if (Object.keys(toRemove).includes('value'))
+                {
+                  console.log("second")
+                  // @ts-ignore
+                  this.instances = this.instances.filter(val => val._id!=toRemove.value.msg._id);
+                }
+              })
+   
+            }) 
+
+            this.selectedInstances = null
+       
+        }
+    });
+}
+
+
+  ngOnInit() {
+      this.apiService.getInstances().subscribe(instances => {
+          this.instances = instances;
+          this.fetchLastBuild(instances)
+          console.log(instances)
+          this.loading = false;
+          this.instances.forEach(instance => instance.date = new Date(instance.date));
+      });
+
+      this.uploadService.getFiles().subscribe(data=>{
+        data.forEach(element => {
+          this.uploadService.getFileImage(element.name).subscribe(data => {
+              let unsafeImageUrl = URL.createObjectURL(data);
+              this.imageUrls[element.name]= this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+          }, error => {
+              console.log(error);
+          });
+        });
+
+      })
+  }
+
 
 }

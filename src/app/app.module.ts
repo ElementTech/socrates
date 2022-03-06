@@ -100,6 +100,9 @@ import {TooltipModule} from 'primeng/tooltip';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import {BadgeModule} from 'primeng/badge';
 import { ChipModule } from 'primeng/chip';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -138,6 +141,7 @@ import { ChipModule } from 'primeng/chip';
     
   ],
   imports: [
+    TagModule,
     ChipModule,
     BadgeModule,
     FileUploadModule,
@@ -218,7 +222,7 @@ import { ChipModule } from 'primeng/chip';
   //     ]
   //   }
   // },
-  ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService,FileUploadService],
+  ApiService,SidenavService,FileService,AuthenticationService,AuthGuardService,FileUploadService,ConfirmationService,MessageService],
   bootstrap: [AppComponent]
 })
 

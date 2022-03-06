@@ -125,7 +125,7 @@
   </ng-template> -->
 </p-toolbar>
 <p-table 
-#dt [value]="instances" stateStorage="session" stateKey="statedemo-session"  [(selection)]="selectedInstances" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+#dt [value]="instances" stateStorage="session" stateKey="statedemo-session-instances"  [(selection)]="selectedInstances" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
 [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
 [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
 [filterDelay]="0" [globalFilterFields]="['name','lang','github']">
@@ -155,6 +155,13 @@
                 <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
             </div>
         </th>
+        <th  pSortableColumn="block">
+          <div class="flex justify-content-between align-items-center">
+              Block
+              <p-sortIcon field="block"></p-sortIcon>
+              <p-columnFilter type="text" field="block" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+      </th>
     
         <!-- <th pSortableColumn="lang">
             <div class="flex justify-content-between align-items-center">
@@ -247,7 +254,11 @@
             <img width="30px" [src]="this.imageUrls[instance.image]">
             {{instance.name}}
         </td>
-        
+        <td>
+          <span class="p-column-title">Block</span>
+          {{instance.block}}
+      </td>
+      
         <!-- <td>
             <span class="p-column-title">Lang</span>
             <img onerror="this.src='../../../assets/no_code.png'" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{instance.lang | lowercase}}/{{instance.lang | lowercase}}-original.svg" width="30">
@@ -298,7 +309,7 @@
 </ng-template>
 <ng-template pTemplate="emptymessage">
     <tr>
-        <td colspan="4">No instances found.</td>
+        <td colspan="20">No instances found.</td>
     </tr>
 </ng-template>
 </p-table>

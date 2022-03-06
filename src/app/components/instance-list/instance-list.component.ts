@@ -26,6 +26,8 @@ export class InstanceListComponent implements OnInit {
   
     for (let index = 0; index < thisInstance.length; index++) {
       const element = thisInstance[index];
+      thisInstance[index].block_id = thisInstance[index].block._id
+      thisInstance[index].block = thisInstance[index].block.name
       this.apiService.getDockerInstanceByInstanceID(element._id).subscribe(data => {
       
         if (data.length != 0)
@@ -73,6 +75,7 @@ export class InstanceListComponent implements OnInit {
     private uploadService: FileUploadService,
     private sanitizer: DomSanitizer,
     private messageService: MessageService,
+    private actRoute: ActivatedRoute,
     private confirmationService: ConfirmationService) { }
 
   deleteSelectedInstances() {
@@ -127,14 +130,17 @@ export class InstanceListComponent implements OnInit {
     });
 }
 
-
+  @ViewChild('dt', { static: true }) dt: any;
   ngOnInit() {
       this.apiService.getInstances().subscribe(instances => {
           this.instances = instances;
           this.fetchLastBuild(instances)
-          console.log(instances)
           this.loading = false;
-          this.instances.forEach(instance => instance.date = new Date(instance.date));
+
+          if (this.actRoute.snapshot.paramMap.get('name') != ""){
+            this.dt.filters['block'] = [{value: this.actRoute.snapshot.paramMap.get('name'), matchMode: "equals", operator: "and"}];
+          }
+
       });
 
       this.uploadService.getFiles().subscribe(data=>{

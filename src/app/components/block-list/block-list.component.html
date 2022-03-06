@@ -10,7 +10,7 @@
     </ng-template> -->
 </p-toolbar>
   <p-table 
-  #dt [value]="blocks" stateStorage="session" stateKey="statedemo-session"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+  #dt [value]="blocks" stateStorage="session" stateKey="statedemo-session-blocks"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
   [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
   [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [filterDelay]="0" [globalFilterFields]="['name','lang','github']">

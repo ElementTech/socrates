@@ -119,25 +119,29 @@
       <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/create-instance'"></button>
       <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedInstances()" [disabled]="!selectedInstances || !selectedInstances.length"></button>
   </ng-template>
+  <h2>
+    <i class="fa-solid fa-cubes"></i> List of Instances
 
+  </h2>
   <!-- <ng-template pTemplate="right">
       <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
   </ng-template> -->
 </p-toolbar>
 <p-table 
-#dt [value]="instances" stateStorage="session" stateKey="statedemo-session-instances"  [(selection)]="selectedInstances" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+
+#dt [value]="instances"  [(selection)]="selectedInstances" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
 [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
 [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
 [filterDelay]="0" [globalFilterFields]="['name','lang','github']">
 <ng-template pTemplate="caption">
     <div class="table-header">
-        List of Instances
-        <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
-        </span>
+          <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+          </span>
     </div>
 </ng-template>
+
 <ng-template pTemplate="header">
     <tr>
         <th  style="width: 3rem">
@@ -146,7 +150,7 @@
         <th  style="width: 3rem">
         </th>
         <th  style="width: 3rem">
-          Description
+          
       </th>
         <th  pSortableColumn="name">
             <div class="flex justify-content-between align-items-center">
@@ -193,14 +197,8 @@
                 <p-columnFilter type="date" field="date" display="menu" class="ml-auto"></p-columnFilter>
             </div>
         </th> -->
-        <!-- <th pSortableColumn="balance">
-            <div class="flex justify-content-between align-items-center">
-                Balance
-                <p-sortIcon field="balance"></p-sortIcon>
-                <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" class="ml-auto"></p-columnFilter>
-            </div>
-        </th> -->
-        <th  pSortableColumn="lastrun">
+
+        <th  pSortableColumn="lastrun"  style="width: 10rem">
           <div class="flex justify-content-between align-items-center">
               Last Run
               <p-sortIcon field="lastrun"></p-sortIcon>
@@ -213,6 +211,13 @@
                       </p-dropdown>
                   </ng-template>
               </p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="numruns">
+          <div class="flex justify-content-between align-items-center">
+              # Runs
+              <p-sortIcon field="numruns"></p-sortIcon>
+              <p-columnFilter type="numeric" field="numruns" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <!-- <th pSortableColumn="activity">
@@ -235,7 +240,7 @@
             Parameters
           </div>
         </th>
-        <th ></th>
+        <th></th>
     </tr>
 </ng-template>
 <ng-template pTemplate="body" let-instance  let-expanded="expanded">
@@ -247,7 +252,7 @@
           <button  style="height:30px;width: 30px;" [routerLink]="['/instance-run/', instance._id]" pButton pRipple type="button" icon="pi pi-play" class="p-button-rounded p-button-sm"></button>
         </td>
         <td>
-          <button  style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="instance" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          <button  *ngIf="instance.desc" style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="instance" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
         </td>
         <td>
             <span class="p-column-title">Name</span>
@@ -257,7 +262,7 @@
         <td>
           <span class="p-column-title">Block</span>
           {{instance.block}}
-      </td>
+        </td>
       
         <!-- <td>
             <span class="p-column-title">Lang</span>
@@ -277,6 +282,9 @@
             <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == false" matListAvatar src="../../../assets/fail.png">
             <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
             <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
+        </td>
+        <td>
+          {{instance.numruns}}
         </td>
         <td>
           <ng-container *ngFor="let param of instance.parameters.concat(instance.shared).concat(instance.shared).concat(instance.multis)">

@@ -11,8 +11,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Amitai Getzler">
-    <meta name="generator" content="Hugo 0.84.0">
     <title>Socrates</title>
 
 
@@ -33,7 +31,7 @@
       </svg>
 
     <mat-sidenav-container>
-      <mat-sidenav #sidenav mode="side" opened  *ngIf="auth.isLoggedIn()">
+      <mat-sidenav #sidenav mode="side" opened *ngIf="auth.isLoggedIn()">
         <mat-list>
           <h1 class="text-white"><img class="masthead-avatar" width="30px"  src="/assets/socrates.png" /> Socrates</h1>
           <div mat-header>Create</div>
@@ -91,42 +89,19 @@
       </mat-sidenav>
     
       <mat-sidenav-content>
-        <mat-toolbar *ngIf="auth.isLoggedIn()" color="primary" fxLayout="row">
-       
-         
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/portal'"> <i class="fa-solid fa-users fa-lg" aria-hidden="true"></i> Portal </a>
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/blocks-list'"> <i class="fa-solid fa-cube fa-lg" aria-hidden="true"></i> Blocks </a>
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/instance-list'"> <i class="fa-solid fa-cubes fa-lg" aria-hidden="true"></i> Instances </a>
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/flow-portal'"> <i class="fa-solid fa-chain fa-lg" aria-hidden="true"></i> Flows </a>
-          <span class="example-spacer"></span>
-          <a mat-button routerLinkActive="activebutton" [routerLink]="'/github-list'"> <i class="fa fa-github fa-lg" aria-hidden="true"></i>  Github </a>
-          <div class="vl"></div>
-          <span class="fill-remaining-space">
-            <!-- <button #clickMe mat-icon-button [matMenuTriggerFor]="menu">
-              <i class="fa fa-user-circle fa-2x" [ngStyle]="{'color': (auth.isLoggedIn()) ? 'lightgreen' : 'white'}" aria-hidden="true"></i>
-            </button>
-            
-            <mat-menu #menu="matMenu" [overlapTrigger]="false">
-              <button (click)="auth.logout()" mat-menu-item *ngIf="auth.isLoggedIn()">
-                <mat-icon>logout</mat-icon>
-                <span>Logout</span>
-              </button>
-              <button routerLink="/login" mat-menu-item *ngIf="!auth.isLoggedIn()">
-                <mat-icon>assignment_ind</mat-icon>
-                <span>Login</span>
-              </button>
-              <button routerLink="/profile" mat-menu-item *ngIf="auth.isLoggedIn()">
-                <mat-icon>account_circle</mat-icon>
-                <span>Profile</span>
-              </button>
-            </mat-menu> -->
-            
-            <button class="btn btn-outline-light"  routerLink="/profile" *ngIf="auth.isLoggedIn()"><i class="fa fa-user" aria-hidden="true"></i> {{auth.getUserDetails().name}}</button>
-            <a mat-button (click)="auth.logout()"> <mat-icon>logout</mat-icon>  </a>
-  
-          </span>
+      
+
         
-        </mat-toolbar>
+      <p-menubar [model]="items" *ngIf="auth.isLoggedIn()" [style]="{'background-color': '#3f51b5'}">
+        <ng-template pTemplate="start">
+        </ng-template>
+        <!-- <ng-template pTemplate="end">
+            <input type="text" pInputText placeholder="Search">
+        </ng-template> -->
+      </p-menubar>
+
+
+
         <div>
           <router-outlet></router-outlet>
         </div>

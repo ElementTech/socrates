@@ -234,6 +234,8 @@ export class InstanceRunComponent implements OnInit {
               }
             }
             this.output=response.console.join("\r\n")
+            this.dockerOutput = response.output
+
             // this.scrollLogToBottom()
             if(response.done == false) 
             {

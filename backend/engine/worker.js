@@ -145,9 +145,12 @@ function containerLogs(container,generated_id,folder_path) {
             { output: {"key":key,"value":val} }
           )
         }
-        update_docker_instance_console_in_database(generated_id,
-          { console: chunk.toString('utf8').replace("\n","") }
-        )
+        else
+        {
+          update_docker_instance_console_in_database(generated_id,
+            { console: chunk.toString('utf8').replace("\n","") }
+          )
+        }
       });
       container.logs({
         follow: true,

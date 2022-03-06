@@ -103,6 +103,10 @@ import { ChipModule } from 'primeng/chip';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
+import {MenubarModule} from 'primeng/menubar';
+
+import {SplitButtonModule} from 'primeng/splitbutton';
+
 // import {SocialLoginModule,GoogleLoginProvider} from 'angularx-social-login'
 @NgModule({
   declarations: [
@@ -141,6 +145,8 @@ import { TagModule } from 'primeng/tag';
     
   ],
   imports: [
+    MenubarModule,
+    SplitButtonModule,
     TagModule,
     ChipModule,
     BadgeModule,

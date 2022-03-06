@@ -4,19 +4,21 @@
         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/create-block'"></button>
         <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedBlocks()" [disabled]="!selectedBlocks || !selectedBlocks.length"></button>
     </ng-template>
-
+    <h2>
+        <i class="fa-solid fa-cube"></i> List of Blocks
+    
+      </h2>
     <!-- <ng-template pTemplate="right">
         <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
     </ng-template> -->
 </p-toolbar>
   <p-table 
-  #dt [value]="blocks" stateStorage="session" stateKey="statedemo-session-blocks"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+  #dt [value]="blocks"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
   [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
   [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [filterDelay]="0" [globalFilterFields]="['name','lang','github']">
   <ng-template pTemplate="caption">
       <div class="table-header">
-          List of Blocks
           <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
@@ -29,7 +31,7 @@
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
           <th  style="width: 3rem">
-              Description
+              
           </th>
           <th  pSortableColumn="name">
               <div class="flex justify-content-between align-items-center">
@@ -119,7 +121,7 @@
               <p-tableCheckbox [value]="block"></p-tableCheckbox>
           </td>
           <td>
-            <button style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="block" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            <button *ngIf="block.desc" style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="block" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
           </td>
           <td>
               <span class="p-column-title">Name</span>

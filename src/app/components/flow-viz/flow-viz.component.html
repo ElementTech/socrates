@@ -261,6 +261,11 @@
         <mat-label>Name</mat-label>
         <input matInput placeholder="My Flow" formControlName="name" required>
       </mat-form-field>
+
+      <h3>On Error: (Coming Soon)</h3>
+      <p-selectButton styleClass="mb-4"   [options]="error_options" formControlName="error_option" optionLabel="label" optionValue="value"></p-selectButton>
+
+
       <mat-form-field class="w-100" appearance="fill">
         <mat-label>Icon</mat-label>
         <mat-select formControlName="image">

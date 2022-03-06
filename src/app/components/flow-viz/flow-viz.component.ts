@@ -29,8 +29,10 @@ export class FlowVizComponent {
       label: 'Start'
     }
   ];
-
-
+  error_option = "";
+  error_options = [{label: 'Continue', value: 'continue',icon: 'pi pi-fast-forward'},
+  {label: 'Stop Branch', value: 'branch',icon:'pi pi-filter-slash'},
+  {label: 'Stop Tree', value: 'tree',icon:'pi pi-sort-alt-slash'}]
   onNodeClick(event){
     console.log(event)
   }
@@ -230,6 +232,7 @@ export class FlowVizComponent {
       name: ['', [Validators.required]],
       nodes: [this.nodes, [Validators.required]],
       links: [this.links, [Validators.required]],
+      error_option: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })

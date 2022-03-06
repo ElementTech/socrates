@@ -104,6 +104,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import {MenubarModule} from 'primeng/menubar';
+import {SelectButtonModule} from 'primeng/selectbutton';
 
 import {SplitButtonModule} from 'primeng/splitbutton';
 
@@ -145,6 +146,7 @@ import {SplitButtonModule} from 'primeng/splitbutton';
     
   ],
   imports: [
+    SelectButtonModule,
     MenubarModule,
     SplitButtonModule,
     TagModule,

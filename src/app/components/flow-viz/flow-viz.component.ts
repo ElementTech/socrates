@@ -232,7 +232,7 @@ export class FlowVizComponent {
       name: ['', [Validators.required]],
       nodes: [this.nodes, [Validators.required]],
       links: [this.links, [Validators.required]],
-      error_option: ['', [Validators.required]],
+      // error_option: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })
@@ -281,7 +281,7 @@ export class FlowVizComponent {
             this._snackBar.open('Flow created successfully', 'Close', {
               duration: 3000
             });
-            this.ngZone.run(() => this.router.navigateByUrl('/flow-list'))
+            this.ngZone.run(() => this.router.navigateByUrl('/flow-viz-list'))
           }, (error) => {
             if (error.includes("Error Code: 400")){
               this._snackBar.open('Duplicate Names Not Allowed', 'Close', {

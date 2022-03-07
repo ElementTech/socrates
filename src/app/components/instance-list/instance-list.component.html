@@ -287,7 +287,7 @@
           {{instance.numruns}}
         </td>
         <td>
-          <ng-container *ngFor="let param of instance.parameters.concat(instance.shared).concat(instance.shared).concat(instance.multis)">
+          <ng-container *ngFor="let param of instance.parameters.concat(instance.shared).concat(instance.shared).concat(instance.multis).concat(instance.booleans)">
             <p-tag *ngIf="param.key && !param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}={{param.value}}"></p-tag>
             <p-tag *ngIf="param.key && param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}=****"></p-tag>
           </ng-container>

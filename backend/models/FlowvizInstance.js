@@ -12,6 +12,9 @@ let FlowvizInstance = new Schema({
    flow:{
       type: String // Flow ID
    },
+   on_error: {
+      type: String
+   },
    done: {
       type: Boolean
    },

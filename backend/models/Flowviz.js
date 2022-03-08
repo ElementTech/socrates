@@ -13,6 +13,9 @@ let Flowviz = new Schema({
       type: String,
       unique: true
    },
+   on_error: {
+      type: String
+   },
    desc: {
       type: String
    },

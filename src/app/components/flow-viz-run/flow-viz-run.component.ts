@@ -605,6 +605,7 @@ export class FlowvizRunComponent implements OnInit {
       name: ['', [Validators.required]],
       nodes: [this.nodes, [Validators.required]],
       links: [this.links, [Validators.required]],
+      on_error: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })

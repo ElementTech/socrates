@@ -4,5 +4,6 @@ export class Flowviz {
    links: [Object];
    name: string;
    desc: string;
+   on_error: string;
    image?: string;
 }

@@ -68,6 +68,8 @@ export class FlowVizListComponent implements OnInit {
 
   imageUrls = {};
 
+  onErrorOptions = ['continue','branch','tree']
+
   constructor(
     private apiService: ApiService,
     private uploadService: FileUploadService,

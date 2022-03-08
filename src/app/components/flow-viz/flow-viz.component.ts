@@ -232,7 +232,7 @@ export class FlowVizComponent {
       name: ['', [Validators.required]],
       nodes: [this.nodes, [Validators.required]],
       links: [this.links, [Validators.required]],
-      // error_option: ['', [Validators.required]],
+      on_error: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })

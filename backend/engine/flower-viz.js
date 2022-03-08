@@ -34,7 +34,8 @@ mongoose.connect(dbConfig.db, {
 )
 
 function run_flow(){
-  create_flow_instance_in_database({_id: workerData.flow_run_id,"flow": workerData.flow._id, "nodes": workerData.flow.nodes,"links":workerData.flow.links,"done": false,"error": false})
+  create_flow_instance_in_database({_id: workerData.flow_run_id,"flow": workerData.flow._id, "nodes": workerData.flow.nodes,"links":workerData.flow.links,"on_error": workerData.flow.on_error,"done": false,"error": false})
+  
   const startTime = new Date()
   const refreshTime = setInterval(function() {
     set_flow_instance_in_database(workerData.flow_run_id,
@@ -64,26 +65,60 @@ async function run_node(node_name,instance_name,next_nodes,refreshTime,extraEnv)
   const inst_obj = await Promise.resolve(get_instance_obj(instance_name))
   console.log("Running node",node_name,"with",instance_name,"run_id",run_id,"extraEnv",extraEnv)
   engine.run(inst_obj,run_id,JSON.parse(JSON.stringify(extraEnv)))
-  const extra_env = await Promise.resolve(run_finished(node_name,run_id));
-  if (next_nodes.length != 0)
+  const results = await Promise.resolve(run_finished(node_name,run_id));
+  if (results.error)
   {
-    next_nodes.forEach(next_node => {
-      run_node(next_node,workerData.flow.nodes.filter(node=>node.id==next_node)[0].data.name,workerData.flow.links.filter(link=>link.source==next_node).map(link_node=>link_node.target),refreshTime,extra_env)
-    });
+    if (workerData.flow.on_error == "continue")
+    {
+      if (next_nodes.length != 0)
+      {
+        next_nodes_run(next_nodes,refreshTime,results.extra_env)
+      }
+      else
+      {
+        stop_worker(refreshTime)
+      }
+    }
+    else if (workerData.flow.on_error == "branch")
+    {
+      console.log("Branch Stopped")
+    }
+    else if (workerData.flow.on_error == "tree")
+    {
+      stop_worker(refreshTime)
+    }
   }
   else
   {
-    console.log("Removing Number of trees by",1)
-    numberOfTrees--
-    console.log("Number of Trees:",numberOfTrees)
-    if (numberOfTrees==0)
+    if (next_nodes.length != 0)
     {
-      clearInterval(refreshTime);
-      set_flow_instance_in_database(workerData.flow_run_id,
-        { done: true }
-      )
-      parentPort.postMessage("Done")
+      next_nodes_run(next_nodes,refreshTime,results.extra_env)
     }
+    else
+    {
+      stop_worker(refreshTime)
+    }
+  }
+}
+
+function next_nodes_run(next_nodes,refreshTime,extra_env)
+{
+  next_nodes.forEach(next_node => {
+    run_node(next_node,workerData.flow.nodes.filter(node=>node.id==next_node)[0].data.name,workerData.flow.links.filter(link=>link.source==next_node).map(link_node=>link_node.target),refreshTime,extra_env)
+  });
+}
+function stop_worker(refreshTime)
+{
+  console.log("Removing Number of trees by",1)
+  numberOfTrees--
+  console.log("Number of Trees:",numberOfTrees)
+  if (numberOfTrees==0)
+  {
+    clearInterval(refreshTime);
+    set_flow_instance_in_database(workerData.flow_run_id,
+      { done: true }
+    )
+    parentPort.postMessage("Done")
   }
 }
 
@@ -138,7 +173,7 @@ async function run_finished(node_name,run_id) {
                   }
                   clearInterval(nodeTime);
                   DockerInstance.findById(run_id, (error, dockerinst) => {
-                    resolve(dockerinst.parameters.concat(dockerinst.output))
+                    resolve({"extra_env":dockerinst.parameters.concat(dockerinst.output),"error":data.updateDescription.updatedFields.error})
                   });
                 }
               }

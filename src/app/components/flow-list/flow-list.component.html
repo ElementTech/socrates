@@ -182,6 +182,7 @@
               </p-columnFilter>
           </div>
         </th>
+
         <th pSortableColumn="numruns">
           <div class="flex justify-content-between align-items-center">
               # Runs
@@ -252,6 +253,7 @@
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
         </td>
+
         <td>
           {{flow.numruns}}
         </td>

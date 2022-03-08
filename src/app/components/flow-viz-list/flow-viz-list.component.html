@@ -81,7 +81,7 @@
 <p-toast></p-toast>
 <p-toolbar>
   <ng-template pTemplate="left">
-      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/create-flow'"></button>
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/flow-viz'"></button>
       <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedFlows()" [disabled]="!selectedFlows || !selectedFlows.length"></button>
   </ng-template>
     <h2>
@@ -174,6 +174,21 @@
               </p-columnFilter>
           </div>
         </th>
+        <th  pSortableColumn="on_error"  style="width: 10rem">
+          <div class="flex justify-content-between align-items-center">
+              On Error
+              <p-sortIcon field="on_error"></p-sortIcon>
+              <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="on_error" matchMode="equals" display="menu" class="ml-auto">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                      <p-dropdown [ngModel]="value" [options]="onErrorOptions" (onChange)="filter($event.value)" placeholder="Any">
+                          <ng-template let-option pTemplate="item">
+                              <span [class]="'customer-badge on_error-' + option">{{option}}</span>
+                          </ng-template>
+                      </p-dropdown>
+                  </ng-template>
+              </p-columnFilter>
+          </div>
+        </th>
         <th pSortableColumn="numruns">
           <div class="flex justify-content-between align-items-center">
               # Runs
@@ -245,8 +260,12 @@
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
         </td>
         <td>
+          {{flow.on_error}}
+        </td>
+        <td>
           {{flow.numruns}}
         </td>
+
         <td>
           {{flow.nodes}}
         </td>

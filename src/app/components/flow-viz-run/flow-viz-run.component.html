@@ -115,7 +115,8 @@
                     [attr.fill]="'lightgrey'"
                     [class.pulsing]="node.done==false"
                     [class.error]="node.error == true"
-                    [class.noterror]="node.error == false"
+                    [class.noterror]="node.error == false && node.skipped == false"
+                    [class.skipped]="node.error == false && node.skipped == true"
                     id="{{node.label}}rect"
                 />
                 <svg xmlns="http://www.w3.org/2000/svg">

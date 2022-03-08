@@ -404,3 +404,6 @@
   .noterror{
     fill: green;
   }
+  .skipped{
+    fill: goldenrod;
+  }

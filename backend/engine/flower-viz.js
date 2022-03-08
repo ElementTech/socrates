@@ -33,6 +33,8 @@ mongoose.connect(dbConfig.db, {
    }
 )
 
+let tree_continue = true
+
 function run_flow(){
   create_flow_instance_in_database({_id: workerData.flow_run_id,"flow": workerData.flow._id, "nodes": workerData.flow.nodes,"links":workerData.flow.links,"on_error": workerData.flow.on_error,"done": false,"error": false})
   
@@ -66,9 +68,32 @@ async function run_node(node_name,instance_name,next_nodes,refreshTime,extraEnv)
   console.log("Running node",node_name,"with",instance_name,"run_id",run_id,"extraEnv",extraEnv)
   engine.run(inst_obj,run_id,JSON.parse(JSON.stringify(extraEnv)))
   const results = await Promise.resolve(run_finished(node_name,run_id));
-  if (results.error)
+  if (tree_continue)
   {
-    if (workerData.flow.on_error == "continue")
+    if (results.error)
+    {
+      if (workerData.flow.on_error == "continue")
+      {
+        if (next_nodes.length != 0)
+        {
+          next_nodes_run(next_nodes,refreshTime,results.extra_env)
+        }
+        else
+        {
+          stop_worker(refreshTime)
+        }
+      }
+      else if (workerData.flow.on_error == "branch")
+      {
+        skip_next_nodes(next_nodes,refreshTime)
+      }
+      else if (workerData.flow.on_error == "tree")
+      {
+        tree_continue = false
+        skip_next_nodes(next_nodes,refreshTime)
+      }
+    }
+    else
     {
       if (next_nodes.length != 0)
       {
@@ -79,25 +104,32 @@ async function run_node(node_name,instance_name,next_nodes,refreshTime,extraEnv)
         stop_worker(refreshTime)
       }
     }
-    else if (workerData.flow.on_error == "branch")
-    {
-      console.log("Branch Stopped")
-    }
-    else if (workerData.flow.on_error == "tree")
-    {
-      stop_worker(refreshTime)
-    }
   }
   else
   {
-    if (next_nodes.length != 0)
-    {
-      next_nodes_run(next_nodes,refreshTime,results.extra_env)
-    }
-    else
-    {
-      stop_worker(refreshTime)
-    }
+    skip_next_nodes(next_nodes,refreshTime)
+  }
+}
+
+function skip_next_nodes(next_nodes,refreshTime)
+{
+  if (next_nodes.length != 0)
+  {
+    next_nodes.forEach(next_node => {
+      set_flow_instance_in_database_with_node_name(workerData.flow_run_id,next_node,
+        { 
+          [`nodes.$[outer].error`]: false,
+          [`nodes.$[outer].skipped`]: true,
+          [`nodes.$[outer].runtime`]: 0,
+          [`nodes.$[outer].done`]: true
+        }
+      )
+      skip_next_nodes(workerData.flow.links.filter(link=>link.source==next_node).map(link_node=>link_node.target),refreshTime)
+    });
+  }
+  else
+  {
+    stop_worker(refreshTime)
   }
 }
 
@@ -155,6 +187,7 @@ async function run_finished(node_name,run_id) {
                   {
                     set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
                       { [`nodes.$[outer].error`]: true,
+                        [`nodes.$[outer].skipped`]: false,
                         [`nodes.$[outer].runtime`]: nodeRunTime,
                         [`nodes.$[outer].done`]: true,
                         error: true 
@@ -166,6 +199,7 @@ async function run_finished(node_name,run_id) {
                     set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
                       { 
                         [`nodes.$[outer].error`]: false,
+                        [`nodes.$[outer].skipped`]: false,
                         [`nodes.$[outer].runtime`]: nodeRunTime,
                         [`nodes.$[outer].done`]: true
                       }

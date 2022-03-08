@@ -23,10 +23,6 @@ const run_flow = async (flow,flow_run_id) => {
 
   worker.once("message", result => {
       console.log(`${result}`);
-      if (result == "Done")
-      {
-          worker.terminate()
-      }
   });
   
   worker.on("error", error => {

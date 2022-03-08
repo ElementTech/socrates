@@ -12,6 +12,13 @@ let FlowInstance = new Schema({
    done: {
       type: Boolean
    },
+   on_error: {
+      type: String
+   },
+   skipped:{
+      type: Boolean,
+      required: false
+   },
    error: {
       type: Boolean
    },

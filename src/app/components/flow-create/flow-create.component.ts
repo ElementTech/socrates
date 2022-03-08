@@ -29,6 +29,9 @@ export class FlowCreateComponent implements OnInit {
   direction = "";
   submitted: boolean;
 
+  error_option = "";
+  error_options = [{label: 'Continue', value: 'continue',icon: 'pi pi-fast-forward'},
+  {label: 'Stop', value: 'stop',icon:'pi pi-filter-slash'}]
  
   constructor(  
     private sanitizer: DomSanitizer,
@@ -147,12 +150,18 @@ export class FlowCreateComponent implements OnInit {
     this.flowForm.get("steps").setValue(this.steps);
     // this.cdRef.detectChanges();
   }
+  removeStep(i)
+  {
+    this.steps.splice(i,1)
+    this.flowForm.get("steps").setValue(this.steps);
+  }
 
 
   mainForm() {
     this.flowForm = this.fb.group({
       name: ['', [Validators.required]],
       steps: [this.steps, [Validators.required]],
+      on_error: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })

@@ -254,7 +254,7 @@ export class FlowvizRunComponent implements OnInit {
   {
     
     let updatedInList = false
-    this.subscription = interval(500)
+    this.subscription = interval(1000)
     .pipe(
         switchMap(() => this.apiService.getFlowvizInstance(run_id)),
         map(response => {

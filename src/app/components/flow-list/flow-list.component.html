@@ -182,6 +182,21 @@
               </p-columnFilter>
           </div>
         </th>
+        <th  pSortableColumn="on_error"  style="width: 10rem">
+          <div class="flex justify-content-between align-items-center">
+              On Error
+              <p-sortIcon field="on_error"></p-sortIcon>
+              <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="on_error" matchMode="equals" display="menu" class="ml-auto">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                      <p-dropdown [ngModel]="value" [options]="onErrorOptions" (onChange)="filter($event.value)" placeholder="Any">
+                          <ng-template let-option pTemplate="item">
+                              <span [class]="'customer-badge on_error-' + option">{{option}}</span>
+                          </ng-template>
+                      </p-dropdown>
+                  </ng-template>
+              </p-columnFilter>
+          </div>
+        </th>
 
         <th pSortableColumn="numruns">
           <div class="flex justify-content-between align-items-center">
@@ -253,7 +268,9 @@
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
         </td>
-
+        <td>
+          {{flow.on_error}}
+        </td>
         <td>
           {{flow.numruns}}
         </td>

@@ -114,6 +114,7 @@
             <div class="text-center align-vertical">
               <div>&nbsp;</div>
               <h2>{{i}}</h2>
+                <i class="fa-solid fa-times-circle" aria-hidden="true" style="color: maroon;cursor: pointer;"  (click)="removeStep(i)"></i>
             </div>
           </div>
         </div>
@@ -130,6 +131,9 @@
         <mat-label>Name</mat-label>
         <input matInput placeholder="My Flow" formControlName="name" required>
       </mat-form-field>
+
+      <h3>On Error:</h3>
+      <p-selectButton styleClass="mb-4"   [options]="error_options" formControlName="on_error" optionLabel="label" optionValue="value"></p-selectButton>
       <mat-form-field class="w-100" appearance="fill">
         <mat-label>Icon</mat-label>
         <mat-select formControlName="image">

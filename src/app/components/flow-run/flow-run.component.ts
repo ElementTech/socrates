@@ -48,7 +48,6 @@ export class FlowRunComponent implements OnInit {
       data.steps = data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
       this.flowForm.setValue(data)
       this.steps=data.steps
-      console.log(this.steps)
     });
   }
   Images?: Observable<any>;
@@ -268,7 +267,7 @@ export class FlowRunComponent implements OnInit {
   {
     
     let updatedInList = false
-    this.subscription = interval(500)
+    this.subscription = interval(1000)
     .pipe(
         switchMap(() => this.apiService.getFlowInstance(run_id)),
         map(response => {
@@ -366,6 +365,13 @@ export class FlowRunComponent implements OnInit {
             else
             {
               document.getElementById(run.id+run.ui_id).classList.add("blob");
+            }
+          }
+          else
+          {
+            if (flowRun.skipped)
+            {
+              document.getElementById(run.id+run.ui_id).style.backgroundColor = "goldenrod";
             }
           }
         })
@@ -536,6 +542,7 @@ export class FlowRunComponent implements OnInit {
     this.flowForm = this.fb.group({
       name: ['', [Validators.required]],
       steps: [this.steps, [Validators.required]],
+      on_error: ['', [Validators.required]],
       desc: [''],
       image: ['']
     })

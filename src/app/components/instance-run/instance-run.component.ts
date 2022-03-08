@@ -177,7 +177,7 @@ export class InstanceRunComponent implements OnInit {
   {
     
     let updatedInList = false
-    this.subscription = interval(500)
+    this.subscription = interval(1000)
     .pipe(
         switchMap(() => this.apiService.getDockerInstance(run_id)),
         map(response => {

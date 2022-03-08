@@ -22,12 +22,12 @@ mongoose.connect(dbConfig.db, {
    }
 )
 
-
+continue_tree = true
 
 async function run_flow(){
 
   let run_ids = await Promise.resolve(asyncSearch(workerData.flow.steps,workerData.flow.steps.length))
-  create_flow_instance_in_database({_id: workerData.flow_run_id,"flow": workerData.flow._id, "run": run_ids,"done": false,"error": false})
+  create_flow_instance_in_database({_id: workerData.flow_run_id,"flow": workerData.flow._id, "run": run_ids,"on_error": workerData.flow.on_error,"done": false,"error": false,"skipped":false})
   var generalEnv = await Promise.resolve(calculate_general_envs(run_ids))
   const startTime = new Date()
   const refreshTime = setInterval(function() {
@@ -43,25 +43,35 @@ async function run_flow(){
   let extraEnv = []
   for (const step of run_ids) // During
   {
-    let stepRunIds = []
-    // let extraEnv = await Promise.resolve(get_outputs_and_envs(stepRunIds));
-    for (const run_object of step) 
+    if (continue_tree)
     {
-      Instance.findById(run_object.id).populate({
-        path: 'block',
-        model: Block 
-        }).exec(function(error, data){
-        if (error) {
-          console.log(error)
-          return error
-        } else {
-          stepRunIds.push(run_object.run_id)
-          engine.run(data,run_object.run_id,generalEnv.concat(extraEnv))
-          
-        }
-      })
+      let stepRunIds = []
+      // let extraEnv = await Promise.resolve(get_outputs_and_envs(stepRunIds));
+      for (const run_object of step) 
+      {
+        Instance.findById(run_object.id).populate({
+          path: 'block',
+          model: Block 
+          }).exec(function(error, data){
+          if (error) {
+            console.log(error)
+            return error
+          } else {
+            stepRunIds.push(run_object.run_id)
+            engine.run(data,run_object.run_id,generalEnv.concat(extraEnv))
+            
+          }
+        })
+      }
+      extraEnv = await Promise.resolve(wait_for_equal(stepRunIds,workerData.flow_run_id));
     }
-    extraEnv = await Promise.resolve(wait_for_equal(stepRunIds,workerData.flow_run_id));
+    else
+    {
+      set_flow_instance_in_database(workerData.flow_run_id,
+        { skipped: true }
+      )
+      console.log("Skipping next steps")
+    }
   }
   //After
   clearInterval(refreshTime);
@@ -130,6 +140,10 @@ async function wait_for_equal(stepRunIds,flow_run_id) {
                     set_flow_instance_in_database(flow_run_id,
                       { error: true }
                     )
+                    if (workerData.flow.on_error == "stop")
+                    {
+                      continue_tree = false
+                    }
                   }
                   if ((finished+1) == stepRunIds.length) {
                     resolve(collectedOutputs)

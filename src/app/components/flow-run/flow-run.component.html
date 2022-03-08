@@ -2,6 +2,8 @@
 <mat-toolbar class="d-flex justify-content-center">
   <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp; {{this.flowForm.get("name").value}}</h1>
   <a class="play-btn" id="play-btn" (click)="ani();"></a>
+  &nbsp;
+  <small style="font-size: 10px;">On Error: {{this.flowForm.get("on_error").value}}</small>
 </mat-toolbar>
 <div class="row  w-100">
     <div class="col-3">

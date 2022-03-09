@@ -62,6 +62,8 @@ ingress:
   #      - chart-example.local
 
 mongodb:
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
   persistence:
     enabled: false
   architecture: replicaset

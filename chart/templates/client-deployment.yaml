@@ -18,6 +18,8 @@ spec:
       labels:
         app: {{ template "socrates.name" . }}-client
         release: {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
       containers:
         - name: {{ .Chart.Name }}

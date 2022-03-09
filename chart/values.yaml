@@ -6,7 +6,7 @@ istio:
   enabled: true
 
 client:
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: jatasocrates/socrates-client
     tag: v1
@@ -67,6 +67,7 @@ mongodb:
   persistence:
     enabled: false
   architecture: replicaset
+  replicaCount: 3
   auth:
     enabled: true
     usernames: 

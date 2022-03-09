@@ -46,6 +46,7 @@ export class FlowRunComponent implements OnInit {
       delete data.__v
       delete data._id
       data.steps = data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
+      console.log(data)
       this.flowForm.setValue(data)
       this.steps=data.steps
     });
@@ -125,7 +126,8 @@ export class FlowRunComponent implements OnInit {
               content: content,
               runtime: runtime,
               done: data[this.alreadyLoaded+i].done,
-              image: imageToShow
+              image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
             });
             
           }
@@ -242,8 +244,8 @@ export class FlowRunComponent implements OnInit {
       }
       this.apiService.runFlow({id}).subscribe(
         (res) => {
-        
-          this._snackBar.open('Instance Run Started', 'Close', {
+          
+          this._snackBar.open('Flow Run Started', 'Close', {
             duration: 3000
           });
         this.updateConsole(res)
@@ -472,7 +474,8 @@ export class FlowRunComponent implements OnInit {
                 content: content,
                 runtime: runtime,
                 done: data[this.alreadyLoaded+i].done,
-                image: imageToShow
+                image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
               });
       
               
@@ -544,6 +547,8 @@ export class FlowRunComponent implements OnInit {
       steps: [this.steps, [Validators.required]],
       on_error: ['', [Validators.required]],
       desc: [''],
+      createdAt: [''],
+      updatedAt: [''],
       image: ['']
     })
   }

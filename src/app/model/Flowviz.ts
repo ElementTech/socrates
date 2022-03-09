@@ -6,4 +6,6 @@ export class Flowviz {
    desc: string;
    on_error: string;
    image?: string;
+   createdAt?: Date;
+   updateAt?: Date;
 }

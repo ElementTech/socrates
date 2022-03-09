@@ -7,4 +7,6 @@ export class DockerInstance {
    done: Boolean;
    error: Boolean;
    runtime: Object;
+   createdAt?: Date;
+   updateAt?: Date;
 }

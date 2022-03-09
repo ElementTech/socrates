@@ -403,7 +403,8 @@ export class InstanceRunComponent implements OnInit {
                 runtime: runtime,
                 output: data[this.alreadyLoaded+i].output,
                 done: data[this.alreadyLoaded+i].done,
-                image: imageToShow
+                image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
               });
       
               
@@ -466,7 +467,8 @@ export class InstanceRunComponent implements OnInit {
               runtime: runtime,
               output: data[this.alreadyLoaded+i].output,
               done: data[this.alreadyLoaded+i].done,
-              image: imageToShow
+              image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
             });
             
     

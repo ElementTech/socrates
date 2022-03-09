@@ -163,6 +163,8 @@ export class FlowCreateComponent implements OnInit {
       steps: [this.steps, [Validators.required]],
       on_error: ['', [Validators.required]],
       desc: [''],
+      createdAt: [''],
+      updatedAt: [''],
       image: ['']
     })
   }

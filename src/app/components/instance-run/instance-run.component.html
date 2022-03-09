@@ -17,6 +17,8 @@
                         <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> </h3>
                         <p matLine>
                             <span> <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Duration: <code>{{item.runtime}}</code>
+                              <br>
+                              <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;Started: <code>{{item.createdAt | date:'short'}}</code>
                               <mat-chip-list class="artlist" *ngIf="item.artifacts.length != 0" >
                                 <mat-chip [routerLink]="['/artifacts/', this.id , item.id]" style="min-height: 22px !important; cursor: pointer;">Artifacts: {{item.artifacts.length}}</mat-chip>
                             </mat-chip-list> 

@@ -18,7 +18,6 @@ const run = (instance,custom_id,custom_env=[]) => {
 }
 
 const run_flow = async (flow,flow_run_id) => {
-  
   const worker = new Worker("./engine/flower.js", {workerData: {flow: JSON.parse(JSON.stringify(flow)),flow_run_id: flow_run_id}});
 
   worker.once("message", result => {

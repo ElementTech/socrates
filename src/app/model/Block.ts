@@ -12,4 +12,6 @@ export class Block {
    prescript: string;
    description: string
    image?: string;
+   createdAt?: Date;
+   updateAt?: Date;
 }

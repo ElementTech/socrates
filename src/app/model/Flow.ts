@@ -4,4 +4,6 @@ export class Flow {
    name: string;
    desc: string;
    image?: string;
+   createdAt?: Date;
+   updateAt?: Date;
 }

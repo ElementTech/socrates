@@ -112,7 +112,8 @@ export class FlowvizRunComponent implements OnInit {
               content: content,
               runtime: runtime,
               done: data[this.alreadyLoaded+i].done,
-              image: imageToShow
+              image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
             });
 
             
@@ -424,7 +425,8 @@ export class FlowvizRunComponent implements OnInit {
                 content: content,
                 runtime: runtime,
                 done: data[this.alreadyLoaded+i].done,
-                image: imageToShow
+                image: imageToShow,
+              createdAt: data[this.alreadyLoaded+i].createdAt
               });
       
               
@@ -607,6 +609,8 @@ export class FlowvizRunComponent implements OnInit {
       links: [this.links, [Validators.required]],
       on_error: ['', [Validators.required]],
       desc: [''],
+      createdAt: [''],
+      updatedAt: [''],
       image: ['']
     })
   }

@@ -9,4 +9,6 @@ export class Instance {
    multis: [Object];
    desc: String;
    image?: string;
+   createdAt?: Date;
+   updateAt?: Date;
 }

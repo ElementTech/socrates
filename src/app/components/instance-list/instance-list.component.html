@@ -271,8 +271,8 @@
         </td>
         <td>
           <span class="p-column-title">Block</span>
-          {{instance.block}}
-        </td>
+          <button pButton type="button" class="p-button-outlined p-button-sm" label="{{instance.block}}" [routerLink]="['/create-block/', instance.block_id]" ></button>
+         </td>
       
         <!-- <td>
             <span class="p-column-title">Lang</span>

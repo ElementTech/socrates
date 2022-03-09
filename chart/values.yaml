@@ -49,13 +49,13 @@ server:
 
 
 ingress:
-  enabled: false
+  enabled: yes
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - chart-example.local
+    - socrates.explorium.ninja
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

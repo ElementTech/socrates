@@ -1,33 +1,33 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card class="box">
+  <div class="middle" fxLayout="row" fxLayoutAlign="center center">
 
-    <mat-card-header>
-      <mat-card-title>Log in</mat-card-title>
-      <p class="lead">Not a member? Please contact your Administrator</p>
 
-    </mat-card-header>
-    <form class="example-form" (submit)="login()">
-      <mat-card-content>
-        <mat-form-field class="example-full-width">
-          <input type="email" matInput name="email" placeholder="Enter email" [(ngModel)]="credentials.email">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <input type="password" matInput name="password" placeholder="Password" [(ngModel)]="credentials.password">
-        </mat-form-field>
-      </mat-card-content>
-      <div class="btn-group w-100" role="group" aria-label="Basic example">
-   
-
-        <button mat-stroked-button color="primary" class="btn-block">Log in</button>
-        <!-- <a (click)="loginWithGoogle()" class="btn btn-success"><span class="fa fa-google-plus"></span> Google</a> -->
+    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+      <div class="text-center mb-5">
+          <img src="assets/socrates.png" alt="Image" height="50" class="mb-3">
+          <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
+          <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+          <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Contact your Administrator</a>
       </div>
-     
-   
-    </form>
-    <p *ngIf="error" class="error">
-      {{ error }}
-    </p>
-
-  </mat-card>
-
-</div>
+    
+      <form (submit)="login()">
+          <label for="email" class="block text-900 font-medium mb-2">Email</label>
+          <input type="email" pInputText name="email"  class="w-full mb-3" placeholder="Enter email" [(ngModel)]="credentials.email">
+    
+          <label for="password" class="block text-900 font-medium mb-2">Password</label>
+          <input type="password" pInputText name="password" class="w-full mb-3" placeholder="Password" [(ngModel)]="credentials.password">
+    
+          <div class="flex align-items-center justify-content-between mb-6"  *ngIf="error">
+              <div class="flex align-items-center">
+                  <!-- <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox> -->
+                  <label for="rememberme1">{{ error }}</label>
+              </div>
+              <!-- <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a> -->
+          </div>
+    
+          <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full"></button>
+        </form>
+    </div>
+  </div>
+  
+  
+  

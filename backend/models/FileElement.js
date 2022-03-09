@@ -32,7 +32,8 @@ let FileElement = new Schema({
       required: false
    }
 }, {
-   collection: 'files'
+   collection: 'files',
+   timestamps: true
 })
 
 module.exports = mongoose.model('FileElement', FileElement)

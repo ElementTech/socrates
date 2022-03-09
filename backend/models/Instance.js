@@ -30,7 +30,8 @@ let Instance = new Schema({
       required: false
    },
 }, {
-   collection: 'instances'
+   collection: 'instances',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Instance', Instance)

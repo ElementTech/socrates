@@ -14,6 +14,7 @@ import { Table } from 'primeng/table';
 import { PrimeNGConfig } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',

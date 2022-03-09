@@ -14,7 +14,8 @@ let Settings = new Schema({
       required: false
    }
 }, {
-   collection: 'settings'
+   collection: 'settings',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Settings', Settings)

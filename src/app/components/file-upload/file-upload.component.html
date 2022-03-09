@@ -1,32 +1,36 @@
-  <div class="row">
-      <div class="col-4">
-          <div class="container">
-              <div class="fileUploadInput">
-              <label><i class="fa fa-photo" aria-hidden="true"></i>&nbsp; Upload File</label>
-              <input type="file" (change)="selectFile($event)" />
-              <button>+</button>
+  <div style="padding-left: 8em;padding-right: 8em;padding-top: 10px;">
+   <div>
+
+    <p-fileUpload #primeFileUpload (onProgress)="progressReport($event)" name="myfile[]" customUpload="true" accept="image/*" (uploadHandler)="upload($event)"></p-fileUpload>
+
+    <!-- <div class="col-4">
+        <div class="container">
+            <div class="fileUploadInput">
+            <label><i class="fa fa-photo" aria-hidden="true"></i>&nbsp; Upload File</label>
+            <input type="file" (change)="selectFile($event)" />
+            <button>+</button>
+        </div>
+    </div>
+    </div>
+    <div class="col-1">
+        <div class="container justify-content-center d-flex h-100">
+            <button class="btn" [disabled]="!selectedFiles" [ngStyle]="{'color': (!selectedFiles) ? 'black' : 'blue',
+            'border': (!selectedFiles) ? '0px' : '1px solid black'}" (click)="upload()">
+              <i class="fa fa-upload" aria-hidden="true"></i> Upload
+            </button>
+        </div>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-3">
+        <div class="alert alert-primary d-flex align-items-center" role="alert">
+          <svg class="flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+          <div>
+            Icons allow you to give Components (Block, Instance, Flow) an Image that will appear wherever they are.
           </div>
-      </div>
-      </div>
-      <div class="col-1">
-          <div class="container justify-content-center d-flex h-100">
-              <button class="btn" [disabled]="!selectedFiles" [ngStyle]="{'color': (!selectedFiles) ? 'black' : 'blue',
-              'border': (!selectedFiles) ? '0px' : '1px solid black'}" (click)="upload()">
-                <i class="fa fa-upload" aria-hidden="true"></i> Upload
-              </button>
-          </div>
-      </div>
-      <div class="col-4"></div>
-      <div class="col-3">
-          <div class="alert alert-primary d-flex align-items-center" role="alert">
-            <svg class="flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-            <div>
-              Icons allow you to give Components (Block, Instance, Flow) an Image that will appear wherever they are.
-            </div>
-          </div>
-      </div>
-  </div>
-  <div *ngIf="currentFile" class="progress my-3">
+        </div>
+    </div> -->
+
+  <!-- <div *ngIf="currentFile" class="progress my-3">
     <div
       class="progress-bar progress-bar-info progress-bar-striped"
       role="progressbar"
@@ -37,7 +41,7 @@
     >
       {{ progress }}%
     </div>
-  </div>
+  </div> -->
   <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
   <div class="card mt-3">
     <div class="card-header">List of Images</div>
@@ -55,4 +59,8 @@
         <button mat-raised-button style="color: maroon;" (click)="deleteFile(file.name)"><mat-icon class="mat-18">delete</mat-icon> Delete</button>
       </li>
     </ul>
+  </div>
+   </div>
+
+
   </div>

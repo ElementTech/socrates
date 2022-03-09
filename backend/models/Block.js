@@ -43,7 +43,8 @@ let Block = new Schema({
       required: false
    },
 }, {
-   collection: 'blocks'
+   collection: 'blocks',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Block', Block)

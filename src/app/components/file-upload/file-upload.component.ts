@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from '../../service/file-upload.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
@@ -47,17 +48,23 @@ export class FileUploadComponent implements OnInit {
       })
     }
   }
+  progressReport($event: any) {
+    this.primeFileUpload.progress = $event;
+  }
+  @ViewChild('primeFileUpload') primeFileUpload: FileUpload;
+  upload(event): void {
+    
 
-  upload(): void {
-    this.progress = 0;
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
+    if (event.files) {
+      const file: File | null = event.files[0];
       if (file) {
         this.currentFile = file;
         this.uploadService.upload(this.currentFile).subscribe({
           next: (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
-              this.progress = Math.round(100 * event.loaded / event.total);
+     
+              this.primeFileUpload.onProgress.emit(Math.round(100 * event.loaded / event.total));
+
             } else if (event instanceof HttpResponse) {
               this.message = event.body.message;
               this.reloadView()
@@ -65,7 +72,7 @@ export class FileUploadComponent implements OnInit {
           },
           error: (err: any) => {
             console.log(err);
-            this.progress = 0;
+            event.progress = 0;
             if (err.error && err.error.message) {
               this.message = err.error.message;
             } else {

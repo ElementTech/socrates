@@ -16,7 +16,8 @@ let GithubElement = new Schema({
       type: String
    }
 }, {
-   collection: 'github'
+   collection: 'github',
+   timestamps: true
 })
 
 module.exports = mongoose.model('GithubElement', GithubElement)

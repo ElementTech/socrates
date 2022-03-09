@@ -21,7 +21,8 @@ let Flow = new Schema({
       required: false
    },
 }, {
-   collection: 'flows'
+   collection: 'flows',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Flow', Flow)

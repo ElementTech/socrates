@@ -2,6 +2,11 @@
   background-color: #3f51b5 !important;
 
 }
+::ng-deep ul[role="menubar"]{
+  background-color: #3f51b5 !important;
+
+}
+
 ::ng-deep a[role="menuitem"] > .p-menuitem-text{
   color: white !important;
 

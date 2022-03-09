@@ -31,7 +31,8 @@ let DockerInstance = new Schema({
       type: [String]
    }
 }, {
-   collection: 'docker'
+   collection: 'docker',
+   timestamps: true
 })
 
 module.exports = mongoose.model('DockerInstance', DockerInstance)

@@ -218,7 +218,21 @@
                 </p-columnFilter>
             </div>
         </th> -->
-
+        <th pSortableColumn="createdAt">
+          <div class="flex justify-content-between align-items-center">
+              Created
+              <p-sortIcon field="createdAt"></p-sortIcon>
+              <!-- <p-columnFilter type="date" field="createdAt" display="menu" class="ml-auto"></p-columnFilter> -->
+              
+          </div>
+      </th>
+      <th pSortableColumn="updatedAt">
+          <div class="flex justify-content-between align-items-center">
+              Updated
+              <p-sortIcon field="updatedAt"></p-sortIcon>
+              <!-- <p-columnFilter type="date" field="updatedAt" display="menu" class="ml-auto"></p-columnFilter> -->
+          </div>
+      </th>
         <th></th>
     </tr>
 </ng-template>
@@ -273,6 +287,12 @@
             <span class="p-column-title">Activity</span>
             <p-progressBar [value]="flow.activity" [showValue]="false"></p-progressBar>
         </td> -->
+        <td>
+          {{flow.createdAt | date:'short'}}
+        </td>
+        <td>
+          {{flow.updatedAt | date:'short'}}
+        </td>
         <td style="text-align: center">
     
 

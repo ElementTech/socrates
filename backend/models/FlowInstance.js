@@ -26,7 +26,8 @@ let FlowInstance = new Schema({
       type: Object
    }
 }, {
-   collection: 'flow_instances'
+   collection: 'flow_instances',
+   timestamps: true
 })
 
 module.exports = mongoose.model('FlowInstance', FlowInstance)

@@ -13,7 +13,8 @@ let Parameter = new Schema({
       type: Boolean
    }
 }, {
-   collection: 'parameters'
+   collection: 'parameters',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Parameter', Parameter)

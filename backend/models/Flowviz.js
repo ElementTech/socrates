@@ -24,7 +24,8 @@ let Flowviz = new Schema({
       required: false
    },
 }, {
-   collection: 'flows_viz'
+   collection: 'flows_viz',
+   timestamps: true
 })
 
 module.exports = mongoose.model('Flowviz', Flowviz)

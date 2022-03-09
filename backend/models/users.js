@@ -30,7 +30,7 @@ var userSchema = new mongoose.Schema({
   },
   hash: String,
   salt: String
-});
+},{timestamps: true});
 
 userSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');

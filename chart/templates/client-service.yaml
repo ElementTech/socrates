@@ -5,7 +5,6 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "socrates.explorium.ninja"  
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:182893536443:certificate/e617b17a-30df-473c-a89c-49c052f234d3"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https    
     service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
     service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: "ELBSecurityPolicy-TLS-1-2-2017-01" 
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"

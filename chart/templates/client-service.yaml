@@ -17,10 +17,12 @@ metadata:
 spec:
   type: {{ .Values.client.service.type }}
   ports:
-    - port: {{ .Values.client.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 80      
   selector:
     app: {{ template "socrates.name" . }}-client
     release: {{ .Release.Name }}

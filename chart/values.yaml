@@ -13,7 +13,6 @@ client:
     pullPolicy: Always
   service:
     type: LoadBalancer
-    port: 443
   # resources:
   #   limits:
   #     cpu: 2

@@ -17,4 +17,4 @@ spec:
   selector:
     app: {{ template "socrates.name" . }}-server
     release: {{ .Release.Name }}
-  type: LoadBalancer
+  

@@ -1,57 +1,47 @@
-.DS_STORE
-data
-.data
-/dist/
-/bazel-out
-/integration/bazel/bazel-*
-*.log
-node_modules
-**/node_modules
-**/.angular
-# Include when developing application packages.
-pubspec.lock
-.c9
-.idea/
-.devcontainer/*
-!.devcontainer/README.md
-!.devcontainer/recommended-devcontainer.json
-!.devcontainer/recommended-Dockerfile
-.settings/
-.vscode/launch.json
-.vscode/settings.json
-.vscode/tasks.json
-*.swo
-*.swp
-modules/.settings
-modules/.vscode
-.vimrc
-.nvimrc
-backend/resources/static/assets/uploads/*
-backend/resources/artifacts/*
-# Don't check in secret files
-*secret.js
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Ignore npm/yarn debug log
+# compiled output
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+
+# dependencies
+/node_modules
+package-lock.json
+
+# profiling files
+chrome-profiler-events*.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
 npm-debug.log
 yarn-error.log
+testem.log
+/typings
 
-# build-analytics
-.build-analytics
-
-# rollup-test output
-/modules/rollup-test/dist/
-
-# User specific bazel settings
-.bazelrc.user
-
-# User specific ng-dev settings
-.ng-dev.user*
-
-.notes.md
-baseline.json
-
-# Ignore .history for the xyz.local-history VSCode extension
-.history
-
-# Husky
-.husky/_
+# System Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,50 @@
+
+    <mat-toolbar class="d-flex justify-content-center">
+      <i class="fa fa-github" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Github Repository -
+        <span [class.connected]="this.githubConnected" [class.disconnected]="!this.githubConnected">Connected: {{this.githubConnected}}</span>
+    </h1>
+  </mat-toolbar>
+    <div class="example-header">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    
+    <div class="example-container mat-elevation-z8">
+      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-table [dataSource]="dataSource" matSort>
+    
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="path">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Path</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.path}}</mat-cell>
+        </ng-container>
+    
+  
+        <ng-container matColumnDef="prefix">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Prefix</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.prefix">{{row.prefix}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="content">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Show Content</mat-header-cell>
+            <mat-cell *matCellDef="let row" [style.color]="row.content"><button mat-flat-button color="primary" (click)="openDialog(row.content)">Show</button></mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="sha">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Sha</mat-header-cell>
+            <mat-cell *matCellDef="let row" [style.color]="row.sha">{{row.sha}}</mat-cell>
+          </ng-container>
+  
+  
+
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+    
+   
+    </div>
+  

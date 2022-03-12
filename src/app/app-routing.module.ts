@@ -12,7 +12,7 @@ import { UnauthorizedComponent } from './views/pages/unauthorized/unauthorized.c
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'portal',
     pathMatch: 'full'
   },
   {

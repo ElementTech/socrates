@@ -214,9 +214,10 @@
     
             <div class="multi-button">
                 <button class="special" [routerLink]="['/instance/create/', instance._id]"><i class="fas fa-cog"></i> Edit</button>
+                <button class="special" [routerLink]="['/instance/stats/', instance._id]"><i class="fas fa-line-chart"></i> Stats</button>
+
                 <button class="special" [routerLink]="['/step/list/']"><i class="fas fa-stairs"></i> Steps <p-badge [value]="instance.flow_count" severity="primary" [style.margin-left]="'.5em'"></p-badge></button>
                 <button class="special" [routerLink]="['/dag/list/']"><i class="fas fa-diagram-project"></i> DAGs <p-badge [value]="instance.flowviz_count" severity="primary" [style.margin-left]="'.5em'"></p-badge></button>
-                <button class="special" [routerLink]="['/instance/stats/', instance._id]"><i class="fas fa-line-chart"></i> Stats</button>
             </div>
 
         </td>

@@ -46,7 +46,7 @@
             <button mat-menu-item (click)="showConsole(name)">
                 <i class="fa-solid fa-code" aria-hidden="true"></i> Console Log
             </button>
-            <button mat-menu-item *ngIf="length != 0" [routerLink]="['/artifacts/', instance , docker]">
+            <button mat-menu-item *ngIf="length != 0" [routerLink]="['/instance/artifacts/', instance , docker]">
               <i class="fa-solid fa-file-archive" aria-hidden="true"></i> Artifacts
           </button>
             <button mat-menu-item (click)="deleteDockerInstance(name)">

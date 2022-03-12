@@ -46,3 +46,7 @@ mat-cell.mat-column-name:hover {
 .mat-column-name{
     flex: 0 0 5%;
 }
+:host ::ng-deep .p-cell-editing {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}

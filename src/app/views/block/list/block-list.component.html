@@ -177,10 +177,11 @@
           </td>
           <td style="text-align: center">
       
-
-              <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Edit" tooltipPosition="top" [routerLink]="['/block/create/', block._id]" class="p-button-rounded  p-button-info" icon="pi pi-cog"></button>
-              <button pButton pRipple  class="p-button" style="height:30px;width: 70px;" pTooltip="Instances Attached to this Block" tooltipPosition="top"  [routerLink]="['/instance/list/', block.name]"><i class="fa fa-cubes" aria-hidden="true"></i> <p-badge [value]="block.instance_count" severity="primary" [style.margin-right]="'1em'"></p-badge></button>
-              <button pButton pRipple style="height:30px;width: 30px;" pTooltip="Statistics"  tooltipPosition="top"  [routerLink]="['/block/stats/', block._id]"  class="p-button-rounded p-button-secondary" icon="pi pi-chart-line"></button>
+            <div class="multi-button">
+                <button class="special" [routerLink]="['/block/create/', block._id]"><i class="fas fa-cog"></i> Edit</button>
+                <button class="special" [routerLink]="['/instance/list/', block.name]"><i class="fas fa-cubes"></i> Instances <p-badge [value]="block.instance_count" severity="primary" [style.margin-left]="'.5em'"></p-badge></button>
+                <button class="special" [routerLink]="['/block/stats/', block._id]"><i class="fas fa-line-chart"></i> Stats</button>
+            </div>
 
           </td>
       </tr>

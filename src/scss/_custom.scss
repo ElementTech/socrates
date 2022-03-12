@@ -3,7 +3,7 @@
 @import '~codemirror/theme/material.css';
 @import "../../node_modules/@coreui/icons/css/all.min.css";
 @import '../../node_modules/primeicons/primeicons.css';
-@import '../../node_modules/primeng/resources/themes/lara-light-blue/theme.css';
+@import '../../node_modules/primeng/resources/themes/nova/theme.css';
 @import '../../node_modules/primeng/resources/primeng.min.css';
 @import "primeflex/primeflex.css";
 
@@ -132,4 +132,45 @@
     }
     
   }
+}
+
+
+.special{
+  font-size: 1.7vmin;
+  padding: .5em 1em;
+  background: #fff;
+  color: #4A5568;
+  border: 0px solid #A0AEC0;
+  margin: .1em;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+  box-shadow: 0 0 0 #BEE3F8;
+  transform: translateY(0);
+}
+.special:first-of-type{
+  border-radius: .5em 0 0 .5em;
+}
+.special:last-of-type{
+  border-radius: 0 .5em .5em 0;
+}
+.special i{
+  color: #A0AEC0;
+  margin-right: .3em;
+  transition: all .2s ease-out;
+}
+.multi-button:hover .special{
+  color: #A0AEC0;
+}
+
+.multi-button:hover .special:hover{
+  background: rgb(255,212,96);
+  color: #fff;
+  box-shadow: 0 0 0.8em 0 rgba(255,212,96, 0.8);
+  transform: translateY(-.2em);
+}
+.multi-button:hover .special i{
+  color: #CBD5E0;
+}
+.multi-button:hover .special:hover i{
+  color: rgb(48,60,84);
+  transform: rotate(-10deg);
 }

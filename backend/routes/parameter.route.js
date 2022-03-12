@@ -85,7 +85,7 @@ parameterRoute.route('/read/:id').get((req, res) => {
 parameterRoute.route('/update/:id').put((req, res, next) => {
   Parameter.findByIdAndUpdate(req.params.id, {
     $set: req.body
-  }, (error, data) => {
+  },{upsert: true, new: true}, (error, data) => {
     if (error) {
       return next(error);
       console.log(error)

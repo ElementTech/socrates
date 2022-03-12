@@ -2,7 +2,7 @@
 <p-toast></p-toast>
 <p-toolbar>
   <ng-template pTemplate="left">
-      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="'/dag/create'"></button>
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-dark mr-2" [routerLink]="'/dag/create'"></button>
       <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedFlows()" [disabled]="!selectedFlows || !selectedFlows.length"></button>
   </ng-template>
     <h2>

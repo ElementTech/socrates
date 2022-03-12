@@ -1,6 +1,6 @@
 // Here you can add other styles
-@import '~codemirror/lib/codemirror';
-@import '~codemirror/theme/material';
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/theme/material.css';
 @import "../../node_modules/@coreui/icons/css/all.min.css";
 @import '../../node_modules/primeicons/primeicons.css';
 @import '../../node_modules/primeng/resources/themes/lara-light-blue/theme.css';
@@ -74,4 +74,63 @@
   height: 100%;
   margin-right:1em;
 
+}
+
+
+
+.circle {
+  stroke: #f8aa28;
+  stroke-dasharray: 650;
+  stroke-dashoffset: 650;
+  -webkit-transition: all 0.5s ease-in-out;
+  opacity: 0.3;
+}
+
+.playBut {
+/*  border: 1px solid red;*/
+  display: inline-block;
+  -webkit-transition: all 0.5s ease;
+  
+  .triangle {
+    -webkit-transition: all 0.7s ease-in-out;
+    stroke-dasharray: 240;
+    stroke-dashoffset: 480;
+    stroke: #000;
+    transform: translateY(0) 
+   }
+  
+  
+  &:hover {
+    
+    .triangle {
+      stroke-dashoffset: 0;
+      opacity: 1;
+      stroke: #f8aa28;
+      animation: nudge 0.7s ease-in-out;
+      
+      @keyframes nudge{
+        0% {
+          transform: translateX(0)  
+        }
+        30% {
+          transform: translateX(-5px)
+        }
+        50% {
+          transform: translateX(5px)
+        }
+        70% {
+          transform: translateX(-2px)
+        }
+        100% {
+          transform: translateX(0)
+        }
+      }
+    }
+    
+    .circle {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    
+  }
 }

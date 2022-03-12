@@ -161,7 +161,7 @@
               <span [class]="'block-badge github-' + block.github">{{block.github}}</span>
           </td>
           <td>
-              <ng-container *ngFor="let param of block.parameters.concat(block.shared).concat(block.shared).concat(block.multis).concat(block.booleans)">
+              <ng-container *ngFor="let param of block.parameters.concat(block.shared).concat(block.multis).concat(block.booleans)">
                 <p-tag *ngIf="param.key" [style.margin-right]="'.5rem'" value="{{param.key}}"></p-tag>
               </ng-container>
           </td>

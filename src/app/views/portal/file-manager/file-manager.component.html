@@ -21,7 +21,7 @@
           <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/block/create/', element.fileid]" *ngIf="element.type == 'block'">
             <i class="fa-solid fa-cube"></i><img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]">
           </mat-icon>
-          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/instance.run/', element.fileid]" *ngIf="element.type == 'instance'">
+          <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/instance/run/', element.fileid]" *ngIf="element.type == 'instance'">
             <i class="fa-solid fa-cubes"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
           <mat-icon color="primary" class="file-icon pointer" [routerLink]="['/step/run/', element.fileid]" *ngIf="element.type == 'flow'">
             <i class="fa-solid fa-stairs"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>

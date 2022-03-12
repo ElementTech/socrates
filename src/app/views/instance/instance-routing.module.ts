@@ -54,7 +54,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'artifacts',
+        path: 'artifacts/:instance/:docker',
         component: ArtifactsComponent,
         data: {
           title: 'Artifacts',

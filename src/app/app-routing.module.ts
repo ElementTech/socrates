@@ -70,11 +70,6 @@ const routes: Routes = [
           import('./views/step/step.module').then((m) => m.StepModule)
       },
       {
-        path: 'widgets',
-        loadChildren: () =>
-          import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
-      },
-      {
         path: 'pages',
         loadChildren: () =>
           import('./views/pages/pages.module').then((m) => m.PagesModule)

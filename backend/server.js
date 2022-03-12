@@ -10,7 +10,6 @@ const health = require('@cloudnative/health-connect');
 const { Webhooks, createNodeMiddleware } = require("@octokit/webhooks");
 const EventSource = require('eventsource')
 const { Octokit } = require("@octokit/core");
-
 // User Manual
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -31,6 +30,7 @@ mongoose.connect(dbConfig.db, {
       process.exit(error)
    }
 )
+
 require('./models/users');
 require('./config/passport');
 let Settings = require('./models/Settings');
@@ -117,6 +117,7 @@ var routesApi = require('./routes/index');
 const UserRoute = require('./routes/users.route');
 const imageRoute = require('./routes/image.route');
 const artifactRoute = require('./routes/artifact.route');
+const dashboardRoute = require('./routes/dashboard.route');
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
@@ -131,6 +132,7 @@ app.use('/', express.static(path.join(__dirname, 'dist/socrates')));
 app.use('/live', health.LivenessEndpoint(healthcheck))
 app.use('/ready', health.ReadinessEndpoint(healthcheck))
 app.use('/health', health.HealthEndpoint(healthcheck))
+app.use('/api/dashboard', dashboardRoute)
 app.use('/api/block', blockRoute)
 app.use('/api/instance', instanceRoute)
 app.use('/api/docker', dockerRoute)

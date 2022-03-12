@@ -34,6 +34,11 @@ export class ApiService {
   //  getLangs() {
   //   return this.http.get(`${this.webUri}/langs`);
   // }
+  // Get all blocks
+  getDashboard() {
+    return this.http.get(`${this.baseUri}/dashboard`,{headers: this.headers});
+  }
+  
 
   // Create
   bulkParameter(data: any): Observable<any> {

@@ -57,10 +57,31 @@
    
     </div>
    -->
+<!-- 
+   #dt [value]="blocks"  [(selection)]="selectedBlocks" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [filterDelay]="0" [globalFilterFields]="['name','lang','github']" -->
 
    <p-toast></p-toast>
    <div class="card">
-        <p-table [value]="parameters2" dataKey="_id" editMode="row" responsiveLayout="scroll">
+        <p-table [value]="parameters2" dataKey="_id" editMode="row" responsiveLayout="scroll"
+        
+        #dt styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" 
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [filterDelay]="0" [globalFilterFields]="['key','value','secret']"
+        
+        
+        >
+        <ng-template pTemplate="caption">
+          <div class="table-header">
+              <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+              </span>
+          </div>
+      </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th>Key</th>

@@ -18,7 +18,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 @Component({
   selector: 'app-instance-run',
   templateUrl: './instance-run.component.html',
-  styleUrls: ['./instance-run.component.css']
+  styleUrls: ['./instance-run.component.scss']
 })
 export class InstanceRunComponent implements OnInit {
  

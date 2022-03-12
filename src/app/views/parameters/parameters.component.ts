@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Parameter } from '../../model/parameter';
+import { Parameter } from 'src/app/model/parameter';
 import {v4 as uuidv4} from 'uuid';
 @Component({
   selector: 'app-parameters',

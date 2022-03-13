@@ -40,8 +40,8 @@ server:
       cpu: 2
       memory: 2048Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 1
+      memory: 512Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}

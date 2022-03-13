@@ -28,6 +28,9 @@ spec:
             claimName: socrates-engine-storage
         - name: tmp
           emptyDir: {}          
+        - name: data 
+          persistentVolumeClaim:
+            claimName: server-storage                 
       containers:
         - name: dind-daemon 
           image: docker:dind
@@ -49,10 +52,11 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
-          
           volumeMounts: 
             - name: tmp
               mountPath: /tmp           
+            - name: data
+              mountPath: /                    
           env:    
             - name: DOCKER_HOST 
               value: tcp://localhost:2375

@@ -9,3 +9,15 @@ spec:
   resources:
     requests:
       storage: {{ .Values.server.storage }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-storage
+spec:
+  storageClassName: {{ .Values.server.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi   

@@ -6,7 +6,7 @@ istio:
   enabled: true
 
 client:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: jatasocrates/socrates-client
     tag: v1

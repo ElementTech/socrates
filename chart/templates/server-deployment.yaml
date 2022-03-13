@@ -28,9 +28,12 @@ spec:
             claimName: socrates-engine-storage
         - name: tmp
           emptyDir: {}          
-        - name: data 
+        - name: artifacts 
           persistentVolumeClaim:
-            claimName: server-storage                 
+            claimName: server-storage            
+        - name: icons 
+          persistentVolumeClaim:
+            claimName: icon-storage                  
       containers:
         - name: dind-daemon 
           image: docker:dind
@@ -55,8 +58,10 @@ spec:
           volumeMounts: 
             - name: tmp
               mountPath: /tmp           
-            - name: data
-              mountPath: /usr/src/app/resources
+            - name: artifacts
+              mountPath: /usr/src/app/resources/artifacts
+            - name: icons
+              mountPath: /usr/src/app/resources/static/assets/uploads              
           env:    
             - name: DOCKER_HOST 
               value: tcp://localhost:2375

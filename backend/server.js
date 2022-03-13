@@ -20,7 +20,11 @@ mongoose.plugin(upsertMany);
 // Connecting with mongo db
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
-   useNewUrlParser: true
+   useNewUrlParser: true,
+reconnectTries: Number.MAX_VALUE,
+reconnectInterval: 500,
+connectTimeoutMS: 20000,
+socketTimeoutMS: 45000
 }).then(() => {
       
       console.log('Database sucessfully connected')

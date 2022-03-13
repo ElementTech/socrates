@@ -14,7 +14,11 @@ const FlowvizInstance = require('../models/FlowvizInstance');
 dashboardRoute.route('/').get(async (req, res, next) => {
     mongoose = require('mongoose'),
     mongoose.Promise = global.Promise;
-    mongoose.connect(dbConfig.db, {useNewUrlParser: true})
+    mongoose.connect(dbConfig.db, {useNewUrlParser: true,
+reconnectTries: Number.MAX_VALUE,
+reconnectInterval: 500,
+connectTimeoutMS: 20000,
+socketTimeoutMS: 45000})
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', function() {

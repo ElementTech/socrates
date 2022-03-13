@@ -10,7 +10,11 @@ dbConfig = require('../database/db');
 mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
-   useNewUrlParser: true
+   useNewUrlParser: true,
+reconnectTries: Number.MAX_VALUE,
+reconnectInterval: 500,
+connectTimeoutMS: 20000,
+socketTimeoutMS: 45000
 }).then(() => {
     docker.listImages(function (err, result) {
         currentImages = result.map(item=>item.RepoTags? item.RepoTags[0] : '')

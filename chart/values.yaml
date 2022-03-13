@@ -25,7 +25,7 @@ client:
   affinity: {}
 
 server:
-  replicaCount: 2
+  replicaCount: 1
   storageClass: gp2
   storage: 3Gi
   image:

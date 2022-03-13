@@ -35,13 +35,13 @@ server:
   service:
     type: ClusterIP
     port: 4000
-  # resources:
-  #   limits:
-  #     cpu: 2
-  #     memory: 1024Mi
-  #   requests:
-  #     cpu: 100m
-  #     memory: 128Mi
+  resources:
+    limits:
+      cpu: 2
+      memory: 2048Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}

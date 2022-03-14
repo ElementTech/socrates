@@ -69,19 +69,37 @@ instanceRoute.route('/read/:id').get((req, res,next) => {
   })
 })
 
+function updateFlowVizes(oldname,newname)
+{
+  Flowviz.updateMany({"nodes.data.name":oldname},{ "$set": { "nodes.$.data.name": newname } },(error, data)=>{
+    Flowviz.find({"nodes.data.name":oldname},(error, data)=>{
+      if (data.length != 0)
+      {
+        updateFlowVizes(oldname,newname)
+      }
+    })
+  })
+}
+
 // Update instance
 instanceRoute.route('/update/:id').put((req, res, next) => {
-  Instance.findByIdAndUpdate(req.params.id, {
-    $set: req.body
-  }, (error, data) => {
-    if (error) {
-      res.error(error)
-      return next(error);
-    } else {
-      res.json(data)
-      console.log('Data updated successfully')
+  Instance.findById(req.params.id).exec().then(inst=>{
+    if (inst.name != req.params.name)
+    {
+      updateFlowVizes(inst.name,req.body.name)
     }
-  })
+    Instance.findByIdAndUpdate(req.params.id, {
+      $set: req.body
+    }, (error, data) => {
+      if (error) {
+        res.error(error)
+        return next(error);
+      } else {
+        res.json(data)
+        console.log('Data updated successfully')
+      }
+    })
+  });
 })
 
 // Delete instance

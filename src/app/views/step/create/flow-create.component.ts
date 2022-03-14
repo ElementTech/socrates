@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
+import {v4 as uuidv4} from 'uuid';
 @Component({
   selector: 'app-flow-create',
   templateUrl: './flow-create.component.html',
@@ -204,12 +205,13 @@ export class FlowCreateComponent implements OnInit {
     } else {
       if (this.id == "")
       {
-        this.apiService.createFlow(this.flowForm.value).subscribe(
+        const CUSTOM_ID = uuidv4().replace(/-/g, "").substring(0,24)
+        this.apiService.createFlow(Object.assign(this.flowForm.value,{"_id":CUSTOM_ID})).subscribe(
           (res) => {
             this._snackBar.open('Flow created successfully', 'Close', {
               duration: 3000
             });
-            this.ngZone.run(() => this.router.navigateByUrl('/step/list'))
+            this.ngZone.run(() => this.router.navigateByUrl('/step/run/'+CUSTOM_ID))
           }, (error) => {
             if (error.includes("Error Code: 400")){
               this._snackBar.open('Duplicate Names Not Allowed', 'Close', {

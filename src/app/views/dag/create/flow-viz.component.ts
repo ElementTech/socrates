@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filter, Observable, tap } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
+import {v4 as uuidv4} from 'uuid';
 @Component({
   selector: 'flow-viz',
   styleUrls: ['./flow-viz.component.scss'],
@@ -278,12 +279,13 @@ export class FlowVizComponent {
     } else {
       if (this.id == "")
       {
-        this.apiService.createFlowviz(this.flowForm.value).subscribe(
+        const CUSTOM_ID = uuidv4().replace(/-/g, "").substring(0,24)
+        this.apiService.createFlowviz(Object.assign(this.flowForm.value,{"_id":CUSTOM_ID})).subscribe(
           (res) => {
             this._snackBar.open('Flow created successfully', 'Close', {
               duration: 3000
             });
-            this.ngZone.run(() => this.router.navigateByUrl('/dag/list'))
+            this.ngZone.run(() => this.router.navigateByUrl('/dag/run/'+CUSTOM_ID))
           }, (error) => {
             if (error.includes("Error Code: 400")){
               this._snackBar.open('Duplicate Names Not Allowed', 'Close', {

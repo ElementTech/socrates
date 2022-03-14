@@ -13,6 +13,7 @@ import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {v4 as uuidv4} from 'uuid';
 @Component({
   selector: 'app-instance-create',
   templateUrl: './instance-create.component.html',
@@ -311,11 +312,12 @@ export class InstanceCreateComponent implements OnInit {
 
       if (this.id == "")
       {
-        this.apiService.createInstance(this.instanceForm.value).subscribe(
+        const CUSTOM_ID = uuidv4().replace(/-/g, "").substring(0,24)
+        this.apiService.createInstance(Object.assign(this.instanceForm.value,{"_id":CUSTOM_ID})).subscribe(
           (res) => {
             console.log(this.instanceForm.value)
             console.log('Instance successfully created!')
-            this.ngZone.run(() => this.router.navigateByUrl('/instance/list'))
+            this.ngZone.run(() => this.router.navigateByUrl('/instance/run/'+CUSTOM_ID))
           }, (error) => {
             if (error.includes("Error Code: 400")){
               this._snackBar.open('Duplicate Names Not Allowed', 'Close', {

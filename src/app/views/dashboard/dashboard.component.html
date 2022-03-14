@@ -104,7 +104,7 @@
                 [scheme]="colorScheme"
                 [results]="[
                   {'name': 'Total GB','value':(this.data | async).server.fsTotalSize },
-                  {'name': 'Used GB','value':(this.data | async).server.totalSize }
+                  {'name': 'Used GB','value':(this.data | async).server.fsUsedSize }
                 ]"
                 [gradient]="false"
                 [legend]="true"

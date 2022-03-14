@@ -53,6 +53,7 @@
 
 
             <mat-list class="infinite">
+
               <ng-container  *ngFor="let i of nodes">
                 <!-- <mat-list-item  *ngIf="i.label != '+'" class="firstitem w-100">
                   <div class="list-group w-100">
@@ -139,53 +140,47 @@
               [tooltipTitle]="node.label"
               >
               <filter id="neon" height="300%" width="300%" x="-75%" y="-75%">
-                <!-- Thicken out the original shape -->
                 <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
-            
-                <!-- Use a gaussian blur to create the soft blurriness of the glow -->
                 <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
-            
-                <!-- Change the colour -->
-                <feFlood flood-color="rgb(63, 81, 181)" result="glowColor" />
-            
-                <!-- Color in the glows -->
+                <feFlood flood-color="rgb(48,60,84)" result="glowColor" />
                 <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
-            
-                <!--	Layer the effects together -->
                 <feMerge>
                   <feMergeNode in="softGlow_colored"/>
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             
               </filter>
-                <svg:rect
+                <!-- <svg:rect
                     [attr.width]="'5em'"
                     [attr.height]="'5em'"
                     [attr.fill]="'lightgrey'"
                     id="{{node.label}}rect"
+                /> -->
+                <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
+                [attr.stroke]="node.data.name ? '#007ad9' : 'orange'"
+                style="
+                stroke-width: 5;
+                fill:rgb(48,60,84)"
                 />
                 <svg xmlns="http://www.w3.org/2000/svg">
-                  <!-- Common use case: embed HTML text into SVG -->
-                  <foreignObject x="0" y="0" width="5em" height="5em">
-                    <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
+                  <foreignObject width="5em" height="5em">
+                    <!-- <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
                      
                         {{node.label}} 
-                    </div>
+                    </div> -->
                     <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
-                     
-                      <p>{{node.data.name}}</p>
-                      <button type="button" class="btn btn-outline-warning btn-sm" style="top:0;position:absolute;right:0;height:1.7em;border-radius:0" (click)="remvoeNode(node)"><i class="fa fa-minus" aria-hidden="true"></i></button>
+          
+                      <span class="text-white"> {{node.label}} </span>
+                      <p class="text-white fifty-chars pl-2">{{node.data.name}}</p>
+                      <button pButton pRipple (click)="remvoeNode(node)" type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"  style="top:0;position:absolute;right:0;width:20px;height:20px"></button>
                      
                     </div>
-                      <img width="30px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0">
+                      <!-- <img width="20px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0"> -->
                   </foreignObject>
                 </svg>
-                <!-- <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-                  
-                </svg:text>
-                <svg:text alignment-baseline="central" [attr.x]="20" [attr.y]="node.dimension.height / 2">
-                  
-                </svg:text> -->
+
+
+  
               </svg:g>
               <svg:g *ngIf="node.label == 'Start'"
               class="node"

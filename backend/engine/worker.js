@@ -21,7 +21,6 @@ reconnectInterval: 500,
 connectTimeoutMS: 20000,
 socketTimeoutMS: 45000
 }).then(() => {
-      
       console.log('Database sucessfully connected')
    },
    error => {
@@ -31,6 +30,8 @@ socketTimeoutMS: 45000
 )
 
 const lang = workerData.instance.block.lang.toLowerCase()
+
+
 Settings.find((error, data) => {
   if (error) {
     console.log(error)

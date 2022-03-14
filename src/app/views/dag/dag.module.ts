@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { ProgressSpinnerModule} from 'primeng/progressspinner'
 
 // CoreUI Modules
 import {
@@ -198,7 +199,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     CodemirrorModule,
     // Infinite
     InfiniteScrollModule,
-    NgxChartsModule
+    NgxChartsModule,
+    ProgressSpinnerModule
   ],
   declarations: [
     FlowVizComponent,

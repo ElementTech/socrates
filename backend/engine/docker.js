@@ -1,20 +1,22 @@
 const {Worker} = require("worker_threads");
 
 const run = (instance,custom_id,custom_env=[]) => {
+    if (instance)
+    {
+        const worker = new Worker("./engine/worker.js", {workerData: {instance:JSON.parse(JSON.stringify(instance)),custom_id:custom_id,custom_env:custom_env}});
 
-  const worker = new Worker("./engine/worker.js", {workerData: {instance:JSON.parse(JSON.stringify(instance)),custom_id:custom_id,custom_env:custom_env}});
-
-  worker.once("message", result => {
-      console.log(`${result}`);
-  });
-  
-  worker.on("error", error => {
-      console.log(error);
-  });
-  
-  worker.on("exit", exitCode => {
-      console.log(`It exited with code ${exitCode}`);
-  })
+        worker.once("message", result => {
+            console.log(`${result}`);
+        });
+        
+        worker.on("error", error => {
+            console.log(error);
+        });
+        
+        worker.on("exit", exitCode => {
+            console.log(`It exited with code ${exitCode}`);
+        })
+    }
 }
 
 const run_flow = async (flow,flow_run_id) => {

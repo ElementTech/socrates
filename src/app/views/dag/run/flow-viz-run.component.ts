@@ -334,6 +334,7 @@ export class FlowvizRunComponent implements OnInit {
 
   paintSteps(flowRun){
     this.nodes = flowRun.nodes
+    console.log(this.nodes)
     this.nodes=[...this.nodes]
   }
 

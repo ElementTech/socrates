@@ -396,14 +396,27 @@
     /* blur size and spread size are optional (they default to 0) */
   }
   .pulsing{
-      fill: #008cffcc;
+      stroke: #007ad9;
+      stroke-dashoffset: 0;
+      stroke-dasharray: 65;
+      animation: progress-indef 1s linear infinite;
+  }
+  @keyframes progress-indef {
+    0% { stroke-dashoffset: 251; }
+    100% { stroke-dashoffset: 0; }
   }
   .error{
-    fill: red;
+    stroke: red;
   }
   .noterror{
-    fill: green;
+    stroke: green;
   }
   .skipped{
-    fill: goldenrod;
+    stroke: goldenrod;
+  }
+  .fifty-chars {
+    width: 8ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }

@@ -90,58 +90,33 @@
               [tooltipType]="'tooltip'"
               [tooltipTitle]="node.label"
               >
-              <filter id="neon" height="300%" width="300%" x="-75%" y="-75%">
-                <!-- Thicken out the original shape -->
-                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
-            
-                <!-- Use a gaussian blur to create the soft blurriness of the glow -->
-                <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
-            
-                <!-- Change the colour -->
-                <feFlood flood-color="rgb(63, 81, 181)" result="glowColor" />
-            
-                <!-- Color in the glows -->
-                <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
-            
-                <!--	Layer the effects together -->
-                <feMerge>
-                  <feMergeNode in="softGlow_colored"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            
-              </filter>
-                <svg:rect
-                    [attr.width]="'5em'"
-                    [attr.height]="'5em'"
-                    [attr.fill]="'lightgrey'"
-                    [class.pulsing]="node.done==false"
-                    [class.error]="node.error == true"
-                    [class.noterror]="node.error == false && node.skipped == false"
-                    [class.skipped]="node.error == false && node.skipped == true"
-                    id="{{node.label}}rect"
-                />
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <!-- Common use case: embed HTML text into SVG -->
-                  <foreignObject x="0" y="0" width="5em" height="5em">
-                    <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
-                     
-                        {{node.label}}
-                    </div>
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
-                     
-                      <p>{{node.data.name}}</p>
-                      <p>{{node.runtime}}</p>
-                     
-                    </div>
-                      <img width="30px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0">
-                  </foreignObject>
-                </svg>
-                <!-- <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-                  
-                </svg:text>
-                <svg:text alignment-baseline="central" [attr.x]="20" [attr.y]="node.dimension.height / 2">
-                  
-                </svg:text> -->
+
+              <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
+
+              [attr.fill]="'lightgrey'"
+              [class.pulsing]="node.done==false"
+              [class.error]="node.error == true"
+              [class.noterror]="node.error == false && node.skipped == false"
+              [class.skipped]="node.error == false && node.skipped == true"
+              [attr.stroke-width]="5"
+              />
+              <svg xmlns="http://www.w3.org/2000/svg">
+                <foreignObject width="5em" height="5em">
+                  <!-- <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
+                   
+                      {{node.label}} 
+                  </div> -->
+                  <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
+                    {{node.runtime != undefined ? node.runtime+'s' : ' '}}
+        
+                    <p class="text-black fifty-chars pl-2">{{node.data.name}}</p>
+                  </div>
+                    <!-- <img width="20px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0"> -->
+                </foreignObject>
+              </svg>
+
+
+
               </svg:g>
               <svg:g *ngIf="node.label == 'Start'"
               class="node"

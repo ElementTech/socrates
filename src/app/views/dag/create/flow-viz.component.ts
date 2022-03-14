@@ -12,7 +12,7 @@ import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 @Component({
   selector: 'flow-viz',
-  styleUrls: ['./flow-viz.component.css'],
+  styleUrls: ['./flow-viz.component.scss'],
   templateUrl: './flow-viz.component.html'
 })
 export class FlowVizComponent {
@@ -148,6 +148,8 @@ export class FlowVizComponent {
   }
 
   ngOnInit(): void {
+
+
 
     this.showPlus()
     // this.sidenav.close();

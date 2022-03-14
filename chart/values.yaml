@@ -61,6 +61,7 @@ ingress:
   #      - chart-example.local
 
 mongodb:
+  disableSystemLog: true
   podAnnotations:
     sidecar.istio.io/inject: "false"
   persistence:

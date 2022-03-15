@@ -13,7 +13,7 @@ import { stepRound } from './customStepCurved';
 @Component({
   selector: 'app-flow-viz-run',
   templateUrl: './flow-viz-run.component.html',
-  styleUrls: ['./flow-viz-run.component.css']
+  styleUrls: ['./flow-viz-run.component.scss']
 })
 export class FlowvizRunComponent implements OnInit {
 
@@ -568,6 +568,7 @@ export class FlowvizRunComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
 
     // this.showPlus()
     // this.sidenav.close();

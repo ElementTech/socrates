@@ -23,6 +23,12 @@ let FlowvizInstance = new Schema({
    },
    runtime:{
       type: Object
+   },
+   run_id:{
+      type: String
+   },
+   instance_id:{
+      type: String
    }
 }, {
    collection: 'flowviz_instances',

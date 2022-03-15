@@ -187,30 +187,35 @@ async function run_finished(node_name,run_id) {
                   //   });
                   // })
 
-                  if (data.updateDescription.updatedFields.error)
-                  {
-                    set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
-                      { [`nodes.$[outer].error`]: true,
-                        [`nodes.$[outer].skipped`]: false,
-                        [`nodes.$[outer].runtime`]: nodeRunTime,
-                        [`nodes.$[outer].done`]: true,
-                        error: true 
-                      }
-                    )
-                  }
-                  else
-                  {
-                    set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
-                      { 
-                        [`nodes.$[outer].error`]: false,
-                        [`nodes.$[outer].skipped`]: false,
-                        [`nodes.$[outer].runtime`]: nodeRunTime,
-                        [`nodes.$[outer].done`]: true
-                      }
-                    )
-                  }
-                  clearInterval(nodeTime);
+  
                   DockerInstance.findById(run_id, (error, dockerinst) => {
+                    if (data.updateDescription.updatedFields.error)
+                    {
+                      set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
+                        { [`nodes.$[outer].error`]: true,
+                          [`nodes.$[outer].skipped`]: false,
+                          [`nodes.$[outer].runtime`]: nodeRunTime,
+                          [`nodes.$[outer].done`]: true,
+                          [`nodes.$[outer].run_id`]: run_id,
+                          [`nodes.$[outer].instance_id`]: dockerinst.instance,
+                          error: true 
+                        }
+                      )
+                    }
+                    else
+                    {
+                      set_flow_instance_in_database_with_node_name(workerData.flow_run_id,node_name,
+                        { 
+                          [`nodes.$[outer].error`]: false,
+                          [`nodes.$[outer].skipped`]: false,
+                          [`nodes.$[outer].runtime`]: nodeRunTime,
+                          [`nodes.$[outer].done`]: true,
+                          [`nodes.$[outer].run_id`]: run_id,
+                          [`nodes.$[outer].instance_id`]: dockerinst.instance
+                        }
+                      )
+                    }
+                    clearInterval(nodeTime);
                     resolve({"extra_env":dockerinst.parameters.concat(dockerinst.output),"error":data.updateDescription.updatedFields.error})
                   });
                 }

@@ -92,13 +92,15 @@
               >
 
               <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
-
+           
               [attr.fill]="'lightgrey'"
+              
               [class.pulsing]="node.done==false"
               [class.error]="node.error == true"
               [class.noterror]="node.error == false && node.skipped == false"
               [class.skipped]="node.error == false && node.skipped == true"
               [attr.stroke-width]="5"
+            
               />
               <svg xmlns="http://www.w3.org/2000/svg">
                 <foreignObject width="5em" height="5em">

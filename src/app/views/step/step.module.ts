@@ -99,14 +99,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FlowCreateComponent } from './create/flow-create.component';
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-
+import {OverlayModule} from '@angular/cdk/overlay';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { FlowRunComponent } from './run/flow-run.component';
+import { DialogContentExampleDialog, FlowRunComponent } from './run/flow-run.component';
 import { FlowStatsComponent } from './stats/flow-stats.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts'
 @NgModule({
   imports: [
     CommonModule,
+    OverlayModule,
     StepRoutingModule,
     AccordionModule,
     BadgeModule,
@@ -201,7 +202,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts'
     FlowListComponent,
     FlowCreateComponent,
     FlowRunComponent,
-    FlowStatsComponent
+    FlowStatsComponent,
+    DialogContentExampleDialog
   ]
 })
 export class StepModule {}

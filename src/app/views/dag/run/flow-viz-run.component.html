@@ -140,8 +140,10 @@
                       {{node.label}} 
                   </div> -->
                   <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
-                    {{node.runtime != undefined ? node.runtime+'s' : ' '}}
-        
+                    <!-- <img *ngIf="node.runtime == undefined" width="30px" src="assets/clock.gif"> -->
+                   <i *ngIf="node.runtime != undefined" class="fa fa-clock-o" aria-hidden="true"></i> 
+                   {{node.runtime != undefined ? node.runtime+'s' : ' '}}
+                
                     <p class="text-black fifty-chars pl-2">{{node.data.name}}</p>
                   </div>
                     <!-- <img width="20px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0"> -->

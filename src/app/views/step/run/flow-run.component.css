@@ -231,3 +231,8 @@
       box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
     }
   }
+
+  mat-list-item:hover{
+    background-color: lightgrey;
+    cursor: pointer;
+  }

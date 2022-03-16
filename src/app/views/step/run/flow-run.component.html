@@ -61,9 +61,34 @@
 
           </div>
         <div [cdkDropListData]="this.steps[i]" class="example-list-horiz">
-          <div class="example-box-horiz" [id]="item._id+i+j" *ngFor="let item of this.steps[i]; let j = index" >
-            <img width="50px" [src]="this.imageUrls[item.image]">
+          <div class="example-box-horiz" [id]="item._id+i+j" *ngFor="let item of this.steps[i]; let j = index" 
+          
+          style="cursor: pointer;"  cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+                (click)="toggle(trigger)"
+          >
+            <img width="30px" [src]="this.imageUrls[item.image]">
             {{item.name}}</div>
+
+            <ng-template
+            class="overlay"
+            cdkConnectedOverlay 
+            [cdkConnectedOverlayOrigin]="triggerOrigin"
+            [cdkConnectedOverlayHasBackdrop]="true"
+            [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+            (backdropClick)="isOpen=false" 
+            [cdkConnectedOverlayOpen]="isOpen">
+
+
+            <mat-list role="list" class="bg-white border border-black">
+              <mat-list-item role="listitem" [routerLink]="['/instance/run/', triggerNode.id, triggerNode.run_id]"><i class="fa fa-external-link" aria-hidden="true"></i> &nbsp; Instance Page</mat-list-item>
+              <mat-list-item role="listitem" (click)="openDialog(triggerNode.run_id)"><i class="fa fa-code" aria-hidden="true"></i> &nbsp; Console Log</mat-list-item>
+            </mat-list>
+
+      
+          
+           
+          </ng-template>
+
         </div>
         <div class="border-end border-start border-1" style="width:3em;">
           <div class="text-center align-vertical">

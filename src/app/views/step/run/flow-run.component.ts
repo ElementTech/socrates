@@ -1,6 +1,7 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit,NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,NgZone, ChangeDetectorRef, Inject } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,6 +34,10 @@ export class FlowRunComponent implements OnInit {
   subscription: any;
   output: String = "";
   runNumber: any;
+  triggerOrigin: any;
+  isOpen: boolean;
+  chosenFlowInstance: any;
+  toggledNode: any;
 
   ngOnInit(): void {
     this.mainForm();
@@ -52,6 +57,7 @@ export class FlowRunComponent implements OnInit {
   Images?: Observable<any>;
   imageUrls = {};
   constructor(  
+    public dialog: MatDialog,
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,
     public fb: FormBuilder,
@@ -150,7 +156,7 @@ export class FlowRunComponent implements OnInit {
     // this.fetchMore(true)
     this.apiService.getFlowInstance(id).subscribe(data => {
         console.log("Show console of instance "+id+" is "+data.done)
-        
+        this.chosenFlowInstance = data
         //this.output = data.console.join("\r\n")
         //this.getInstance(data.instance)
         try{
@@ -643,5 +649,59 @@ export class FlowRunComponent implements OnInit {
         }
       }
   }
+  openDialog(content) {
+    this.apiService.getDockerInstance(content).subscribe(dockerInstance=>{
+      const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:dockerInstance.console.join("\n")}});
 
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    })
+  }
+
+
+  triggerNode: any;
+
+  toggle(trigger: any) {
+    this.triggerOrigin = trigger;
+    this.isOpen = !this.isOpen
+    this.triggerNode = this.chosenFlowInstance.run.map(runArray=>{
+      return runArray.filter(runItem=>{
+        return (runItem.ui_id == trigger.__ngContext__[24].slice(-2)) && (runItem.id == trigger.__ngContext__[24].slice(0,-2))
+      })
+    }).filter(resultItem=>resultItem.length!=0)[0][0]
+    // const box = trigger.__ngContext__[0].getBoundingClientRect()
+    // console.log(box)
+    // this.waitForElm('#menu'+trigger.__ngContext__[0].id).then((elm) => {
+    //   // // @ts-ignore
+    //   // elm.style.left= box.left+'px'
+    //   // // @ts-ignore
+    //   // elm.style.top= box.top+'px'
+    //   // // @ts-ignore
+    //   // elm.style.right= box.right+'px'
+    //   // // @ts-ignore
+    //   // elm.style.bottom= box.bottom+'px'
+    //   this.waitForElm('#toggle'+trigger.__ngContext__[0].id).then((elm) => {
+    //     // @ts-ignore
+    //     elm.click()
+    //   });
+    // });
+
+    // console.log(trigger.__ngContext__[0].id)
+  }
+
+
+}
+
+@Component({
+  selector: 'dialog-content-example-dialog',
+  templateUrl: 'dialog-content-example-dialog.html',
+})
+export class DialogContentExampleDialog {
+  ready: boolean;
+  constructor(
+    public dialogRef: MatDialogRef<DialogContentExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {this.dialogRef.afterOpened().subscribe(() => setTimeout(() => this.ready = true, 0));}
+  
 }

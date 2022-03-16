@@ -1,0 +1,15 @@
+<mat-dialog-content class="mat-typography"  style="width:50vw !important">
+  <ngx-codemirror *ngIf="ready" 
+        [options]="{
+          lineNumbers: true,
+          theme: 'material',
+          autoRefresh:true,
+          readOnly: true
+        }"
+        [(ngModel)]="data.content"
+    ></ngx-codemirror>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+  <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+</mat-dialog-actions>

@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '',
     component: ProfileComponent,
     data: {
-      title: $localize`Profile`
+      title: $localize`Profile`,
+      breadcrumb: {
+        info: 'user'
+      }
     }
   }
 ];

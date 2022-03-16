@@ -36,7 +36,7 @@
         </span>
         <span class="link-title">Users</span>
       </a>
-      <a routerLink="/settings/settings" routerLinkActive="focus" class="link">
+      <a routerLink="/settings/configure" routerLinkActive="focus" class="link">
         <span class="link-icon">
           <!-- icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
@@ -106,7 +106,18 @@
   </c-container>
   <c-header-divider></c-header-divider>
   <c-container [fluid]="true">
-    <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+    <!-- <c-breadcrumb-router class="ms-2"></c-breadcrumb-router> -->
+    <xng-breadcrumb>
+      <ng-container
+      *xngBreadcrumbItem="let breadcrumb; let info = info; let first = first"
+    >
+    <div *ngIf="info">
+      <i class="fa fa-{{ info }}" aria-hidden="true"></i>
+      &nbsp;
+    </div>
+      <ng-container *ngIf="!first">{{ breadcrumb.replaceAll("/"," / ") }}</ng-container>
+    </ng-container>
+    </xng-breadcrumb>
   </c-container>
 </ng-container>
 <!--</c-header>-->

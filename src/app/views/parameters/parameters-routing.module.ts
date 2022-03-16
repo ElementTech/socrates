@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '',
     component: ParametersComponent,
     data: {
-      title: $localize`Parameters`
+      title: $localize`Parameters`,
+      breadcrumb: {
+        info: 'th-list'
+      }
     }
   }
 ];

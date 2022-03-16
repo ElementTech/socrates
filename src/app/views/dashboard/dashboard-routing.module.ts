@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
     data: {
-      title: $localize`Dashboard`
+      title: $localize`Dashboard`,
+      breadcrumb: {
+        info: 'pie-chart'
+      }
     }
   }
 ];

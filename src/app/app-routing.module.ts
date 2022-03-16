@@ -13,14 +13,24 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'portal',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      role: 'ROLE_USER',
+      breadcrumb: {
+        info: 'home'
+      }
+    },
   },
   {
     path: '',
     component: DefaultLayoutComponent,
     data: {
       title: 'Home',
-      role: 'ROLE_USER'
+      role: 'ROLE_USER',
+      breadcrumb: {
+        label: 'app home',
+        info: 'home'
+      }
     },
     canActivate: [AuthGuardService],
     children: [

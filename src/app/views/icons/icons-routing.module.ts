@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '',
     component: FileUploadComponent,
     data: {
-      title: $localize`Icons`
+      title: $localize`Icons`,
+      breadcrumb: {
+        info: 'image'
+      }
     }
   }
 ];

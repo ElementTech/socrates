@@ -11,6 +11,9 @@ const routes: Routes = [
     path: '',
     data: {
       title: 'DAG',
+      breadcrumb: {
+        info: 'sitemap'
+      }
     },
     children: [
       {
@@ -18,6 +21,9 @@ const routes: Routes = [
         component: FlowVizListComponent,
         data: {
           title: 'List',
+          breadcrumb: {
+            info: 'list'
+          }
         },
       },
       {
@@ -30,6 +36,9 @@ const routes: Routes = [
         component: FlowVizComponent,
         data: {
           title: 'Create',
+          breadcrumb: {
+            info: 'edit'
+          }
         },
       },
       {
@@ -42,6 +51,9 @@ const routes: Routes = [
         component: FlowvizRunComponent,
         data: {
           title: 'Run',
+          breadcrumb: {
+            info: 'play'
+          }
         },
       },
       {
@@ -49,6 +61,9 @@ const routes: Routes = [
         component: FlowvizStatsComponent,
         data: {
           title: 'Statistics',
+          breadcrumb: {
+            info: 'bar-chart'
+          }
         },
       }
     ],

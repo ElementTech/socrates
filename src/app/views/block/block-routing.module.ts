@@ -11,6 +11,9 @@ const routes: Routes = [
     path: '',
     data: {
       title: 'Block',
+      breadcrumb: {
+        info: 'cube'
+      }
     },
     children: [
       {
@@ -18,6 +21,9 @@ const routes: Routes = [
         component: BlockListComponent,
         data: {
           title: 'List',
+          breadcrumb: {
+            info: 'list'
+          }
         },
       },
       {
@@ -25,6 +31,9 @@ const routes: Routes = [
         component: BlockCreateComponent,
         data: {
           title: 'Create',
+          breadcrumb: {
+            info: 'edit'
+          }
         },
       },
       {
@@ -37,6 +46,9 @@ const routes: Routes = [
         component: BlockStatsComponent,
         data: {
           title: 'Statistics',
+          breadcrumb: {
+            info: 'bar-chart'
+          }
         },
       }
     ],

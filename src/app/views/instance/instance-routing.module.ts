@@ -13,6 +13,9 @@ const routes: Routes = [
     path: '',
     data: {
       title: 'Instance',
+      breadcrumb: {
+        info: 'cubes'
+      }
     },
     children: [
       {
@@ -20,18 +23,24 @@ const routes: Routes = [
         component: InstanceListComponent,
         data: {
           title: 'List',
+          breadcrumb: {
+            info: 'list'
+          }
         },
       },
       {
         path: 'list',
         redirectTo: '/instance/list/',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },        
       {
         path: 'create/:id',
         component: InstanceCreateComponent,
         data: {
           title: 'Create',
+          breadcrumb: {
+            info: 'edit'
+          }
         },
       },
       {
@@ -44,6 +53,9 @@ const routes: Routes = [
         component: InstanceRunComponent,
         data: {
           title: 'Run',
+          breadcrumb: {
+            info: 'play'
+          }
         },
       },
       {
@@ -51,6 +63,9 @@ const routes: Routes = [
         component: InstanceRunComponent,
         data: {
           title: 'Run',
+          breadcrumb: {
+            info: 'play'
+          }
         },
       },
       {
@@ -58,6 +73,9 @@ const routes: Routes = [
         component: InstanceStatsComponent,
         data: {
           title: 'Statistics',
+          breadcrumb: {
+            info: 'bar-chart'
+          }
         },
       },
       {
@@ -65,6 +83,9 @@ const routes: Routes = [
         component: ArtifactsComponent,
         data: {
           title: 'Artifacts',
+          breadcrumb: {
+            info: 'file'
+          }
         },
       }
     ],

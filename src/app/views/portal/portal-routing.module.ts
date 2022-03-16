@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '',
     component: PortalComponent,
     data: {
-      title: $localize`Portal`
+      title: $localize`Portal`,
+      breadcrumb: {
+        info: 'dungeon'
+      }
     }
   }
 ];

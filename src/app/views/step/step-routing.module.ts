@@ -12,6 +12,9 @@ const routes: Routes = [
     path: '',
     data: {
       title: 'Step',
+      breadcrumb: {
+        info: 'stairs'
+      }
     },
     children: [
       {
@@ -19,6 +22,9 @@ const routes: Routes = [
         component: FlowListComponent,
         data: {
           title: 'List',
+          breadcrumb: {
+            info: 'list'
+          }
         },
       },
       {
@@ -31,6 +37,9 @@ const routes: Routes = [
         component: FlowCreateComponent,
         data: {
           title: 'Create',
+          breadcrumb: {
+            info: 'edit'
+          }
         },
       },
       {
@@ -43,6 +52,9 @@ const routes: Routes = [
         component: FlowRunComponent,
         data: {
           title: 'Run',
+          breadcrumb: {
+            info: 'play'
+          }
         },
       },
       {
@@ -50,6 +62,9 @@ const routes: Routes = [
         component: FlowStatsComponent,
         data: {
           title: 'Statistics',
+          breadcrumb: {
+            info: 'bar-chart'
+          }
         },
       }
     ],

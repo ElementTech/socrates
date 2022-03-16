@@ -10,24 +10,33 @@ const routes: Routes = [
     path: '',
     data: {
       title: 'Settings',
+      breadcrumb: {
+        info: 'cog'
+      }
     },
     children: [
       {
         path: '',
-        redirectTo: 'settings',
+        redirectTo: 'configure',
       },
       {
         path: 'github',
         component: GithubListComponent,
         data: {
           title: 'Github',
+          breadcrumb: {
+            info: 'github'
+          }
         },
       },
       {
-        path: 'settings',
+        path: 'configure',
         component: SettingsComponent,
         data: {
           title: 'Configure',
+          breadcrumb: {
+            info: 'edit'
+          }
         },
       },
       {
@@ -35,6 +44,9 @@ const routes: Routes = [
         component: UserListComponent,
         data: {
           title: 'Users',
+          breadcrumb: {
+            info: 'users'
+          }
         },
       }
     ],

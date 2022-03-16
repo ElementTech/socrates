@@ -169,3 +169,13 @@
   color: rgb(48,60,84);
   transform: rotate(-10deg);
 }
+
+.xng-breadcrumb-root {
+  padding: 8px 16px;
+  display: inline-block;
+  border-radius: 4px;
+}
+.xng-breadcrumb-trail{
+  padding-left: "/" 2px;
+  padding-right: "/" 2px;
+}

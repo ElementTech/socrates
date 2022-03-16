@@ -236,3 +236,10 @@
     background-color: lightgrey;
     cursor: pointer;
   }
+  .missing{
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Removed.svg/861px-Removed.svg.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+
+  }

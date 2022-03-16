@@ -20,9 +20,11 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 
+import {SkeletonModule} from 'primeng/skeleton';
 
 @NgModule({
   imports: [
+    SkeletonModule,
     DashboardRoutingModule,
     CardModule,
     NavModule,

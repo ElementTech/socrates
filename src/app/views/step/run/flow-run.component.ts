@@ -52,7 +52,9 @@ export class FlowRunComponent implements OnInit {
       console.log(data)
       this.flowForm.setValue(data)
       this.steps=data.steps
+
     });
+    
   }
   Images?: Observable<any>;
   imageUrls = {};
@@ -357,6 +359,7 @@ export class FlowRunComponent implements OnInit {
         this.apiService.getDockerInstance(run.run_id).subscribe(data=>{
           if (Object.keys(data ? data : []).length != 0)
           {
+
             if (data.done){
               if (data.error){
                 document.getElementById(run.id+run.ui_id).classList.remove("blob");
@@ -379,6 +382,7 @@ export class FlowRunComponent implements OnInit {
             {
               document.getElementById(run.id+run.ui_id).style.backgroundColor = "goldenrod";
             }
+
           }
         })
       });

@@ -33,10 +33,11 @@ import { IconModule } from '@coreui/icons-angular';
 // utils
 import { DocsComponentsModule } from '@docs-components/docs-components.module';
 
+
 // views
 import { FlowVizListComponent } from './list/flow-viz-list.component';
 import { FlowVizComponent } from './create/flow-viz.component';
-import { FlowvizRunComponent } from './run/flow-viz-run.component';
+import { FlowvizRunComponent,DialogContentExampleDialog } from './run/flow-viz-run.component';
 import { FlowvizStatsComponent } from './stats/flow-viz-stats.component';
 
 // Components Routing
@@ -67,7 +68,6 @@ import {TagModule} from 'primeng/tag';
 import {MenubarModule} from 'primeng/menubar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {SplitButtonModule} from 'primeng/splitbutton';
-
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -106,9 +106,13 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { NgxGraphModule } from '@swimlane/ngx-graph'
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {OverlayModule} from '@angular/cdk/overlay';
+import {ListboxModule} from 'primeng/listbox';
 
 @NgModule({
   imports: [
+    ListboxModule,
+    OverlayModule,
     CommonModule,
     NgxGraphModule,
     DagRoutingModule,
@@ -206,7 +210,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FlowVizComponent,
     FlowVizListComponent,
     FlowvizRunComponent,
-    FlowvizStatsComponent
+    FlowvizStatsComponent,
+    DialogContentExampleDialog
   ]
 })
 export class DagModule {}

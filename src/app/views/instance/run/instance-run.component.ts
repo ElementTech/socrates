@@ -26,7 +26,7 @@ export class InstanceRunComponent implements OnInit {
   Instance= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[]};
   displayedColumns = ['name','desc','parameters'];
   output: String = "";
-  runNumber: number;
+  runNumber: any;
   id: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -41,6 +41,7 @@ export class InstanceRunComponent implements OnInit {
   fetchedLatestRun = false;
   SubscribeNow = true;
   dockerOutput: any;
+  run: string;
   // ----
 
   constructor(
@@ -53,12 +54,16 @@ export class InstanceRunComponent implements OnInit {
   ) {  
   
     this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.run = this.actRoute.snapshot.paramMap.get('run');
+
     this.getInstance(this.id);
    
   }
 
   ngOnInit() {
     this.fetchMoreInit()
+
+    
   }// Good
 
   ani() {
@@ -69,21 +74,21 @@ export class InstanceRunComponent implements OnInit {
       this.runInstance(this.id)
   }// Good
 
-  ngAfterViewInit(){
-    this.scroller.elementScrolled().pipe(
-      map(() => this.scroller.measureScrollOffset('bottom')),
-      pairwise(),
-      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-      throttleTime(200)
-    ).subscribe(() => {
-      this.ngZone.run(() => {
-        this.fetchMore(false);
-      });
-    }
-    )
+  // ngAfterViewInit(){
+  //   this.scroller.elementScrolled().pipe(
+  //     map(() => this.scroller.measureScrollOffset('bottom')),
+  //     pairwise(),
+  //     filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
+  //     throttleTime(200)
+  //   ).subscribe(() => {
+  //     this.ngZone.run(() => {
+  //       this.fetchMore(false);
+  //     });
+  //   }
+  //   )
    
-  }// Good
-  
+  // }// Good
+ 
 
   ngAfterViewChecked() { 
     if (document.querySelector<HTMLElement>('.CodeMirror') != null)
@@ -420,7 +425,7 @@ export class InstanceRunComponent implements OnInit {
 
     this.loading = true;
     this.apiService.getDockerInstanceByInstanceID(this.id).subscribe(data => {
-    
+      this.showConsole(this.run == null ? data[0]._id: this.run)
       if (this.alreadyLoaded <= data.length)
       {
         
@@ -429,7 +434,7 @@ export class InstanceRunComponent implements OnInit {
 
         //const newItems = [];
   
-          for (let i = 0; i < 15; i++) {
+          for (let i = 0; i < (this.run == null ? 15 : data.length); i++) {
       
             if (data.length == this.alreadyLoaded+i)
             {
@@ -438,7 +443,8 @@ export class InstanceRunComponent implements OnInit {
               break
           
             }
-            this.showConsole(data[0]._id)
+              
+         
 
             let imageToShow = "../../assets/loading.gif"
             let content = "Running..."
@@ -476,6 +482,7 @@ export class InstanceRunComponent implements OnInit {
       else
       {
         this.loading = false;
+
       }
       this.listItems.slice().reverse().forEach(element => {
         if (element.content == "Running..."){

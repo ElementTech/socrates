@@ -47,6 +47,13 @@ const routes: Routes = [
         },
       },
       {
+        path: 'run/:id/:run',
+        component: InstanceRunComponent,
+        data: {
+          title: 'Run',
+        },
+      },
+      {
         path: 'stats/:id',
         component: InstanceStatsComponent,
         data: {

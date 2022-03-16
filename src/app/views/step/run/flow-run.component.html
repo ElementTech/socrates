@@ -6,7 +6,7 @@
   <small style="font-size: 10px;">On Error: {{this.flowForm.get("on_error").value}}</small>
 </mat-toolbar>
 <div class="row  w-100">
-    <div class="col-3">
+    <div class="col-4">
       <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
         <mat-list class="infinitelist">
             <ng-container *cdkVirtualFor="let item of listItems">
@@ -50,7 +50,7 @@
 
     </div>
   
-    <div class="col-9">
+    <div class="col-8">
 
 
       <div class="d-flex flex-row" *ngFor="let num of this.steps; let i = index">

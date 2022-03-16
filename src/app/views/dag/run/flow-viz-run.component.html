@@ -4,14 +4,15 @@
   <a class="play-btn" id="play-btn" (click)="ani();"></a>
   &nbsp;
   <small style="font-size: 10px;">On Error: {{this.flowForm.get("on_error").value}}</small>
+
 </mat-toolbar>
 <div class="row w-100">
-    <div class="col-3">
+    <div class="col-4">
       <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
         <mat-list class="infinitelist">
             <ng-container *cdkVirtualFor="let item of listItems">
               <mat-divider></mat-divider>
-                    <mat-list-item  class="listitem" [style.border-left]="getBorder(item.content)">
+                    <mat-list-item class="listitem" [style.border-left]="getBorder(item.content)">
                      
                     <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> </h3>
                     <p matLine>
@@ -50,9 +51,13 @@
 
     </div>
   
-    <div class="col-9">
+    <div class="col-8">
 
       <div class="chart-container card">
+
+        <mat-toolbar class="d-flex justify-content-between">
+          <h1><i class="fa fa-hashtag" aria-hidden="true"></i> {{this.runNumber}}</h1>
+        </mat-toolbar>
 
         <ngx-graph
           [links]="links"
@@ -81,9 +86,11 @@
           </ng-template>
       
           <ng-template #nodeTemplate let-node>
+<!-- 
+            (click)="onNodeClick($event)"
+            (dblclick)="onNodeDblClick($event)" -->
               <svg:g *ngIf="node.label != '+' && node.label != 'Start'"
-              (click)="onNodeClick($event)"
-              (dblclick)="onNodeDblClick($event)"
+      
               class="node"
               ngx-tooltip
               [tooltipPlacement]="'top'"
@@ -92,9 +99,7 @@
               >
 
               <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
-           
               [attr.fill]="'lightgrey'"
-              
               [class.pulsing]="node.done==false"
               [class.error]="node.error == true"
               [class.noterror]="node.error == false && node.skipped == false"
@@ -102,8 +107,34 @@
               [attr.stroke-width]="5"
             
               />
+           
+     
               <svg xmlns="http://www.w3.org/2000/svg">
-                <foreignObject width="5em" height="5em">
+                <foreignObject width="5em" height="5em" style="cursor: pointer;"  cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+                (click)="toggle(trigger)"
+                >
+
+                
+                <ng-template
+                  class="overlay"
+                  cdkConnectedOverlay 
+                  [cdkConnectedOverlayOrigin]="triggerOrigin"
+                  [cdkConnectedOverlayHasBackdrop]="true"
+                  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+                  (backdropClick)="isOpen=false" 
+                  [cdkConnectedOverlayOpen]="isOpen">
+
+
+                  <mat-list role="list" class="bg-white border border-black">
+                    <mat-list-item role="listitem" [routerLink]="['/instance/run/', triggerNode.instance_id, triggerNode.run_id]"><i class="fa fa-external-link" aria-hidden="true"></i> &nbsp; Instance Page</mat-list-item>
+                    <mat-list-item role="listitem" (click)="openDialog(triggerNode.run_id)"><i class="fa fa-code" aria-hidden="true"></i> &nbsp; Console Log</mat-list-item>
+                  </mat-list>
+
+            
+                
+                 
+                </ng-template>
+
                   <!-- <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
                    
                       {{node.label}} 
@@ -160,6 +191,8 @@
           </ng-template>
       
         </ngx-graph>
+
+
       </div>
     </div>
     <!-- <div class="details text-center">
@@ -173,3 +206,5 @@
 
     </div> -->
   </div>
+
+

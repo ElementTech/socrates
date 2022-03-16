@@ -1,11 +1,14 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit,NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,NgZone, ChangeDetectorRef, ViewChild, Input, Inject } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DagreNodesOnlyLayout, Layout } from '@swimlane/ngx-graph';
-import { interval, map, Observable, switchMap, tap } from 'rxjs';
+import { MenuItem } from 'primeng/api';
+import { ContextMenu } from 'primeng/contextmenu';
+import { interval, map, Observable, switchMap, tap, timeInterval } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 import { stepRound } from './customStepCurved';
@@ -41,6 +44,7 @@ export class FlowvizRunComponent implements OnInit {
   imageUrls = {};
   flowData: any;
   constructor(  
+    public dialog: MatDialog,
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,
     public fb: FormBuilder,
@@ -136,7 +140,7 @@ export class FlowvizRunComponent implements OnInit {
   {
     // this.fetchMore(true)
     this.apiService.getFlowvizInstance(id).subscribe(data => {
-        console.log("Show console of instance "+id+" is "+data.done)
+        // console.log("Show console of instance "+id+" is "+data.done)
         
         //this.output = data.console.join("\r\n")
         this.paintSteps(data)
@@ -145,13 +149,12 @@ export class FlowvizRunComponent implements OnInit {
           this.subscription.unsubscribe();
         }
         catch{
-          console.log("Unsubscribing")
         }
+        this.setRunID(id)
         
         if (data.done == true)
         {
           this.fetchMore(true)
-          this.setRunID(id)
         }
         else
         {
@@ -225,7 +228,6 @@ export class FlowvizRunComponent implements OnInit {
         this.subscription.unsubscribe();
       }
       catch{
-        console.log("Unsubscribing")
       }
       this.apiService.runFlowviz({id}).subscribe(
         (res) => {
@@ -241,6 +243,8 @@ export class FlowvizRunComponent implements OnInit {
 
   setRunID(id)
   {
+
+
     for (let index = 0; index < this.listItems.length; index++) {
       const element = this.listItems[index];
       if (element.id == id)
@@ -334,7 +338,6 @@ export class FlowvizRunComponent implements OnInit {
 
   paintSteps(flowRun){
     this.nodes = flowRun.nodes
-    console.log(this.nodes)
     this.nodes=[...this.nodes]
   }
 
@@ -568,7 +571,7 @@ export class FlowvizRunComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
 
     // this.showPlus()
     // this.sidenav.close();
@@ -624,10 +627,78 @@ export class FlowvizRunComponent implements OnInit {
   //     }
   //   };
   // }
+  isOpen = false;
+  
+  triggerOrigin: any;
+
+  waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+  }
+
+  triggerNode: any;
+
+  toggle(trigger: any) {
+    this.triggerOrigin = trigger;
+    this.isOpen = !this.isOpen
+    this.triggerNode = this.nodes.find(node=>node.id==trigger.__ngContext__[0].id)
+    console.log(this.triggerNode)
+    // const box = trigger.__ngContext__[0].getBoundingClientRect()
+    // console.log(box)
+    // this.waitForElm('#menu'+trigger.__ngContext__[0].id).then((elm) => {
+    //   // // @ts-ignore
+    //   // elm.style.left= box.left+'px'
+    //   // // @ts-ignore
+    //   // elm.style.top= box.top+'px'
+    //   // // @ts-ignore
+    //   // elm.style.right= box.right+'px'
+    //   // // @ts-ignore
+    //   // elm.style.bottom= box.bottom+'px'
+    //   this.waitForElm('#toggle'+trigger.__ngContext__[0].id).then((elm) => {
+    //     // @ts-ignore
+    //     elm.click()
+    //   });
+    // });
+
+    // console.log(trigger.__ngContext__[0].id)
+  }
+
+  openDialog(content) {
+    this.apiService.getDockerInstance(content).subscribe(dockerInstance=>{
+      const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:dockerInstance.console.join("\n")}});
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    })
+  }
+}
 
 
-
-
-
-
+@Component({
+  selector: 'dialog-content-example-dialog',
+  templateUrl: 'dialog-content-example-dialog.html',
+})
+export class DialogContentExampleDialog {
+  ready: boolean;
+  constructor(
+    public dialogRef: MatDialogRef<DialogContentExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {this.dialogRef.afterOpened().subscribe(() => setTimeout(() => this.ready = true, 0));}
+  
 }

@@ -30,9 +30,7 @@
           <th  style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th  style="width: 3rem">
-              
-          </th>
+      
           <th  pSortableColumn="name">
               <div class="flex justify-content-between align-items-center">
                   Name
@@ -136,12 +134,11 @@
               <p-tableCheckbox [value]="block"></p-tableCheckbox>
           </td>
           <td>
-            <button *ngIf="block.desc" style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="block" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-          </td>
-          <td>
               <span class="p-column-title">Name</span>
               <img width="30px" [src]="this.imageUrls[block.image]">
               {{block.name}}
+              <button *ngIf="block.desc" style="height:30px;width: 30px;" type="button" pButton pRipple [pRowToggler]="block" class="p-button-text p-button-sm p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+
           </td>
           <td>
               <span class="p-column-title">Lang</span>

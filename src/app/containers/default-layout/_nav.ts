@@ -90,14 +90,21 @@ export const navItems: INavData[] = [
     name: 'Extras',
   },
   {
-    name: 'Shared Parameters',
-    url: '/parameters/shared',
-    icon: 'cil-wrap-text'
-  },
-  {
-    name: 'Dynamic Parameters',
-    url: '/parameters/dynamic',
-    icon: 'cil-vector'
+    name: 'Parameters',
+    url: '/parameters',
+    icon: 'cil-playlist-add',
+    children: [
+      {
+        name: 'Shared',
+        url: '/parameters/shared',
+        icon: 'cil-spreadsheet'
+      },
+      {
+        name: 'Dynamic',
+        url: '/parameters/dynamic',
+        icon: 'cil-vector'
+      },
+    ]
   },
   {
     name: 'Icons',

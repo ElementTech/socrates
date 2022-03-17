@@ -6,25 +6,36 @@ import { ParametersComponent } from './shared/parameters.component';
 import { DynamicParametersComponent } from './dynamic/dynamic.component';
 const routes: Routes = [
   {
-    path: 'shared',
-    component: ParametersComponent,
+    path: '',
     data: {
-      title: 'Shared Parameters',
+      title: 'Parameters',
       breadcrumb: {
-        info: 'th-list'
+        info: 'list-ol'
       }
-    }
+    },
+    children: [
+      {
+        path: 'shared',
+        component: ParametersComponent,
+        data: {
+          title: 'Shared Parameters',
+          breadcrumb: {
+            info: 'th-list'
+          }
+        }
+      },
+      {
+        path: 'dynamic',
+        component: DynamicParametersComponent,
+        data: {
+          title: 'Dynamic Parameters',
+          breadcrumb: {
+            info: 'list'
+          }
+        }
+      }
+    ],
   },
-  {
-    path: 'dynamic',
-    component: DynamicParametersComponent,
-    data: {
-      title: 'Dynamic Parameters',
-      breadcrumb: {
-        info: 'list'
-      }
-    }
-  }
 ];
 
 @NgModule({

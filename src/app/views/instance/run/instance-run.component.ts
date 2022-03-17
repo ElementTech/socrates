@@ -74,20 +74,20 @@ export class InstanceRunComponent implements OnInit {
       this.runInstance(this.id)
   }// Good
 
-  // ngAfterViewInit(){
-  //   this.scroller.elementScrolled().pipe(
-  //     map(() => this.scroller.measureScrollOffset('bottom')),
-  //     pairwise(),
-  //     filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-  //     throttleTime(200)
-  //   ).subscribe(() => {
-  //     this.ngZone.run(() => {
-  //       this.fetchMore(false);
-  //     });
-  //   }
-  //   )
+  ngAfterViewInit(){
+    this.scroller.elementScrolled().pipe(
+      map(() => this.scroller.measureScrollOffset('bottom')),
+      pairwise(),
+      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
+      throttleTime(200)
+    ).subscribe(() => {
+      this.ngZone.run(() => {
+        this.fetchMore(false);
+      });
+    }
+    )
    
-  // }// Good
+  }// Good
  
 
   ngAfterViewChecked() { 
@@ -371,7 +371,7 @@ export class InstanceRunComponent implements OnInit {
     }
       this.loading = true;
       this.apiService.getDockerInstanceByInstanceID(this.id).subscribe(data => {
-      
+        
         if (this.alreadyLoaded <= data.length)
         {
           
@@ -413,7 +413,7 @@ export class InstanceRunComponent implements OnInit {
                 output: data[this.alreadyLoaded+i].output,
                 done: data[this.alreadyLoaded+i].done,
                 image: imageToShow,
-              createdAt: data[this.alreadyLoaded+i].createdAt
+                createdAt: data[this.alreadyLoaded+i].createdAt
               });
       
               

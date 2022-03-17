@@ -122,6 +122,7 @@ const UserRoute = require('./routes/users.route');
 const imageRoute = require('./routes/image.route');
 const artifactRoute = require('./routes/artifact.route');
 const dashboardRoute = require('./routes/dashboard.route');
+const dynamicParameterRoute = require('./routes/dynamic.route');
 // let Instances = require('./models/Instances');
 const app = express();
 app.use(bodyParser.json());
@@ -144,6 +145,7 @@ app.use('/api/settings', settingsRoute.settingsRoute)
 app.use('/api/flow', flowRoute)
 app.use('/api/flowviz', flowvizRoute)
 app.use('/api/parameter', parameterRoute)
+app.use('/api/dynamic', dynamicParameterRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/github', githubRoute)
 app.use('/api/user', UserRoute)

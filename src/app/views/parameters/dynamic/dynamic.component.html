@@ -1,16 +1,51 @@
 <p-tabView styleClass="tabview-custom">
   <p-tabPanel>
+    <ng-template pTemplate = "header">
+        <i class="pi pi-pencil"></i>
+        <span>Create</span>
+    </ng-template>
+    <form [formGroup]="dynamicParameterForm" (ngSubmit)="onSubmit()">
+      <div class="grid p-fluid">
+        <div class="col-6">
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-pencil"></i></span>
+                <input type="text" name="name" pInputText placeholder="Name" formControlName="name">         
+            </div>
+            <p-messages [(value)]="warning" [enableService]="false"></p-messages>
+            <div class="p-inputgroup">
+              <!-- <span class="p-inputgroup-addon"><i class="fa fa-code" aria-hidden="true"></i></span>
+              <input type="text"  name="lang" pInputText placeholder="Lang" formControlName="lang">    -->
+
+
+
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Language</mat-label>
+                <mat-select formControlName="lang">
+                  <mat-option [value]="lang" *ngFor="let lang of Language">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{lang}}/{{lang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30">{{lang}}
+                  </mat-option>
+                </mat-select>
+    
+              </mat-form-field> 
+          </div>
+        </div>
+        <div class="col-6" >
+          <p-messages [(value)]="info" [enableService]="false"></p-messages>
+          <ngx-codemirror
+            formControlName="script"
+            [options]="ngxOptions"
+          ></ngx-codemirror>
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+</p-tabPanel>
+  <p-tabPanel>
       <ng-template pTemplate = "header">
           <i class="pi pi-table"></i>
           <span>List</span>
       </ng-template>
 
   </p-tabPanel>
-  <p-tabPanel>
-      <ng-template pTemplate = "header">
-          <i class="pi pi-pencil"></i>
-          <span>Create</span>
-      </ng-template>
 
-  </p-tabPanel>
 </p-tabView>

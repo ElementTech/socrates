@@ -34,7 +34,7 @@ import { DocsComponentsModule } from '@docs-components/docs-components.module';
 
 // views
 
-import { ParametersComponent } from './parameters.component';
+import { ParametersComponent } from './shared/parameters.component';
 
 // Components Routing
 import { ParametersRoutingModule } from './parameters-routing.module';
@@ -98,12 +98,14 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-
+import {TabViewModule} from 'primeng/tabview';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { DynamicParametersComponent } from './dynamic/dynamic.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    TabViewModule,
     ParametersRoutingModule,
     AccordionModule,
     BadgeModule,
@@ -194,7 +196,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     InfiniteScrollModule
   ],
   declarations: [
-    ParametersComponent
+    ParametersComponent,
+    DynamicParametersComponent
   ]
 })
 export class ParametersModule {}

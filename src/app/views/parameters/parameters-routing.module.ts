@@ -1,16 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ParametersComponent } from './parameters.component';
+import { ParametersComponent } from './shared/parameters.component';
 
+import { DynamicParametersComponent } from './dynamic/dynamic.component';
 const routes: Routes = [
   {
-    path: '',
+    path: 'shared',
     component: ParametersComponent,
     data: {
-      title: $localize`Parameters`,
+      title: 'Shared Parameters',
       breadcrumb: {
         info: 'th-list'
+      }
+    }
+  },
+  {
+    path: 'dynamic',
+    component: DynamicParametersComponent,
+    data: {
+      title: 'Dynamic Parameters',
+      breadcrumb: {
+        info: 'list'
       }
     }
   }

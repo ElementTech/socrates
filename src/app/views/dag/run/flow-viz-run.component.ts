@@ -1,4 +1,5 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, OnInit,NgZone, ChangeDetectorRef, ViewChild, Input, Inject } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DagreNodesOnlyLayout, Layout } from '@swimlane/ngx-graph';
 import { MenuItem } from 'primeng/api';
 import { ContextMenu } from 'primeng/contextmenu';
-import { interval, map, Observable, switchMap, tap, timeInterval } from 'rxjs';
+import { filter, interval, map, Observable, pairwise, switchMap, tap, throttleTime, timeInterval } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 import { stepRound } from './customStepCurved';
@@ -200,6 +201,21 @@ export class FlowvizRunComponent implements OnInit {
       }
     });
   }
+  @ViewChild('scroller') scroller: CdkVirtualScrollViewport;
+  ngAfterViewInit(){
+    this.scroller.elementScrolled().pipe(
+      map(() => this.scroller.measureScrollOffset('bottom')),
+      pairwise(),
+      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
+      throttleTime(200)
+    ).subscribe(() => {
+      this.ngZone.run(() => {
+        this.fetchMore(false);
+      });
+    }
+    )
+   
+  }// Good
 
   // ngAfterViewChecked() { 
   //   if (document.querySelector<HTMLElement>('.CodeMirror') != null)

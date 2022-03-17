@@ -1,11 +1,12 @@
 import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit,NgZone, ChangeDetectorRef, Inject } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Component, OnInit,NgZone, ChangeDetectorRef, Inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { interval, map, Observable, switchMap, tap } from 'rxjs';
+import { filter, interval, map, Observable, pairwise, switchMap, tap, throttleTime } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 @Component({
@@ -433,7 +434,21 @@ export class FlowRunComponent implements OnInit {
       document.getElementById(elList[i].id).classList.remove("blob")
     }
   }
-
+  @ViewChild('scroller') scroller: CdkVirtualScrollViewport;
+  ngAfterViewInit(){
+    this.scroller.elementScrolled().pipe(
+      map(() => this.scroller.measureScrollOffset('bottom')),
+      pairwise(),
+      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
+      throttleTime(200)
+    ).subscribe(() => {
+      this.ngZone.run(() => {
+        this.fetchMore(false);
+      });
+    }
+    )
+   
+  }// Good
 
   fetchMore(zero): void {
     if (zero == true)

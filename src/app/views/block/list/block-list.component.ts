@@ -10,7 +10,7 @@ import { Observable, tap } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 import { Table } from 'primeng/table';
-import { PrimeNGConfig } from 'primeng/api';
+import { PrimeNGConfig, SelectItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 @Component({
@@ -104,6 +104,14 @@ export class BlockListComponent implements OnInit {
       });
   }
 
+
+  sortOptions: SelectItem[];
+
+  sortOrder: number;
+
+  sortField: string;
+
+
   ngOnInit() {
       this.apiService.getBlocks().subscribe(blocks => {
           this.blocks = blocks;
@@ -124,6 +132,11 @@ export class BlockListComponent implements OnInit {
         });
 
       })
+
+      this.sortOptions = [
+        {label: 'Price High to Low', value: '!price'},
+        {label: 'Price Low to High', value: 'price'}
+      ];
   }
 
 }

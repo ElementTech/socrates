@@ -164,6 +164,11 @@ instanceRoute.route('/run').post((req, res) => {
         //   process.exit();
         // });
         const custom_id = new mongoose.Types.ObjectId().toHexString()
+        data.parameters = req.body.parameters
+        data.shared = req.body.shared
+        data.booleans = req.body.booleans
+        data.multis = req.body.multis
+        console.log(data)
         docker.run(data,custom_id)
         res.json(custom_id)
       }

@@ -7,7 +7,11 @@
 <div class="row w-100">
   
     <div class="col-4">
+      <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
+        Runs:
+     </li>
         <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
+          
             <mat-list class="infinitelist">
                 <ng-container *cdkVirtualFor="let item of listItems">
                   <mat-divider></mat-divider>
@@ -63,10 +67,77 @@
                 
             <div class="w-100">
                 <ul class="list-group">
-              
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
+                   Parameters:
+                </li>
+                  <p-table [value]="this.Instance.parameters.concat(this.Instance.shared).concat(this.Instance.booleans).concat(this.Instance.multis)" dataKey="key" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><i class="fa fa-key" aria-hidden="true"></i> Key</th>
+                            <th><i class="fa fa-pencil-square" aria-hidden="true"></i> Value (Click to Override)</th>
+                            <th><i class="fa fa-check" aria-hidden="true"></i> Type</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-parameter>
+                        <tr>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="parameter.key">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{parameter.key}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn class="editme">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input" *ngIf="parameter.type == 'text'">
+                                        <input pInputText [type]="parameter.secret ? 'password' : 'text'" [(ngModel)]="parameter.value">
+                                    </ng-template>
+                                    <ng-template pTemplate="input" *ngIf="parameter.type == 'checkbox'">
+                                      <mat-checkbox [(ngModel)]="parameter.value">
+                                        {{parameter.value}}
+                                      </mat-checkbox>
+                                    </ng-template>     
+                                    <ng-template pTemplate="input" *ngIf="parameter.type == 'multi'">
+                                      <mat-form-field appearance="outline">
+                                        <mat-label>{{parameter.key}}</mat-label>
+                                        <mat-select [(ngModel)]="parameter.value">
+                                          <mat-option *ngFor="let choice of parameter.choices.split(',')" [value]="choice">
+                                            {{choice}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>    
+                                    </ng-template>                         
+                                    <ng-template pTemplate="output">
+                                        {{parameter.secret ? "*********" : parameter.value}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                              <p-cellEditor>
+                                  <ng-template pTemplate="input">
+                                      <input pInputText type="text" [(ngModel)]="parameter.type">
+                                  </ng-template>
+                                  <ng-template pTemplate="output">
+                                    <i *ngIf="parameter.type == 'text'" class="fa fa-file-text" aria-hidden="true"></i>  
+                                    <i *ngIf="parameter.type == 'checkbox'" class="fa fa-check-square" aria-hidden="true"></i>
+                                    <i *ngIf="parameter.type == 'multi'" class="fa fa-list-ul" aria-hidden="true"></i>
+                                    {{parameter.type}}
+                                  </ng-template>
+                              </p-cellEditor>
+                          </td>                            
+                        </tr>
+                    </ng-template>
+                  </p-table>
+                <br>
+                  <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
                       <mat-list-item>
 
+
+
+                   
 
                           <ng-container matColumnDef="parameters">
                               <mat-chip-list>
@@ -129,10 +200,11 @@
 
   
                   <span class="badge bg-primary rounded-pill">{{this.Instance.parameters.length+this.Instance.shared.length+this.Instance.booleans.length+this.Instance.multis.length}}</span>
-                  </li>
+                  </li> -->
                   <li *ngIf='this.Instance.desc != ""' class="list-group-item d-flex justify-content-between align-items-center">
-                      {{this.Instance.desc}}
+                      Description: {{this.Instance.desc}}
                   </li>
+                  <br>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     Output:
                     <mat-chip-list>

@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
+import {DataViewModule} from 'primeng/dataview';
 
 // CoreUI Modules
 import {
+  
   AccordionModule,
   BadgeModule,
   BreadcrumbModule,
@@ -25,6 +27,7 @@ import {
   TabsModule,
   TooltipModule,
   UtilitiesModule,
+  
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
@@ -107,6 +110,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
   imports: [
     CommonModule,
+    DataViewModule,
     BlockRoutingModule,
     AccordionModule,
     BadgeModule,

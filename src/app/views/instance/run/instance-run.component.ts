@@ -127,11 +127,11 @@ export class InstanceRunComponent implements OnInit {
         if (this.fullScreenToggle)
         {
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('position','fixed')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('top','10vh')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('left','12em')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('right','1.2em')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('top','8%')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('left','0')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('right','0')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('bottom','0')
-          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('height','auto')
+          document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('height','100%')
           document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('z-index','9999')
           this.fullScreenToggle = false;
         }
@@ -152,11 +152,11 @@ export class InstanceRunComponent implements OnInit {
     if (this.fullScreenToggle)
     {
       document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('position','fixed')
-      document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('top','10vh')
+      document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('top','8%')
       document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('left','0')
       document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('right','0')
       document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('bottom','0')
-      document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('height','auto')
+      document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('height','100%')
       document.querySelector<HTMLElement>('.CodeMirror').style.setProperty('z-index','9999')
       this.fullScreenToggle = false;
     }
@@ -265,7 +265,9 @@ export class InstanceRunComponent implements OnInit {
     catch{
       console.log("Unsubscribing")
     }
-    this.apiService.runInstance({id}).subscribe(
+    console.log({"text":this.Instance.parameters,"shared":this.Instance.shared,"bool":this.Instance.booleans,"multis":this.Instance.multis})
+    this.apiService.runInstance({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
+    "multis":this.Instance.multis}).subscribe(
       (res) => {
        
         this._snackBar.open('Instance Run Started', 'Close', {
@@ -345,8 +347,15 @@ export class InstanceRunComponent implements OnInit {
 
   getInstance(id) {
     this.apiService.getInstance(id).subscribe(data => {
-      
+      this.apiService.getBlock(data.block).subscribe(block=>{
+        data.parameters = data.parameters.map(param=>Object.assign({"type":"text"},param))
+        data.shared = data.shared.map(param=>Object.assign({"type":"text"},param))
+        data.booleans = data.booleans.map(param=>Object.assign({"type":"checkbox"},param))
+        data.multis = data.multis.map(param=>Object.assign({"type":"multi","choices":block.multis.filter(m=>m.key==param.key)[0].value},param))
+        console.log(data.multis)
         this.Instance = data
+      })
+
         // this.dataSource = new MatTableDataSource([this.Instance]);
 
         // console.log(this.dataSource)

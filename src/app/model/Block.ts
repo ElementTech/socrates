@@ -3,6 +3,7 @@ export class Block {
    name!: string;
    lang!: string;
    parameters!: [Object];
+   dynamic!: [Object];
    shared!: [Object];
    booleans!: [Object];
    multis!: [Object];

@@ -1,5 +1,5 @@
 
-<form [formGroup]="blockForm" class="container" (ngSubmit)="onSubmit()">
+<form [formGroup]="blockForm"  (ngSubmit)="onSubmit()">
   <mat-stepper [linear]="isLinear" #stepper>
     <mat-step [stepControl]="blockForm" errorMessage="Name and Language are required.">
 
@@ -172,7 +172,7 @@
               cdkDropList 
               cdkDropListOrientation="vertical"
               cdkDropListSortingDisabled="true"
-              (cdkDropListDropped)="drop($event)"
+              (cdkDropListDropped)="dropShared($event)"
               [cdkDropListData]="sharedParams"
               
               infinite-scroll
@@ -213,7 +213,7 @@
                   cdkDropList 
                   cdkDropListOrientation="vertical"
                   cdkDropListSortingDisabled="true"
-                  (cdkDropListDropped)="drop($event)"
+                  (cdkDropListDropped)="dropShared($event)"
                   [cdkDropListData]="shared"
                   >
                 
@@ -227,6 +227,75 @@
               
                     
                         <td class="text-center align-middle"><button type="button" (click)="removeItemShared(i)" class="btn-danger" aria-label="Close">
+                          <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
+                      </tr>
+                  </tbody>
+                </table>   
+              </div>    
+            </div>
+            <div class="col" cdkDropListGroup>
+              <div style="background-color:#0b59a2a2;" class="w-100 d-flex justify-content-center">
+                <label class="p-2 text-white">Dynamic Parameters - Drag From the List Below</label>
+                <!-- <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItemShared()">Add Parameter</button> -->
+              </div>
+              <!-- <pre>{{blockForm.value | json}}</pre> -->
+           
+              <div
+              class="example-chip items-body"
+              cdkDropList 
+              cdkDropListOrientation="vertical"
+              cdkDropListSortingDisabled="true"
+              (cdkDropListDropped)="dropDynamic($event)"
+              [cdkDropListData]="dynamicParams"
+              
+              infinite-scroll
+              [infiniteScrollDistance]="scrollDistance"
+              [scrollWindow]="false"
+              [horizontal]="false"
+              [infiniteScrollUpDistance]="scrollUpDistance"
+              [infiniteScrollThrottle]="throttle"
+              (scrolled)="onScrollDown($event)"
+              (scrolledUp)="onUp($event)">
+  
+             
+              <div class="items-body-content example-box" style="max-height: 3em; border: 1px dotted black;"  *ngFor="let sha of dynamicParams" cdkDrag>
+                <!-- <span *ngIf="sha.secret">{{sha.key}} - ***</span>
+                <span *ngIf="!sha.secret">{{sha.key}} - {{sha.value}}</span> -->
+                <span>{{sha.name}}</span>
+                <i class="fa-solid fa-hand-grab-o"></i>
+              </div>
+  
+        
+              </div>
+                         
+              <div class="border border-dark text-center justify-content-center" style="min-height: 20em;display: flex;align-items: center;">
+                <mat-chip-list *ngIf="blockForm.get('dynamic')['controls'][0] == undefined" class="text-center">
+                  <mat-chip color="primary" selected>Drag a Dynamic Parameter Here</mat-chip>
+                </mat-chip-list>
+                
+                <table style="align-self: flex-start;" *ngIf="blockForm.get('dynamic')['controls'][0] != undefined" class="table table-bordered table-hover table-sm table-responsive">
+                  <thead class="thead-default">
+                    <tr>
+                      <th><i class="fa fa-hashtag" aria-hidden="true"></i> Name</th>
+                      <th><i class="fa fa-times" aria-hidden="true"></i> Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                  cdkDropList 
+                  cdkDropListOrientation="vertical"
+                  cdkDropListSortingDisabled="true"
+                  (cdkDropListDropped)="dropDynamic($event)"
+                  [cdkDropListData]="dynamic"
+                  >
+                
+                    <tr formArrayName="dynamic" cdkDrag
+                    *ngFor="let item of blockForm.get('dynamic')['controls']; let i = index;"
+                    >
+                
+                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="name" required disabled></td>
+              
+                    
+                        <td class="text-center align-middle"><button type="button" (click)="removeItemDynamic(i)" class="btn-danger" aria-label="Close">
                           <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
                       </tr>
                   </tbody>
@@ -326,13 +395,13 @@
             <td>{{ blockForm.controls['lang'].value }}</td>
             <td>{{ blockForm.controls['desc'].value }}</td>
             <td>
-              <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"]'>
+              <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"] || blockForm.controls["booleans"] || blockForm.controls["multis"] || blockForm.controls["dynamic"]'>
 
                 <mat-chip-list aria-label="Parameters">
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key != ""'>
                     <mat-chip color="primary" selected *ngFor="let param of blockForm.controls['parameters'].value">{{param.key}}</mat-chip>
                   </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key == "" && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0'>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key == "" && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
                     <mat-chip *ngFor="let param of blockForm.controls['parameters'].value">No Parameters</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["shared"].length != 0'>
@@ -341,8 +410,8 @@
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["booleans"].length != 0'>
                     <mat-chip color="warning" selected *ngFor="let param of blockForm.controls['booleans'].value">{{param.key}}</mat-chip>
                   </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["multis"].length != 0'>
-                    <mat-chip color="secondary" selected *ngFor="let param of blockForm.controls['multis'].value">{{param.key}}</mat-chip>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["dynamic"].length != 0'>
+                    <mat-chip color="secondary" selected *ngFor="let param of blockForm.controls['dynamic'].value">{{param.name}}</mat-chip>
                   </ng-container>
                 </mat-chip-list>
               </div>

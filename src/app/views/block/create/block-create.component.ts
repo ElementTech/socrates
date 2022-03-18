@@ -51,6 +51,7 @@ export class BlockCreateComponent implements OnInit {
   Language: String[] = []
   title = "New Block"
   shared: FormArray;
+  dynamic: FormArray;
   booleans: FormArray;
   multis: any;
   githubConnected: any;
@@ -74,8 +75,9 @@ export class BlockCreateComponent implements OnInit {
   }
 
   sharedParams: any = [];
+  dynamicParams: any = [];
 
-  drop(event: CdkDragDrop<Object[]>) {
+  dropShared(event: CdkDragDrop<Object[]>) {
     let item = Object(event.previousContainer.data[event.previousIndex])
     this.shared = this.blockForm.get('shared') as FormArray;
     let valid = true
@@ -90,11 +92,20 @@ export class BlockCreateComponent implements OnInit {
         secret: item.secret,
       }));
     }
-
-
-   
-    // copyArrayItem(this.sharedParams,this.blockForm.get('shared').value,event.previousIndex,event.currentIndex)
-    // moveItemInArray(this.sharedParams, event.previousIndex, event.currentIndex);
+  }
+  dropDynamic(event: CdkDragDrop<Object[]>) {
+    let item = Object(event.previousContainer.data[event.previousIndex])
+    this.dynamic = this.blockForm.get('dynamic') as FormArray;
+    let valid = true
+    this.dynamic.value.forEach((x, i) => {
+      if (x.name == item.name) valid = false;
+    });
+    if (valid)
+    {
+      this.dynamic.push(this.fb.group({
+        name: item.name,
+      }));
+    }
   }
 
   ngAfterViewChecked(){
@@ -150,6 +161,12 @@ export class BlockCreateComponent implements OnInit {
                 key: item.key,
                 value: item.value,
                 secret: item.secret,
+                _id: item._id
+              }));
+            });
+            data.dynamic.forEach(item=>{
+              this.dynamic.push(this.fb.group({
+                name: item.name,
                 _id: item._id
               }));
             });
@@ -230,11 +247,19 @@ export class BlockCreateComponent implements OnInit {
   addItems(startIndex, endIndex, _method) {
 
     this.apiService.getParameters().subscribe(data=>{
-      this.data=data
-      for (let i = startIndex; i < endIndex && i < this.data.length; ++i) {
+      // @ts-ignore
+      for (let i = startIndex; i < endIndex && i < data.length; ++i) {
         this.sharedParams[_method](data[i]);
        
       }
+    })
+    this.apiService.getDynamicParameters().subscribe(data=>{
+      // @ts-ignore
+      for (let i = startIndex; i < endIndex && i < data.length; ++i) {
+        this.dynamicParams[_method](data[i]);
+       
+      }
+      console.log(this.dynamicParams)
     })
 
     
@@ -272,6 +297,8 @@ export class BlockCreateComponent implements OnInit {
         this.createItem()
       ]),
       shared: this.fb.array([
+      ]),
+      dynamic: this.fb.array([
       ]),
       booleans: this.fb.array([
       ]),
@@ -369,6 +396,10 @@ export class BlockCreateComponent implements OnInit {
   }
   removeItemShared(index): void {
     this.shared.removeAt(index)
+    
+  }
+  removeItemDynamic(index): void {
+    this.dynamic.removeAt(index)
     
   }
   removeItemMulti(index): void {

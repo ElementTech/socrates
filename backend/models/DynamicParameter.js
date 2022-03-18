@@ -11,6 +11,10 @@ let DynamicParameter = new Schema({
    },
    lang:{
       type: String
+   },
+   output:{
+      type: Array,
+      required: false
    }
 }, {
    collection: 'dynamics',

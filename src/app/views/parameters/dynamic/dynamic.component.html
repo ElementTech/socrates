@@ -1,15 +1,67 @@
-<p-tabView styleClass="tabview-custom">
+<p-toast></p-toast>
+<p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
   <p-tabPanel>
     <ng-template pTemplate = "header">
-        <i class="pi pi-pencil"></i>
-        <span>Create</span>
+        <i class="pi pi-list"></i>&nbsp;
+        <span>List</span>
+    </ng-template>
+    <p-table 
+    #dt
+      
+     styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
+      [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" 
+      [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [filterDelay]="0" [globalFilterFields]="['name','lang']"
+    
+    [value]="parameters" responsiveLayout="scroll">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+          <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+          </span>
+      </div>
+  </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Test Run</th>
+              <th>Name</th>
+              <th>Language</th>
+              <th>Lines</th>
+              <th>Last Test Output</th>
+
+              <th></th>
+
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-parameter>
+          <tr>
+              <td>
+                <button pButton pRipple type="button" icon="pi pi-play" (click)="activeIndex = 2;onRowRun(parameter)" class="p-button-rounded"></button>
+              </td>
+              <td>{{parameter.name}}</td>
+              <td><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{parameter.lang}}/{{parameter.lang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30"> &nbsp; {{parameter.lang}}</td>
+              <td>{{parameter.script.split("\n").length}}</td>
+              <td>{{parameter.output ? parameter.output : ''}}</td>
+              <td>
+                <button pButton pRipple type="button" icon="pi pi-trash" (click)="onRowEditRemove(parameter._id)" class="p-button-rounded p-button-text p-button-danger"></button>
+                <button pButton pRipple type="button" icon="pi pi-pencil" (click)="activeIndex = 1;editThis(parameter)" class="p-button-rounded p-button-text"></button>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</p-tabPanel>
+  <p-tabPanel>
+    <ng-template pTemplate = "header">
+        <i class="pi pi-pencil"></i>&nbsp;
+        <span>Create/Edit</span>
     </ng-template>
     <form [formGroup]="dynamicParameterForm" (ngSubmit)="onSubmit()">
       <div class="grid p-fluid">
         <div class="col-6">
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon"><i class="pi pi-pencil"></i></span>
-                <input type="text" name="name" pInputText placeholder="Name" formControlName="name">         
+                <input type="text" name="name" pInputText placeholder="Name (Unique)" formControlName="name">         
             </div>
             <p-messages [(value)]="warning" [enableService]="false"></p-messages>
             <div class="p-inputgroup">
@@ -29,23 +81,80 @@
               </mat-form-field> 
           </div>
         </div>
-        <div class="col-6" >
+        <div class="col-6">
           <p-messages [(value)]="info" [enableService]="false"></p-messages>
-          <ngx-codemirror
+          <ngx-codemirror #codeMirror
             formControlName="script"
             [options]="ngxOptions"
           ></ngx-codemirror>
         </div>
       </div>
-      <button type="submit">Submit</button>
+      <p-button type="submit" label="Submit"></p-button>
     </form>
-</p-tabPanel>
+  </p-tabPanel>
   <p-tabPanel>
       <ng-template pTemplate = "header">
-          <i class="pi pi-table"></i>
-          <span>List</span>
+          <i class="pi pi-forward"></i>&nbsp;
+          <span>Test</span>
       </ng-template>
+      <ng-template [ngIf]="(chosenRunParameter | json) == '{}'" [ngIfElse]="elseBlock">
+        Run a parameter from the list in order to test it
+      </ng-template>
+      <ng-template #elseBlock>
+        <mat-toolbar class="d-flex justify-content-center">
+          <i class="fa-solid fa-rocket" aria-hidden="true"></i> &nbsp; <h1 style="margin-right: 1em;">{{this.chosenRunParameter.name}} </h1>
+          <a class="play-btn" id="play-btn" (click)="runParameter()"></a>
+          <!-- <button pButton pRipple type="button" icon="pi pi-play" (click)="runParameter()" class="p-button-rounded"></button> -->
+          &nbsp;
+          <i class="fa fa-clock-o" aria-hidden="true"> </i>&nbsp;
+          {{this.runtime}}
+        </mat-toolbar>
+        <div class="row">
+          <div class="col-4">
+            <ngx-codemirror
+            [(ngModel)]="this.chosenRunParameter.script"
+            [options]="ngxOptions"
+            ></ngx-codemirror>
+          </div>
+          <div class="col-1">
+            <div class="centered-text">
+              <mat-chip-list>
+                  <mat-chip><i class="fa fa-arrow-right" aria-hidden="true"></i></mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
 
+          <div class="col-4">
+            <ngx-codemirror
+            [(ngModel)]="this.chosenRunOutput.console"
+            [options]="ngxOptions"
+            ></ngx-codemirror>
+          </div>
+
+          <div class="col-1">
+            <div class="centered-text">
+              <mat-chip-list>
+                  <mat-chip><i class="fa fa-arrow-right" aria-hidden="true"></i></mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
+
+          <div class="col-2">
+            <p-table *ngIf="this.chosenRunOutput.output" [value]="this.chosenRunOutput.output" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Result Options</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-result>
+                    <tr>
+                        <td>{{result}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+          </div>
+        </div>
+
+      </ng-template>
   </p-tabPanel>
-
 </p-tabView>

@@ -81,6 +81,38 @@ export class ApiService {
   }
 
 
+    // Get all blocks
+    getDynamicParameters() {
+      return this.http.get(`${this.baseUri}/dynamic`,{headers: this.headers});
+    }
+  
+    // Get block
+    getDynamicParameter(id: any): Observable<any> {
+      let url = `${this.baseUri}/dynamic/read/${id}`;
+      return this.http.get(url, {headers: this.headers}).pipe(
+  
+        catchError(this.errorMgmt)
+      )
+    }
+  
+    // Update block
+    updateDynamicParameter(id: string, data: any): Observable<any> {
+      let url = `${this.baseUri}/dynamic/update/${id}`;
+      return this.http.put(url, data, { headers: this.headers })
+    }
+  
+    // Delete block
+    deleteDynamicParameter(id: any): Observable<any> {
+      let url = `${this.baseUri}/dynamic/delete/${id}`;
+      return this.http.delete(url, { headers: this.headers })
+    }
+
+
+    createDynamicParameter(data: any): Observable<any> {
+      let url = `${this.baseUri}/dynamic/create`;
+      return this.http.post(url,data,{headers: this.headers})
+        
+    }
   // Create
   createBlock(data: any): Observable<any> {
     let url = `${this.baseUri}/block/create`;
@@ -163,6 +195,12 @@ export class ApiService {
 
   runInstance(data: any): Observable<any> {
     let url = `${this.baseUri}/instance/run`;
+    return this.http.post(url,data,{headers: this.headers})
+      
+  }
+
+  runDynamicParameter(data: any): Observable<any> {
+    let url = `${this.baseUri}/dynamic/run`;
     return this.http.post(url,data,{headers: this.headers})
       
   }

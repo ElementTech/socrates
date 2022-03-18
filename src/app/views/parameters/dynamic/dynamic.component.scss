@@ -4,4 +4,10 @@
     border-width: 0 0 0 6px;
     color: #2c1e30;
 }
-
+.centered-text {
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    padding: 2em;
+  }
+  

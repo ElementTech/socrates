@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const DynamicParameterRoute = express.Router();
-
+let DockerInstance = require('../models/DockerInstance');
+var docker = require('../engine/docker');
 // DynamicParameter model
+let mongoose = require('mongoose');
 let DynamicParameter = require('../models/DynamicParameter');
 const auth = require("../middleware/auth");
 DynamicParameterRoute.use(auth)
@@ -41,6 +43,7 @@ DynamicParameterRoute.route('/read/:id').get((req, res) => {
 
 // Update DynamicParameter
 DynamicParameterRoute.route('/update/:id').put((req, res, next) => {
+  console.log(req.body)
   DynamicParameter.findByIdAndUpdate(req.params.id, {
     $set: req.body
   }, (error, data) => {
@@ -66,5 +69,23 @@ DynamicParameterRoute.route('/delete/:id').delete((req, res, next) => {
     }
   })
 })
+
+DynamicParameterRoute.route('/run').post((req, res) => {
+
+  
+      const custom_id = new mongoose.Types.ObjectId().toHexString()
+      console.log(req.body)
+      docker.run(Object.assign({"block": {"lang":req.body.lang,"script":req.body.script,"prescript":""},
+      "parameters": [{"key":"","value":""}],
+      "shared": [],
+      "booleans": [],
+      "multis": []
+    },{}),custom_id)
+
+
+    res.json(custom_id)
+
+})
+
 
 module.exports = DynamicParameterRoute;

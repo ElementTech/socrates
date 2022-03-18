@@ -3,4 +3,5 @@ export class Block {
    name!: string;
    script!: string;
    lang!: string;
+   output?: Array<string>;
 }

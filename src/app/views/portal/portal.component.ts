@@ -6,7 +6,7 @@ import { FileService } from './file-manager/service/file.service';
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
-  styleUrls: ['./portal.component.css'],
+  styleUrls: ['./portal.component.scss'],
   providers: [FileService]
 })
 export class PortalComponent implements OnInit {

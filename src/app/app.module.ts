@@ -59,8 +59,7 @@ const APP_CONTAINERS = [
   DefaultHeaderComponent,
   DefaultLayoutComponent,
 ];
-
-
+import {ScrollTopModule} from 'primeng/scrolltop';
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS],
   imports: [
@@ -91,6 +90,7 @@ const APP_CONTAINERS = [
     ProgressModule,
     BadgeModule,
     ListGroupModule,
+    ScrollTopModule,
     CardModule
   ],
   providers: [

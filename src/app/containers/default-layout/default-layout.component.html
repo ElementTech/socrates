@@ -43,8 +43,11 @@
   <div class="body flex-grow-1 px-3">
     <c-container fluid class="h-auto">
       <router-outlet></router-outlet>
+     
     </c-container>
   </div>
   <!--app footer-->
+  <p-scrollTop [threshold]="0"></p-scrollTop>
   <app-default-footer></app-default-footer>
 </div>
+

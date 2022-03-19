@@ -235,6 +235,8 @@ export class FlowRunComponent implements OnInit {
   showConsole(id)
   {
     this.unPaintSteps()
+    this.setRunID(id)
+
     // this.fetchMore(true)
     this.apiService.getFlowInstance(id).subscribe(data => {
         console.log("Show console of instance "+id+" is "+data.done)
@@ -251,7 +253,6 @@ export class FlowRunComponent implements OnInit {
         if (data.done == true)
         {
           this.fetchMore(true)
-          this.setRunID(id)
           this.paintSteps(data)
         }
         else
@@ -356,11 +357,13 @@ export class FlowRunComponent implements OnInit {
   {
     
     let updatedInList = false
+    this.showConsole(run_id)
     this.subscription = interval(1000)
     .pipe(
         switchMap(() => this.apiService.getFlowInstance(run_id)),
         map(response => {
-          this.setRunID(run_id)
+          // this.setRunID(run_id)
+          
           if (Object.keys(response ? response : []).length == 0)
           {
             return true;
@@ -371,6 +374,7 @@ export class FlowRunComponent implements OnInit {
             {
               this.fetchMore(true)
               updatedInList = true
+              
             }
       
             for (let index = 0; index < this.listItems.length; index++) {

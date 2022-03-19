@@ -3,6 +3,7 @@
   <mat-stepper [linear]="isLinear" #stepper>
     <mat-step [stepControl]="blockForm" errorMessage="Name and Language are required.">
 
+
       <div class="example-action-buttons">
         <button mat-button (click)="accordion.openAll()">Expand All</button>
         <button mat-button (click)="accordion.closeAll()">Collapse All</button>
@@ -83,7 +84,7 @@
           </div>
           <!-- <pre>{{blockForm.value | json}}</pre> -->
           <div class="row">
-            <div class="col-7">
+            <div class="">
               <table class="table table-bordered table-hover table-sm table-responsive">
                 <thead class="thead-default">
                   <tr>
@@ -160,148 +161,53 @@
         
             </div>
 
-            <div class="col" cdkDropListGroup>
-              <div style="background-color:#0b59a2a2;" class="w-100 d-flex justify-content-center">
-                <label class="p-2 text-white">Shared Parameters - Drag From the List Below</label>
-                <!-- <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItemShared()">Add Parameter</button> -->
-              </div>
-              <!-- <pre>{{blockForm.value | json}}</pre> -->
-           
-              <div
-              class="example-chip items-body"
-              cdkDropList 
-              cdkDropListOrientation="vertical"
-              cdkDropListSortingDisabled="true"
-              (cdkDropListDropped)="dropShared($event)"
-              [cdkDropListData]="sharedParams"
+            <div class="row">
+              <div class="col">
+                <p-pickList [source]="sharedParams" 
+                [responsive]="true"
+                filterBy="key"
+                sourceHeader="Shared Parameters" targetHeader="Chosen Shared"
+                (onMoveToTarget)="dropShared($event);" 
+                (onMoveAllToTarget)="dropShared($event)" 
+                (onMoveToSource)="removeShared($event);" 
+                (onMoveAllToSource)="removeShared($event)" 
+                [showSourceControls]="false"
+                stripedRows="true"
+                [showTargetControls]="false"
+                [target]="sharedBeforeForm"  [dragdrop]="true">
+                  <ng-template let-param pTemplate="item">
+                      <div>
+                          <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48"> -->
+                          <div>{{param.key}}</div>
+                      </div>
+                  </ng-template>
+              </p-pickList>
               
-              infinite-scroll
-              [infiniteScrollDistance]="scrollDistance"
-              [scrollWindow]="false"
-              [horizontal]="false"
-              [infiniteScrollUpDistance]="scrollUpDistance"
-              [infiniteScrollThrottle]="throttle"
-              (scrolled)="onScrollDown($event)"
-              (scrolledUp)="onUp($event)">
-  
-             
-              <div class="items-body-content example-box" style="max-height: 3em; border: 1px dotted black;"  *ngFor="let sha of sharedParams" cdkDrag>
-                <!-- <span *ngIf="sha.secret">{{sha.key}} - ***</span>
-                <span *ngIf="!sha.secret">{{sha.key}} - {{sha.value}}</span> -->
-                <span>{{sha.key}}</span>
-                <i class="fa-solid fa-hand-grab-o"></i>
               </div>
-  
-        
-              </div>
-                         
-              <div class="border border-dark text-center justify-content-center" style="min-height: 20em;display: flex;align-items: center;">
-                <mat-chip-list *ngIf="blockForm.get('shared')['controls'][0] == undefined" class="text-center">
-                  <mat-chip color="primary" selected>Drag a Shared Parameter Here</mat-chip>
-                </mat-chip-list>
-                
-                <table style="align-self: flex-start;" *ngIf="blockForm.get('shared')['controls'][0] != undefined" class="table table-bordered table-hover table-sm table-responsive">
-                  <thead class="thead-default">
-                    <tr>
-                      <th><i class="fa fa-hashtag" aria-hidden="true"></i> Key</th>
-                      <th><i class="fa fa-edit" aria-hidden="true"></i> Value</th>
-                      <th><i class="fa fa-key" aria-hidden="true"></i> Secret</th>
-                      <th><i class="fa fa-times" aria-hidden="true"></i> Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody
-                  cdkDropList 
-                  cdkDropListOrientation="vertical"
-                  cdkDropListSortingDisabled="true"
-                  (cdkDropListDropped)="dropShared($event)"
-                  [cdkDropListData]="shared"
-                  >
-                
-                    <tr formArrayName="shared" cdkDrag
-                    *ngFor="let item of blockForm.get('shared')['controls']; let i = index;"
-                    >
-                
-                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="key" required disabled></td>
-                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" [id]="i+'shared'" formControlName="value" required disabled></td>
-                      <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox disabled (change)="this.togglePass(i+'shared',item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+              <div class="col">
+                <p-pickList 
+                [responsive]="true"
+                filterBy="name"
+                sourceHeader="Dynamic Parameters" targetHeader="Chosen Dynamic"
+                (onMoveToTarget)="dropDynamic($event);" 
+                (onMoveAllToTarget)="dropDynamic($event)" 
+                (onMoveToSource)="removeDynamic($event);" 
+                (onMoveAllToSource)="removeDynamic($event)"
+                [showSourceControls]="false"
+                [showTargetControls]="false"
+                stripedRows="true"
+                [source]="dynamicParams" [target]="dynamicBeforeForm"  [dragdrop]="true">
+                  <ng-template let-param pTemplate="item">
+                      <div>
+                          <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48"> -->
+                          <div>{{param.name}}</div>
+                      </div>
+                  </ng-template>
+              </p-pickList>
               
-                    
-                        <td class="text-center align-middle"><button type="button" (click)="removeItemShared(i)" class="btn-danger" aria-label="Close">
-                          <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
-                      </tr>
-                  </tbody>
-                </table>   
-              </div>    
+              </div>
             </div>
-            <div class="col" cdkDropListGroup>
-              <div style="background-color:#0b59a2a2;" class="w-100 d-flex justify-content-center">
-                <label class="p-2 text-white">Dynamic Parameters - Drag From the List Below</label>
-                <!-- <button class="btn btn-outline-dark btn-sm" type="button" (click)="addItemShared()">Add Parameter</button> -->
-              </div>
-              <!-- <pre>{{blockForm.value | json}}</pre> -->
-           
-              <div
-              class="example-chip items-body"
-              cdkDropList 
-              cdkDropListOrientation="vertical"
-              cdkDropListSortingDisabled="true"
-              (cdkDropListDropped)="dropDynamic($event)"
-              [cdkDropListData]="dynamicParams"
-              
-              infinite-scroll
-              [infiniteScrollDistance]="scrollDistance"
-              [scrollWindow]="false"
-              [horizontal]="false"
-              [infiniteScrollUpDistance]="scrollUpDistance"
-              [infiniteScrollThrottle]="throttle"
-              (scrolled)="onScrollDown($event)"
-              (scrolledUp)="onUp($event)">
-  
-             
-              <div class="items-body-content example-box" style="max-height: 3em; border: 1px dotted black;"  *ngFor="let sha of dynamicParams" cdkDrag>
-                <!-- <span *ngIf="sha.secret">{{sha.key}} - ***</span>
-                <span *ngIf="!sha.secret">{{sha.key}} - {{sha.value}}</span> -->
-                <span>{{sha.name}}</span>
-                <i class="fa-solid fa-hand-grab-o"></i>
-              </div>
-  
-        
-              </div>
-                         
-              <div class="border border-dark text-center justify-content-center" style="min-height: 20em;display: flex;align-items: center;">
-                <mat-chip-list *ngIf="blockForm.get('dynamic')['controls'][0] == undefined" class="text-center">
-                  <mat-chip color="primary" selected>Drag a Dynamic Parameter Here</mat-chip>
-                </mat-chip-list>
-                
-                <table style="align-self: flex-start;" *ngIf="blockForm.get('dynamic')['controls'][0] != undefined" class="table table-bordered table-hover table-sm table-responsive">
-                  <thead class="thead-default">
-                    <tr>
-                      <th><i class="fa fa-hashtag" aria-hidden="true"></i> Name</th>
-                      <th><i class="fa fa-times" aria-hidden="true"></i> Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody
-                  cdkDropList 
-                  cdkDropListOrientation="vertical"
-                  cdkDropListSortingDisabled="true"
-                  (cdkDropListDropped)="dropDynamic($event)"
-                  [cdkDropListData]="dynamic"
-                  >
-                
-                    <tr formArrayName="dynamic" cdkDrag
-                    *ngFor="let item of blockForm.get('dynamic')['controls']; let i = index;"
-                    >
-                
-                      <td [formGroupName]="i" class="flex-grow-1"><input class="form-control" formControlName="name" required disabled></td>
-              
-                    
-                        <td class="text-center align-middle"><button type="button" (click)="removeItemDynamic(i)" class="btn-danger" aria-label="Close">
-                          <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
-                      </tr>
-                  </tbody>
-                </table>   
-              </div>    
-            </div>
+      
           </div>
         </mat-expansion-panel>
       </mat-accordion>
@@ -355,7 +261,7 @@
                       <i class="fa fa-github" aria-hidden="true"></i>
                       &nbsp;
                       Connect to a Github
-                   <button mat-mini-fab color="warning" (click)="disconnectGit()" style="background-color: maroon;"><mat-icon style="color: white;">link_off</mat-icon></button>
+                   <button mat-mini-fab color="warning" type="button" (click)="disconnectGit()" style="background-color: maroon;"><mat-icon style="color: white;">link_off</mat-icon></button>
                     
                   </mat-grid-tile-header>
               </mat-grid-tile>

@@ -15,7 +15,7 @@
   </ng-template> -->
 </p-toolbar>
 <p-table 
-
+[resizableColumns]="true"
 #dt [value]="flows"  [(selection)]="selectedFlows" dataKey="_id" styleClass="p-datatable-sm p-datatable-gridlines" [rowHover]="true"
 [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
 [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -32,13 +32,13 @@
 
 <ng-template pTemplate="header">
     <tr>
-        <th  style="width: 3rem">
+        <th   style="width: 3rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <th  style="width: 3rem">
+        <th   style="width: 3rem">
             Run
         </th>
-        <th  pSortableColumn="name">
+        <th   pSortableColumn="name">
             <div class="flex justify-content-between align-items-center">
                 Name
                 <p-sortIcon field="name"></p-sortIcon>
@@ -47,7 +47,7 @@
         </th>
 
     
-        <!-- <th pSortableColumn="lang">
+        <!-- <th  pSortableColumn="lang">
             <div class="flex justify-content-between align-items-center">
                 Language
                 <p-sortIcon field="lang"></p-sortIcon>
@@ -70,7 +70,7 @@
               </p-columnFilter>
             </div>
         </th> -->
-        <!-- <th pSortableColumn="date">
+        <!-- <th  pSortableColumn="date">
             <div class="flex justify-content-between align-items-center">
                 Date
                 <p-sortIcon field="date"></p-sortIcon>
@@ -78,7 +78,7 @@
             </div>
         </th> -->
 
-        <th  pSortableColumn="lastrun"  style="width: 10rem">
+        <th   pSortableColumn="lastrun"  style="width: 10rem">
           <div class="flex justify-content-between align-items-center">
               Last Run
               <p-sortIcon field="lastrun"></p-sortIcon>
@@ -93,7 +93,7 @@
               </p-columnFilter>
           </div>
         </th>
-        <th  pSortableColumn="on_error"  style="width: 10rem">
+        <th   pSortableColumn="on_error"  style="width: 10rem">
           <div class="flex justify-content-between align-items-center">
               On Error
               <p-sortIcon field="on_error"></p-sortIcon>
@@ -108,21 +108,21 @@
               </p-columnFilter>
           </div>
         </th>
-        <th pSortableColumn="numruns">
+        <th  pSortableColumn="numruns">
           <div class="flex justify-content-between align-items-center">
               # Runs
               <p-sortIcon field="numruns"></p-sortIcon>
               <p-columnFilter type="numeric" field="numruns" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
-        <th pSortableColumn="nodes">
+        <th  pSortableColumn="nodes">
           <div class="flex justify-content-between align-items-center">
               # Nodes
               <p-sortIcon field="nodes"></p-sortIcon>
               <p-columnFilter type="numeric" field="nodes" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>        
-        <!-- <th pSortableColumn="activity">
+        <!-- <th  pSortableColumn="activity">
             <div class="flex justify-content-between align-items-center">
                 Activity
                 <p-sortIcon field="activity"></p-sortIcon>
@@ -137,7 +137,7 @@
                 </p-columnFilter>
             </div>
         </th> -->
-        <th pSortableColumn="createdAt">
+        <th  pSortableColumn="createdAt">
           <div class="flex justify-content-between align-items-center">
               Created
               <p-sortIcon field="createdAt"></p-sortIcon>
@@ -145,7 +145,7 @@
               
           </div>
       </th>
-      <th pSortableColumn="updatedAt">
+      <th  pSortableColumn="updatedAt">
           <div class="flex justify-content-between align-items-center">
               Updated
               <p-sortIcon field="updatedAt"></p-sortIcon>

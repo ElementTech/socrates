@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import {DataViewModule} from 'primeng/dataview';
-
+import {PickListModule} from 'primeng/picklist';
 // CoreUI Modules
 import {
   
@@ -199,7 +199,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     CodemirrorModule,
     // Infinite
     InfiniteScrollModule,
-    NgxChartsModule
+    NgxChartsModule,
+    PickListModule
   ],
   declarations: [
     BlockListComponent,

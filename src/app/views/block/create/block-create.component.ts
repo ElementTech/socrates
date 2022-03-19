@@ -42,6 +42,14 @@ export class BlockCreateComponent implements OnInit {
   Images?: Observable<any>;
   imageUrls = {};
 
+
+  sharedParams: any = [];
+  dynamicParams: any = [];
+  sharedBeforeForm: any = [];
+  dynamicBeforeForm: any = [];
+  shared: FormArray;
+  dynamic: FormArray;
+
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('CodeMirror') private cm: any;
   submitted = false;
@@ -50,8 +58,7 @@ export class BlockCreateComponent implements OnInit {
 
   Language: String[] = []
   title = "New Block"
-  shared: FormArray;
-  dynamic: FormArray;
+
   booleans: FormArray;
   multis: any;
   githubConnected: any;
@@ -59,6 +66,7 @@ export class BlockCreateComponent implements OnInit {
     lineNumbers: true,
     theme: 'material'
   }
+  parametersForm: any;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -71,41 +79,42 @@ export class BlockCreateComponent implements OnInit {
     private actRoute: ActivatedRoute
   ) { 
    
-    
   }
 
-  sharedParams: any = [];
-  dynamicParams: any = [];
 
-  dropShared(event: CdkDragDrop<Object[]>) {
-    let item = Object(event.previousContainer.data[event.previousIndex])
+
+
+  dropShared(event) {
     this.shared = this.blockForm.get('shared') as FormArray;
-    let valid = true
-    this.shared.value.forEach((x, i) => {
-      if (x.key == item.key) valid = false;
-    });
-    if (valid)
-    {
+    event.items.forEach(element => {
       this.shared.push(this.fb.group({
-        key: item.key,
-        value: item.value,
-        secret: item.secret,
+        key: element.key,
+        value: element.value,
+        secret: element.secret,
       }));
-    }
-  }
-  dropDynamic(event: CdkDragDrop<Object[]>) {
-    let item = Object(event.previousContainer.data[event.previousIndex])
-    this.dynamic = this.blockForm.get('dynamic') as FormArray;
-    let valid = true
-    this.dynamic.value.forEach((x, i) => {
-      if (x.name == item.name) valid = false;
     });
-    if (valid)
-    {
+  }
+  removeShared(event)
+  {
+    this.shared = this.blockForm.get('shared') as FormArray;
+    event.items.forEach(element => {
+      this.shared.removeAt(this.shared.value.findIndex(item => item.key === element.key))
+    });
+  }
+  dropDynamic(event) {
+    this.dynamic = this.blockForm.get('dynamic') as FormArray;
+    event.items.forEach(element => {
       this.dynamic.push(this.fb.group({
-        name: item.name,
+        name: element.name,
       }));
-    }
+    })
+  }
+  removeDynamic(event)
+  {
+    this.dynamic = this.blockForm.get('dynamic') as FormArray;
+    event.items.forEach(element => {
+      this.shared.removeAt(this.shared.value.findIndex(item => item.name === element.name))
+    });
   }
 
   ngAfterViewChecked(){
@@ -117,6 +126,14 @@ export class BlockCreateComponent implements OnInit {
 
 
   ngOnInit() { 
+
+    this.apiService.getParameters().subscribe(data=>{
+      this.sharedParams = data
+    })
+    this.apiService.getDynamicParameters().subscribe(data=>{
+      this.dynamicParams = data
+    })
+
     this.Images = this.uploadService.getFiles();
     this.uploadService.getFiles().subscribe(data=>{
       data.forEach(element => {
@@ -130,7 +147,6 @@ export class BlockCreateComponent implements OnInit {
 
     })
     this.mainForm();
-    this.appendItems(0, this.sum);
     this.id = this.actRoute.snapshot.paramMap.get('id')
     this.apiService.getSettings().subscribe(settings=>{
         this.githubConnected = settings[0].github[0].githubConnected
@@ -156,7 +172,9 @@ export class BlockCreateComponent implements OnInit {
             this.blockForm.get('lang').setValue(data.lang)
             this.blockForm.get('image').setValue(data.image)
             this.shared = this.blockForm.get('shared') as FormArray;
+            this.dynamic = this.blockForm.get('dynamic') as FormArray;
             data.shared.forEach(item=>{
+              this.sharedBeforeForm.push(item.key)
               this.shared.push(this.fb.group({
                 key: item.key,
                 value: item.value,
@@ -165,6 +183,7 @@ export class BlockCreateComponent implements OnInit {
               }));
             });
             data.dynamic.forEach(item=>{
+              this.dynamicBeforeForm.push(item.name)
               this.dynamic.push(this.fb.group({
                 name: item.name,
                 _id: item._id
@@ -177,8 +196,8 @@ export class BlockCreateComponent implements OnInit {
               this.connectGit(this.githubList.find(element => element.path == data.github_path))
               this.blockForm.get('script').setValue(atob(this.githubList.find(element => element.path == data.github_path).content))
             }
-            this.blockForm.get('parameters').setValue(data.parameters)
-    
+            this.parameters = this.blockForm.get('parameters') as FormArray;
+            this.parameters.setValue(data.parameters)
             this.multis = this.blockForm.get('multis') as FormArray;
             data.multis.forEach(item=>{
               this.multis.push(this.fb.group({
@@ -265,30 +284,6 @@ export class BlockCreateComponent implements OnInit {
     
   }
 
-  appendItems(startIndex, endIndex) {
-    this.addItems(startIndex, endIndex, "push");
-  }
-
-  prependItems(startIndex, endIndex) {
-    this.addItems(startIndex, endIndex, "unshift");
-  }
-
-  onScrollDown(ev) {
-    // add another 20 items
-    const start = this.sum;
-    this.sum += 15;
-    this.appendItems(start, this.sum);
-
-    this.direction = "down";
-  }
-
-  onUp(ev) {
-    // const start = this.sum;
-    // this.sum += 20;
-    // this.prependItems(start, this.sum);
-    // this.direction = "up";
-  }
-
   mainForm() {
     this.blockForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -314,14 +309,7 @@ export class BlockCreateComponent implements OnInit {
     })
   }
 
-  // Choose designation with select dropdown
-  // updateProfile(e){
-  //   this.blockForm.get('designation').setValue(e, {
-  //     onlySelf: true
-  //   })
-  // }
 
-  // Getter to access form control
   get myForm(){
     return this.blockForm.controls;
   }

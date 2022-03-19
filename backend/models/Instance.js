@@ -19,11 +19,11 @@ let Instance = new Schema({
    multis: {
       type: [Object]
    },
-   desc: {
-      type: String
-   },
    dynamic: {
       type: [Object]
+   },
+   desc: {
+      type: String
    },
    block: {
       type: String

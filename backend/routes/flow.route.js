@@ -106,9 +106,14 @@ flowRoute.route('/run').post((req, res, next) => {
         return next(error)
       } else {
         const flow_run_id = new mongoose.Types.ObjectId().toHexString()
-        docker.run_flow(data,flow_run_id)
+        docker.run_flow({...data.toJSON(),
+          "parameters":req.body.parameters,
+          "shared":req.body.shared,
+          "booleans":req.body.booleans,
+          "multis":req.body.multis,
+          "dynamic":req.body.dynamic,
+        },flow_run_id)
         res.json(flow_run_id)
-        
       }
   });
 })

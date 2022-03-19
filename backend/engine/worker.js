@@ -94,7 +94,7 @@ function writeAndRun(path,folder_path,data,script)
       {
         workerData.instance.block.prescript = "echo No Pre-Script"
       }
-
+      console.log((workerData.custom_env.length != 0 ? workerData.custom_env : []))
       workerData.instance.parameters = 
       (workerData.custom_env.length != 0 ? workerData.custom_env : [])
       .concat(workerData.instance.parameters)

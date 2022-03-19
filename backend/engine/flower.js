@@ -28,6 +28,21 @@ socketTimeoutMS: 45000
 
 continue_tree = true
 
+Array.prototype.unique = function(first=true) {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if ((a[i] != undefined) && (a[j] != undefined))
+          {
+            if(a[i].key === a[j].key)
+            a.splice((first ? j-- : i--), 1);  
+          }
+      }
+  }
+
+  return a;
+};
+
 async function run_flow(){
 
   let run_ids = await Promise.resolve(asyncSearch(workerData.flow.steps,workerData.flow.steps.length))
@@ -44,7 +59,8 @@ async function run_flow(){
   // Calculate Env
   
   // Before
-  let extraEnv = []
+  let extraEnv = [].concat(workerData.flow.parameters,workerData.flow.shared,workerData.flow.booleans,workerData.flow.multis,
+    workerData.flow.dynamic != undefined ? (workerData.flow.dynamic != 0 ? workerData.flow.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : []).unique(true)   
   for (const step of run_ids) // During
   {
     if (continue_tree)
@@ -62,7 +78,7 @@ async function run_flow(){
             return error
           } else {
             stepRunIds.push(run_object.run_id)
-            engine.run(data,run_object.run_id,generalEnv.concat(extraEnv))
+            engine.run(data,run_object.run_id,generalEnv.concat(extraEnv).unique(false))
             
           }
         })
@@ -117,7 +133,9 @@ async function calculate_general_envs(run_ids){
           {
             console.log(error)
           }
-          generalEnvVars = generalEnvVars.concat(doc.parameters).concat(doc.shared).concat(doc.booleans).concat(doc.multis)
+          generalEnvVars = generalEnvVars.concat(doc.parameters).concat(doc.shared).concat(doc.booleans).concat(doc.multis).concat(
+            doc.dynamic != undefined ? (doc.dynamic != 0 ? doc.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : []
+          )
           console.log(generalEnvVars.length,run_ids.length)
           if ((generalEnvVars.length >= run_ids.length) || (generalEnvVars.length == 0))
           {

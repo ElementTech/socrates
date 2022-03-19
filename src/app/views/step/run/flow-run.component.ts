@@ -39,7 +39,10 @@ export class FlowRunComponent implements OnInit {
   isOpen: boolean;
   chosenFlowInstance: any;
   toggledNode: any;
-
+  info = [
+    {severity:'warn', summary:'Attention', detail:'Duplicate keys in instances will only consider first occurance in list'}
+  ];
+  Instance: any = {"parameters":[],"shared":[],"booleans":[],"multis":[],"dynamic":[]};
   ngOnInit(): void {
     this.mainForm();
     this.id = this.actRoute.snapshot.paramMap.get('id')
@@ -49,7 +52,20 @@ export class FlowRunComponent implements OnInit {
     this.apiService.getFlow(this.id).subscribe(data => {
       delete data.__v
       delete data._id
-      data.steps = data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
+      data.steps = data.steps.map(step=>step.map(inst=>
+        {
+          const tempInst = JSON.parse(inst).data
+          this.Instance.parameters = this.Instance.parameters.concat(tempInst.parameters.map(param=>Object.assign({"type":"text"},param)))
+          this.Instance.shared = this.Instance.shared.concat(tempInst.shared.map(param=>Object.assign({"type":"text"},param)))
+          this.Instance.booleans = this.Instance.booleans.concat(tempInst.booleans.map(param=>Object.assign({"type":"checkbox"},param)))
+          this.Instance.multis = this.Instance.multis.concat(tempInst.multis.map(param=>
+            Object.assign({"type":"multi","choices":this.getBlock(tempInst.block,param)},param)
+          ))
+          this.Instance.dynamic = this.Instance.dynamic.concat(tempInst.dynamic.map(param=>Object.assign({"type":"dynamic","choices":this.createDynamicKeyValue(param.name)},param)))
+          console.log(this.Instance.multis)
+          return tempInst;
+        }
+      ))
       console.log(data)
       this.flowForm.setValue(data)
       this.steps=data.steps
@@ -57,6 +73,69 @@ export class FlowRunComponent implements OnInit {
     });
     
   }
+
+  getBlock(id,param)
+  {
+    return new Promise(resolve=>{
+      this.apiService.getBlock(id).subscribe(data=>{
+        resolve(data.multis.filter(m=>m.key==param.key)[0].value)
+      })
+    })
+  }
+
+  createDynamicKeyValue(name): any {
+    
+    return new Promise(resolve=>{
+      this.apiService.getDynamicParameters().subscribe(params=>{
+        // @ts-ignore
+        const chosenParam = params.filter(param=>param.name==name)[0]
+
+
+        let output = []
+
+        this.apiService.runDynamicParameter({"id":chosenParam._id,"script":chosenParam.script,"lang":chosenParam.lang}).subscribe(run_id=>{
+          let subscription = interval(500)
+          .pipe(
+              switchMap(() => this.apiService.getDockerInstance(run_id)),
+              map(response => {
+                if (Object.keys(response ? response : []).length == 0)
+                {
+                  return true;
+                }
+                else
+                {
+    
+                  output = response.output[0] ? response.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',') : []
+      
+                  // this.scrollLogToBottom()
+                  if(response.done == false) 
+                  {
+                    return response.data;
+                  }
+                  else 
+                  { 
+                    return false; //or some error message or data.
+                  }
+                }
+              })
+          )
+          .subscribe(response => {
+             if (response == false)
+             {
+              subscription.unsubscribe();
+              console.log("done");
+              // @ts-ignore
+
+              resolve(output)
+    
+             }
+          });
+        })
+      })
+    })
+   
+  }
+
   Images?: Observable<any>;
   imageUrls = {};
   constructor(  
@@ -249,7 +328,8 @@ export class FlowRunComponent implements OnInit {
       catch{
         console.log("Unsubscribing")
       }
-      this.apiService.runFlow({id}).subscribe(
+      this.apiService.runFlow({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
+        "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
         (res) => {
           
           this._snackBar.open('Flow Run Started', 'Close', {

@@ -23,7 +23,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 export class InstanceRunComponent implements OnInit {
  
   dataSource: MatTableDataSource<any>;
-  Instance= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[],dynamic:[]};
+  Instance:any= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[],dynamic:[]};
   displayedColumns = ['name','desc','parameters'];
   output: String = "";
   runNumber: any;

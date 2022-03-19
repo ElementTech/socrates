@@ -104,6 +104,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { DialogContentExampleDialog, FlowRunComponent } from './run/flow-run.component';
 import { FlowStatsComponent } from './stats/flow-stats.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts'
+import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
 @NgModule({
   imports: [
     CommonModule,
@@ -192,6 +193,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts'
     MatDialogModule,
     MatTabsModule,
     MatAutocompleteModule,
+    PrimeAccordionModule,
     // Codemirror
     CodemirrorModule,
     // Infinite

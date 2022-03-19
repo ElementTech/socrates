@@ -9,5 +9,31 @@ if (environment.production) {
   enableProdMode();
 }
 
+//@ts-ignore
+Array.prototype.unique = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i]["key"] === a[j]["key"])
+              a.splice(j--, 1);
+      }
+  }
+
+  return a;
+};
+
+//@ts-ignore
+Array.prototype.uniqueDynamic = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i]["name"] === a[j]["name"])
+              a.splice(j--, 1);
+      }
+  }
+
+  return a;
+};
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

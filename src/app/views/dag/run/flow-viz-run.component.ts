@@ -41,7 +41,7 @@ export class FlowvizRunComponent implements OnInit {
   output: String = "";
   runNumber: any;
   info = [
-    {severity:'warn', summary:'Attention', detail:'Duplicate keys will only consider first occurance in list'}
+    {severity:'warn', summary:'Attention', detail:'Duplicate keys in instances will only consider first occurance in list'}
   ];
   Images?: Observable<any>;
   imageUrls = {};
@@ -794,3 +794,4 @@ export class DialogContentExampleDialog {
   ) {this.dialogRef.afterOpened().subscribe(() => setTimeout(() => this.ready = true, 0));}
   
 }
+

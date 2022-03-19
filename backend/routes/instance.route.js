@@ -168,6 +168,7 @@ instanceRoute.route('/run').post((req, res) => {
         data.shared = req.body.shared
         data.booleans = req.body.booleans
         data.multis = req.body.multis
+        data.dynamic = req.body.dynamic
         console.log(data)
         docker.run(data,custom_id)
         res.json(custom_id)

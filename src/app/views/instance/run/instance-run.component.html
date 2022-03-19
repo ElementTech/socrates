@@ -35,8 +35,8 @@
             
                 </ng-container>
                 <div class="spinner-item">
-                    <mat-progress-spinner [mode]="'indeterminate'" [diameter]="50" *ngIf="loading != false">     
-              </mat-progress-spinner>
+                    <mat-progress-spinner [mode]="'indeterminate'" [diameter]="50" *ngIf="loading">     
+                  </mat-progress-spinner>
                   </div>
             </mat-list>
         </cdk-virtual-scroll-viewport>
@@ -71,7 +71,7 @@
                   <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
                    Parameters:
                 </li>
-                  <p-table [value]="this.Instance.parameters.concat(this.Instance.shared).concat(this.Instance.booleans).concat(this.Instance.multis)" dataKey="key" responsiveLayout="scroll">
+                  <p-table [value]="this.Instance.parameters.concat(this.Instance.shared).concat(this.Instance.booleans).concat(this.Instance.multis).concat(this.Instance.dynamic)" dataKey="key" responsiveLayout="scroll">
                     <ng-template pTemplate="header">
                         <tr>
                             <th><i class="fa fa-key" aria-hidden="true"></i> Key</th>
@@ -83,12 +83,18 @@
                         <tr>
                             <td>
                                 <p-cellEditor>
-                                    <ng-template pTemplate="input">
+                                    <ng-template pTemplate="input" *ngIf="parameter.type != 'dynamic'">
                                         <input pInputText type="text" [(ngModel)]="parameter.key">
                                     </ng-template>
-                                    <ng-template pTemplate="output">
+                                    <ng-template pTemplate="input" *ngIf="parameter.type == 'dynamic'">
+                                    <input pInputText type="text" [(ngModel)]="parameter.name">
+                                  </ng-template>
+                                    <ng-template *ngIf="parameter.type != 'dynamic'" pTemplate="output">
                                         {{parameter.key}}
                                     </ng-template>
+                                    <ng-template *ngIf="parameter.type == 'dynamic'" pTemplate="output">
+                                      {{parameter.name}}
+                                  </ng-template>
                                 </p-cellEditor>
                             </td>
                             <td pEditableColumn class="editme">
@@ -110,9 +116,24 @@
                                           </mat-option>
                                         </mat-select>
                                       </mat-form-field>    
-                                    </ng-template>                         
+                                    </ng-template>                      
+                                    
+                                    <ng-template pTemplate="input" *ngIf="parameter.type == 'dynamic'">
+                                      
+                                      <mat-form-field appearance="outline">
+                                        <mat-label>{{parameter.name}}</mat-label>
+                                        <mat-select [(ngModel)]="parameter.output">
+                                          <mat-option *ngFor="let choice of parameter.choices | async" [value]="choice">
+                                            {{choice}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>    
+                                      
+                                    </ng-template>    
+
+
                                     <ng-template pTemplate="output">
-                                        {{parameter.secret ? "*********" : parameter.value}}
+                                        {{parameter.secret ? "*********" : (parameter.value ? parameter.value : parameter.output)}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -125,7 +146,12 @@
                                     <i *ngIf="parameter.type == 'text'" class="fa fa-file-text" aria-hidden="true"></i>  
                                     <i *ngIf="parameter.type == 'checkbox'" class="fa fa-check-square" aria-hidden="true"></i>
                                     <i *ngIf="parameter.type == 'multi'" class="fa fa-list-ul" aria-hidden="true"></i>
+                                    <i *ngIf="parameter.type == 'dynamic'" class="fa fa-rocket" aria-hidden="true"></i>
+                      
                                     {{parameter.type}}
+                                    <ng-container *ngIf="parameter.type == 'dynamic'">
+                                      <p-progressSpinner [style]="{width: '20px', height: '20px'}" *ngIf="!(parameter.choices | async)"></p-progressSpinner>
+                                    </ng-container>
                                   </ng-template>
                               </p-cellEditor>
                           </td>                            

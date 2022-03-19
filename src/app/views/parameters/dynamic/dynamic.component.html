@@ -42,7 +42,13 @@
               <td>{{parameter.name}}</td>
               <td><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{parameter.lang}}/{{parameter.lang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30"> &nbsp; {{parameter.lang}}</td>
               <td>{{parameter.script.split("\n").length}}</td>
-              <td>{{parameter.output ? parameter.output : ''}}</td>
+              <td>
+
+                <ng-container *ngIf="parameter.output != ''">
+                  <p-tag *ngFor="let out of parameter.output" styleClass="mr-2" value="{{out}}"></p-tag>
+                </ng-container>
+
+              </td>
               <td>
                 <button pButton pRipple type="button" icon="pi pi-trash" (click)="onRowEditRemove(parameter._id)" class="p-button-rounded p-button-text p-button-danger"></button>
                 <button pButton pRipple type="button" icon="pi pi-pencil" (click)="activeIndex = 1;editThis(parameter)" class="p-button-rounded p-button-text"></button>

@@ -56,6 +56,9 @@
                     <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
                       <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
                     </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='row.dynamic.length != 0'>
+                      <mat-chip color="warn" selected *ngFor="let param of row.dynamic">{{param.name}}</mat-chip>
+                    </ng-container>
                   </mat-chip-list>
           
                 </mat-cell>
@@ -188,6 +191,27 @@
                           <td></td>
 
                       </tr>
+
+                      <tr formArrayName="dynamic"
+                      *ngFor="let item of dynamicOptions; let i = index;"
+                      >
+                        <td [formGroupName]="i" class="">
+                      
+                            <input disabled class="form-control" formControlName="name" placeholder="name">
+                        </td>
+                        <td [formGroupName]="i" class="text-center align-middle">
+                          <mat-select formControlName="output" placeholder="output" *ngIf="item.output != undefined">
+                              <mat-option *ngFor="let choice of item.output" [value]="choice">
+                                  {{choice}}
+                              </mat-option>
+                          </mat-select>
+                          <p-progressSpinner [style]="{width: '50px', height: '50px'}" *ngIf="item.output == undefined"></p-progressSpinner>
+                        
+                        </td>
+                          <td></td>
+
+                      </tr>
+                      
 
                         
                   </tbody>

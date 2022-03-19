@@ -22,6 +22,9 @@ let Instance = new Schema({
    desc: {
       type: String
    },
+   dynamic: {
+      type: [Object]
+   },
    block: {
       type: String
    },

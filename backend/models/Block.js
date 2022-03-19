@@ -19,6 +19,9 @@ let Block = new Schema({
    multis: {
       type: [Object]
    },
+   dynamic: {
+      type: [Object]
+   },
    script:{
       type: String
    },

@@ -161,6 +161,9 @@
               <ng-container *ngFor="let param of block.parameters.concat(block.shared).concat(block.multis).concat(block.booleans)">
                 <p-tag *ngIf="param.key" [style.margin-right]="'.5rem'" value="{{param.key}}"></p-tag>
               </ng-container>
+              <ng-container *ngFor="let param of block.dynamic">
+                <p-tag *ngIf="param.name" [style.margin-right]="'.5rem'" severity="success" value="{{param.name}}"></p-tag>
+              </ng-container>
           </td>
           <!-- <td>
               <span class="p-column-title">Activity</span>

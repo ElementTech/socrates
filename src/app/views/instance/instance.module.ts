@@ -100,7 +100,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -122,6 +122,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     IconModule,
     ListGroupModule,
     ProgressModule,
+    ProgressSpinnerModule,
     SpinnerModule,
     TabsModule,
     NavModule,

@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, NgZone, ViewEncapsulation,ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Component, OnInit, NgZone, ViewEncapsulation,ViewChild, ChangeDetectorRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { FormArray } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -11,7 +11,7 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
-import { Observable } from 'rxjs';
+import { interval, map, Observable, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {v4 as uuidv4} from 'uuid';
 @Component({
@@ -54,6 +54,8 @@ export class InstanceCreateComponent implements OnInit {
   booleans: FormArray;
   multis: FormArray;
   multisOptions: Array<any>;
+  dynamic: FormArray;
+  dynamicOptions: Array<any>;
   constructor(
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,
@@ -62,7 +64,8 @@ export class InstanceCreateComponent implements OnInit {
     private ngZone: NgZone,
     private _snackBar: MatSnackBar,
     private apiService: ApiService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) { 
     this.mainForm();
     this.readBlock();
@@ -81,9 +84,12 @@ export class InstanceCreateComponent implements OnInit {
         this.instanceForm.get('name').setValue(data.name)
         this.instanceForm.get('desc').setValue(data.desc)
         this.instanceForm.get('block').setValue(data.block)
+
         this.apiService.getBlock(data.block).subscribe(block=>{
           this.multisOptions=block.multis
         })
+        this.dynamicOptions=[]
+
         this.shared = this.instanceForm.get('shared') as FormArray;
         data.shared.forEach(item=>{
           console.log(item)
@@ -112,6 +118,14 @@ export class InstanceCreateComponent implements OnInit {
             value: item.value
           }));
         });
+
+        this.dynamic = this.instanceForm.get('dynamic') as FormArray;
+        data.dynamic.forEach(item=>{
+          this.dynamic.push(this.fb.group({
+            name: item.name,
+          }));
+        });
+
         this.booleans = this.instanceForm.get('booleans') as FormArray;
         data.booleans.forEach(item=>{
           this.booleans.push(this.fb.group({
@@ -167,6 +181,8 @@ export class InstanceCreateComponent implements OnInit {
       ]),
       multis: this.fb.array([
       ]),
+      dynamic: this.fb.array([
+      ]),
       desc: [''],
       image: [''],
       block: ['',[Validators.required]]
@@ -210,6 +226,58 @@ export class InstanceCreateComponent implements OnInit {
       key: key,
       value: value
     });
+  }
+  createDynamicKeyValue(name): any {
+    
+    return new Promise(resolve=>{
+      this.apiService.getDynamicParameters().subscribe(params=>{
+        // @ts-ignore
+        const chosenParam = params.filter(param=>param.name==name)[0]
+
+
+        let output = []
+
+        this.apiService.runDynamicParameter({"id":chosenParam._id,"script":chosenParam.script,"lang":chosenParam.lang}).subscribe(run_id=>{
+          let subscription = interval(500)
+          .pipe(
+              switchMap(() => this.apiService.getDockerInstance(run_id)),
+              map(response => {
+                if (Object.keys(response ? response : []).length == 0)
+                {
+                  return true;
+                }
+                else
+                {
+    
+                  output = response.output[0] ? response.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',') : []
+      
+                  // this.scrollLogToBottom()
+                  if(response.done == false) 
+                  {
+                    return response.data;
+                  }
+                  else 
+                  { 
+                    return false; //or some error message or data.
+                  }
+                }
+              })
+          )
+          .subscribe(response => {
+             if (response == false)
+             {
+              subscription.unsubscribe();
+              console.log("done");
+              // @ts-ignore
+
+              resolve(output)
+    
+             }
+          });
+        })
+      })
+    })
+   
   }
   addItem(): void {
     this.parameters = this.instanceForm.get('parameters') as FormArray;
@@ -260,6 +328,8 @@ export class InstanceCreateComponent implements OnInit {
     this.booleans.clear()
     this.multis = this.instanceForm.get('multis') as FormArray;
     this.multis.clear()
+    this.dynamic = this.instanceForm.get('dynamic') as FormArray;
+    this.dynamic.clear()
     this.paramCount = 0
     this.clickedRows = row;
 
@@ -297,7 +367,39 @@ export class InstanceCreateComponent implements OnInit {
         this.paramCount+=1
       } 
     });
+    this.dynamicOptions = row.dynamic
+    for (let index = 0; index < row.dynamic.length; index++) {
+      const element = row.dynamic[index];
+      this.dynamic.push(this.fb.group({
+        name: element.name,
+        output: []
+      }))
 
+      this.createDynamicKeyValue(element.name).then((resolved)=>{
+        // console.log(this.instanceForm,index,resolved)
+        //@ts-ignore
+        for (let control of this.instanceForm.get('dynamic')['controls']) {
+          if (control.controls.name.value == element.name)
+          {
+            this.dynamicOptions = this.dynamicOptions.map(obj=>{
+              if (obj.name==element.name)
+              {
+                return Object.assign({"output":resolved},obj)
+              }
+              else
+              {
+                return obj
+              }
+            })
+            control.get("output").setValue(resolved)
+          }
+       }
+
+        console.log(resolved)
+        // this.dynamic.push(resolved)
+      })
+      this.paramCount+=1
+    }
 
   }
 

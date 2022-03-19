@@ -198,6 +198,9 @@
             <p-tag *ngIf="param.key && !param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}={{param.value}}"></p-tag>
             <p-tag *ngIf="param.key && param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}=****"></p-tag>
           </ng-container>
+          <ng-container *ngFor="let param of instance.dynamic">
+            <p-tag *ngIf="param.name" [style.margin-right]="'.5rem'" severity="success" value="{{param.name}}={{param.output}}"></p-tag>
+          </ng-container>
         </td>
         <!-- <td>
             <span class="p-column-title">Activity</span>
@@ -214,7 +217,6 @@
             <div class="multi-button">
                 <button class="special" [routerLink]="['/instance/create/', instance._id]"><i class="fas fa-cog"></i> Edit</button>
                 <button class="special" [routerLink]="['/instance/stats/', instance._id]"><i class="fas fa-line-chart"></i> Stats</button>
-
                 <button class="special" [routerLink]="['/step/list/']"><i class="fas fa-stairs"></i> Steps <p-badge [value]="instance.flow_count" severity="primary" [style.margin-left]="'.5em'"></p-badge></button>
                 <button class="special" [routerLink]="['/dag/list/']"><i class="fas fa-diagram-project"></i> DAGs <p-badge [value]="instance.flowviz_count" severity="primary" [style.margin-left]="'.5em'"></p-badge></button>
             </div>

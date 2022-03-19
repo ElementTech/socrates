@@ -398,11 +398,11 @@
               <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"] || blockForm.controls["booleans"] || blockForm.controls["multis"] || blockForm.controls["dynamic"]'>
 
                 <mat-chip-list aria-label="Parameters">
-                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key != ""'>
-                    <mat-chip color="primary" selected *ngFor="let param of blockForm.controls['parameters'].value">{{param.key}}</mat-chip>
-                  </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key == "" && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
                     <mat-chip *ngFor="let param of blockForm.controls['parameters'].value">No Parameters</mat-chip>
+                  </ng-container>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key != ""'>
+                    <mat-chip color="primary" selected *ngFor="let param of blockForm.controls['parameters'].value">{{param.key}}</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["shared"].length != 0'>
                     <mat-chip color="accent" selected *ngFor="let param of blockForm.controls['shared'].value">{{param.key}}</mat-chip>

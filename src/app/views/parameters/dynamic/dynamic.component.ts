@@ -48,7 +48,7 @@ export class DynamicParametersComponent {
     
     this.dynamicParameterForm = this.fb.group({
       name: ['', [Validators.required]],
-      script: ['echo "::set-output result=[a,b,c]"', [Validators.required,Validators.pattern('::set-output result=\\[.+\\]')]],
+      script: ['echo "::set-output result=[a,b,c]"', [Validators.required]],
       lang: ['', [Validators.required]],
       output: ['']
     })
@@ -76,32 +76,40 @@ export class DynamicParametersComponent {
   }
 
   onSubmit() {
-    if (this.parameters.filter(param=>param.name==this.dynamicParameterForm.value.name).length == [0])
+    if (this.dynamicParameterForm.valid)
     {
-      this.apiService.createDynamicParameter(Object.assign(this.dynamicParameterForm.value,{"output":""})).subscribe(
-        data=>{
-          this.apiService.getDynamicParameters().subscribe(data => {this.parameters = data});
-          this.messageService.add({severity:'success', summary: 'Success', detail:'Parameter is Created'});
-        },
-        error=>{
-          console.log(error)
-          this.messageService.add({severity:'error', summary: 'Error', detail:'Parameter Could not be Created'});
-        }
-      );
+      if (this.parameters.filter(param=>param.name==this.dynamicParameterForm.value.name).length == [0])
+      {
+        this.apiService.createDynamicParameter(Object.assign(this.dynamicParameterForm.value,{"output":""})).subscribe(
+          data=>{
+            this.apiService.getDynamicParameters().subscribe(data => {this.parameters = data});
+            this.messageService.add({severity:'success', summary: 'Success', detail:'Parameter is Created'});
+          },
+          error=>{
+            console.log(error)
+            this.messageService.add({severity:'error', summary: 'Error', detail:'Parameter Could not be Created'});
+          }
+        );
+      }
+      else
+      {
+        this.apiService.updateDynamicParameter(this.chosenEditID,this.dynamicParameterForm.value).subscribe(
+          data=>{
+            this.apiService.getDynamicParameters().subscribe(data => {this.parameters = data});
+            this.messageService.add({severity:'success', summary: 'Success', detail:'Parameter is Updated'});
+          },
+          error=>{
+            console.log(error)
+            this.messageService.add({severity:'error', summary: 'Error', detail:'Parameter Could not be Updated'});
+          }
+        );
+      }
     }
     else
     {
-      this.apiService.updateDynamicParameter(this.chosenEditID,this.dynamicParameterForm.value).subscribe(
-        data=>{
-          this.apiService.getDynamicParameters().subscribe(data => {this.parameters = data});
-          this.messageService.add({severity:'success', summary: 'Success', detail:'Parameter is Updated'});
-        },
-        error=>{
-          console.log(error)
-          this.messageService.add({severity:'error', summary: 'Error', detail:'Parameter Could not be Updated'});
-        }
-      );
+      this.messageService.add({severity:'error', summary: 'Error', detail:'Parameter Form Invalid'});
     }
+
 
   }
   chosenRunParameter: any = {};

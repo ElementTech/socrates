@@ -23,7 +23,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 export class InstanceRunComponent implements OnInit {
  
   dataSource: MatTableDataSource<any>;
-  Instance= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[]};
+  Instance= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[],dynamic:[]};
   displayedColumns = ['name','desc','parameters'];
   output: String = "";
   runNumber: any;
@@ -265,9 +265,8 @@ export class InstanceRunComponent implements OnInit {
     catch{
       console.log("Unsubscribing")
     }
-    console.log({"text":this.Instance.parameters,"shared":this.Instance.shared,"bool":this.Instance.booleans,"multis":this.Instance.multis})
     this.apiService.runInstance({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
-    "multis":this.Instance.multis}).subscribe(
+    "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
       (res) => {
        
         this._snackBar.open('Instance Run Started', 'Close', {
@@ -352,7 +351,7 @@ export class InstanceRunComponent implements OnInit {
         data.shared = data.shared.map(param=>Object.assign({"type":"text"},param))
         data.booleans = data.booleans.map(param=>Object.assign({"type":"checkbox"},param))
         data.multis = data.multis.map(param=>Object.assign({"type":"multi","choices":block.multis.filter(m=>m.key==param.key)[0].value},param))
-        console.log(data.multis)
+        data.dynamic = data.dynamic.map(param=>Object.assign({"type":"dynamic","choices":this.createDynamicKeyValue(param.name)},param))
         this.Instance = data
       })
 
@@ -362,6 +361,61 @@ export class InstanceRunComponent implements OnInit {
     });
     
   }
+
+
+  createDynamicKeyValue(name): any {
+    
+    return new Promise(resolve=>{
+      this.apiService.getDynamicParameters().subscribe(params=>{
+        // @ts-ignore
+        const chosenParam = params.filter(param=>param.name==name)[0]
+
+
+        let output = []
+
+        this.apiService.runDynamicParameter({"id":chosenParam._id,"script":chosenParam.script,"lang":chosenParam.lang}).subscribe(run_id=>{
+          let subscription = interval(500)
+          .pipe(
+              switchMap(() => this.apiService.getDockerInstance(run_id)),
+              map(response => {
+                if (Object.keys(response ? response : []).length == 0)
+                {
+                  return true;
+                }
+                else
+                {
+    
+                  output = response.output[0] ? response.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',') : []
+      
+                  // this.scrollLogToBottom()
+                  if(response.done == false) 
+                  {
+                    return response.data;
+                  }
+                  else 
+                  { 
+                    return false; //or some error message or data.
+                  }
+                }
+              })
+          )
+          .subscribe(response => {
+             if (response == false)
+             {
+              subscription.unsubscribe();
+              console.log("done");
+              // @ts-ignore
+
+              resolve(output)
+    
+             }
+          });
+        })
+      })
+    })
+   
+  }
+  
 
   fetchMore(zero): void {
     if (zero == true)
@@ -434,6 +488,10 @@ export class InstanceRunComponent implements OnInit {
 
     this.loading = true;
     this.apiService.getDockerInstanceByInstanceID(this.id).subscribe(data => {
+      if (data.length == 0)
+      {
+        this.loading = false
+      }
       this.showConsole(this.run == null ? data[0]._id: this.run)
       if (this.alreadyLoaded <= data.length)
       {

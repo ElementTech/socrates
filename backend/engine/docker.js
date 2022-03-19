@@ -36,7 +36,7 @@ const run_flow = async (flow,flow_run_id) => {
 }
 
 const run_flowviz = async (flowviz,flowviz_run_id) => {
-  
+console.log("flowviz",flowviz)
   const worker = new Worker("./engine/flower-viz.js", {workerData: {flow: JSON.parse(JSON.stringify(flowviz)),flow_run_id: flowviz_run_id}});
 
   worker.once("message", result => {

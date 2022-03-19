@@ -48,9 +48,13 @@ function run_flow(){
       {runtime: engine.duration(startTime,Date.now())}
     )
   }, 1000);
+  console.log(workerData.flow)
   const first_linked_nodes = workerData.flow.links.filter(link=>link.source=="node0").map(link_node=>link_node.target)
   first_linked_nodes.forEach(node_name => {
-    run_node(node_name,workerData.flow.nodes.filter(node=>node.id==node_name)[0].data.name,workerData.flow.links.filter(link=>link.source==node_name).map(link_node=>link_node.target),refreshTime,[])
+    run_node(node_name,workerData.flow.nodes.filter(node=>node.id==node_name)[0].data.name,workerData.flow.links.filter(link=>link.source==node_name).map(link_node=>link_node.target),refreshTime,
+    [].concat(workerData.flow.parameters,workerData.flow.shared,workerData.flow.booleans,workerData.flow.multis,
+      workerData.flow.dynamic != undefined ? (workerData.flow.dynamic != 0 ? workerData.flow.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : [])
+    )
   });
 }
 

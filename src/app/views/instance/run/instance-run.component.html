@@ -133,7 +133,7 @@
 
 
                                     <ng-template pTemplate="output">
-                                        {{parameter.secret ? "*********" : (parameter.value ? parameter.value : parameter.output)}}
+                                        {{parameter.secret ? "*********" : (parameter.value ? parameter.value : (parameter.value == false ? 'false' : parameter.output))}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>

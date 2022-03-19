@@ -82,7 +82,13 @@ flowvizRoute.route('/run').post((req, res, next) => {
       } else {
 
         const flowviz_run_id = new mongoose.Types.ObjectId().toHexString()
-        docker.run_flowviz(data,flowviz_run_id)
+        docker.run_flowviz({...data.toJSON(),
+          "parameters":req.body.parameters,
+          "shared":req.body.shared,
+          "booleans":req.body.booleans,
+          "multis":req.body.multis,
+          "dynamic":req.body.dynamic,
+        },flowviz_run_id)
         res.json(flowviz_run_id)
         
       }

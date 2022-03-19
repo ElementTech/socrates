@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule} from 'primeng/progressspinner'
-
 // CoreUI Modules
 import {
   AccordionModule,
@@ -108,6 +107,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph'
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {OverlayModule} from '@angular/cdk/overlay';
 import {ListboxModule} from 'primeng/listbox';
+import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
 
 @NgModule({
   imports: [
@@ -168,6 +168,7 @@ import {ListboxModule} from 'primeng/listbox';
     MenubarModule,
     SelectButtonModule,
     SplitButtonModule,
+    PrimeAccordionModule,
     // Angular Material
     DragDropModule,
     MatNativeDateModule,

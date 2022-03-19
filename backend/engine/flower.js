@@ -59,6 +59,7 @@ async function run_flow(){
   // Calculate Env
   
   // Before
+  console.log(workerData.flow.dynamic)
   let extraEnv = [].concat(workerData.flow.parameters,workerData.flow.shared,workerData.flow.booleans,workerData.flow.multis,
     workerData.flow.dynamic != undefined ? (workerData.flow.dynamic != 0 ? workerData.flow.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : []).unique(true)   
   for (const step of run_ids) // During

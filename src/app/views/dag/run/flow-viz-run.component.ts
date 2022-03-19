@@ -623,7 +623,7 @@ export class FlowvizRunComponent implements OnInit {
                 //@ts-ignore
                 this.Instance.multis = this.Instance.multis.concat(inst.multis.map(param=>Object.assign({"type":"multi","choices":inst.block.multis.filter(m=>m.key==param.key)[0].value},param)))
                 //@ts-ignore
-                this.Instance.dynamic = this.Instance.dynamic.concat(inst.dynamic.map(param=>Object.assign({"type":"dynamic","choices":this.createDynamicKeyValue(param.name)},param)))
+                this.Instance.dynamic = this.Instance.dynamic.concat(inst.dynamic.map(param=>Object.assign({"type":"dynamic","key":param.name,"choices":this.createDynamicKeyValue(param.name)},param)))
               }
             })
         })

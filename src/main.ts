@@ -35,5 +35,26 @@ Array.prototype.uniqueDynamic = function() {
   return a;
 };
 
+//@ts-ignore
+Array.prototype.addNotFirst = function() {
+  let seen = []
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+     if (!seen.includes(a[i]["key"]))
+     {  
+        seen.push(a[i]["key"])
+        a[i].first = false
+     }
+     else
+     {
+        a[i].first = true
+     }
+  }
+
+  return a;
+};
+
+
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

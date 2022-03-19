@@ -63,7 +63,7 @@
              Parameters:
           </li>
           <p-messages [(value)]="info" [enableService]="false"></p-messages>
-            <p-table [value]="this.Instance.parameters.concat(this.Instance.shared).concat(this.Instance.booleans).concat(this.Instance.multis).concat(this.Instance.dynamic)" dataKey="key" responsiveLayout="scroll">
+            <p-table [value]="this.Instance.parameters.concat(this.Instance.shared).concat(this.Instance.booleans).concat(this.Instance.multis).concat(this.Instance.dynamic).addNotFirst()" dataKey="key" responsiveLayout="scroll">
               <ng-template pTemplate="header">
                   <tr>
                       <th><i class="fa fa-key" aria-hidden="true"></i> Key</th>
@@ -73,7 +73,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-parameter>
                   <tr>
-                      <td>
+                      <td [ngStyle]="{'background-color': parameter.first ? 'lightgrey' : 'initial'}">
                           <p-cellEditor>
                               <ng-template pTemplate="input" *ngIf="parameter.type != 'dynamic'">
                                   <input pInputText type="text" [(ngModel)]="parameter.key">
@@ -82,27 +82,29 @@
                               <input pInputText type="text" [(ngModel)]="parameter.name">
                             </ng-template>
                               <ng-template *ngIf="parameter.type != 'dynamic'" pTemplate="output">
-                                  {{parameter.key}}
+                                <del *ngIf="parameter.first">{{parameter.key}}</del>
+                                <div *ngIf="!parameter.first">{{parameter.key}}</div>
                               </ng-template>
                               <ng-template *ngIf="parameter.type == 'dynamic'" pTemplate="output">
-                                {{parameter.name}}
+                                <del *ngIf="parameter.first">{{parameter.name}}</del>
+                                <div *ngIf="!parameter.first">{{parameter.name}}</div>
                             </ng-template>
                           </p-cellEditor>
                       </td>
-                      <td pEditableColumn class="editme">
+                      <td pEditableColumn class="editme" [ngStyle]="{'background-color': parameter.first ? 'lightgrey' : 'initial'}">
                           <p-cellEditor>
                               <ng-template pTemplate="input" *ngIf="parameter.type == 'text'">
-                                  <input pInputText [type]="parameter.secret ? 'password' : 'text'" [(ngModel)]="parameter.value">
+                                  <input pInputText [type]="parameter.secret ? 'password' : 'text'" [(ngModel)]="parameter.value"  [disabled]="parameter.first">
                               </ng-template>
                               <ng-template pTemplate="input" *ngIf="parameter.type == 'checkbox'">
-                                <mat-checkbox [(ngModel)]="parameter.value">
+                                <mat-checkbox [(ngModel)]="parameter.value" [disabled]="parameter.first">
                                   {{parameter.value}}
                                 </mat-checkbox>
                               </ng-template>     
                               <ng-template pTemplate="input" *ngIf="parameter.type == 'multi'">
                                 <mat-form-field appearance="outline">
                                   <mat-label>{{parameter.key}}</mat-label>
-                                  <mat-select [(ngModel)]="parameter.value">
+                                  <mat-select [(ngModel)]="parameter.value"   [disabled]="parameter.first">
                                     <mat-option *ngFor="let choice of parameter.choices.split(',')" [value]="choice">
                                       {{choice}}
                                     </mat-option>
@@ -112,9 +114,9 @@
                               
                               <ng-template pTemplate="input" *ngIf="parameter.type == 'dynamic'">
                                 
-                                <mat-form-field appearance="outline">
+                                <mat-form-field appearance="outline"  >
                                   <mat-label>{{parameter.name}}</mat-label>
-                                  <mat-select [(ngModel)]="parameter.output">
+                                  <mat-select [(ngModel)]="parameter.output"  [disabled]="parameter.first">
                                     <mat-option *ngFor="let choice of parameter.choices | async" [value]="choice">
                                       {{choice}}
                                     </mat-option>
@@ -125,11 +127,13 @@
     
     
                               <ng-template pTemplate="output">
-                                {{parameter.secret ? "*********" : (parameter.value ? parameter.value : (parameter.value == false ? 'false' : parameter.output))}}
+                                <del *ngIf="parameter.first">{{parameter.secret ? "*********" : (parameter.value ? parameter.value : (parameter.value == false ? 'false' : parameter.output))}}</del>
+                                <div *ngIf="!parameter.first">{{parameter.secret ? "*********" : (parameter.value ? parameter.value : (parameter.value == false ? 'false' : parameter.output))}}</div>
+                                
                               </ng-template>
                           </p-cellEditor>
                       </td>
-                      <td>
+                      <td [ngStyle]="{'background-color': parameter.first ? 'lightgrey' : 'initial'}">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="text" [(ngModel)]="parameter.type">
@@ -268,7 +272,7 @@
                 <svg:rect
                     [attr.width]="'5em'"
                     [attr.height]="'5em'"
-                    [attr.fill]="'black'"
+                    [attr.fill]="'lightgrey'"
                     id="{{node.label}}rect"
                 />
     

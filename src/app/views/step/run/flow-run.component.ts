@@ -61,7 +61,7 @@ export class FlowRunComponent implements OnInit {
           this.Instance.multis = this.Instance.multis.concat(tempInst.multis.map(param=>
             Object.assign({"type":"multi","choices":this.getBlock(tempInst.block,param)},param)
           ))
-          this.Instance.dynamic = this.Instance.dynamic.concat(tempInst.dynamic.map(param=>Object.assign({"type":"dynamic","choices":this.createDynamicKeyValue(param.name)},param)))
+          this.Instance.dynamic = this.Instance.dynamic.concat(tempInst.dynamic.map(param=>Object.assign({"type":"dynamic","key":param.name,"choices":this.createDynamicKeyValue(param.name)},param)))
           console.log(this.Instance.multis)
           return tempInst;
         }

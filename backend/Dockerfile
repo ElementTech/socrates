@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:17.7.2-alpine
 
 RUN apk add --update docker
 # Create app directory

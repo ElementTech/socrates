@@ -8,9 +8,8 @@
 /bazel-out
 /.data
 # dependencies
-/node_modules
-**/backend/node_modules
-backend/node_modules
+**/node_modules
+node_modules
 package-lock.json
 
 # profiling files

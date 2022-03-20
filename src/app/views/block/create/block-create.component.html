@@ -77,7 +77,7 @@
               <mat-icon>list</mat-icon>
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <div class="d-flex justify-content-start mb-2 p-2 text-white" style="background-color: #0B5AA2;">
+          <div class="d-flex justify-content-start mb-2 p-2 text-white" style="background-color: #303c54;">
             <button class="btn btn-outline-light btn-sm" style="margin-right:1em" type="button" (click)="addItem()"><i class="fa fa-file-text-o" aria-hidden="true"></i> Add Text Parameter</button>
             <button class="btn btn-outline-light btn-sm" style="margin-right:1em" type="button" (click)="addBooleanItem()"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Add Boolean Parameter</button>
             <button class="btn btn-outline-light btn-sm" type="button" (click)="addMultiItem()"><i class="fa fa-check-square" aria-hidden="true"></i> Add Multi-Choice Parameter</button>
@@ -95,7 +95,9 @@
                   </tr>
                   </thead>
                   <tbody>
-                    
+                    <ng-container *ngIf="blockForm.get('parameters')['controls'][0] != undefined">
+
+                  
                     <tr formArrayName="parameters"
                       *ngFor="let item of blockForm.get('parameters')['controls']; let i = index;">
                       <td [formGroupName]="i" class="flex-grow-1">
@@ -106,16 +108,17 @@
                         </mat-form-field>
                       </td>
                       <td [formGroupName]="i" class="flex-grow-1">
-                        <mat-form-field appearance="outline" id="compact-input">
+                        <mat-form-field appearance="outline" id="compact-input" >
                           <mat-label>Value</mat-label>
-                          <input matInput class="firstvalue" formControlName="value" [id]="i" placeholder="value">
+                          <input matInput class="firstvalue" formControlName="value"  [type]="blockForm.get('parameters')['controls'][i].value.secret ? 'password' : 'text'" [id]="i" placeholder="value">
                           <mat-icon matSuffix>edit_note</mat-icon>
                         </mat-form-field>
                       </td>
-                      <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox (change)="this.togglePass(i,item.controls.secret.value)" formControlName="secret" color="primary"></mat-checkbox></td>
+                      <td [formGroupName]="i" class="text-center align-middle"> <mat-checkbox formControlName="secret" color="primary"></mat-checkbox></td>
                       <td class="text-center align-middle"><button type="button" (click)="removeItem(i)" class="btn-danger" aria-label="Close">
                         <i class="fa-solid fa-times" aria-hidden="true"></i></button></td>
                     </tr>
+                  </ng-container>
                     <tr formArrayName="booleans" 
                     *ngFor="let item of blockForm.get('booleans')['controls']; let i = index;"
                     >
@@ -255,7 +258,7 @@
           </mat-chip-list>
         </div>
         <div class="list-group w-25" *ngIf="this.githubConnected">
-          <mat-grid-list cols="1" rowHeight="fit" style="background-color: #0B5AA2;" [style.height]="'3em'" [gutterSize]="'1px'">
+          <mat-grid-list cols="1" rowHeight="fit" style="background-color: #303c54;" [style.height]="'3em'" [gutterSize]="'1px'">
               <mat-grid-tile [colspan]="1" [rowspan]="1">
                   <mat-grid-tile-header  class="d-flex flex-row justify-content-between">
                       <i class="fa fa-github" aria-hidden="true"></i>
@@ -269,7 +272,7 @@
           <a [id]="git.path" (click)="connectGit(git)" *ngFor="let git of githubList" class="choosegit list-group-item list-group-item-action">{{git.path}}</a>
         </div>
         <div class="list-group w-25" *ngIf="!this.githubConnected">
-          <mat-grid-list cols="1" rowHeight="fit" style="background-color: #0B5AA2;" [style.height]="'3em'" [gutterSize]="'1px'">
+          <mat-grid-list cols="1" rowHeight="fit" style="background-color: #303c54;" [style.height]="'3em'" [gutterSize]="'1px'">
               <mat-grid-tile [colspan]="1" [rowspan]="1">
                   <mat-grid-tile-header  class="d-flex flex-row justify-content-between">
                       <i class="fa fa-github" aria-hidden="true"></i>
@@ -304,10 +307,10 @@
               <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"] || blockForm.controls["booleans"] || blockForm.controls["multis"] || blockForm.controls["dynamic"]'>
 
                 <mat-chip-list aria-label="Parameters">
-                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key == "" && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].length != 0 && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
                     <mat-chip *ngFor="let param of blockForm.controls['parameters'].value">No Parameters</mat-chip>
                   </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].value[0].key != ""'>
+                  <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].length != 0'>
                     <mat-chip color="primary" selected *ngFor="let param of blockForm.controls['parameters'].value">{{param.key}}</mat-chip>
                   </ng-container>
                   <ng-container aria-label="Parameters" *ngIf='blockForm.controls["shared"].length != 0'>

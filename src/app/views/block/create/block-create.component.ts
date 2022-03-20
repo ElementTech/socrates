@@ -117,13 +117,6 @@ export class BlockCreateComponent implements OnInit {
     });
   }
 
-  ngAfterViewChecked(){
-    for (let index = 0; index < this.blockForm.get('shared').value.length; index++) {
-      this.togglePass(index+"shared",this.blockForm.get('shared').value[index].secret)
-    }
-    
-  }
-
 
   ngOnInit() { 
 
@@ -173,8 +166,9 @@ export class BlockCreateComponent implements OnInit {
             this.blockForm.get('image').setValue(data.image)
             this.shared = this.blockForm.get('shared') as FormArray;
             this.dynamic = this.blockForm.get('dynamic') as FormArray;
+            this.sharedBeforeForm = data.shared
             data.shared.forEach(item=>{
-              this.sharedBeforeForm.push(item.key)
+              this.sharedParams = this.sharedParams.filter(el => el.key !== item.key)
               this.shared.push(this.fb.group({
                 key: item.key,
                 value: item.value,
@@ -182,8 +176,10 @@ export class BlockCreateComponent implements OnInit {
                 _id: item._id
               }));
             });
+            this.dynamicBeforeForm = data.dynamic
             data.dynamic.forEach(item=>{
-              this.dynamicBeforeForm.push(item.name)
+              this.dynamicParams = this.dynamicParams.filter(el => el.name !== item.name)
+              this.dynamicParams.splice(this.dynamicParams.indexOf(item),1)
               this.dynamic.push(this.fb.group({
                 name: item.name,
                 _id: item._id
@@ -197,7 +193,17 @@ export class BlockCreateComponent implements OnInit {
               this.blockForm.get('script').setValue(atob(this.githubList.find(element => element.path == data.github_path).content))
             }
             this.parameters = this.blockForm.get('parameters') as FormArray;
-            this.parameters.setValue(data.parameters)
+            data.parameters.forEach(item=>{
+              if (item.key != undefined)
+              {
+                this.parameters.push(this.fb.group({
+                  key: item.key,
+                  value: item.value,
+                  secret: item.secret
+                }));
+              }
+     
+            });
             this.multis = this.blockForm.get('multis') as FormArray;
             data.multis.forEach(item=>{
               this.multis.push(this.fb.group({
@@ -238,58 +244,15 @@ export class BlockCreateComponent implements OnInit {
     });
     
   }
-  togglePass(i,checkbox) {
-    try {
-      if (checkbox)
-      {
-        document.getElementById(i).setAttribute("type","password");
-      }
-      else
-      {
-        document.getElementById(i).setAttribute("type","text");
-      }
-    } catch (error) {
-      if (checkbox)
-      {
-        document.getElementsByClassName("firstvalue")[0].setAttribute("type","password");
-      }
-      else
-      {
-        document.getElementsByClassName("firstvalue")[0].setAttribute("type","text");
-      }
-    }
-
-  }
 
 
-
-  addItems(startIndex, endIndex, _method) {
-
-    this.apiService.getParameters().subscribe(data=>{
-      // @ts-ignore
-      for (let i = startIndex; i < endIndex && i < data.length; ++i) {
-        this.sharedParams[_method](data[i]);
-       
-      }
-    })
-    this.apiService.getDynamicParameters().subscribe(data=>{
-      // @ts-ignore
-      for (let i = startIndex; i < endIndex && i < data.length; ++i) {
-        this.dynamicParams[_method](data[i]);
-       
-      }
-      console.log(this.dynamicParams)
-    })
-
-    
-  }
 
   mainForm() {
     this.blockForm = this.fb.group({
       name: ['', [Validators.required]],
       //email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
       parameters: this.fb.array([
-        this.createItem()
+
       ]),
       shared: this.fb.array([
       ]),

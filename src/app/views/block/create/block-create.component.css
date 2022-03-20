@@ -37,7 +37,7 @@
   width: 300px;
   background:  #fffffe;
   box-shadow: 0 3px 6px rgba(black,0.16), 0 3px 6px rgba(black,0.23);
-  border-top: 10px solid #0B5AA2;
+  border-top: 10px solid #303c54;
  
 }
 
@@ -72,13 +72,13 @@
 }
 
 .items-body-content:hover {
-  border: 1px solid #0B5AA2 !important;
+  border: 1px solid #303c54 !important;
 }
 
 .items-body-content i {
   align-self: center;
   font-size: 15px;
-  color: #0B5AA2;
+  color: #303c54;
   font-weight: bold;
   animation: icon 1.5s infinite forwards;
 }

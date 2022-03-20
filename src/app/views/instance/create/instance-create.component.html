@@ -40,26 +40,13 @@
               <ng-container matColumnDef="parameters">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Parameters</mat-header-cell>
                 <mat-cell *matCellDef="let row" [style.color]="row.parameters">   
-                  <mat-chip-list>
-                    <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key != ""'>
-                      <mat-chip color="primary" selected *ngFor="let param of row.parameters">{{param.key}}</mat-chip>
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='row.parameters[0].key == "" && row.shared.length == 0 && row.booleans.length == 0 && row.multis.length == 0'>
-                      <mat-chip *ngFor="let param of row.parameters">No Parameters</mat-chip>
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='row.shared.length != 0'>
-                      <mat-chip color="accent" selected *ngFor="let param of row.shared">{{param.key}}</mat-chip>
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='row.booleans.length != 0'>
-                      <mat-chip color="secondary" selected *ngFor="let param of row.booleans">{{param.key}}</mat-chip>
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='row.multis.length != 0'>
-                      <mat-chip color="warning" selected *ngFor="let param of row.multis">{{param.key}}</mat-chip>
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='row.dynamic.length != 0'>
-                      <mat-chip color="warn" selected *ngFor="let param of row.dynamic">{{param.name}}</mat-chip>
-                    </ng-container>
-                  </mat-chip-list>
+                  <ng-container *ngFor="let param of row.parameters.concat(row.shared).concat(row.multis).concat(row.booleans)">
+                    <p-tag *ngIf="param.key && !param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}={{param.value}}"></p-tag>
+                    <p-tag *ngIf="param.key && param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}=****"></p-tag>
+                  </ng-container>
+                  <ng-container *ngFor="let param of row.dynamic">
+                    <p-tag *ngIf="param.name" [style.margin-right]="'.5rem'" severity="success" value="{{param.name}}"></p-tag>
+                  </ng-container>
           
                 </mat-cell>
               </ng-container>

@@ -47,5 +47,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-backend/resources/static/assets/uploads
-backend/resources/artifacts
+backend/resources/static/assets/uploads/*
+backend/resources/artifacts/*

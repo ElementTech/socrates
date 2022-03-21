@@ -21,7 +21,7 @@ flowRoute.route('/create').post((req, res, next) => {
     newSteps.push(tempStep)
   })
   req.body.steps = newSteps
-  Flow.create(req.body, (error, data) => {
+  Flow.create(Object.assign(req.body,{user: req.user._id}), (error, data) => {
     if (error) {
       res.status(400).json(error)
       return next(error)
@@ -33,7 +33,7 @@ flowRoute.route('/create').post((req, res, next) => {
 
 // Get All Flows
 flowRoute.route('/').get((req, res, next) => {
-  Flow.find((error, data) => {
+  Flow.find({}).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
     } else {
@@ -44,7 +44,7 @@ flowRoute.route('/').get((req, res, next) => {
 
 // Get single flow
 flowRoute.route('/read/:id').get((req, res, next) => {
-  Flow.findById(req.params.id, (error, data) => {
+  Flow.findById(req.params.id).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
     } else {

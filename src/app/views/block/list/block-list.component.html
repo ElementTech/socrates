@@ -128,6 +128,7 @@
                 <!-- <p-columnFilter type="date" field="updatedAt" display="menu" class="ml-auto"></p-columnFilter> -->
             </div>
         </th>
+        <th>Created By</th>
           <th  ></th>
       </tr>
   </ng-template>
@@ -158,7 +159,7 @@
           </td> -->
           <td>
               <span class="p-column-title">Github</span>
-              <span [class]="'block-badge github-' + block.github">{{block.github}}</span>
+              <p-tag *ngIf="block.github" styleClass="bg-dark" icon="pi pi-github" value="{{block.github_path}}"></p-tag>
           </td>
           <td>
               <ng-container *ngFor="let param of block.parameters.concat(block.shared).concat(block.multis).concat(block.booleans)">
@@ -177,6 +178,9 @@
           </td>
           <td>
             {{block.updatedAt | date:'short'}}
+          </td>
+          <td>
+            {{block.user != undefined ? block.user.name : ''}}
           </td>
           <td style="text-align: center">
       
@@ -199,7 +203,7 @@
 </ng-template>
   <ng-template pTemplate="emptymessage">
       <tr>
-          <td colspan="4">No blocks found.</td>
+          <td colspan="20">No blocks found.</td>
       </tr>
   </ng-template>
   </p-table>

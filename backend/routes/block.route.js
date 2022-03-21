@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 blockRoute.use(auth)
 // Add Block
 blockRoute.route('/create').post((req, res, next) => {
-  Block.create(req.body, (error, data) => {
+  Block.create(Object.assign(req.body,{user: req.user._id}), (error, data) => {
     if (error) {
       res.status(400).json(error)
       return next(error)
@@ -22,7 +22,7 @@ blockRoute.route('/create').post((req, res, next) => {
 
 // Get All Blocks
 blockRoute.route('/').get((req, res, next) => {
-  Block.find((error, data) => {
+  Block.find({}).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
     } else {
@@ -37,7 +37,7 @@ blockRoute.route('/').get((req, res, next) => {
 
 // Get single block
 blockRoute.route('/read/:id').get((req, res, next) => {
-  Block.findById(req.params.id, (error, data) => {
+  Block.findById(req.params.id).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
     } else {

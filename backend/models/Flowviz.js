@@ -23,6 +23,10 @@ let Flowviz = new Schema({
       type: String,
       required: false
    },
+   user: {
+      type: Schema.Types.ObjectId, ref:  "User",
+      required: false
+   }
 }, {
    collection: 'flows_viz',
    timestamps: true,

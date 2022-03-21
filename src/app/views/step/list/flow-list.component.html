@@ -152,6 +152,7 @@
               <!-- <p-columnFilter type="date" field="updatedAt" display="menu" class="ml-auto"></p-columnFilter> -->
           </div>
       </th>
+      <th>Created By</th>
         <th></th>
     </tr>
 </ng-template>
@@ -224,6 +225,9 @@
         <td>
           {{flow.updatedAt | date:'short'}}
         </td>
+        <td>
+            {{flow.user != undefined ? flow.user.name : ''}}
+          </td>
         <td style="text-align: center">
     
             <div class="multi-button">

@@ -11,7 +11,7 @@ const auth = require("../middleware/auth");
 instanceRoute.use(auth)
 // Add Instance
 instanceRoute.route('/create').post((req, res, next) => {
-  Instance.create(req.body, (error, data) => {
+  Instance.create(Object.assign(req.body,{user: req.user._id}), (error, data) => {
     if (error) {
       res.status(400).json(error)
       return next(error)
@@ -26,7 +26,7 @@ instanceRoute.route('/').get((req, res,next) => {
   Instance.find().populate({
     path: 'block',
     model: 'Block' 
-    }).exec(function(error, data){
+    }).populate('user').exec(function(error, data){
     if (error) {
       return next(error)
     } else {
@@ -47,7 +47,7 @@ instanceRoute.route('/').get((req, res,next) => {
 
 // Get All Instances
 instanceRoute.route('/block/read/:id').get((req, res,next) => {
-  Instance.find({ block: req.params.id }).sort({_id: -1}).exec(function(error,data)
+  Instance.find({ block: req.params.id }).populate('user').sort({_id: -1}).exec(function(error,data)
   { 
     if (error) {
       return next(error)

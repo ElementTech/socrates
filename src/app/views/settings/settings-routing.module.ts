@@ -26,7 +26,8 @@ const routes: Routes = [
           title: 'Github',
           breadcrumb: {
             info: 'github'
-          }
+          },
+          role: 'ROLE_USER'
         },
       },
       {

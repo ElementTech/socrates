@@ -11,7 +11,7 @@ const auth = require("../middleware/auth");
 flowvizRoute.use(auth)
 // Add Flowviz
 flowvizRoute.route('/create').post((req, res, next) => {
-  Flowviz.create(req.body, (error, data) => {
+  Flowviz.create(Object.assign(req.body,{user: req.user._id}), (error, data) => {
     if (error) {
       console.log(error)
       res.status(400).json(error)
@@ -24,7 +24,7 @@ flowvizRoute.route('/create').post((req, res, next) => {
 
 // Get All Flowvizs
 flowvizRoute.route('/').get((req, res, next) => {
-  Flowviz.find((error, data) => {
+  Flowviz.find({}).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
     } else {
@@ -35,7 +35,7 @@ flowvizRoute.route('/').get((req, res, next) => {
 
 // Get single flowviz
 flowvizRoute.route('/read/:id').get((req, res, next) => {
-  Flowviz.findById(req.params.id, (error, data) => {
+  Flowviz.findById(req.params.id).populate('user').exec((error, data) => {
     if (error) {
       console.log(error)
       return next(error)

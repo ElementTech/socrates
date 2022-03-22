@@ -84,6 +84,7 @@ export class InstanceCreateComponent implements OnInit {
         this.instanceForm.get('name').setValue(data.name)
         this.instanceForm.get('desc').setValue(data.desc)
         this.instanceForm.get('block').setValue(data.block)
+        this.instanceForm.get('image').setValue(data.image)
 
         this.apiService.getBlock(data.block).subscribe(block=>{
           this.multisOptions=block.multis
@@ -320,6 +321,7 @@ export class InstanceCreateComponent implements OnInit {
   }
 
   onClickRow(row){
+    row = row.value
     this.parameters = this.instanceForm.get('parameters') as FormArray;
     this.parameters.clear()
     this.shared = this.instanceForm.get('shared') as FormArray;
@@ -336,7 +338,7 @@ export class InstanceCreateComponent implements OnInit {
     this.isDisabled = false;
 
     this.instanceForm.get('block').setValue(row._id);
-    this.stepper.next()
+    // this.stepper.next()
     row.parameters.forEach(element => {
       if (element)
       {
@@ -444,7 +446,8 @@ export class InstanceCreateComponent implements OnInit {
       }
     }
   }
-
+  selectedBlock: any;
+  selectedImage: any;
 
   readBlock(){
     this.apiService.getBlocks().subscribe((data) => {

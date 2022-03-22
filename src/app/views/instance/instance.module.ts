@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
-
+import {ListboxModule} from 'primeng/listbox';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -98,7 +98,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
-
+import {CheckboxModule} from 'primeng/checkbox';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -116,6 +116,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     CardModule,
     CollapseModule,
     GridModule,
+    CheckboxModule,
     UtilitiesModule,
     SharedModule,
     ListGroupModule,
@@ -126,6 +127,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     SpinnerModule,
     TabsModule,
     NavModule,
+    ListboxModule,
     TooltipModule,
     CarouselModule,
     FormModule,

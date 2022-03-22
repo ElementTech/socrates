@@ -114,7 +114,7 @@ export class BlockCreateComponent implements OnInit {
   {
     this.dynamic = this.blockForm.get('dynamic') as FormArray;
     event.items.forEach(element => {
-      this.shared.removeAt(this.shared.value.findIndex(item => item.name === element.name))
+      this.dynamic.removeAt(this.shared.value.findIndex(item => item.name === element.name))
     });
   }
 

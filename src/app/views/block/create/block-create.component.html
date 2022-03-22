@@ -25,7 +25,7 @@
           </div>
           
           <div class="col-12">
-            <p-dropdown  appendTo="body" [options]="Language" [(ngModel)]="selectedLang"  style="z-index: 1000;"  formControlName="lang" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Code Language">
+            <p-dropdown  appendTo="body" [options]="Language" [(ngModel)]="selectedLang"   formControlName="lang" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Code Language">
                 <ng-template pTemplate="selectedItem">
                     <div class="d-flex align-middle"  *ngIf="selectedLang">
                       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{selectedLang}}/{{selectedLang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30">
@@ -42,7 +42,7 @@
           </div>
 
           <div class="col-12">
-            <p-dropdown  appendTo="body" [options]="Images | async"  style="z-index: 1000;" [(ngModel)]="selectedImage"  formControlName="image" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an Icon">
+            <p-dropdown  appendTo="body" [options]="Images | async"  [(ngModel)]="selectedImage"  formControlName="image" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an Icon">
                 <ng-template pTemplate="selectedItem">
                     <div class="d-flex align-middle"  *ngIf="selectedImage">
                       <img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[selectedImage]">
@@ -298,6 +298,9 @@
                 </ng-container>
                 <ng-container aria-label="Parameters" *ngIf='blockForm.controls["shared"].length != 0'>
                   <mat-chip color="accent" selected *ngFor="let param of blockForm.controls['shared'].value">{{param.key}}</mat-chip>
+                </ng-container>
+                <ng-container aria-label="Parameters" *ngIf='blockForm.controls["multis"].length != 0'>
+                  <mat-chip color="accent" selected *ngFor="let param of blockForm.controls['multis'].value">{{param.key}}</mat-chip>
                 </ng-container>
                 <ng-container aria-label="Parameters" *ngIf='blockForm.controls["booleans"].length != 0'>
                   <mat-chip color="warning" selected *ngFor="let param of blockForm.controls['booleans'].value">{{param.key}}</mat-chip>

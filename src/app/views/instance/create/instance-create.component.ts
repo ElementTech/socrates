@@ -6,8 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Block } from 'src/app/model/Block';
-import { MatStepper } from '@angular/material/stepper';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+
 import { DomSanitizer } from '@angular/platform-browser';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
@@ -19,12 +18,7 @@ import {v4 as uuidv4} from 'uuid';
   templateUrl: './instance-create.component.html',
   styleUrls: ['./instance-create.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: {showError: true},
-    },
-  ]
+
 })
 
 export class InstanceCreateComponent implements OnInit {  
@@ -50,7 +44,6 @@ export class InstanceCreateComponent implements OnInit {
   title = "New Instance"
   shared: FormArray;
   id = "";
-  @ViewChild('stepper') stepper: MatStepper;
   booleans: FormArray;
   multis: FormArray;
   multisOptions: Array<any>;
@@ -121,11 +114,44 @@ export class InstanceCreateComponent implements OnInit {
         });
 
         this.dynamic = this.instanceForm.get('dynamic') as FormArray;
-        data.dynamic.forEach(item=>{
+
+        this.dynamicOptions = data.dynamic.map(d=>{delete d.output;return d})
+        for (let index = 0; index < data.dynamic.length; index++) {
+          const element = data.dynamic[index];
           this.dynamic.push(this.fb.group({
-            name: item.name,
-          }));
-        });
+            name: element.name,
+            output: []
+          }))
+    
+          this.createDynamicKeyValue(element.name).then((resolved)=>{
+            // console.log(this.instanceForm,index,resolved)
+            //@ts-ignore
+            for (let control of this.dynamic['controls']) {
+              //@ts-ignore
+              if (control.controls.name.value == element.name)
+              {
+                this.dynamicOptions = this.dynamicOptions.map(obj=>{
+                  console.log(obj.name,element.name)
+                  if (obj.name==element.name)
+                  {
+                    console.log("returning")
+                    return Object.assign({"output":resolved},obj)
+                  }
+                  else
+                  {
+                    return obj
+                  }
+                })
+                control.get("output").setValue(resolved)
+              }
+           }
+    
+            console.log(resolved)
+            // this.dynamic.push(resolved)
+          })
+          this.paramCount+=1
+        }
+    
 
         this.booleans = this.instanceForm.get('booleans') as FormArray;
         data.booleans.forEach(item=>{
@@ -288,12 +314,7 @@ export class InstanceCreateComponent implements OnInit {
     this.parameters.removeAt(index)
     
   }
-  ngAfterViewInit(){
-    if (this.id != "")
-    {
-      this.stepper.next()
-    }
-  }
+
   ngAfterViewChecked(){
     for (let index = 0; index < this.instanceForm.get("parameters").value.length; index++) {
       let element = this.instanceForm.get("parameters").value[index];
@@ -338,7 +359,6 @@ export class InstanceCreateComponent implements OnInit {
     this.isDisabled = false;
 
     this.instanceForm.get('block').setValue(row._id);
-    // this.stepper.next()
     row.parameters.forEach(element => {
       if (element)
       {

@@ -45,7 +45,7 @@
       
 
       <div class="col-12">
-        <p-dropdown  appendTo="body" [options]="Images | async"  style="z-index: 1000;" [(ngModel)]="selectedImage"  formControlName="image" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an Icon">
+        <p-dropdown  appendTo="body" [options]="Images | async"  [(ngModel)]="selectedImage"  formControlName="image" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an Icon">
             <ng-template pTemplate="selectedItem">
                 <div class="d-flex align-middle"  *ngIf="selectedImage">
                   <img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[selectedImage]">

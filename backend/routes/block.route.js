@@ -56,6 +56,102 @@ blockRoute.route('/update/:id').put((req, res, next) => {
       res.status(400).json(error)
       return next(error);
     } else {
+      Instance.find({ 
+        block:req.params.id
+      }, (err, docs) => {
+         if(err){
+             console.log(`Error: ` + err)
+         } else{
+           if(docs.length === 0){
+               console.log("no instances to update")
+           } else{
+              docs.forEach(inst => {
+                let tempParams=inst.parameters
+                let tempShared=inst.shared
+                let tempBool=inst.booleans
+                let tempMulti=inst.multis
+                let tempDynamic=inst.dynamic
+                inst.parameters.forEach(param=>{
+                  if (!req.body.parameters.map(bparam=>bparam.key).includes(param.key))
+                  {
+                    tempParams = tempParams.filter(item => item.key !== param.key)
+                  }
+                })
+                req.body.parameters.forEach(bparam=>{
+                  if (!tempParams.map(param=>param.key).includes(bparam.key))
+                  {
+                    tempParams.push(bparam)
+                  }
+                })
+                inst.shared.forEach(param=>{
+                  if (!req.body.shared.map(bparam=>bparam.key).includes(param.key))
+                  {
+                    tempShared = tempShared.filter(item => item.key !== param.key)
+                  }
+                })
+                req.body.shared.forEach(bparam=>{
+                  if (!tempShared.map(param=>param.key).includes(bparam.key))
+                  {
+                    tempShared.push(bparam)
+                  }
+                })           
+                inst.booleans.forEach(param=>{
+                  if (!req.body.booleans.map(bparam=>bparam.key).includes(param.key))
+                  {
+                    tempBool = tempBool.filter(item => item.key !== param.key)
+                  }
+                })
+                req.body.booleans.forEach(bparam=>{
+                  if (!tempBool.map(param=>param.key).includes(bparam.key))
+                  {
+                    tempBool.push(bparam)
+                  }
+                })           
+                inst.multis.forEach(param=>{
+                  if (!req.body.multis.map(bparam=>bparam.key).includes(param.key))
+                  {
+                    tempMulti = tempMulti.filter(item => item.key !== param.key)
+                  }
+                })
+                req.body.multis.forEach(bparam=>{
+                  if (!tempMulti.map(param=>param.key).includes(bparam.key))
+                  {
+                    bparam.value = bparam.value.split(",")[0]
+                    tempMulti.push(bparam)
+                  }
+                })    
+                inst.dynamic.forEach(param=>{
+                  if (!req.body.dynamic.map(bparam=>bparam.name).includes(param.name))
+                  {
+                    tempDynamic = tempDynamic.filter(item => item.name !== param.name)
+                  }
+                })
+                req.body.dynamic.forEach(bparam=>{
+                  if (!tempDynamic.map(param=>param.name).includes(bparam.name))
+                  {
+                    tempDynamic.push(bparam)
+                  }
+                })   
+                
+                Instance.findOneAndUpdate({
+                    _id: inst._id,
+                }, {
+                    parameters: tempParams,
+                    shared: tempShared,
+                    booleans: tempBool,
+                    mutlis: tempMulti,
+                    dynamic: tempDynamic
+                }, (err, doc) => {
+                    if (err) {
+                        console.log(`Error: ` + err)
+                    } else {
+                        console.log("Updated relevant instances")
+                    }
+                });
+             });
+           }
+         }
+      });
       res.json(data)
       console.log('Data updated successfully')
     }

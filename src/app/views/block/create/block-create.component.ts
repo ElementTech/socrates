@@ -55,8 +55,9 @@ export class BlockCreateComponent implements OnInit {
   submitted = false;
   blockForm: FormGroup;
   parameters: FormArray;
-
-  Language: String[] = []
+  selectedLang: String;
+  selectedImage: String;
+  Language: Object[] = []
   title = "New Block"
 
   booleans: FormArray;
@@ -239,7 +240,7 @@ export class BlockCreateComponent implements OnInit {
   this.apiService.getSettings().subscribe(data=>{
 
       data[0]["langs"].forEach(element => {
-        this.Language.push(element["lang"])
+        this.Language.push({"name":element["lang"]})
       });
     });
     

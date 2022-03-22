@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import {DataViewModule} from 'primeng/dataview';
 import {PickListModule} from 'primeng/picklist';
+import {FieldsetModule} from 'primeng/fieldset';
+
 // CoreUI Modules
 import {
   
@@ -102,9 +104,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { BlockCreateComponent } from './create/block-create.component';
 import {BlockStatsComponent} from './stats/block-stats.component'
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
+import {CheckboxModule} from 'primeng/checkbox';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
@@ -115,6 +116,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AccordionModule,
     BadgeModule,
     BreadcrumbModule,
+    CheckboxModule,
     ButtonModule,
     CardModule,
     CollapseModule,
@@ -140,6 +142,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     DocsComponentsModule,
     // PRIME NG
     TableNGModule,
+    FieldsetModule,
     CalendarModule,
     SliderModule,
     DialogModule,

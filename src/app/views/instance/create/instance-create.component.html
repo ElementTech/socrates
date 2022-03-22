@@ -76,9 +76,9 @@
         </div>
     </mat-step>
       <mat-step [stepControl]="instanceForm" errorMessage="Name and Language is required.">
-        <div class="text-center">
-          <button mat-button matStepperPrevious type="button">Back</button>
-          <button mat-raised-button color="primary" matStepperNext type="button">Next</button>
+        <div class="d-flex justify-content-start">
+          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id == ''">Create</button>
+          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id != ''">Update</button>
         </div>
           <ng-template matStepLabel>Fill in the Instance's Information</ng-template>
           <div class="row">
@@ -214,56 +214,45 @@
               <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
             </mat-form-field>
           </div>
-
+          <table class="table table-hover">
+            <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Parameters</th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ instanceForm.controls['name'].value }}</td>
+                <td>
+                  
+                  
+                  <mat-chip-list aria-label="Parameters">
+                    <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length != 0'>
+                      <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['parameters'].value">{{param.key}}={{param.value}}</mat-chip>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length == 0 && instanceForm.controls["shared"].value.length == 0
+                    && instanceForm.controls["booleans"].value.length == 0 && instanceForm.controls["multis"].value.length == 0'>
+                      <mat-chip>No Parameters</mat-chip>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["shared"].value.length != 0'>
+                      <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}={{param.value}}</mat-chip>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["booleans"].value.length != 0'>
+                      <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['booleans'].value">{{param.key}}={{param.value}}</mat-chip>
+                    </ng-container>
+                    <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["multis"].value.length != 0'>
+                      <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['multis'].value">{{param.key}}={{param.value}}</mat-chip>
+                    </ng-container>
+                  </mat-chip-list>
+  
+                </td>
+              </tr>
+            </tbody>
+          </table>
   
       </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel>Review</ng-template>
-        <table class="table table-hover">
-          <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Parameters</th>
-              </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ instanceForm.controls['name'].value }}</td>
-              <td>{{ instanceForm.controls['desc'].value }}</td>
-              <td>
-                
-                
-                <mat-chip-list aria-label="Parameters">
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length != 0'>
-                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['parameters'].value">{{param.key}}={{param.value}}</mat-chip>
-                  </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["parameters"].value.length == 0 && instanceForm.controls["shared"].value.length == 0
-                  && instanceForm.controls["booleans"].value.length == 0 && instanceForm.controls["multis"].value.length == 0'>
-                    <mat-chip>No Parameters</mat-chip>
-                  </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["shared"].value.length != 0'>
-                    <mat-chip color="accent" selected *ngFor="let param of instanceForm.controls['shared'].value">{{param.key}}={{param.value}}</mat-chip>
-                  </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["booleans"].value.length != 0'>
-                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['booleans'].value">{{param.key}}={{param.value}}</mat-chip>
-                  </ng-container>
-                  <ng-container aria-label="Parameters" *ngIf='instanceForm.controls["multis"].value.length != 0'>
-                    <mat-chip color="primary" selected *ngFor="let param of instanceForm.controls['multis'].value">{{param.key}}={{param.value}}</mat-chip>
-                  </ng-container>
-                </mat-chip-list>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div>
-          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id == ''">Create</button>
-          <button class="btn btn-primary btn-lg" type="submit" *ngIf="this.id != ''">Update</button>
-          <button mat-button matStepperPrevious type="button">Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
-        </div>
-      </mat-step>
+ 
     </mat-stepper>
   </form>

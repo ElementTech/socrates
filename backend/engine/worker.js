@@ -11,6 +11,7 @@ const fs = require('fs');
 dbConfig = require('../database/db');
 var engine = require('./docker');
 const cupr = require('cup-readdir')
+const lang = workerData.instance.block.lang.toLowerCase()
 
 mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
@@ -22,15 +23,17 @@ connectTimeoutMS: 20000,
 socketTimeoutMS: 45000
 }).then(() => {
       console.log('Database sucessfully connected')
-   },
-   error => {
-      console.log('Database could not connected: ' + error)
-      process.exit(error)
-   }
-)
+Array.prototype.unique = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i]["key"] === a[j]["key"])
+              a.splice(j--, 1);
+      }
+  }
 
-const lang = workerData.instance.block.lang.toLowerCase()
-
+  return a;
+};
 
 Settings.find((error, data) => {
   if (error) {
@@ -69,18 +72,16 @@ Settings.find((error, data) => {
     });
   }
 })
+   },
+   error => {
+      console.log('Database could not connected: ' + error)
+      process.exit(error)
+   }
+)
 
-Array.prototype.unique = function() {
-  var a = this.concat();
-  for(var i=0; i<a.length; ++i) {
-      for(var j=i+1; j<a.length; ++j) {
-          if(a[i]["key"] === a[j]["key"])
-              a.splice(j--, 1);
-      }
-  }
 
-  return a;
-};
+
+
 
 function writeAndRun(path,folder_path,data,script)
 {

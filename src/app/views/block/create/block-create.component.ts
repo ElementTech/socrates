@@ -114,7 +114,7 @@ export class BlockCreateComponent implements OnInit {
   {
     this.dynamic = this.blockForm.get('dynamic') as FormArray;
     event.items.forEach(element => {
-      this.dynamic.removeAt(this.shared.value.findIndex(item => item.name === element.name))
+      this.dynamic.removeAt(this.dynamic.value.findIndex(item => item.name === element.name))
     });
   }
 
@@ -159,6 +159,14 @@ export class BlockCreateComponent implements OnInit {
             delete data.__v
             delete data._id
             this.blockForm.get('prescript').setValue(data.prescript)
+            if (data.prescript == "false" || data.prescript == "")
+            {
+              this.prescript_enabled = false
+            }
+            else
+            {
+              this.prescript_enabled = true
+            }
             this.blockForm.get('name').setValue(data.name)
             this.blockForm.get('script').setValue(data.script)
             this.blockForm.get('github').setValue(data.github)
@@ -313,7 +321,7 @@ export class BlockCreateComponent implements OnInit {
   createBooleanItem(): FormGroup {
     return this.fb.group({
       key: '',
-      value: ''
+      value: false
     });
   }
   createMultiItem(): FormGroup {

@@ -139,7 +139,7 @@ blockRoute.route('/update/:id').put((req, res, next) => {
                     parameters: tempParams,
                     shared: tempShared,
                     booleans: tempBool,
-                    mutlis: tempMulti,
+                    multis: tempMulti,
                     dynamic: tempDynamic
                 }, (err, doc) => {
                     if (err) {

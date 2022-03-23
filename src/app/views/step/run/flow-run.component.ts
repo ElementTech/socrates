@@ -654,6 +654,7 @@ export class FlowRunComponent implements OnInit {
       steps: [this.steps, [Validators.required]],
       on_error: ['', [Validators.required]],
       desc: [''],
+      user: [''],
       createdAt: [''],
       updatedAt: [''],
       image: ['']

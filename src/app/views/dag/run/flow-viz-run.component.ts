@@ -705,6 +705,7 @@ export class FlowvizRunComponent implements OnInit {
       links: [this.links, [Validators.required]],
       on_error: ['', [Validators.required]],
       desc: [''],
+      user: [''],
       createdAt: [''],
       updatedAt: [''],
       image: ['']

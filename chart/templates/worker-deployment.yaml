@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "socrates.fullname" . }}-worker
   labels:
@@ -19,7 +19,17 @@ spec:
         app: {{ template "socrates.name" . }}-worker
         release: {{ .Release.Name }}
       annotations:
-        sidecar.istio.io/inject: "false"        
+        sidecar.istio.io/inject: "false"  
+    volumeClaimTemplates:
+    - metadata:
+        name: docker-graph-storage
+        spec:
+            accessModes:
+                - ReadWriteOnce
+            resources:
+                requests:
+                storage: {{ .Values.worker.storage }}
+            storageClassName: {{ .Values.worker.storageClass }}              
     spec:
       restartPolicy: Always
       volumes: 

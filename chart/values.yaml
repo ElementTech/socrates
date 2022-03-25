@@ -6,7 +6,7 @@ istio:
   enabled: true
 
 client:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: jatasocrates/socrates-client
     tag: v1
@@ -25,7 +25,7 @@ client:
   affinity: {}
 
 server:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: jatasocrates/socrates-server
     tag: v1
@@ -45,7 +45,7 @@ server:
   affinity: {}
 
 worker:
-  replicaCount: 2
+  replicaCount: 1
   storageClass: gp2
   storage: 3Gi
   image:

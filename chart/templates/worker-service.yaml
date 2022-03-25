@@ -18,8 +18,8 @@ spec:
     app: {{ template "socrates.name" . }}-worker
     release: {{ .Release.Name }}
   sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 3600
+  # sessionAffinityConfig:
+  #   clientIP:
+  #     timeoutSeconds: 3600
 
   

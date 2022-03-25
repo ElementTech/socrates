@@ -53,7 +53,7 @@ worker:
     tag: v1
     pullPolicy: Always
   service:
-    type: ClusterIP
+    type: None
     port: 2375
   resources:
     limits:

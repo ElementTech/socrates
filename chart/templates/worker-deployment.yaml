@@ -40,7 +40,7 @@ spec:
           image: docker:dind
           env:    
             - name: DOCKER_HOST 
-              value: tcp://0.0.0.0:2375
+              value: tcp://localhost:2375
           command: ['dockerd', '-H', 'tcp://0.0.0.0:2375'] 
           resources: 
               requests: 

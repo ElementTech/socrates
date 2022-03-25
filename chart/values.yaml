@@ -106,5 +106,5 @@ minio:
     enabled: false
   mode: distributed
   auth:
-    rootUser: admin
-    rootPassword: admin
+    rootUser: AKIAIOSFODNN7EXAMPLE
+    rootPassword: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY

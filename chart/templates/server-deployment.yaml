@@ -58,9 +58,9 @@ spec:
             - name: MINIO_SSL
               value: "false"
             - name: MINIO_ACCESS_KEY
-              value: admin
+              value: AKIAIOSFODNN7EXAMPLE
             - name: MINIO_SECRET_KEY
-              value: admin                                                        
+              value: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY                                                        
           ports:
             - name: http
               containerPort: 4000

@@ -20,8 +20,8 @@ spec:
         accessModes:
             - ReadWriteOnce
         resources:
-            requests:
-              storage: {{ .Values.worker.storage }}
+          requests:
+            storage: {{ .Values.worker.storage }}
         storageClassName: {{ .Values.worker.storageClass }}        
   template:
     metadata:

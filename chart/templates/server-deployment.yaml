@@ -34,7 +34,7 @@ spec:
               mountPath: /tmp           
           env:    
             - name: DOCKER_HOST 
-              value: tcp://worker:2375
+              value: tcp://worker:{{ .Values.worker.service.port }}
             - name: PORT
               value: "4000"
             - name: ENV

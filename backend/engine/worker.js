@@ -137,7 +137,17 @@ function writeAndRun(path,folder_path,data,script)
                   if(err) {
                     console.error(err);
                   }
-                  container.modem.demuxStream(stream);
+
+                  const refreshTimeConnect = setInterval(function() {
+                    try {
+                      container.modem.demuxStream(stream);
+                      clearInterval(refreshTimeConnect)
+                    } catch (error) {
+                      console.error(err);
+                    }
+                  }, 500);
+
+
                   stream.on('end', function(){
                     if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
                     {
@@ -264,7 +274,7 @@ function containerLogs(container,generated_id,folder_path) {
           } catch (error) {
             console.error(err);
           }
-        }, 1000);
+        }, 500);
         stream.on('end', function(){
           clearInterval(refreshTime);
           logStream.end('DONE');

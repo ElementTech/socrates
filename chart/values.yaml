@@ -105,7 +105,6 @@ minio:
   persistence:
     enabled: false
   mode: distributed
-  replicaCount: 3
   auth:
     rootUser: admin
     rootPassword: admin

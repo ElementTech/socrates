@@ -138,71 +138,81 @@ function writeAndRun(path,folder_path,data,script)
                     console.error(err);
                   }
 
-                  const refreshTimeConnect = setInterval(function() {
-                    try {
-                      container.modem.demuxStream(stream);
-                      clearInterval(refreshTimeConnect)
-                    } catch (error) {
-                      console.error(err);
-                    }
-                  }, 500);
 
+                  function continueStream()
+                  {
+                    stream.on('end', function(){
+                      if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
+                      {
+                        workerData.instance.block.prescript = "echo No Pre-Script"
+                      }
+                      console.log((workerData.custom_env.length != 0 ? workerData.custom_env : []))
+                      workerData.instance.parameters = 
+                      (workerData.custom_env.length != 0 ? workerData.custom_env : [])
+                      .concat(workerData.instance.parameters)
+                      .concat(workerData.instance.shared)
+                      .concat(workerData.instance.multis)
+                      .concat(workerData.instance.booleans)
+                      .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : [])
+                      .unique()
+                  
+                      var auxContainer;
+                      docker.createContainer({
+                        Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
+                        Env: workerData.instance.parameters.map(doc=>{
+                          if (doc.key.toString() == "" || doc.value.toString() == "")
+                          {
+                            return `no_params=true`
+                          }
+                          return `${doc.key.toString()}=${doc.value}`
+                        }),
+                        WorkingDir: "/run",
+                        Volumes: {
+                          '/run': {}
+                        },
+                        HostConfig: {
+                          AutoRemove: false,
+                          Binds: [
+                              `${require("path").dirname(path)}:/tmp`,
+                              `${folder_path}:/run`
+                          ]
+                        }, 
+                        Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
+                      }).then(function(container) {
+                        auxContainer = container;
+                        return auxContainer.start()
+                      }).then(function(data) {
+                        create_docker_instance_in_database(
+                          {
+                            _id: workerData.custom_id,
+                            parameters: workerData.instance.parameters,
+                            container_id: auxContainer.id,
+                            instance: workerData.instance._id,
+                            console: [],
+                            output: [],
+                            done:false
+                          }
+                        )
+                        containerLogs(auxContainer,workerData.custom_id,folder_path);
+                      })
+                    });
+                  }
+                  try {
+                    container.modem.demuxStream(stream);
+                    continueStream()
+                  } catch (error) {
+                    const refreshTimeConnect = setInterval(function() {
+                      try {
+                        container.modem.demuxStream(stream);
+                        clearInterval(refreshTimeConnect)
+                        continueStream()
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }, 500);
+                  }
+       
 
-                  stream.on('end', function(){
-                    if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
-                    {
-                      workerData.instance.block.prescript = "echo No Pre-Script"
-                    }
-                    console.log((workerData.custom_env.length != 0 ? workerData.custom_env : []))
-                    workerData.instance.parameters = 
-                    (workerData.custom_env.length != 0 ? workerData.custom_env : [])
-                    .concat(workerData.instance.parameters)
-                    .concat(workerData.instance.shared)
-                    .concat(workerData.instance.multis)
-                    .concat(workerData.instance.booleans)
-                    .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : [])
-                    .unique()
-                
-                    var auxContainer;
-                    docker.createContainer({
-                      Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
-                      Env: workerData.instance.parameters.map(doc=>{
-                        if (doc.key.toString() == "" || doc.value.toString() == "")
-                        {
-                          return `no_params=true`
-                        }
-                        return `${doc.key.toString()}=${doc.value}`
-                      }),
-                      WorkingDir: "/run",
-                      Volumes: {
-                        '/run': {}
-                      },
-                      HostConfig: {
-                        AutoRemove: false,
-                        Binds: [
-                            `${require("path").dirname(path)}:/tmp`,
-                            `${folder_path}:/run`
-                        ]
-                      }, 
-                      Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
-                    }).then(function(container) {
-                      auxContainer = container;
-                      return auxContainer.start()
-                    }).then(function(data) {
-                      create_docker_instance_in_database(
-                        {
-                          _id: workerData.custom_id,
-                          parameters: workerData.instance.parameters,
-                          container_id: auxContainer.id,
-                          instance: workerData.instance._id,
-                          console: [],
-                          output: [],
-                          done:false
-                        }
-                      )
-                      containerLogs(auxContainer,workerData.custom_id,folder_path);
-                    })
-                  });
                 });
               }
 
@@ -272,7 +282,7 @@ function containerLogs(container,generated_id,folder_path) {
             container.modem.demuxStream(stream, logStream, logStream);
             clearInterval(refreshTimeConnect)
           } catch (error) {
-            console.error(err);
+            console.error(error);
           }
         }, 500);
         stream.on('end', function(){

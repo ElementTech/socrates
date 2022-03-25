@@ -4,7 +4,6 @@ let Settings = require('../models/Settings');
 let GithubElement = require('../models/GithubElement');
 var Docker = require('dockerode');
 var docker = new Docker();
-console.log("docker",docker)
 var stream = require('stream');
 let DockerInstance = require('../models/DockerInstance');
 const tmp = require('tmp');

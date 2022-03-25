@@ -25,6 +25,7 @@ services:
     build: backend
     container_name: server
     restart: always
+    image: jatasocrates/socrates-server:v1
     ports:
       - '4000:4000'
     volumes:
@@ -38,6 +39,7 @@ services:
       - docker
   client:
     build: .
+    image: jatasocrates/socrates-client:v1
     restart: always
     ports:
       - '80:80'

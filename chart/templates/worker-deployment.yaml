@@ -15,15 +15,15 @@ spec:
       app: {{ template "socrates.name" . }}-worker
       release: {{ .Release.Name }}
   volumeClaimTemplates:
-  - metadata:
-      name: docker-graph-storage
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: {{ .Values.worker.storage }}
-        storageClassName: {{ .Values.worker.storageClass }}        
+    - metadata:
+        name: docker-graph-storage
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: {{ .Values.worker.storage }}
+          storageClassName: {{ .Values.worker.storageClass }}        
   template:
     metadata:
       labels:
@@ -31,13 +31,9 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         sidecar.istio.io/inject: "false"  
-            
     spec:
       restartPolicy: Always
       volumes: 
-        - name: docker-graph-storage 
-          persistentVolumeClaim:
-            claimName: socrates-engine-storage
         - name: tmp
           emptyDir: {}
       containers:

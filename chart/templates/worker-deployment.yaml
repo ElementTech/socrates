@@ -18,12 +18,11 @@ spec:
   - metadata:
       name: docker-graph-storage
     spec:
-      accessModes:
-        - ReadWriteOnce
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.worker.storageClass }}
       resources:
         requests:
-          storage: {{ .Values.worker.storage }}
-      storageClassName: {{ .Values.worker.storageClass }}        
+          storage: {{ .Values.worker.storage }}      
   template:
     metadata:
       labels:

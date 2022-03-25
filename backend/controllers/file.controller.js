@@ -1,6 +1,7 @@
 const uploadFile = require("../middleware/upload");
 const fs = require("fs");
 const path = require("path")
+var minioClient = require('../database/minio').minioClient
 const upload = async (req, res) => {
   try {
     await uploadFile(req, res);
@@ -34,42 +35,42 @@ const upload = async (req, res) => {
 };
 
 const getListFiles = (req, res) => {
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/")
-  fs.readdir(directoryPath, function (err, files) {
-    if (err) {
-      res.status(500).send({
-        message: "Unable to scan files!",
-      });
-    }
 
-    let fileInfos = [];
-
-    files.forEach((file) => {
-      fileInfos.push({
-        name: file
-      });
-    });
-
-    res.status(200).send(fileInfos);
-  });
+  var minioStream = minioClient.listObjects('icons','', true)
+  var artifacts = []
+  minioStream.on('data', function(obj) { 
+    console.log("here",obj)
+    artifacts.push({"name":obj["name"]})
+  })
+  minioStream.on("end", function (obj) { 
+    console.log(artifacts)
+    res.status(200).send(artifacts);
+  })
+  minioStream.on('error', function(err) { res.status(500).send({
+    message: "Unable to scan files!",
+  }); } )
 };
 
 const download = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/")
-  res.download(directoryPath + fileName, fileName, (err) => {
+  minioClient.fGetObject('icons', fileName, '/tmp/'+fileName, function(err) {
     if (err) {
-      res.status(500).send({
-        message: "Could not download the file. " + err,
-      });
+      return console.log(err)
     }
-  });
+    console.log('success')
+    res.download('/tmp/'+fileName, fileName, (err) => {
+      if (err) {
+        res.status(500).send({
+          message: "Could not download the file. " + err,
+        });
+      }
+    });
+  })
 };
 
 const deleteFile = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = path.join(__dirname, "../resources/static/assets/uploads/" + req.params.name)
-  fs.unlink(directoryPath, (err) => {
+  minioClient.removeObject('icons', fileName, function(err) {
     if (err) {
       res.status(500).send({
         message: "Unable to scan files!",
@@ -78,8 +79,7 @@ const deleteFile = (req, res) => {
     res.status(200).send({
       message: "Delete the file successfully: " + fileName,
     });
-    //file removed
-  })
+  });
 };
 
 module.exports = {

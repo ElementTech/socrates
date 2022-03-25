@@ -4,6 +4,7 @@ let express = require('express'),
    cors = require('cors'),
    bodyParser = require('body-parser'),
    dbConfig = require('./database/db');
+
 const createError = require('http-errors');
 const upsertMany = require('@meanie/mongoose-upsert-many');
 const health = require('@cloudnative/health-connect');
@@ -16,6 +17,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 let healthcheck = new health.HealthChecker();
+var minioClient = require('./database/minio').minioClient
 mongoose.plugin(upsertMany);
 // Connecting with mongo db
 mongoose.Promise = global.Promise;
@@ -159,6 +161,22 @@ app.use(createNodeMiddleware())
 
 //Settings.create({"langs":{"python":{"image":"latest","command":"python"}}}, (error, data) => {
 async function mySeeder() {
+
+
+   minioClient.makeBucket('tmp', 'us-east-1', function(err) {
+      if (err) return console.log('Error creating bucket.', err)
+      console.log('Bucket created successfully in "us-east-1".')
+   })
+   minioClient.makeBucket('artifacts', 'us-east-1', function(err) {
+      if (err) return console.log('Error creating bucket.', err)
+      console.log('Bucket created successfully in "us-east-1".')
+   })
+   minioClient.makeBucket('icons', 'us-east-1', function(err) {
+      if (err) return console.log('Error creating bucket.', err)
+      console.log('Bucket created successfully in "us-east-1".')
+   })
+
+
    const data = await Settings.find({}).exec();
    if (data.length !== 0) {
          // Data exists, no need to seed.
@@ -191,6 +209,7 @@ async function mySeeder() {
          ]
       }
    );
+
 
    // some other seed logic
    // ...

@@ -12,7 +12,7 @@ dbConfig = require('../database/db');
 var engine = require('./docker');
 const cupr = require('cup-readdir')
 const lang = workerData.instance.block.lang.toLowerCase()
-
+var minioClient = require('../database/minio').minioClient
 mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
@@ -34,54 +34,49 @@ Array.prototype.unique = function() {
 
   return a;
 };
-
-Settings.find((error, data) => {
-  if (error) {
-    console.log(error)
-    throw error
-  } else {
-    docker.pull(`${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,{'authconfig': data[0].docker_auth[0]}, function (err, stream) {
-      docker.modem.followProgress(stream, onFinished);
-      function onFinished(err, output) {
-        tmp.file(function _tempFileCreated(err, path, fd) {
-          if (err) throw err;
-          tmp.dir(function _tempDirCreated(err, folder_path) {
+  Settings.find((error, data) => {
+    if (error) {
+      console.log(error)
+      throw error
+    } else {
+      docker.pull(`${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,{'authconfig': data[0].docker_auth[0]}, function (err, stream) {
+        docker.modem.followProgress(stream, onFinished);
+        function onFinished(err, output) {
+          tmp.file(function _tempFileCreated(err, path, fd) {
             if (err) throw err;
-            if (workerData.instance.block.github){
-              if (data[0].github[0].githubConnected){
-                GithubElement.findOne({path:workerData.instance.block.github_path},(error, git) => {
-                  if ((git.content != null) && (git.content != undefined))
-                  {
-                    writeAndRun(path,folder_path,data=data,Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
-                  }
-                });
+            tmp.dir(function _tempDirCreated(err, folder_path) {
+              if (err) throw err;
+              if (workerData.instance.block.github){
+                if (data[0].github[0].githubConnected){
+                  GithubElement.findOne({path:workerData.instance.block.github_path},(error, git) => {
+                    if ((git.content != null) && (git.content != undefined))
+                    {
+                      writeAndRun(path,folder_path,data=data,Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+                    }
+                  });
+                }
+                else
+                {
+                  writeAndRun(path,folder_path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
+                }
               }
               else
               {
                 writeAndRun(path,folder_path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
               }
-            }
-            else
-            {
-              writeAndRun(path,folder_path,data=data,workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ""))
-            }
-          });
-        });  
-      }
-     
-    });
-  }
-})
+            });
+          });  
+        }
+      
+      });
+    }
+  })
    },
    error => {
       console.log('Database could not connected: ' + error)
       process.exit(error)
    }
 )
-
-
-
-
 
 function writeAndRun(path,folder_path,data,script)
 {
@@ -90,57 +85,128 @@ function writeAndRun(path,folder_path,data,script)
       console.error(err)
       return
     }
-      //
-      if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
-      {
-        workerData.instance.block.prescript = "echo No Pre-Script"
-      }
-      console.log((workerData.custom_env.length != 0 ? workerData.custom_env : []))
-      workerData.instance.parameters = 
-      (workerData.custom_env.length != 0 ? workerData.custom_env : [])
-      .concat(workerData.instance.parameters)
-      .concat(workerData.instance.shared)
-      .concat(workerData.instance.multis)
-      .concat(workerData.instance.booleans)
-      .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : [])
-      .unique()
-  
-      var auxContainer;
-      docker.createContainer({
-        Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
-        Env: workerData.instance.parameters.map(doc=>{
-          if (doc.key.toString() == "" || doc.value.toString() == "")
-          {
-            return `no_params=true`
+      console.log("here")
+      // Using fPutObject API upload your file to the bucket tmp.
+      minioClient.fPutObject('tmp', require("path").basename(path), path, function(err, etag) {
+        if (err)
+        { 
+          console.log(err)
+        }
+        console.log('File uploaded successfully. ' + etag)
+        //
+
+        docker.pull('d3fk/s3cmd',function (err, stream) {
+          console.log(err)
+          docker.modem.followProgress(stream, onFinished);
+          function onFinished(err, output) {
+            console.log(err,output)
+            docker.run('d3fk/s3cmd', [
+              "--force",
+              `--access_key=${process.env.MINIO_ACCESS_KEY ? process.env.MINIO_ACCESS_KEY : 'AKIAIOSFODNN7EXAMPLE'}`,
+              `--secret_key=${process.env.MINIO_SECRET_KEY ? process.env.MINIO_SECRET_KEY : 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'}`,
+              "--signature-v2",
+              "--no-ssl",
+              `--host=${process.env.MINIO_ADDR ? process.env.MINIO_ADDR : "127.0.0.1"}:${process.env.MINIO_PORT ? process.env.MINIO_PORT : "9000"}`,
+              `--host-bucket=${process.env.MINIO_ADDR ? process.env.MINIO_ADDR : "127.0.0.1"}:${process.env.MINIO_PORT ? process.env.MINIO_PORT : "9000"}`,
+              `--region=us-east-1`,
+              "get",
+              `s3://tmp/${require("path").basename(path)}`
+            ], process.stdout, {
+              WorkingDir: "/tmp",
+              HostConfig: {
+                AutoRemove: false,
+                Binds: [
+                    `${require("path").dirname(path)}:/tmp`
+                ],
+                NetworkMode: 'host'
+              }
+            }, function(err, data_s3, container) {
+              if (err){
+                return console.error(err);
+              }
+              continueLogs(container)
+
+              function continueLogs(container) {
+                container.logs({
+                  follow: true,
+                  stdout: true,
+                  stderr: true
+                }, function(err, stream){
+                  if(err) {
+                      return logger.err(err.message);
+                  }
+                  container.modem.demuxStream(stream);
+                  stream.on('end', function(){
+                    if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
+                    {
+                      workerData.instance.block.prescript = "echo No Pre-Script"
+                    }
+                    console.log((workerData.custom_env.length != 0 ? workerData.custom_env : []))
+                    workerData.instance.parameters = 
+                    (workerData.custom_env.length != 0 ? workerData.custom_env : [])
+                    .concat(workerData.instance.parameters)
+                    .concat(workerData.instance.shared)
+                    .concat(workerData.instance.multis)
+                    .concat(workerData.instance.booleans)
+                    .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map(dynamo=>{return {"key":dynamo.name,"value":dynamo.output}}) : []) : [])
+                    .unique()
+                
+                    var auxContainer;
+                    docker.createContainer({
+                      Image: `${data[0].langs.find(o => o.lang == lang).image}:${data[0].langs.find(o => o.lang == lang).tag}`,
+                      Env: workerData.instance.parameters.map(doc=>{
+                        if (doc.key.toString() == "" || doc.value.toString() == "")
+                        {
+                          return `no_params=true`
+                        }
+                        return `${doc.key.toString()}=${doc.value}`
+                      }),
+                      WorkingDir: "/run",
+                      Volumes: {
+                        '/run': {}
+                      },
+                      HostConfig: {
+                        AutoRemove: false,
+                        Binds: [
+                            `${require("path").dirname(path)}:/tmp`,
+                            `${folder_path}:/run`
+                        ]
+                      }, 
+                      Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
+                    }).then(function(container) {
+                      auxContainer = container;
+                      return auxContainer.start()
+                    }).then(function(data) {
+                      create_docker_instance_in_database(
+                        {
+                          _id: workerData.custom_id,
+                          parameters: workerData.instance.parameters,
+                          container_id: auxContainer.id,
+                          instance: workerData.instance._id,
+                          console: [],
+                          output: [],
+                          done:false
+                        }
+                      )
+                      containerLogs(auxContainer,workerData.custom_id,folder_path);
+                    })
+                  });
+                });
+              }
+
+             
+
+            });
+            
+
           }
-          return `${doc.key.toString()}=${doc.value}`
-        }),
-        WorkingDir: "/run",
-        HostConfig: {
-          AutoRemove: false,
-          Binds: [
-              `${require("path").dirname(path)}:/tmp`,
-              `${folder_path}:/run`
-          ]
-        }, 
-        Cmd: ['sh','-c',`${workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "")}; ${data[0].langs.find(o => o.lang == lang).command} /tmp/${require("path").basename(path)}`]//,"/socrates/"+require('path').basename(path)],
-      }).then(function(container) {
-        auxContainer = container;
-        return auxContainer.start()
-      }).then(function(data) {
-        create_docker_instance_in_database(
-          {
-            _id: workerData.custom_id,
-            parameters: workerData.instance.parameters,
-            container_id: auxContainer.id,
-            instance: workerData.instance._id,
-            console: [],
-            output: [],
-            done:false
-          }
-        )
-        containerLogs(auxContainer,workerData.custom_id,folder_path);
-      })
+        })
+
+
+
+
+      });
+
   })
 }
 
@@ -200,51 +266,72 @@ function containerLogs(container,generated_id,folder_path) {
           container.inspect(async function (err, data) {
               const finishedAt = data["State"]["FinishedAt"];
               console.log(folder_path)
-              cupr.getAllFilePaths(folder_path).then(files => {
-                if (files.length != 0) {
-                  console.log("Docker Run ID: " +generated_id)
-                  console.log("Instance ID: " +workerData.instance._id)
-                  var dir = require('path').join(__dirname, '..') + '/resources/artifacts/' + workerData.instance._id + "/" + generated_id;
-                  if (!fs.existsSync(dir)) {
-                    fs.mkdir(dir, { recursive: true }, (err) => {
-                        if (err) throw err;
-                        fs.cp(folder_path, dir, {recursive: true},(err)=>{
-                          if (err) throw err;
-                          if (data.State.ExitCode != 0)
-                          {
-                            set_docker_instance_in_database(generated_id,
-                              { artifacts: files.map(file=>file.replace(folder_path + "/","")),done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                            )
-                          }
-                          else
-                          {
-                            set_docker_instance_in_database(generated_id,
-                              { artifacts: files.map(file=>file.replace(folder_path + "/","")),done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                            )
-                          }
-                        });
+
+
+
+
+
+
+              docker.run('d3fk/s3cmd', [
+                "--force",
+                `--access_key=${process.env.MINIO_ACCESS_KEY ? process.env.MINIO_ACCESS_KEY : 'AKIAIOSFODNN7EXAMPLE'}`,
+                `--secret_key=${process.env.MINIO_SECRET_KEY ? process.env.MINIO_SECRET_KEY : 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'}`,
+                "--signature-v2",
+                "--no-ssl",
+                `--host=${process.env.MINIO_ADDR ? process.env.MINIO_ADDR : "127.0.0.1"}:${process.env.MINIO_PORT ? process.env.MINIO_PORT : "9000"}`,
+                `--host-bucket=${process.env.MINIO_ADDR ? process.env.MINIO_ADDR : "127.0.0.1"}:${process.env.MINIO_PORT ? process.env.MINIO_PORT : "9000"}`,
+                `--region=us-east-1`,
+                "sync",
+                "./",
+                `s3://artifacts/${workerData.instance._id}/${generated_id}/`
+              ], process.stdout, {
+                WorkingDir: "/run",
+                HostConfig: {
+                  AutoRemove: false,
+                  Binds: [
+                      `${folder_path}:/run`
+                  ],
+                  NetworkMode: 'host'
+                }
+              }, function(err, data_s3, container) {
+                if (err){
+                  return console.error(err);
+                }
+                continueLogs(container)
+  
+                function continueLogs(container) {
+                  container.logs({
+                    follow: true,
+                    stdout: true,
+                    stderr: true
+                  }, function(err, stream){
+                    if(err) {
+                        return logger.err(err.message);
+                    }
+                    container.modem.demuxStream(stream);
+             
+                    stream.on('end', function(){
+
+                      var minioStream = minioClient.listObjects('artifacts','', true)
+                      var artifacts = []
+                      minioStream.on('data', function(obj) { 
+                        obj = obj["name"].split("/")
+                        if ( (obj[0]==workerData.instance._id) && (obj[1]==generated_id) )
+                        {
+                          artifacts.push(obj[2])
+                        }
+                      })
+                      minioStream.on("end", function (obj) { 
+                        console.log("artifacts",artifacts)
+                        set_docker_instance_in_database(generated_id,
+                          { artifacts: artifacts,done: true, error: ((data.State.ExitCode!=0) ? true : false), runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
+                        )
+                      })
                     });
-                  }
+                  });
                 }
-                else
-                {
-                  if (data.State.ExitCode != 0)
-                  {
-                    set_docker_instance_in_database(generated_id,
-                      { artifacts: [],done: true, error: true, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                    )
-                  }
-                  else
-                  {
-                    set_docker_instance_in_database(generated_id,
-                      { artifacts: [],done: true, error: false, runtime: (Object.keys(duration(startTime,finishedAt)).length != 0) ? duration(startTime,finishedAt) : { "seconds": 0 } }
-                    )
-                  }
-                }
-                }
-              )
-           
-              
+              });
+
               container.remove()
               parentPort.postMessage("Done")
           });

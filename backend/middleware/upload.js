@@ -2,19 +2,20 @@ const util = require("util");
 const multer = require("multer");
 const path = require("path")
 const maxSize = 2 * 1024 * 1024;
-
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../resources/static/assets/uploads/"));
-  },
-  filename: (req, file, cb) => {
-    console.log(file.originalname);
-    cb(null, file.originalname);
-  },
-});
+const multerMinio = require('multer-minio-storage-engine');
+var minioClient = require('../database/minio').minioClient
 
 let uploadFile = multer({
-  storage: storage,
+  storage: multerMinio({
+    minio: minioClient,
+    bucketName: 'icons',
+    metaData: function (req, file, cb) {
+      cb(null, {mimetype: file.mimetype});
+    },
+    objectName: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  }),
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
     if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {

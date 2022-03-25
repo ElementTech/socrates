@@ -47,7 +47,7 @@ server:
 worker:
   replicaCount: 2
   storageClass: gp2
-  # storage: 3Gi
+  storage: 3Gi
   image:
     repository: jatasocrates/socrates-server
     tag: v1

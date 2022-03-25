@@ -22,7 +22,7 @@ spec:
       storageClassName: {{ .Values.worker.storageClass }}
       resources:
         requests:
-          storage: 3Gi     
+          storage: {{ .Values.worker.storage }}      
   template:
     metadata:
       labels:

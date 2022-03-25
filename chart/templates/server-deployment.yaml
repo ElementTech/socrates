@@ -55,8 +55,8 @@ spec:
               value: {{ template "socrates.name" . }}-minio
             # - name: MINIO_PORT
             #   value: "9000"
-            - name: MINIO_SSL
-              value: "false"
+            # - name: MINIO_SSL
+            #   value: false
             - name: MINIO_ACCESS_KEY
               value: AKIAIOSFODNN7EXAMPLE
             - name: MINIO_SECRET_KEY

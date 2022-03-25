@@ -102,7 +102,7 @@ minio:
     sidecar.istio.io/inject: "false"
   persistence:
     enabled: false
-  mode: standalone
+  mode: distributed
   auth:
     rootUser: AKIAIOSFODNN7EXAMPLE
     rootPassword: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY

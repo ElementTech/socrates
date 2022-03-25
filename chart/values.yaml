@@ -36,6 +36,28 @@ server:
     type: ClusterIP
     port: 4000
   resources:
+    # limits:
+    #   cpu: 2
+    #   memory: 2048Mi
+    # requests:
+    #   cpu: 1
+    #   memory: 512Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+worker:
+  replicaCount: 1
+  storageClass: gp2
+  storage: 3Gi
+  image:
+    repository: jatasocrates/socrates-server
+    tag: v1
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 2375
+  resources:
     limits:
       cpu: 2
       memory: 2048Mi
@@ -76,3 +98,14 @@ mongodb:
       - password
     databases: 
       - meandatabase
+
+minio:
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+  persistence:
+    enabled: false
+  mode: distributed
+  replicaCount: 3
+  auth:
+    rootUser: admin
+    rootPassword: admin

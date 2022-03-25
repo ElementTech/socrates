@@ -7,3 +7,6 @@ dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
     version: 11.0.3
+  - name: minio
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.2.0

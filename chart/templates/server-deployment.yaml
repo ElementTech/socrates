@@ -53,8 +53,8 @@ spec:
               value: random_string
             - name: MINIO_ADDR
               value: {{ template "socrates.name" . }}-minio
-            - name: MINIO_PORT
-              value: "9000"
+            # - name: MINIO_PORT
+            #   value: "9000"
             - name: MINIO_SSL
               value: "false"
             - name: MINIO_ACCESS_KEY

@@ -15,15 +15,15 @@ spec:
       app: {{ template "socrates.name" . }}-worker
       release: {{ .Release.Name }}
   volumeClaimTemplates:
-    - metadata:
-        name: docker-graph-storage
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: {{ .Values.worker.storage }}
-          storageClassName: {{ .Values.worker.storageClass }}        
+  - metadata:
+      name: docker-graph-storage
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.worker.storage }}
+      storageClassName: {{ .Values.worker.storageClass }}        
   template:
     metadata:
       labels:

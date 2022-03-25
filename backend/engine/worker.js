@@ -83,7 +83,6 @@ function writeAndRun(path,folder_path,data,script)
   fs.writeFile(path, script, err => {
     if (err) {
       console.error(err)
-      return
     }
       console.log("here")
       // Using fPutObject API upload your file to the bucket tmp.
@@ -96,7 +95,10 @@ function writeAndRun(path,folder_path,data,script)
         //
 
         docker.pull('d3fk/s3cmd',function (err, stream) {
-          console.log(err)
+          if (err)
+          { 
+            console.log(err)
+          }
           docker.modem.followProgress(stream, onFinished);
           function onFinished(err, output) {
             console.log(err,output)
@@ -122,7 +124,7 @@ function writeAndRun(path,folder_path,data,script)
               }
             }, function(err, data_s3, container) {
               if (err){
-                return console.error(err);
+                console.error(err);
               }
               continueLogs(container)
 
@@ -133,7 +135,7 @@ function writeAndRun(path,folder_path,data,script)
                   stderr: true
                 }, function(err, stream){
                   if(err) {
-                      return logger.err(err.message);
+                    console.error(err);
                   }
                   container.modem.demuxStream(stream);
                   stream.on('end', function(){
@@ -213,6 +215,10 @@ function writeAndRun(path,folder_path,data,script)
 function containerLogs(container,generated_id,folder_path) {
 
     container.inspect(function (err, data) {
+      if (err)
+      {
+        console.error(err);
+      }
       const startTime = data["State"]["StartedAt"];
       const refreshTime = setInterval(function() {
         set_docker_instance_in_database(generated_id,
@@ -249,14 +255,14 @@ function containerLogs(container,generated_id,folder_path) {
         stderr: true
       }, function(err, stream){
         if(err) {
-          console.log(err)
+          console.error(err);
         }
         const refreshTimeConnect = setInterval(function() {
           try {
             container.modem.demuxStream(stream, logStream, logStream);
             clearInterval(refreshTimeConnect)
           } catch (error) {
-            console.log(error)
+            console.error(err);
           }
         }, 1000);
         stream.on('end', function(){
@@ -265,6 +271,7 @@ function containerLogs(container,generated_id,folder_path) {
 
           container.inspect(async function (err, data) {
               const finishedAt = data["State"]["FinishedAt"];
+              console.error(err);
               console.log(folder_path)
 
 
@@ -295,7 +302,7 @@ function containerLogs(container,generated_id,folder_path) {
                 }
               }, function(err, data_s3, container) {
                 if (err){
-                  return console.error(err);
+                  console.error(err);
                 }
                 continueLogs(container)
   
@@ -306,7 +313,7 @@ function containerLogs(container,generated_id,folder_path) {
                     stderr: true
                   }, function(err, stream){
                     if(err) {
-                        return logger.err(err.message);
+                        console.log(err)
                     }
                     container.modem.demuxStream(stream);
              

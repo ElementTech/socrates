@@ -1,6 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "socrates.fullname" . -}}
-{{- $dot := . -}}
+{{- $name := include "socrates.name" . -}}
+{{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -30,13 +31,13 @@ spec:
     - host: {{ . }}
       http:
         paths:
-          - path: {{ $dot.Values.ingress.path }}
+          - path: {{ $ingressPath }}
             backend:
               serviceName: client
               servicePort: http
           - path: /minio
             backend:
-              serviceName: {{ template "socrates.name" . }}-minio
+              serviceName: {{ $name }}-minio
               servicePort: 9001              
   {{- end }}
 {{- end }}

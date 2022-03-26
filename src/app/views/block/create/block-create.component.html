@@ -290,7 +290,7 @@
             <div *ngIf='blockForm.controls["parameters"] || blockForm.controls["shared"] || blockForm.controls["booleans"] || blockForm.controls["multis"] || blockForm.controls["dynamic"]'>
 
               <mat-chip-list aria-label="Parameters">
-                <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].length != 0 && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
+                <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].length == 0 && blockForm.controls["shared"].length == 0 && blockForm.controls["booleans"].length == 0 && blockForm.controls["multis"].length == 0  && blockForm.controls["dynamic"].length == 0'>
                   <mat-chip *ngFor="let param of blockForm.controls['parameters'].value">No Parameters</mat-chip>
                 </ng-container>
                 <ng-container aria-label="Parameters" *ngIf='blockForm.controls["parameters"].length != 0'>

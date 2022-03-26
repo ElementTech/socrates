@@ -32,7 +32,6 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: Prefix
             backend:
               serviceName: client
               servicePort: http

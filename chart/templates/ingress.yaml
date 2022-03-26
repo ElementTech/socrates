@@ -1,5 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "socrates.fullname" . -}}
+{{- $dot := . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -29,7 +30,7 @@ spec:
     - host: {{ . }}
       http:
         paths:
-          - path: {{ .Values.ingress.path }}
+          - path: {{ $dot.Values.ingress.path }}
             backend:
               serviceName: client
               servicePort: http

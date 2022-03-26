@@ -34,5 +34,9 @@ spec:
             backend:
               serviceName: client
               servicePort: http
+          - path: /minio
+            backend:
+              serviceName: {{ template "socrates.name" . }}-mino
+              servicePort: 9001              
   {{- end }}
 {{- end }}

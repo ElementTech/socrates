@@ -2,8 +2,10 @@
 {{/*
 Expand the name of the chart.
 */}}
+
 {{- define "socrates.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- $dot := . }}
+{{- default $dot.Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

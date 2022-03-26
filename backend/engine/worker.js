@@ -12,16 +12,7 @@ dbConfig = require('../database/db');
 var engine = require('./docker');
 const lang = workerData.instance.block.lang.toLowerCase()
 var minioClient = require('../database/minio').minioClient
-mongoose = require('mongoose'),
-mongoose.Promise = global.Promise;
-mongoose.connect(dbConfig.db, {
-   useNewUrlParser: true,
-reconnectTries: Number.MAX_VALUE,
-reconnectInterval: 500,
-connectTimeoutMS: 20000,
-socketTimeoutMS: 45000
-}).then(() => {
-      console.log('Database sucessfully connected')
+
 Array.prototype.unique = function() {
   var a = this.concat();
   for(var i=0; i<a.length; ++i) {
@@ -33,6 +24,18 @@ Array.prototype.unique = function() {
 
   return a;
 };
+
+mongoose = require('mongoose'),
+mongoose.Promise = global.Promise;
+mongoose.connect(dbConfig.db, {
+   useNewUrlParser: true,
+reconnectTries: Number.MAX_VALUE,
+reconnectInterval: 500,
+connectTimeoutMS: 20000,
+socketTimeoutMS: 45000
+}).then(() => {
+      console.log('Database sucessfully connected')
+
   Settings.find((error, data) => {
     if (error) {
       console.log(error)

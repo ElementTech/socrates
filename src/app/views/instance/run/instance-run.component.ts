@@ -188,6 +188,7 @@ export class InstanceRunComponent implements OnInit {
           }
           else
           {
+   
             if (updatedInList == false)
             {
               this.fetchMore(true)
@@ -268,10 +269,26 @@ export class InstanceRunComponent implements OnInit {
     this.apiService.runInstance({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
     "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
       (res) => {
-       
         this._snackBar.open('Instance Run Started', 'Close', {
           duration: 3000
         });
+        this.listItems.unshift({
+          id: '?',
+          run_number: this.listItems[0].run_number + 1,
+          artifacts: [],
+          title: `${this.listItems[0].run_number + 1} Started`,
+          content: 'Running...',
+          runtime: 0,
+          output: [],
+          done: false,
+          image: "../../assets/loading.gif",
+          createdAt: Date.now()
+        });
+        this.listItems = [...this.listItems];
+
+     
+
+      
         this.updateConsole(res)
         
       }, (error) => {

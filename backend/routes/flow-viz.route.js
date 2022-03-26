@@ -109,8 +109,7 @@ flowvizRoute.route('/instance/one/read/:id').get((req, res, next) => {
 
 // Get All Flowviz Instances of a specific flowviz ID
 flowvizRoute.route('/instance/read/:id').get((req, res, next) => {
-  FlowvizInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data)
-  => {
+  FlowvizInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {
@@ -121,8 +120,7 @@ flowvizRoute.route('/instance/read/:id').get((req, res, next) => {
 
 // Get All Dockers stats of a specific instance ID
 flowvizRoute.route('/instance/read/stats/:id').get((req, res, next) => {
-  FlowvizInstance.find({ flow: req.params.id }).exec((error,data)
-  => {
+  FlowvizInstance.find({ flow: req.params.id }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

@@ -193,8 +193,7 @@ blockRoute.route('/delete/:id').delete((req, res, next) => {
 
 // Get All Dockers stats of a specific instance ID
 blockRoute.route('/stats/:id').get((req, res, next) => {
-  Instance.find({ block: req.params.id }).exec((error,instances)
-  => {
+  Instance.find({ block: req.params.id }).exec((error,instances)  => {
     if (error) {
       return next(error);
     } else {
@@ -207,8 +206,7 @@ blockRoute.route('/stats/:id').get((req, res, next) => {
       instances.forEach((elementInstance) => {
         instancesCount++;
 
-        DockerInstance.find({ instance: elementInstance._id }).exec((error,data)
-        => {
+        DockerInstance.find({ instance: elementInstance._id }).exec((error,data) => {
           if (error) {
             return next(error);
           } else if (data.length == 0)

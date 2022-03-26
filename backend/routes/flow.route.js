@@ -132,8 +132,7 @@ flowRoute.route('/instance/one/read/:id').get((req, res, next) => {
 
 // Get All Flow Instances of a specific flow ID
 flowRoute.route('/instance/read/:id').get((req, res, next) => {
-  FlowInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data)
-  => {
+  FlowInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {
@@ -144,8 +143,7 @@ flowRoute.route('/instance/read/:id').get((req, res, next) => {
 
 // Get All Dockers stats of a specific instance ID
 flowRoute.route('/instance/read/stats/:id').get((req, res, next) => {
-  FlowInstance.find({ flow: req.params.id }).exec((error,data)
-  => {
+  FlowInstance.find({ flow: req.params.id }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

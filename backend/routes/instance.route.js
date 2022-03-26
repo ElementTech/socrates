@@ -46,8 +46,7 @@ instanceRoute.route('/').get((req, res, next) => {
 
 // Get All Instances
 instanceRoute.route('/block/read/:id').get((req, res, next) => {
-  Instance.find({ block: req.params.id }).populate('user').sort({ _id: -1 }).exec((error,data)
-  => {
+  Instance.find({ block: req.params.id }).populate('user').sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

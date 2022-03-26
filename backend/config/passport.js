@@ -1,31 +1,33 @@
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+const mongoose = require('mongoose');
 
-passport.use(new LocalStrategy({
-    usernameField: 'email'
+const User = mongoose.model('User');
+
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
   },
-  function(username, password, done) {
-    User.findOne({ email: username }, function (err, user) {
+  ((username, password, done) => {
+    User.findOne({ email: username }, (err, user) => {
       if (err) { return done(err); }
       // Return if user not found in database
       if (!user) {
         return done(null, false, {
-          message: 'User not found'
+          message: 'User not found',
         });
       }
       // Return if password is wrong
       if (!user.validPassword(password)) {
         return done(null, false, {
-          message: 'Password is wrong'
+          message: 'Password is wrong',
         });
       }
       // If credentials are correct, return the user object
       return done(null, user);
     });
-  }
+  }),
 ));
 
 // passport.use(new GoogleStrategy({

@@ -1,23 +1,25 @@
 const express = require('express');
+
 const app = express();
 const blockRoute = express.Router();
 
 // Block model
-let Block = require('../models/Block');
-let Instance = require('../models/Instance');
-let DockerInstance = require('../models/DockerInstance')
-const auth = require("../middleware/auth");
-blockRoute.use(auth)
+const Block = require('../models/Block');
+const Instance = require('../models/Instance');
+const DockerInstance = require('../models/DockerInstance')
+const auth = require('../middleware/auth');
+
+blockRoute.use(auth);
 // Add Block
 blockRoute.route('/create').post((req, res, next) => {
-  Block.create(Object.assign(req.body,{user: req.user._id}), (error, data) => {
+  Block.create(Object.assign(req.body, { user: req.user._id }), (error, data) => {
     if (error) {
       res.status(400).json(error)
       return next(error)
-    } else {
+    } 
       res.json(data)
-    }
-  })
+    
+  });
 });
 
 // Get All Blocks
@@ -25,37 +27,36 @@ blockRoute.route('/').get((req, res, next) => {
   Block.find({}).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
-    } else {
+    } 
       Instance.find((error,instances)=>{
         res.json(data.map(block=>
           ({...block.toJSON(),instance_count: instances.filter(instance=>instance.block==block._id).length})
         ))
       })
-    }
-  })
-})
+    
+  });
+});
 
 // Get single block
 blockRoute.route('/read/:id').get((req, res, next) => {
   Block.findById(req.params.id).populate('user').exec((error, data) => {
     if (error) {
       return next(error)
-    } else {
+    } 
       res.json(data)
-    }
-  })
-})
-
+    
+  });
+});
 
 // Update block
 blockRoute.route('/update/:id').put((req, res, next) => {
   Block.findByIdAndUpdate(req.params.id, {
-    $set: req.body
+    $set: req.body,
   }, (error, data) => {
     if (error) {
       res.status(400).json(error)
       return next(error);
-    } else {
+    } 
       Instance.find({ 
         block:req.params.id
       }, (err, docs) => {
@@ -154,20 +155,19 @@ blockRoute.route('/update/:id').put((req, res, next) => {
       });
       res.json(data)
       console.log('Data updated successfully')
-    }
-  })
-})
+    
+  });
+});
 
 // Delete block
 blockRoute.route('/delete/:id').delete((req, res, next) => {
-  Instance.find({block: req.params.id}).exec(function(error,instance_data){
+  Instance.find({ block: req.params.id }).exec((error,instance_data)=> {
     if (error) {
       res.status(500).json({
-        msg: error
-      })
+        msg: error,
+      });
       return next(error);
-    } else {
-      if (instance_data.length == 0){
+    } else if (instance_data.length == 0){
         Block.findByIdAndRemove(req.params.id, (error, data) => {
           console.log("Removing: " + req.params.id)
           if (error) {
@@ -188,34 +188,30 @@ blockRoute.route('/delete/:id').delete((req, res, next) => {
           msg: "Block Has Instances Attached"
         })
       }
-    }
   });
-
-})
+});
 
 // Get All Dockers stats of a specific instance ID
-blockRoute.route('/stats/:id').get((req, res,next) => {
-  Instance.find({ block: req.params.id }).exec(function(error,instances)
-  { 
+blockRoute.route('/stats/:id').get((req, res, next) => {
+  Instance.find({ block: req.params.id }).exec((error,instances)
+  => {
     if (error) {
-      return next(error)
+      return next(error);
     } else {
-      let numFail = 0
-      let numSuccess = 0
-      let avgRun = 0
-      let runs = []
-      let runsLength = 0
-      let instancesCount = 0
-      instances.forEach(elementInstance => {
-        instancesCount++
-        
-        DockerInstance.find({ instance: elementInstance._id }).exec(function(error,data)
-        { 
+      let numFail = 0;
+      let numSuccess = 0;
+      let avgRun = 0;
+      const runs = []
+      let runsLength = 0;
+      let instancesCount = 0;
+      instances.forEach((elementInstance) => {
+        instancesCount++;
+
+        DockerInstance.find({ instance: elementInstance._id }).exec((error,data)
+        => {
           if (error) {
-            return next(error)
-          } else {
-             
-              if (data.length == 0)
+            return next(error);
+          } else if (data.length == 0)
               {
                 instancesCount--
               }
@@ -268,32 +264,27 @@ blockRoute.route('/stats/:id').get((req, res,next) => {
                   }
                   
                 });
-              }
-            
-            
-            
-          }    
-         
+              }    
+
         });
-       
       });
-    }    
+    }
   });
-})
+});
 
 function secondsToHms(d) {
   d = Number(d);
-  var w = Math.floor(d / 604800)
-  var y = Math.floor(d / 86400)
-  var h = Math.floor(d / 3600);
-  var m = Math.floor(d % 3600 / 60);
-  var s = Math.floor(d % 3600.0 % 60.0);
-  var wDisplay = w > 0 ? w + (w == 1 ? " week, " : " weeks, ") : "";
-  var yDisplay = y > 0 ? y + (y == 1 ? " day, " : " days, ") : "";
-  var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-  var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-  var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-  return wDisplay + yDisplay + hDisplay + mDisplay + sDisplay; 
+  let w = Math.floor(d / 604800);
+  let y = Math.floor(d / 86400);
+  let h = Math.floor(d / 3600);
+  let m = Math.floor(d % 3600 / 60);
+  let s = Math.floor(d % 3600.0 % 60.0);
+  let wDisplay = w > 0 ? w + (w == 1 ? ' week, ' : ' weeks, ') : '';
+  let yDisplay = y > 0 ? y + (y == 1 ? ' day, ' : ' days, ') : '';
+  let hDisplay = h > 0 ? h + (h == 1 ? ' hour, ' : ' hours, ') : '';
+  let mDisplay = m > 0 ? m + (m == 1 ? ' minute, ' : ' minutes, ') : '';
+  let sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
+  return wDisplay + yDisplay + hDisplay + mDisplay + sDisplay;
 }
 
 module.exports = blockRoute;

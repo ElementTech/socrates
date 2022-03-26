@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // Define collection and schema
-let GithubElement = new Schema({
-   path: {
-      type: String
-   },
-   content: {
-      type: String
-   },
-   prefix:{
-      type: String
-   },
-   sha: {
-      type: String
-   }
+const GithubElement = new Schema({
+  path: {
+    type: String,
+  },
+  content: {
+    type: String,
+  },
+  prefix: {
+    type: String,
+  },
+  sha: {
+    type: String,
+  },
 }, {
-   collection: 'github',
-   timestamps: true
-})
+  collection: 'github',
+  timestamps: true,
+});
 
-module.exports = mongoose.model('GithubElement', GithubElement)
+module.exports = mongoose.model('GithubElement', GithubElement);

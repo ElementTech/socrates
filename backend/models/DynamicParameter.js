@@ -1,24 +1,25 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // Define collection and schema
-let DynamicParameter = new Schema({
-   name: {
-      type: String, unique: true
-   },
-   script:{
-      type: String
-   },
-   lang:{
-      type: String
-   },
-   output:{
-      type: Array,
-      required: false
-   }
+const DynamicParameter = new Schema({
+  name: {
+    type: String, unique: true,
+  },
+  script: {
+    type: String,
+  },
+  lang: {
+    type: String,
+  },
+  output: {
+    type: Array,
+    required: false,
+  },
 }, {
-   collection: 'dynamics',
-   timestamps: true
-})
+  collection: 'dynamics',
+  timestamps: true,
+});
 
-module.exports = mongoose.model('DynamicParameter', DynamicParameter)
+module.exports = mongoose.model('DynamicParameter', DynamicParameter);

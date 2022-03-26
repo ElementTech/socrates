@@ -12,7 +12,7 @@ client:
     tag: v1
     pullPolicy: Always
   service:
-    type: LoadBalancer
+    type: ClusterIP
   # resources:
   #   limits:
   #     cpu: 2

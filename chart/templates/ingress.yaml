@@ -36,7 +36,7 @@ spec:
             backend:
               serviceName: client
               servicePort: http
-          - path: /minio/*
+          - path: /minio
             pathType: Exact
             backend:
               serviceName: {{ $name }}-minio

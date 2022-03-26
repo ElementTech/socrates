@@ -10,7 +10,6 @@ const tmp = require('tmp');
 const fs = require('fs');
 dbConfig = require('../database/db');
 var engine = require('./docker');
-const cupr = require('cup-readdir')
 const lang = workerData.instance.block.lang.toLowerCase()
 var minioClient = require('../database/minio').minioClient
 mongoose = require('mongoose'),

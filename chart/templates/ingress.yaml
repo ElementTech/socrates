@@ -30,12 +30,10 @@ spec:
     - host: {{ . }}
       http:
         paths:
-          {{- range $ingressPaths }}
-          - path: {{ . }}
+          - path: {{ $ingressPath }}
             backend:
               serviceName: client
               servicePort: http
-          {{- end }}
           - path: /minio
             backend:
               serviceName: {{ template "socrates.name" . }}-minio

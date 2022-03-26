@@ -35,9 +35,11 @@ spec:
             backend:
               serviceName: client
               servicePort: http
-          - path: /minio
-            backend:
-              serviceName: {{ $name }}-minio
-              servicePort: 9001              
   {{- end }}
+    - host: socrates.minio.explorium.ninja
+      http:
+        paths:
+          - backend:
+              serviceName: {{ $name }}-minio
+              servicePort: 9001    
 {{- end }}

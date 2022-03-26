@@ -1,6 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "socrates.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
+{{- $dot := . }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -8,8 +9,8 @@ metadata:
   labels:
     app: {{ template "socrates.name" . }}-client
     chart: {{ template "socrates.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    release: {{ $dot.Release.Name }}
+    heritage: {{ $dot.Release.Service }}
 {{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}

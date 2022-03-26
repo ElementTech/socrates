@@ -60,7 +60,7 @@
                     <a class="list-group-item list-group-item-action">{{i.label}}</a>
                   </div>
                 </mat-list-item> -->
-                <mat-list-item  *ngIf="i.label != '+' && i.label != 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
+                <mat-list-item  *ngIf="i.label !== '+' && i.label !== 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
                   <mat-form-field appearance="fill" class="w-100"  appearance="outline">
                    
                   
@@ -130,7 +130,7 @@
           </ng-template>
       
           <ng-template #nodeTemplate let-node>
-              <svg:g *ngIf="node.label != '+' && node.label != 'Start'"
+              <svg:g *ngIf="node.label !== '+' && node.label !== 'Start'"
               (click)="onNodeClick($event)"
               (dblclick)="onNodeDblClick($event)"
               class="node"
@@ -182,7 +182,7 @@
 
   
               </svg:g>
-              <svg:g *ngIf="node.label == 'Start'"
+              <svg:g *ngIf="node.label === 'Start'"
               class="node"
               ngx-tooltip
               [tooltipPlacement]="'top'"
@@ -202,7 +202,7 @@
                 </svg:text>
           
               </svg:g>
-              <svg:g *ngIf="node.label == '+'"
+              <svg:g *ngIf="node.label === '+'"
               (click)="onPlusClick(node)"
              
               class="plus"
@@ -248,8 +248,8 @@
      
       <mat-toolbar class="d-flex justify-content-center">
         <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id == ''">Create</button>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id != ''">Update</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id === ''">Create</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id !== ''">Update</button>
       </mat-toolbar>
     
       <mat-form-field class="w-100 pt-3" appearance="fill">

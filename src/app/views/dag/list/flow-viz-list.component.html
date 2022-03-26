@@ -203,8 +203,8 @@
             <span class="p-column-title">Last Build</span>
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == true" matListAvatar src="../../../assets/success.png">
             <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == false" matListAvatar src="../../../assets/fail.png">
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
+            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun === 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
+            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun === 'none'" matListAvatar src="../../../assets/question.png">
         </td>
         <td>
           {{flow.on_error}}

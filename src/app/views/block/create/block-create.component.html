@@ -315,8 +315,8 @@
       </tbody>
     </table>
     <div class="text-center d-grid gap-2">
-      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id == ''"><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
-      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id != ''"><i class="fa fa-pencil" aria-hidden="true"></i> Update</button>
+      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id === ''"><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
+      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id !== ''"><i class="fa fa-pencil" aria-hidden="true"></i> Update</button>
     </div>
   </p-fieldset>
 </form>

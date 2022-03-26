@@ -44,7 +44,7 @@
               <td>{{parameter.script.split("\n").length}}</td>
               <td>
 
-                <ng-container *ngIf="parameter.output != ''">
+                <ng-container *ngIf="parameter.output !== ''">
                   <p-tag *ngFor="let out of parameter.output" styleClass="mr-2" value="{{out}}"></p-tag>
                 </ng-container>
 
@@ -103,7 +103,7 @@
           <i class="pi pi-forward"></i>&nbsp;
           <span>Test</span>
       </ng-template>
-      <ng-template [ngIf]="(chosenRunParameter | json) == '{}'" [ngIfElse]="elseBlock">
+      <ng-template [ngIf]="(chosenRunParameter | json) === '{}'" [ngIfElse]="elseBlock">
         Run a parameter from the list in order to test it
       </ng-template>
       <ng-template #elseBlock>

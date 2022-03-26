@@ -76,17 +76,17 @@
           <tr>
               <td [ngStyle]="{'background-color': parameter.first ? 'lightgrey' : 'initial'}">
                   <p-cellEditor>
-                      <ng-template pTemplate="input" *ngIf="parameter.type != 'dynamic'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type !== 'dynamic'">
                           <input pInputText type="text" [(ngModel)]="parameter.key">
                       </ng-template>
-                      <ng-template pTemplate="input" *ngIf="parameter.type == 'dynamic'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type === 'dynamic'">
                       <input pInputText type="text" [(ngModel)]="parameter.name">
                     </ng-template>
-                      <ng-template *ngIf="parameter.type != 'dynamic'" pTemplate="output">
+                      <ng-template *ngIf="parameter.type !== 'dynamic'" pTemplate="output">
                         <del *ngIf="parameter.first">{{parameter.key}}</del>
                         <div *ngIf="!parameter.first">{{parameter.key}}</div>
                       </ng-template>
-                      <ng-template *ngIf="parameter.type == 'dynamic'" pTemplate="output">
+                      <ng-template *ngIf="parameter.type === 'dynamic'" pTemplate="output">
                         <del *ngIf="parameter.first">{{parameter.name}}</del>
                         <div *ngIf="!parameter.first">{{parameter.name}}</div>
                     </ng-template>
@@ -94,15 +94,15 @@
               </td>
               <td pEditableColumn class="editme" [ngStyle]="{'background-color': parameter.first ? 'lightgrey' : 'initial'}">
                   <p-cellEditor>
-                      <ng-template pTemplate="input" *ngIf="parameter.type == 'text'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type === 'text'">
                           <input pInputText [type]="parameter.secret ? 'password' : 'text'" [(ngModel)]="parameter.value"  [disabled]="parameter.first">
                       </ng-template>
-                      <ng-template pTemplate="input" *ngIf="parameter.type == 'checkbox'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type === 'checkbox'">
                         <mat-checkbox [(ngModel)]="parameter.value" [disabled]="parameter.first">
                           {{parameter.value}}
                         </mat-checkbox>
                       </ng-template>     
-                      <ng-template pTemplate="input" *ngIf="parameter.type == 'multi'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type === 'multi'">
                         <mat-form-field appearance="outline">
                           <mat-label>{{parameter.key}}</mat-label>
                           <mat-select [(ngModel)]="parameter.value"   [disabled]="parameter.first">
@@ -113,7 +113,7 @@
                         </mat-form-field>    
                       </ng-template>                      
                       
-                      <ng-template pTemplate="input" *ngIf="parameter.type == 'dynamic'">
+                      <ng-template pTemplate="input" *ngIf="parameter.type === 'dynamic'">
                         
                         <mat-form-field appearance="outline"  >
                           <mat-label>{{parameter.name}}</mat-label>
@@ -140,13 +140,13 @@
                         <input pInputText type="text" [(ngModel)]="parameter.type">
                     </ng-template>
                     <ng-template pTemplate="output">
-                      <i *ngIf="parameter.type == 'text'" class="fa fa-file-text" aria-hidden="true"></i>  
-                      <i *ngIf="parameter.type == 'checkbox'" class="fa fa-check-square" aria-hidden="true"></i>
-                      <i *ngIf="parameter.type == 'multi'" class="fa fa-list-ul" aria-hidden="true"></i>
-                      <i *ngIf="parameter.type == 'dynamic'" class="fa fa-rocket" aria-hidden="true"></i>
+                      <i *ngIf="parameter.type === 'text'" class="fa fa-file-text" aria-hidden="true"></i>  
+                      <i *ngIf="parameter.type === 'checkbox'" class="fa fa-check-square" aria-hidden="true"></i>
+                      <i *ngIf="parameter.type === 'multi'" class="fa fa-list-ul" aria-hidden="true"></i>
+                      <i *ngIf="parameter.type === 'dynamic'" class="fa fa-rocket" aria-hidden="true"></i>
         
                       {{parameter.type}}
-                      <ng-container *ngIf="parameter.type == 'dynamic'">
+                      <ng-container *ngIf="parameter.type === 'dynamic'">
                         <p-progressSpinner [style]="{width: '20px', height: '20px'}" *ngIf="!(parameter.choices | async)"></p-progressSpinner>
                       </ng-container>
                     </ng-template>

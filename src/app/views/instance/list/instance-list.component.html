@@ -188,8 +188,8 @@
             <span class="p-column-title">Last Build</span>
             <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == true" matListAvatar src="../../../assets/success.png">
             <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == false" matListAvatar src="../../../assets/fail.png">
-            <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
-            <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun == 'none'" matListAvatar src="../../../assets/question.png">
+            <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun === 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
+            <img  style="height:30px;width: 30px;" *ngIf="instance.lastrun === 'none'" matListAvatar src="../../../assets/question.png">
         </td>
         <td>
           {{instance.numruns}}

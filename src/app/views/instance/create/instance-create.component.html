@@ -3,8 +3,8 @@
 
   <p-toolbar class="w-100">
     <div class="">
-      <button class="btn  btn-lg btn-success" type="submit" *ngIf="this.id == ''"><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
-      <button class="btn  btn-lg btn-success" type="submit" *ngIf="this.id != ''"><i class="fa fa-pencil" aria-hidden="true"></i> Update</button>
+      <button class="btn  btn-lg btn-success" type="submit" *ngIf="this.id === ''"><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
+      <button class="btn  btn-lg btn-success" type="submit" *ngIf="this.id !== ''"><i class="fa fa-pencil" aria-hidden="true"></i> Update</button>
     </div>
 
   </p-toolbar>

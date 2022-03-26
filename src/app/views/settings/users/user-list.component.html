@@ -38,9 +38,9 @@
           <mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>
           <mat-cell *matCellDef="let row" [style.color]="row.configure">
             <mat-button-toggle-group multiple vertical="false">
-              <button mat-button (click)="removeUser(row._id)" *ngIf="row.name != 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
+              <button mat-button (click)="removeUser(row._id)" *ngIf="row.name !== 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">delete</mat-icon></button>
               <button mat-button (click)="makeAdmin(row._id)" *ngIf="!row.admin"><mat-icon aria-hidden="false" style="color: blue;">admin_panel_settings</mat-icon>Make Admin</button>
-              <button mat-button (click)="revokeAdmin(row._id)" *ngIf="row.admin && row.name != 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">admin_panel_settings</mat-icon>Revoke Admin</button>
+              <button mat-button (click)="revokeAdmin(row._id)" *ngIf="row.admin && row.name !== 'admin'"><mat-icon aria-hidden="false" style="color: maroon;">admin_panel_settings</mat-icon>Revoke Admin</button>
             </mat-button-toggle-group>
           </mat-cell>
         </ng-container>

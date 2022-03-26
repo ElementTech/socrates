@@ -123,8 +123,8 @@
      
       <mat-toolbar class="d-flex justify-content-center">
         <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id == ''">Create</button>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id != ''">Update</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id === ''">Create</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="this.id !== ''">Update</button>
       </mat-toolbar>
     
       <mat-form-field class="w-100 pt-3" appearance="fill">

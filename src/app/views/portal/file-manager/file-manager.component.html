@@ -18,14 +18,14 @@
         <div fxLayout="column" fxLayoutAlign="space-between center" (click)="navigate(element)" (contextmenu)="openMenu($event,element, menuTrigger)">
           <mat-icon style="color:rgb(48,60,84)"class="file-or-folder-icon pointer" *ngIf="element.isFolder">folder</mat-icon>
           
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/block/create/', element.fileid]" *ngIf="element.type == 'block'">
+          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/block/create/', element.fileid]" *ngIf="element.type === 'block'">
             <i class="fa-solid fa-cube"></i><img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]">
           </mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/instance/run/', element.fileid]" *ngIf="element.type == 'instance'">
+          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/instance/run/', element.fileid]" *ngIf="element.type === 'instance'">
             <i class="fa-solid fa-cubes"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/step/run/', element.fileid]" *ngIf="element.type == 'flow'">
+          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/step/run/', element.fileid]" *ngIf="element.type === 'flow'">
             <i class="fa-solid fa-stairs"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/dag/run/', element.fileid]" *ngIf="element.type == 'viz'">
+          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/dag/run/', element.fileid]" *ngIf="element.type === 'viz'">
             <i class="fa-solid fa-diagram-project"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>            
           <span>{{element.name}}</span>
         </div>

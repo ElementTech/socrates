@@ -32,20 +32,14 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: Exact
             backend:
               serviceName: client
               servicePort: http
-          - path: /minio
-            pathType: Prefix
-            backend:
-              serviceName: {{ $name }}-minio
-              servicePort: 9001               
   {{- end }}
-    # - host: socrates.minio.explorium.ninja
-    #   http:
-    #     paths:
-    #       - backend:
-    #           serviceName: {{ $name }}-minio
-    #           servicePort: 9001    
+    - host: socrates.minio.explorium.ninja
+      http:
+        paths:
+          - backend:
+              serviceName: {{ $name }}-minio
+              servicePort: 9001    
 {{- end }}

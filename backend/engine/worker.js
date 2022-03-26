@@ -144,6 +144,12 @@ function writeAndRun(path,folder_path,data,script)
                   function continueStream()
                   {
                     stream.on('end', function(){
+                      minioClient.removeObject('tmp', require("path").basename(path), function(err) {
+                        if (err) {
+                          return console.log('Unable to remove object', err)
+                        }
+                        console.log('Removed the object')
+                      })
                       if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "" || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, "") == "false")
                       {
                         workerData.instance.block.prescript = "echo No Pre-Script"

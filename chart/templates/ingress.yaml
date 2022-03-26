@@ -1,10 +1,10 @@
 {{- if .Values.ingress.enabled -}}
-# {{- $fullName := include "socrates.fullname" . -}}
+{{- $fullName := include "socrates.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "socrates.name" . }}-client
+  name: {{ $fullName }}-client
   labels:
     app: {{ template "socrates.name" . }}-client
     chart: {{ template "socrates.chart" . }}

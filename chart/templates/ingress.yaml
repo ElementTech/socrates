@@ -32,10 +32,12 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: Prefix
             backend:
               serviceName: client
               servicePort: http
           - path: /minio/*
+            pathType: Exact
             backend:
               serviceName: {{ $name }}-minio
               servicePort: 9001               

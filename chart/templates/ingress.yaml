@@ -35,7 +35,7 @@ spec:
             backend:
               serviceName: client
               servicePort: http
-          - path: /minio
+          - path: /minio(/|$)(.*)
             backend:
               serviceName: {{ $name }}-minio
               servicePort: 9001               

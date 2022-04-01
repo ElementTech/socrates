@@ -25,6 +25,7 @@ const CronRun = new Schema({
 }, {
   collection: 'crons',
   timestamps: true,
+  capped: { size: 300000, max: 1000 }
 });
 
 module.exports = mongoose.model('CronRun', CronRun);

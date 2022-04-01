@@ -1,189 +1,107 @@
+# Socrates
+## _A Simple Automation Server_
 [![@coreui angular](https://img.shields.io/badge/@coreui%20-angular-lightgrey.svg?style=flat-square)](https://github.com/coreui/angular)
-[![npm-coreui-angular-next][npm-coreui-angular-badge-next]][npm-coreui-angular]
-[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
-[![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
-[![npm package][npm-coreui-badge]][npm-coreui]
-[![NPM downloads][npm-coreui-download]][npm-coreui]  
-![angular](https://img.shields.io/badge/angular-^13.2.0-lightgrey.svg?style=flat-square&logo=angular)
 
-[npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular
-[npm-coreui-angular-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square
-[npm-coreui-angular-badge-next]: https://img.shields.io/npm/v/@coreui/angular/next?style=flat-square&color=red
-[npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square
-[npm-coreui]: https://www.npmjs.com/package/@coreui/coreui
-[npm-coreui-badge]: https://img.shields.io/npm/v/@coreui/coreui.png?style=flat-square
-[npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
+Socrates is a simple automation server, inspired by Jenkins. It can run tasks in any code language and present them in a friendly dashboard to non-technical users.
 
-# CoreUI 4 Angular 13 Free Admin Template
+## Features
 
-CoreUI is meant to be the UX game changer. Pure & transparent code is devoid of redundant components, so the app is light enough to offer ultimate user experience. This means mobile devices also, where the navigation is just as easy and intuitive as on a desktop or laptop. The CoreUI Layout API lets you customize your project for almost any device – be it Mobile, Web or WebApp – CoreUI covers them all!
+- Define Parameterized Blocks of code in any language to be run in Docker.
+- Define Static and Dynamic parameters to be used by all Blocks.
+- Create Instances of code that can be run individually.
+- Create Steps and DAG Flows using Instances of code.
+- Save Artifacts and Outputs, managed by Minio S3.
+- Schedule any component and view it in a timeline.
+- Give any component an Icon to categorize them.
+- Connect a Github repository with or without a Webhook, automatically update all the code in the server.
+- Manage a friendly Developer Portal, give your jobs custom names and folders.
+- Can be run on Docker or on Kubernetes
 
-[CoreUI Angular Admin Template](https://coreui.io/angular)  
-[Demo](https://coreui.io/angular/demo/4.0/free/)
+## Installation
 
-## Table of Contents
+Dillinger requires either Docker or Kubernetes to run.
 
-* [Versions](#versions)
-* [CoreUI Pro](#coreui-pro)
-* [Quick Start](#quick-start)
-* [Installation](#installation)
-* [Basic usage](#basic-usage)
-* [What's included](#whats-included)
-* [Documentation](#documentation)
-* [Versioning](#versioning)
-* [Creators](#creators)
-* [Community](#community)
-* [Copyright and License](#copyright-and-license)
-
-## Versions
-
-* [CoreUI Free Bootstrap Admin Template](https://github.com/coreui/coreui-free-bootstrap-admin-template)
-* [CoreUI Free Angular Admin Template](https://github.com/coreui/coreui-free-angular-admin-template)
-* [CoreUI Free React.js Admin Template](https://github.com/coreui/coreui-free-react-admin-template)
-* [CoreUI Free Vue.js Admin Template](https://github.com/coreui/coreui-free-vue-admin-template)
-
-## CoreUI Pro
-
-**Only customers with [Enterpise Membership Plan](https://coreui.io/pro/#buy) have access to private github CoreUI Pro repository.**
-
-* 💪  [CoreUI Pro Bootstrap Admin Template](https://coreui.io/pro/)
-* 💪  [CoreUI Pro Angular Admin Template](https://coreui.io/pro/angular)
-* 💪  [CoreUI Pro React Admin Template](https://coreui.io/pro/react)
-* 💪  [CoreUI Pro Vue Admin Template](https://coreui.io/pro/vue)
-
-## Quick Start
-
-- [Download the latest release](https://github.com/coreui/coreui-free-angular-admin-template/)
-- Clone the repo: `git clone https://github.com/coreui/coreui-free-angular-admin-template.git`
-
-#### <i>Prerequisites</i>
-Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
-
-###### Node.js
-Angular 13 requires `Node.js` version `^12.20`, `^14.15` or `^16.10`.
-
-- To check your version, run `node -v` in a terminal/console window.
-- To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
-
-###### Angular CLI
-Install the Angular CLI globally using a terminal/console window.
-```bash
-npm install -g @angular/cli
+#### docker
+`docker-compose.yaml` file available in root.
+```sh
+docker-compose up
+```
+#### Kubernetes
+Helm Chart available in `chart/`
+```sh
+helm install -f values.yaml socrates .
 ```
 
-### Instalation
+## Components
 
-``` bash
-$ npm install
+Socrates's main components are the basic terms that define how to work with the server.
+
+| Component | Description |
+| ------ | ------ |
+| Block | Block is a component made of a Code in a specific Language. It might have parameters, defaults, and a Pre-Code to execute before the main. It may also be directly attached to a file in Github. Any files created during execution will be saved as Artifacts, and Outputs can be set by printing following syntax: `::set-output key=value`.  |
+| Instance | Instance is attached to a Block. It is essentialy a Parameterized Block, with it's own execution History. Multiple Instance can exist for the same Block. It can be run individually and be scheduled. |
+| Steps Flow | Steps Flow is a pipeline of one or more Instances arranged in Steps. They share ENV Variables and Outputs to the next Steps. It has it's own execution history and can be drilled down to individual Instances. |
+| DAG Flow | DAG Flow is a pipeline of one or more Instances arranged in a Graph. They share ENV Variables, and pass Outputs to the next Nodes in the Branch. It has it's own execution history and can be drilled down to individual Instances. |
+| Parameters | Parameters can either be private to a Component, or shared between all. Parameters can also be dynamic, by running a small Instance with an Output of an array. This will become a Multi-Choice parameter. |
+
+## Development
+
+Want to contribute? Great!
+
+Socrates uses Node.JS + Angular for developing.
+For fast development, use these commands to run the infrastructure of Socrates.
+
+#### Infrastructure
+
+MongoDB Replica Set:
+
+```sh
+docker run --rm -d -p 27017:27017 -h $(hostname) -v ~/mongo/data:/data/db --name mongo mongo:latest --replSet=test && sleep 4 && docker exec mongo mongo --eval "rs.initiate();
 ```
 
-### Basic usage
+Minio S3 Server:
 
-``` bash
-# dev server with hot reload at http://localhost:4200
-$ npm start
+```sh
+docker run -p 9000:9000 -p 9001:9001 --name minio -v ~/minio/data:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
 ```
 
-Navigate to [http://localhost:4200](http://localhost:4200). The app will automatically reload if you change any of the source files.
+(optional) MongoDB UI:
 
-#### Build
-
-Run `build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-```bash
-# build for production with minification
-$ npm run build
-```
-## What's included
-
-Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
-
-```
-coreui-free-angular-admin-template
-├── src/                         # project root
-│   ├── app/                     # main app directory
-|   │   ├── containers/          # layout containers
-|   |   │   └── default-layout/  # layout containers
-|   |   |       └── _nav.js      # sidebar navigation config
-|   │   ├── icons/               # icons set for the app
-|   │   └── views/               # application views
-│   ├── assets/                  # images, icons, etc.
-│   ├── components/              # components for demo only
-│   ├── scss/                    # scss styles
-│   └── index.html               # html template
-│
-├── angular.json
-├── README.md
-└── package.json
+```sh
+docker run -it --rm --name mongo-express -p 8081:8081 -e ME_CONFIG_OPTIONS_EDITORTHEME="ambiance" -e ME_CONFIG_MONGODB_SERVER="mongo" -e ME_CONFIG_MONGODB_AUTH_DATABASE="meandatabase" --link mongo mongo-express
 ```
 
-## Documentation
+#### Application
+> Have Angular 13 Installed globally, and Node.JS 17 for the Backend.
 
-The documentation for the CoreUI Admin Template is hosted at our website [CoreUI for Angular](https://coreui.io/angular/)
+Start the Node.JS Backend:
 
----
+```sh
+cd backend
+DB_NAME=localhost ENV=development node server.js
+```
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.5.
+Start the Angular Frontend:
 
-## Versioning
+```sh
+ng serve
+```
 
-For transparency into our release cycle and in striving to maintain backward compatibility, CoreUI Free Admin Template is maintained under [the Semantic Versioning guidelines](http://semver.org/).
+#### Building from source
 
-See [the Releases section of our project](https://github.com/coreui/coreui-free-angular-admin-template/releases) for changelogs for each release version.
+For production release:
+##### Backend
 
+```sh
+npm ci --only=production
+```
 
-## Creators
+##### Frontend
 
-**Łukasz Holeczek**
-* <https://twitter.com/lukaszholeczek>
-* <https://github.com/mrholek>
-* <https://github.com/coreui>
+```sh
+npm run build -- --configuration production
+```
 
-**CoreUI team**
-* https://github.com/orgs/coreui/people
+## License
 
-## Community
-
-Get updates on CoreUI's development and chat with the project maintainers and community members.
-
-- Follow [@core_ui on Twitter](https://twitter.com/core_ui).
-- Read and subscribe to [CoreUI Blog](https://blog.coreui.ui/).
-
-## Copyright and License
-
-copyright 2021 creativeLabs Łukasz Holeczek.
-
-Code released under [the MIT license](https://github.com/coreui/coreui-free-angular-admin-template/blob/master/LICENSE).
-There is only one limitation you can’t re-distribute the CoreUI as stock. You can’t do this if you modify the CoreUI. In the past we faced some problems with persons who tried to sell CoreUI based templates.
-
-## Support CoreUI Development
-
-CoreUI is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing. You can support development by buying [CoreUI Pro Version](https://coreui.io/pro/).
-
-We're also open to conversations regarding custom sponsorship / consulting arrangements. Get in touch on [Twitter](https://twitter.com/lukaszholeczek).
-
----
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+MIT

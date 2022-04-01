@@ -137,7 +137,7 @@ module.exports.createDagFlow = function (interval, data) {
   });
   console.log("Running " + "dag-"+data.name + " at " + interval)
   agenda.every(interval, "dag-"+data.name,{
-    "dag":data,
+    "data":data,
     "type": "dag"
   });
 };

@@ -1,5 +1,6 @@
-
+<p-toast></p-toast>
 <div class="row  w-100">
+ 
     <div class="col-4">
       <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
         Runs:
@@ -56,6 +57,9 @@
   <a class="play-btn" id="play-btn" (click)="ani();"></a>
   &nbsp;
   <small style="font-size: 10px;">On Error: {{this.flowForm.get("on_error").value}}</small>
+  <span class="example-spacer"></span>
+  <button pButton pRipple type="button" (click)="show()" icon="pi pi-clock" label="Schedule" class="p-button-outlined"></button>
+
 </mat-toolbar>
 <p-accordion>
   <p-accordionTab header="Parameters">

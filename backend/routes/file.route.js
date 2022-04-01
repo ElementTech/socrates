@@ -19,7 +19,7 @@ FileRoute.route('/create').post((req, res, next) => {
 });
 
 // Get All Files
-FileRoute.route('/').get((req, res) => {
+FileRoute.route('/').get((req, res,next) => {
   File.find((error, data) => {
     if (error) {
       return next(error);
@@ -29,7 +29,7 @@ FileRoute.route('/').get((req, res) => {
 });
 
 // Get single File
-FileRoute.route('/read/:id').get((req, res) => {
+FileRoute.route('/read/:id').get((req, res,next) => {
   File.findOne({ id: req.params.id }, (error, data) => {
     if (error) {
       return next(error);

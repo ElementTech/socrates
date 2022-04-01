@@ -6,13 +6,17 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ScheduleDialogComponent } from '../../../../components/schedule/schedule-dialog.component';
+import { MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { filter, interval, map, Observable, pairwise, switchMap, tap, throttleTime } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 @Component({
   selector: 'app-flow-run',
   templateUrl: './flow-run.component.html',
-  styleUrls: ['./flow-run.component.css']
+  styleUrls: ['./flow-run.component.css'],
+  providers: [DialogService, MessageService]
 })
 export class FlowRunComponent implements OnInit {
 
@@ -85,6 +89,37 @@ export class FlowRunComponent implements OnInit {
     })
   }
 
+  ref: DynamicDialogRef;
+  show() {
+    this.ref = this.dialogService.open(ScheduleDialogComponent, {
+        header: 'Schedule a Run',
+        width: '80%',
+        height: '80%',
+        contentStyle: {"overflow": "auto"},
+        baseZIndex: 10000,
+        data: this.Instance
+    });
+
+    this.ref.onClose.subscribe((data) =>{
+        if (data) 
+        {
+          console.log(data)
+          this.apiService.scheduleFlow({"id":this.id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
+          "multis":this.Instance.multis,"dynamic":this.Instance.dynamic,"interval":data}).subscribe(
+            (res) => {
+              console.log(res)
+              this.messageService.add({severity:'success', summary: 'Step Flow Run Scheduled', detail: data});
+              
+            }, (error) => {
+              console.log(error);
+              this.messageService.add({severity:'error', summary: 'Step Flow Could not be Scheduled', detail: data});
+          });
+            
+        }
+    });
+  }
+
+
   createDynamicKeyValue(name): any {
     
     return new Promise(resolve=>{
@@ -150,7 +185,10 @@ export class FlowRunComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private ngZone: NgZone,
     private cdRef: ChangeDetectorRef,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    public dialogService: DialogService,
+    public messageService: MessageService
+    ) {
     this.appendItems(0, this.sum);
     this.uploadService.getFiles().subscribe(data=>{
       

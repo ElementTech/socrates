@@ -1,0 +1,56 @@
+<!-- <p-table [value]="products" [paginator]="true" [rows]="5" [responsive]="true">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name">Name <p-sortIcon field="vin"></p-sortIcon></th>
+            <th pSortableColumn="price">Brand <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+            <th style="width:4em"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td><span [class]="'product-badge status-'+product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span></td>
+            <td>
+                <button type="button" pButton icon="pi pi-search" (click)="selectProduct(product)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table> -->
+<div class="row">
+    <div class="col" style="min-height: 15em;">
+        <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
+            Parameters:
+         </li>
+           <p-table [value]="this.config.data.parameters.concat(this.config.data.shared).concat(this.config.data.booleans).concat(this.config.data.multis).concat(this.config.data.dynamic)" responsiveLayout="scroll">
+             <ng-template pTemplate="header">
+                 <tr>
+                     <th><i class="fa fa-key" aria-hidden="true"></i> Key</th>
+                     <th><i class="fa fa-pencil-square" aria-hidden="true"></i> Value</th>
+                 </tr>
+             </ng-template>
+             <ng-template pTemplate="body" let-parameter>
+                 <tr>
+                     <td [class.hidden]="parameter.first">
+                       {{parameter.key ? parameter.key : parameter.name}}
+                     </td>
+                     <td [class.hidden]="parameter.first">
+                       {{parameter.secret ? "*********" : (parameter.value ? parameter.value : (parameter.value == false ? 'false' : parameter.output))}}
+                     </td>
+                 </tr>
+             </ng-template>
+           </p-table>
+    </div>
+    <div class="col"  style="min-height: 15em;">
+                <cron-editor [(cron)]="cronExpression" [disabled]="isCronDisabled" [(options)]="cronOptions"></cron-editor>
+                
+        
+    </div>
+    <hr/>
+    <p>The resulting Cron expression: </p>
+    <div class="form-group d-flex p-4">
+      <input type="text" class="form-control" [(ngModel)]="cronExpression">
+      <button pButton type="button" icon="pi pi-play" label="Schedule" (click)="selectCron()"></button>
+    </div>
+</div>

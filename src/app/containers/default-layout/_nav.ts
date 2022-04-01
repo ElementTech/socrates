@@ -107,8 +107,30 @@ export const navItems: INavData[] = [
     ]
   },
   {
+    name: 'Scheduler',
+    url: '/scheduler',
+    icon: 'cil-clock',
+    children: [
+      {
+        name: 'List',
+        url: '/scheduler/list',
+        icon: 'cil-list'
+      },
+      {
+        name: 'Timeline',
+        url: '/scheduler/timeline',
+        icon: 'cil-chart-line'
+      },
+    ]
+  },  
+  {
     name: 'Icons',
     url: '/icons',
     icon: 'cil-image'
+  },
+  {
+    name: 'Storage',
+    url: '/storage',
+    icon: 'cil-external-link'
   }
 ];

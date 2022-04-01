@@ -12,13 +12,16 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { filter, interval, map, Observable, pairwise, switchMap, throttleTime, timer } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import {ScheduleDialogComponent} from '../../../../components/schedule/schedule-dialog.component'
 
 
 @Component({
   selector: 'app-instance-run',
   templateUrl: './instance-run.component.html',
-  styleUrls: ['./instance-run.component.scss']
+  styleUrls: ['./instance-run.component.scss'],
+  providers: [DialogService, MessageService]
 })
 export class InstanceRunComponent implements OnInit {
  
@@ -50,7 +53,9 @@ export class InstanceRunComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    public dialogService: DialogService,
+    public messageService: MessageService
   ) {  
   
     this.id = this.actRoute.snapshot.paramMap.get('id');
@@ -59,7 +64,7 @@ export class InstanceRunComponent implements OnInit {
     this.getInstance(this.id);
    
   }
-
+  ref: DynamicDialogRef;
   ngOnInit() {
     this.fetchMoreInit()
 
@@ -73,6 +78,40 @@ export class InstanceRunComponent implements OnInit {
       });
       this.runInstance(this.id)
   }// Good
+
+  show() {
+    this.ref = this.dialogService.open(ScheduleDialogComponent, {
+        header: 'Schedule a Run',
+        width: '80%',
+        height: '80%',
+        contentStyle: {"overflow": "auto"},
+        baseZIndex: 10000,
+        data: this.Instance
+    });
+
+    this.ref.onClose.subscribe((data) =>{
+        if (data) 
+        {
+          console.log(data)
+          this.apiService.scheduleInstance({"id":this.id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
+          "multis":this.Instance.multis,"dynamic":this.Instance.dynamic,"interval":data}).subscribe(
+            (res) => {
+   
+              this.messageService.add({severity:'success', summary: 'Instance Run Scheduled', detail: data});
+              
+            }, (error) => {
+              console.log(error);
+              this.messageService.add({severity:'error', summary: 'Instance Run Could not be Scheduled', detail: data});
+          });
+            
+        }
+    });
+  }
+  ngOnDestroy() {
+    if (this.ref) {
+        this.ref.close();
+    }
+  }
 
   ngAfterViewInit(){
     this.scroller.elementScrolled().pipe(

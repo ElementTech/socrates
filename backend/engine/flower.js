@@ -8,7 +8,6 @@ const Block = require('../models/Block');
 const FlowInstance = require('../models/FlowInstance');
 let mongoose = require('mongoose');
 
-mongoose = require('mongoose'),
 mongoose.Promise = global.Promise;
 
 mongoose.connect(dbConfig.db, {

@@ -39,7 +39,9 @@ export class ApiService {
     return this.http.get(`${this.baseUri}/dashboard`,{headers: this.headers});
   }
   
-
+  getStorageUrl() {
+    return this.http.get(`${this.baseUri}/storage`,{headers: this.headers});
+  }
   // Create
   bulkParameter(data: any): Observable<any> {
     let url = `${this.baseUri}/parameter/bulk`;
@@ -79,6 +81,37 @@ export class ApiService {
     let url = `${this.baseUri}/parameter/delete/${id}`;
     return this.http.delete(url, { headers: this.headers })
   }
+  //--------------
+
+  // Get all blocks
+  getSchedules() {
+    return this.http.get(`${this.baseUri}/schedule`,{headers: this.headers});
+  }
+
+  // Get all blocks
+  getScheduleRuns() {
+    return this.http.get(`${this.baseUri}/schedule/runs`,{headers: this.headers});
+  }
+
+  // Get block
+  getSchedule(id: any): Observable<any> {
+    let url = `${this.baseUri}/schedule/read/${id}`;
+    return this.http.get(url, {headers: this.headers}).pipe(
+
+      catchError(this.errorMgmt)
+    )
+  }
+
+
+  // Delete block
+  deleteSchedule(id: any): Observable<any> {
+    let url = `${this.baseUri}/schedule/delete/${id}`;
+    return this.http.delete(url, { headers: this.headers })
+  }
+
+
+
+  //---------------
 
 
     // Get all blocks
@@ -196,7 +229,19 @@ export class ApiService {
   runInstance(data: any): Observable<any> {
     let url = `${this.baseUri}/instance/run`;
     return this.http.post(url,data,{headers: this.headers})
-      
+  }
+
+  scheduleInstance(data: any): Observable<any> {
+    let url = `${this.baseUri}/instance/cron`;
+    return this.http.post(url,data,{headers: this.headers})
+  }
+  scheduleFlow(data: any): Observable<any> {
+    let url = `${this.baseUri}/flow/cron`;
+    return this.http.post(url,data,{headers: this.headers})
+  }
+  scheduleFlowviz(data: any): Observable<any> {
+    let url = `${this.baseUri}/flowviz/cron`;
+    return this.http.post(url,data,{headers: this.headers})
   }
 
   runDynamicParameter(data: any): Observable<any> {

@@ -7,17 +7,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DagreNodesOnlyLayout, Layout } from '@swimlane/ngx-graph';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ContextMenu } from 'primeng/contextmenu';
 import { filter, interval, map, Observable, pairwise, switchMap, tap, throttleTime, timeInterval } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
 import { stepRound } from './customStepCurved';
-
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ScheduleDialogComponent } from '../../../../components/schedule/schedule-dialog.component';
 @Component({
   selector: 'app-flow-viz-run',
   templateUrl: './flow-viz-run.component.html',
-  styleUrls: ['./flow-viz-run.component.scss']
+  styleUrls: ['./flow-viz-run.component.scss'],
+  providers: [DialogService, MessageService]
 })
 export class FlowvizRunComponent implements OnInit {
 
@@ -46,6 +48,7 @@ export class FlowvizRunComponent implements OnInit {
   Images?: Observable<any>;
   imageUrls = {};
   flowData: any;
+  run: string;
   constructor(  
     public dialog: MatDialog,
     private sanitizer: DomSanitizer,
@@ -56,7 +59,9 @@ export class FlowvizRunComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private ngZone: NgZone,
     private cdRef: ChangeDetectorRef,
-    private apiService: ApiService
+    private apiService: ApiService,
+    public dialogService: DialogService,
+    public messageService: MessageService
     ) {
     this.appendItems(0, this.sum);
     this.uploadService.getFiles().subscribe(data=>{
@@ -72,6 +77,35 @@ export class FlowvizRunComponent implements OnInit {
 
     })
   }
+  ref: DynamicDialogRef;
+  show() {
+    this.ref = this.dialogService.open(ScheduleDialogComponent, {
+        header: 'Schedule a Run',
+        width: '80%',
+        height: '80%',
+        contentStyle: {"overflow": "auto"},
+        baseZIndex: 10000,
+        data: this.Instance
+    });
+
+    this.ref.onClose.subscribe((data) =>{
+        if (data) 
+        {
+          console.log(data)
+          this.apiService.scheduleFlowviz({"id":this.id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
+          "multis":this.Instance.multis,"dynamic":this.Instance.dynamic,"interval":data}).subscribe(
+            (res) => {
+              console.log(res)
+              this.messageService.add({severity:'success', summary: 'DAG Flow Run Scheduled', detail: data});
+              
+            }, (error) => {
+              console.log(error);
+              this.messageService.add({severity:'error', summary: 'DAG Flow Could not be Scheduled', detail: data});
+          });
+            
+        }
+    });
+  }
 
 
   fetchMoreInit(): void {
@@ -79,6 +113,11 @@ export class FlowvizRunComponent implements OnInit {
 
     this.loading = true;
     this.apiService.getFlowvizInstanceByFlowvizID(this.id).subscribe(data => {
+      if (data.length == 0)
+      {
+        this.loading = false
+      }
+      this.showConsole(this.run == null ? data[0]._id: this.run)
       if (this.alreadyLoaded <= data.length)
       {
         const imageList = {"true": "fail.png","false": "success.png"};
@@ -86,7 +125,7 @@ export class FlowvizRunComponent implements OnInit {
 
         //const newItems = [];
   
-          for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < (this.run == null ? 15 : data.length); i++) {
       
             if (data.length == this.alreadyLoaded+i)
             {
@@ -591,13 +630,14 @@ export class FlowvizRunComponent implements OnInit {
   Instance: any = {"parameters":[],"shared":[],"booleans":[],"multis":[],"dynamic":[]};
   ngOnInit(): void {
 
-
+    this.messageService.add({severity:'success', summary: 'DAG Flow Run Scheduled', detail: "stam"});
     // this.showPlus()
     // this.sidenav.close();
     this.Images = this.uploadService.getFiles()
 
     this.mainForm()
     this.id = this.actRoute.snapshot.paramMap.get('id')
+    this.run = this.actRoute.snapshot.paramMap.get('run');
     this.fetchMoreInit()
 
     console.log("Populate Flow")
@@ -624,6 +664,7 @@ export class FlowvizRunComponent implements OnInit {
                 this.Instance.multis = this.Instance.multis.concat(inst.multis.map(param=>Object.assign({"type":"multi","choices":inst.block.multis.filter(m=>m.key==param.key)[0].value},param)))
                 //@ts-ignore
                 this.Instance.dynamic = this.Instance.dynamic.concat(inst.dynamic.map(param=>Object.assign({"type":"dynamic","key":param.name,"choices":this.createDynamicKeyValue(param.name)},param)))
+
               }
             })
         })

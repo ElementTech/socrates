@@ -30,7 +30,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 
 // utils
-import { DocsComponentsModule } from '@docs-components/docs-components.module';
+
 
 // views
 import { InstanceCreateComponent } from './create/instance-create.component';
@@ -40,7 +40,7 @@ import { InstanceListComponent } from './list/instance-list.component';
 import { InstanceStatsComponent } from './stats/instance-stats.component'
 // Components Routing
 import { InstanceRoutingModule } from './instance-routing.module';
-
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import {TableModule as TableNGModule} from 'primeng/table';
 import {CalendarModule} from 'primeng/calendar';
 import {SliderModule} from 'primeng/slider';
@@ -102,9 +102,9 @@ import {CheckboxModule} from 'primeng/checkbox';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
+import {ScheduleDialogComponent} from '../../../components/schedule/schedule-dialog.component'
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-
+import { CronEditorModule } from '../../../components/cron-editor/lib/cron-editor.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -137,7 +137,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     PaginationModule,
     PopoverModule,
     TableModule,
-    DocsComponentsModule,
+    
     // PRIME NG
     TableNGModule,
     CalendarModule,
@@ -195,18 +195,21 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatDialogModule,
     MatTabsModule,
     MatAutocompleteModule,
+    DynamicDialogModule,
     // Codemirror
     CodemirrorModule,
     // Infinite
     InfiniteScrollModule,
-    NgxChartsModule
+    NgxChartsModule,
+    CronEditorModule
   ],
   declarations: [
     InstanceListComponent,
     InstanceCreateComponent,
     InstanceRunComponent,
     ArtifactsComponent,
-    InstanceStatsComponent
+    InstanceStatsComponent,
+    ScheduleDialogComponent
   ]
 })
 export class InstanceModule {}

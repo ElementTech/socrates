@@ -123,8 +123,10 @@ const UserRoute = require('./routes/users.route');
 const imageRoute = require('./routes/image.route');
 const artifactRoute = require('./routes/artifact.route');
 const dashboardRoute = require('./routes/dashboard.route');
+const schedulerRoute = require('./routes/scheduler.route');
 const dynamicParameterRoute = require('./routes/dynamic.route');
 // let Instances = require('./models/Instances');
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -152,6 +154,12 @@ app.use('/api/github', githubRoute);
 app.use('/api/user', UserRoute);
 app.use('/api/image', imageRoute);
 app.use('/api/artifact', artifactRoute);
+app.use('/api/schedule', schedulerRoute);
+app.get("/api/storage", (req, res) => {
+
+  res.json((process.env.MINIO_SSL != undefined ? ((process.env.MINIO_SSL == false) ? "http" : "https") : "http")+"://"+(process.env.MINIO_EXTERNAL_ADDR ? process.env.MINIO_EXTERNAL_ADDR : '127.0.0.1')+":9001")
+
+})
 app.use('/api', routesApi);
 app.use(createNodeMiddleware());
 // app.use('/api/web', webRequestsRoute)
@@ -204,6 +212,10 @@ async function mySeeder() {
     },
   );
 
+
+   
+
+
   // some other seed logic
   // ...
 
@@ -211,6 +223,9 @@ async function mySeeder() {
 }
 
 mySeeder();
+
+require('./controllers/cron.controller')
+
 require('./controllers/authentication').createAdmin({
   name: 'admin', password: process.env.MASTER_PASSWORD ? process.env.MASTER_PASSWORD : '123456', admin: true, email: process.env.MASTER_EMAIL ? process.env.MASTER_EMAIL : 'admin@socrates.com',
 });
@@ -238,3 +253,4 @@ app.use((err, req, res, next) => {
   if (!err.statusCode) err.statusCode = 500; // If err has no specified error code, set error code to 'Internal Server Error (500)'
   res.status(err.statusCode).send(err.message); // All HTTP requests must have a response, so let's send back an error with its status code and message
 });
+

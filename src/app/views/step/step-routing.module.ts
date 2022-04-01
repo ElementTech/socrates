@@ -58,6 +58,16 @@ const routes: Routes = [
         },
       },
       {
+        path: 'run/:id/:run',
+        component: FlowRunComponent,
+        data: {
+          title: 'Run',
+          breadcrumb: {
+            info: 'play'
+          }
+        },
+      },
+      {
         path: 'stats/:id',
         component: FlowStatsComponent,
         data: {

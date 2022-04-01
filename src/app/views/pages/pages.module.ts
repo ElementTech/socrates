@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { Page404Component } from './page404/page404.component';
 import { Page500Component } from './page500/page500.component';
+import { StorageComponent } from './storage/storage.component';
 import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ChipModule } from 'primeng/chip'
@@ -19,7 +20,8 @@ import {UnauthorizedComponent} from './unauthorized/unauthorized.component'
     RegisterComponent,
     Page404Component,
     Page500Component,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+    StorageComponent
   ],
   imports: [
     CommonModule,

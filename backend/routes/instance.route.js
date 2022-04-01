@@ -4,6 +4,7 @@ const app = express();
 const instanceRoute = express.Router();
 let docker = require('../engine/docker');
 const mongoose = require('mongoose');
+const cronController = require('../controllers/cron.controller')
 // Instance model
 const Instance = require('../models/Instance');
 const Flow = require('../models/Flow');
@@ -161,6 +162,41 @@ instanceRoute.route('/run').post((req, res) => {
       console.log(data);
       docker.run(data, custom_id);
       res.json(custom_id);
+    }
+  });
+});
+const cron = require('cron-validator');
+instanceRoute.route('/cron').post((req, res) => {
+  console.log(req.body)
+  Instance.findById(req.body.id).populate({
+    path: 'block',
+    model: 'Block', 
+    }).exec((error, data)=> {
+    if (error) {
+      res.status(500).json({
+        msg: error
+      })
+      return next(error);
+    } else {
+      if (cron.isValidCron(req.body.interval, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+        data.parameters = req.body.parameters;
+        data.shared = req.body.shared;
+        data.booleans = req.body.booleans;
+        data.multis = req.body.multis;
+        data.dynamic = req.body.dynamic;
+        console.log("scheduling")
+        cronController.createInstance(req.body.interval,data)
+        res.status(200).json({
+          msg: data.name
+        })
+      }
+      else
+      {
+        res.status(500).json({
+          msg: "Invalid Cron"
+        })
+      }
+
     }
   });
 });

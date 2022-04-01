@@ -10,7 +10,7 @@ const FlowInstance = require('../models/FlowInstance');
 const Instance = require('../models/Instance');
 const { ObjectId } = require('mongodb');
 const auth = require('../middleware/auth');
-
+const cronController = require('../controllers/cron.controller')
 flowRoute.use(auth);
 // Add Flow
 flowRoute.route('/create').post((req, res, next) => {
@@ -115,6 +115,30 @@ flowRoute.route('/run').post((req, res, next) => {
         "dynamic": req.body.dynamic,
       }, flow_run_id);
       res.json(flow_run_id);
+    }
+  });
+});
+const cron = require('cron-validator');
+flowRoute.route('/cron').post((req, res, next) => {
+  Flow.findById(req.body.id).exec((error, data)=> {
+    if (error) {
+      return next(error);
+    } else {
+      if (cron.isValidCron(req.body.interval, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+        data = data.toJSON()
+        data.parameters = req.body.parameters;
+        data.shared = req.body.shared;
+        data.booleans = req.body.booleans;
+        data.multis = req.body.multis;
+        data.dynamic = req.body.dynamic;
+        cronController.createStepFlow(req.body.interval,data)
+      }
+      else
+      {
+        res.status(500).json({
+          msg: "Invalid Cron"
+        })
+      }
     }
   });
 });

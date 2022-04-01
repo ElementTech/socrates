@@ -35,7 +35,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 
 // utils
-import { DocsComponentsModule } from '@docs-components/docs-components.module';
+
 
 // views
 
@@ -139,7 +139,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     PaginationModule,
     PopoverModule,
     TableModule,
-    DocsComponentsModule,
+    
     // PRIME NG
     TableNGModule,
     FieldsetModule,

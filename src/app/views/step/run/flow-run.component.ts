@@ -43,9 +43,11 @@ export class FlowRunComponent implements OnInit {
     {severity:'warn', summary:'Attention', detail:'Duplicate keys in instances will only consider first occurance in list'}
   ];
   Instance: any = {"parameters":[],"shared":[],"booleans":[],"multis":[],"dynamic":[]};
+  run: string;
   ngOnInit(): void {
     this.mainForm();
     this.id = this.actRoute.snapshot.paramMap.get('id')
+    this.run = this.actRoute.snapshot.paramMap.get('run');
     this.fetchMoreInit();
 
     console.log("Populate Flow")
@@ -170,7 +172,11 @@ export class FlowRunComponent implements OnInit {
 
     this.loading = true;
     this.apiService.getFlowInstanceByFlowID(this.id).subscribe(data => {
-    
+      if (data.length == 0)
+      {
+        this.loading = false
+      }
+      this.showConsole(this.run == null ? data[0]._id: this.run)
       if (this.alreadyLoaded <= data.length)
       {
         
@@ -179,7 +185,7 @@ export class FlowRunComponent implements OnInit {
 
         //const newItems = [];
   
-          for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < (this.run == null ? 15 : data.length); i++) {
       
             if (data.length == this.alreadyLoaded+i)
             {

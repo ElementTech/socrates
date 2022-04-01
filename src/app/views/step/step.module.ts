@@ -30,7 +30,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 
 // utils
-import { DocsComponentsModule } from '@docs-components/docs-components.module';
+
 
 // views
 
@@ -97,6 +97,7 @@ import {MatDialogModule} from '@angular/material/dialog'
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FlowCreateComponent } from './create/flow-create.component';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import {OverlayModule} from '@angular/cdk/overlay';
@@ -135,7 +136,8 @@ import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
     PaginationModule,
     PopoverModule,
     TableModule,
-    DocsComponentsModule,
+    ProgressSpinnerModule,
+    
     // PRIME NG
     TableNGModule,
     CalendarModule,

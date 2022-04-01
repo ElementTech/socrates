@@ -9,7 +9,7 @@ const Flowviz = require('../models/Flowviz');
 const FlowvizInstance = require('../models/FlowvizInstance');
 // let Instance = require('../models/Instance');
 const auth = require('../middleware/auth');
-
+const cronController = require('../controllers/cron.controller')
 flowvizRoute.use(auth);
 // Add Flowviz
 flowvizRoute.route('/create').post((req, res, next) => {
@@ -91,6 +91,31 @@ flowvizRoute.route('/run').post((req, res, next) => {
       }, flowviz_run_id);
       res.json(flowviz_run_id);
 
+    }
+  });
+});
+
+const cron = require('cron-validator');
+flowvizRoute.route('/cron').post((req, res, next) => {
+  Flowviz.findById(req.body.id).exec((error, data)=> {
+    if (error) {
+      return next(error);
+    } else {
+      if (cron.isValidCron(req.body.interval, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+      data = data.toJSON()
+      data.parameters = req.body.parameters;
+      data.shared = req.body.shared;
+      data.booleans = req.body.booleans;
+      data.multis = req.body.multis;
+      data.dynamic = req.body.dynamic;
+      cronController.createDagFlow(req.body.interval,data)
+      }
+      else
+      {
+        res.status(500).json({
+          msg: "Invalid Cron"
+        })
+      }      
     }
   });
 });

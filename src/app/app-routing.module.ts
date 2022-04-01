@@ -5,6 +5,7 @@ import { DefaultLayoutComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
+import { StorageComponent } from './views/pages/storage/storage.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { UnauthorizedComponent } from './views/pages/unauthorized/unauthorized.component';
@@ -50,6 +51,11 @@ const routes: Routes = [
           import('./views/icons/icons.module').then((m) => m.IconsModule)
       },
       {
+        path: 'scheduler',
+        loadChildren: () =>
+          import('./views/scheduler/scheduler.module').then((m) => m.SchedulerModule)
+      },      
+      {
         path: 'profile',
         loadChildren: () =>
           import('./views/profile/profile.module').then((m) => m.ProfileModule)
@@ -94,6 +100,13 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
       },
     ]
+  },
+  {
+    path: 'storage',
+    component: StorageComponent,
+    data: {
+      title: 'Storage'
+    }
   },
   {
     path: '404',

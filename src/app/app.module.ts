@@ -15,7 +15,7 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 
 // Import app component
-import { AppComponent } from './app.component';
+import { AppComponent, SafePipe } from './app.component';
 
 // Import containers
 import {
@@ -61,7 +61,7 @@ const APP_CONTAINERS = [
 ];
 import {ScrollTopModule} from 'primeng/scrolltop';
 @NgModule({
-  declarations: [AppComponent, ...APP_CONTAINERS],
+  declarations: [AppComponent, ...APP_CONTAINERS,SafePipe],
   imports: [
     XngBreadcrumbModule,
     HttpClientModule,

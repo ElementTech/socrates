@@ -30,7 +30,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 
 // utils
-import { DocsComponentsModule } from '@docs-components/docs-components.module';
+
 
 // views
 
@@ -133,7 +133,7 @@ import { FileManagerModule } from './file-manager/file-manager.module';
     PaginationModule,
     PopoverModule,
     TableModule,
-    DocsComponentsModule,
+    
     // PRIME NG
     TableNGModule,
     CalendarModule,

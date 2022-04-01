@@ -19,7 +19,7 @@ Socrates is a simple automation server, inspired by Jenkins. It can run tasks in
 
 ## Installation
 
-Dillinger requires either Docker or Kubernetes to run.
+Socrates requires either Docker or Kubernetes to run.
 
 #### docker
 `docker-compose.yaml` file available in root.

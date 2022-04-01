@@ -4,6 +4,8 @@
 
 Socrates is a simple automation server, inspired by Jenkins. It can run tasks in any code language and present them in a friendly dashboard to non-technical users.
 
+![Overview](overview.jpg?raw=true "Overview")
+
 ## Features
 
 - Define Parameterized Blocks of code in any language to be run in Docker.

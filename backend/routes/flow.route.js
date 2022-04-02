@@ -11,6 +11,7 @@ const Instance = require('../models/Instance');
 const { ObjectId } = require('mongodb');
 const auth = require('../middleware/auth');
 const cronController = require('../controllers/cron.controller')
+const agenda = cronController.agenda
 flowRoute.use(auth);
 // Add Flow
 flowRoute.route('/create').post((req, res, next) => {
@@ -89,7 +90,8 @@ flowRoute.route('/update/:id').put((req, res, next) => {
 
 // Delete flow
 flowRoute.route('/delete/:id').delete((req, res, next) => {
-  Flow.findByIdAndRemove(req.params.id, (error, data) => {
+  Flow.findByIdAndRemove(req.params.id, async (error, data) => {
+    await agenda.cancel({ name: ("step-"+data.name) });
     console.log("Removing: " + req.params.id)
     if (error) {
       return next(error);

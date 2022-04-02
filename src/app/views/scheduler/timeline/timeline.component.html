@@ -2,9 +2,9 @@
 
 <div class="card">
     <ngx-timeline class="pl-5 pr-5" [events]="timeline" [reverseOrder]="true" [enableAnimation]="false" [groupEvent]="'DAY_MONTH_YEAR'" [changeSideInGroup]="'ON_DIFFERENT_HMS'"
-    [innerEventCustomTemplate]="innerEventCustomTemplate" 
+    [innerEventCustomTemplate]="innerEventCustomTemplate" [centerIconCustomTemplate]="centerIconCustomTemplate"
     >
-    <!-- [centerIconCustomTemplate]="centerIconCustomTemplate" -->
+    <!--  -->
         <ng-template #innerEventCustomTemplate let-event=event>
             <div class="event">
               <h5>  <i class="fa" [ngClass]="{
@@ -13,8 +13,7 @@
                 'fa-sitemap': (event.eventInfo.type == 'dag')
               }"></i> {{event.eventInfo.title}}</h5>
               <hr>
-              <img width="30px" [src]="event.eventInfo.done == false ? '../../../assets/question.png' : (event.eventInfo.error ? '../../../assets/fail.png' : '../../../assets/success.png')"/>
-               <code>{{event.eventInfo.id}}</code>
+                             <code>{{event.eventInfo.id}}</code>
                <i class="fa fa-external-link pl-2" [routerLink]="['/'+event.eventInfo.type+'/run/', event.eventInfo.component_id, event.eventInfo.id]" aria-hidden="true"></i>
               <!-- <mat-list-item role="listitem" [routerLink]="['/instance/run/', triggerNode.instance_id, triggerNode.run_id]"><i class="fa fa-external-link" aria-hidden="true"></i> &nbsp; Instance Page</mat-list-item> -->
             </div>
@@ -24,11 +23,11 @@
               {{event | json}}
             </div>
           </ng-template> -->
-          <!-- <ng-template #centerIconCustomTemplate>
+          <ng-template #centerIconCustomTemplate let-event=event>
             <div class="icon-container">
-              <img [src]="event.done == false ? '../../../assets/question.png' : (event.error ? '../../../assets/fail.png' : '../../../assets/success.png')"/>
+              <img width="40px" [src]="event.eventInfo.done == false ? '../../../assets/question.png' : (event.eventInfo.error ? '../../../assets/fail.png' : '../../../assets/success.png')"/>
             </div>
-          </ng-template>      -->
+          </ng-template>     
     </ngx-timeline>
 </div>
 

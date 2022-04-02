@@ -5,6 +5,7 @@ const instanceRoute = express.Router();
 let docker = require('../engine/docker');
 const mongoose = require('mongoose');
 const cronController = require('../controllers/cron.controller')
+const agenda = cronController.agenda
 // Instance model
 const Instance = require('../models/Instance');
 const Flow = require('../models/Flow');
@@ -113,7 +114,9 @@ instanceRoute.route('/delete/:id').delete((req, res, next) => {
     } 
       console.log(flowLength,flowvizLength)
       if (flowLength == 0 && flowvizLength == 0){
-        Instance.findByIdAndRemove(req.params.id, (error, data) => {
+        Instance.findByIdAndRemove(req.params.id, async (error, data) => {
+          let numRemoved = await agenda.cancel({ name: ("instance-"+data.name) });
+          console.log("Num Agendas Removed",numRemoved,"instance-"+data.name)
           console.log("Removing: " + req.params.id)
           if (error) {
             res.status(500).json({

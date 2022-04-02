@@ -157,7 +157,7 @@ app.use('/api/artifact', artifactRoute);
 app.use('/api/schedule', schedulerRoute);
 app.get("/api/storage", (req, res) => {
 
-  res.json((process.env.MINIO_SSL != undefined ? ((process.env.MINIO_SSL == false) ? "http" : "https") : "http")+"://"+(process.env.MINIO_EXTERNAL_ADDR ? process.env.MINIO_EXTERNAL_ADDR : '127.0.0.1')+":9001")
+  res.json(process.env.MINIO_EXTERNAL_ADDR ? process.env.MINIO_EXTERNAL_ADDR : "http://127.0.0.1:9001")
 
 })
 app.use('/api', routesApi);

@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import {BreadcrumbModule as XngBreadcrumbModule} from 'xng-breadcrumb';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -91,7 +92,8 @@ import {ScrollTopModule} from 'primeng/scrolltop';
     BadgeModule,
     ListGroupModule,
     ScrollTopModule,
-    CardModule
+    CardModule,
+    LoadingBarRouterModule
   ],
   providers: [
     {

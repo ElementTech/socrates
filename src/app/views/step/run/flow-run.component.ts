@@ -279,7 +279,6 @@ export class FlowRunComponent implements OnInit {
   showConsole(id)
   {
     this.unPaintSteps()
-    this.setRunID(id)
 
     // this.fetchMore(true)
     this.apiService.getFlowInstance(id).subscribe(data => {
@@ -293,6 +292,7 @@ export class FlowRunComponent implements OnInit {
         catch{
           console.log("Unsubscribing")
         }
+        this.setRunID(id)
         
         if (data.done == true)
         {
@@ -357,10 +357,6 @@ export class FlowRunComponent implements OnInit {
    
   // }// Good
   ani() {
-    document.getElementById('play-btn').classList.add("play-btn-animate");
-    this._snackBar.open('Flow Started', 'Close', {
-      duration: 3000
-    });
     this.runFlow(this.id)
   }// Good  
 
@@ -376,12 +372,15 @@ export class FlowRunComponent implements OnInit {
       this.apiService.runFlow({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
         "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
         (res) => {
-          
+          document.getElementById('play-btn').classList.add("play-btn-animate");
           this._snackBar.open('Flow Run Started', 'Close', {
             duration: 3000
           });
         this.updateConsole(res)
         }, (error) => {
+          this._snackBar.open('Please wait for all Dynamic Parameters to resolve', 'Close', {
+            duration: 3000
+          });
           console.log(error);
       });
   }// Good

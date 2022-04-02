@@ -10,6 +10,7 @@ const FlowvizInstance = require('../models/FlowvizInstance');
 // let Instance = require('../models/Instance');
 const auth = require('../middleware/auth');
 const cronController = require('../controllers/cron.controller')
+const FileElement = require('../models/FileElement')
 const agenda = cronController.agenda
 flowvizRoute.use(auth);
 // Add Flowviz
@@ -67,6 +68,7 @@ flowvizRoute.route('/update/:id').put((req, res, next) => {
 flowvizRoute.route('/delete/:id').delete((req, res, next) => {
   Flowviz.findByIdAndRemove(req.params.id, async (error, data) => {
     await agenda.cancel({ name: ("dag-"+data.name) });
+    FileElement.deleteMany({fileid: req.params.id}).exec();
     console.log("Removing: " + req.params.id)
     if (error) {
       return next(error);

@@ -72,10 +72,8 @@ export class InstanceRunComponent implements OnInit {
   }// Good
 
   ani() {
-      document.getElementById('play-btn').classList.add("play-btn-animate");
-      this._snackBar.open('Instance Started', 'Close', {
-        duration: 3000
-      });
+      
+    
       this.runInstance(this.id)
   }// Good
 
@@ -308,6 +306,7 @@ export class InstanceRunComponent implements OnInit {
     this.apiService.runInstance({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
     "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
       (res) => {
+        document.getElementById('play-btn').classList.add("play-btn-animate");
         this._snackBar.open('Instance Run Started', 'Close', {
           duration: 3000
         });
@@ -331,6 +330,9 @@ export class InstanceRunComponent implements OnInit {
         this.updateConsole(res)
         
       }, (error) => {
+        this._snackBar.open('Please wait for all Dynamic Parameters to resolve', 'Close', {
+          duration: 3000
+        });
         console.log(error);
     });
   }// Good

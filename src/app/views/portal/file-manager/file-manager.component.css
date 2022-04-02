@@ -11,8 +11,9 @@
 }
 
 .file-or-folder {
-  padding: 8px;
   overflow: hidden;
+  /* min-width: 150px !important; */
+  /* border: 1px solid black; */
 }
 
 .container{
@@ -22,7 +23,7 @@
 .file-or-folder-icon {
   width: 80px;
   height: 80px;
-  font-size: 80px;
+  font-size: 75px;
   
 }
 
@@ -39,10 +40,11 @@
 }
 
 .file-icon:hover,.file-or-folder-icon:hover{
-  transform: translateY(-8px);
+  transform: translateY(-4px);
 }
 .pointer {
-  cursor: pointer;
+  cursor: pointer !important;
+  color:rgb(48,60,84)
 }
 
 .spacer {
@@ -60,12 +62,17 @@
   grid-row-start: 1;
 }
 .littleimage{
-  width: 40px;
-  padding-top:25px;
-  margin-left: 40px;
+  width: 30px;
+  position: absolute;
+  top: 10px;
+  right: 5px;
 }
 .content2 {
   height: calc(100vh - 64px);
   overflow: auto;
 
+}
+
+.p-panel-header{
+  max-height: 10px !important;
 }

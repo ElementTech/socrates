@@ -11,7 +11,7 @@ const Instance = require('../models/Instance');
 const Flow = require('../models/Flow');
 const Flowviz = require('../models/Flowviz');
 const auth = require('../middleware/auth');
-
+const FileElement = require('../models/FileElement')
 instanceRoute.use(auth);
 // Add Instance
 instanceRoute.route('/create').post((req, res, next) => {
@@ -116,6 +116,7 @@ instanceRoute.route('/delete/:id').delete((req, res, next) => {
       if (flowLength == 0 && flowvizLength == 0){
         Instance.findByIdAndRemove(req.params.id, async (error, data) => {
           let numRemoved = await agenda.cancel({ name: ("instance-"+data.name) });
+          FileElement.deleteMany({fileid: req.params.id}).exec();
           console.log("Num Agendas Removed",numRemoved,"instance-"+data.name)
           console.log("Removing: " + req.params.id)
           if (error) {

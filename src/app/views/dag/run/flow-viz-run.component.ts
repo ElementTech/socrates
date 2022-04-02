@@ -271,10 +271,6 @@ export class FlowvizRunComponent implements OnInit {
    
   // }// Good
   ani() {
-    document.getElementById('play-btn').classList.add("play-btn-animate");
-    this._snackBar.open('Flowviz Started', 'Close', {
-      duration: 3000
-    });
     this.runFlowviz(this.id)
   }// Good  
 
@@ -289,12 +285,15 @@ export class FlowvizRunComponent implements OnInit {
       this.apiService.runFlowviz({"id":id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
         "multis":this.Instance.multis,"dynamic":this.Instance.dynamic}).subscribe(
         (res) => {
-        
+          document.getElementById('play-btn').classList.add("play-btn-animate");
           this._snackBar.open('Flow Run Started', 'Close', {
             duration: 3000
           });
         this.updateConsole(res)
         }, (error) => {
+          this._snackBar.open('Please wait for all Dynamic Parameters to resolve', 'Close', {
+            duration: 3000
+          });
           console.log(error);
       });
   }// Good

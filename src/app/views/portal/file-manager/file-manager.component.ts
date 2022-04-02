@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FileElement } from './model/element';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,7 +7,7 @@ import { RenameDialogComponent } from './modals/renameDialog/renameDialog.compon
 import { NewFileDialogComponent } from './modals/newFileDialog/newFileDialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploadService } from 'src/app/services/file-upload.service';
-
+import {MenuItem} from 'primeng/api';
 @Component({
   selector: 'file-manager',
   templateUrl: './file-manager.component.html',
@@ -37,6 +37,7 @@ export class FileManagerComponent implements OnChanges {
   @Output() navigatedUp = new EventEmitter();
 
   ngOnInit() {
+    this.setColumns();
     this.uploadService.getFiles().subscribe(data=>{
       data.forEach(element => {
         this.uploadService.getFileImage(element.name).subscribe(data => {
@@ -52,7 +53,10 @@ export class FileManagerComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {}
 
   deleteElement(element: FileElement) {
-    this.elementRemoved.emit(element);
+    if (window.confirm("Are you sure?"))
+    {
+      this.elementRemoved.emit(element);
+    }
   }
 
   navigate(element: FileElement) {
@@ -101,4 +105,10 @@ export class FileManagerComponent implements OnChanges {
     event.preventDefault();
     viewChild.openMenu();
   }
+
+  @ViewChild('box', {static: true}) box: ElementRef;
+  columns: number = 8;
+  setColumns() {
+    this.columns = Math.floor(this.box.nativeElement.clientWidth / 200);
+  } 
 }

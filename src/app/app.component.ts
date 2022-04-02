@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'body',
-  template: '<router-outlet></router-outlet>',
+  template: '<ngx-loading-bar></ngx-loading-bar><router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
   title = 'Socrates';

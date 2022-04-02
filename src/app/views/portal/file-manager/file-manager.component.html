@@ -10,25 +10,48 @@
   </button>
 </mat-toolbar>
 
-<div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
-  <div class="content2" fxFlex fxLayout="row">
-    <mat-grid-list cols="10" rowHeight="100px" fxFlex>
-      <mat-grid-tile *ngFor="let element of fileElements" class=file-or-folder>
-        <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span>
-        <div fxLayout="column" fxLayoutAlign="space-between center" (click)="navigate(element)" (contextmenu)="openMenu($event,element, menuTrigger)">
-          <mat-icon style="color:rgb(48,60,84)"class="file-or-folder-icon pointer" *ngIf="element.isFolder">folder</mat-icon>
+<div fxFlex fxLayout="row" fxLayoutAlign="space-evenly">
+  <div class="content2" fxFlex fxLayout="row" id="box" #box>
+    <mat-grid-list [cols]="columns" rowHeight="200px" gutterSize="10px" fxFlex class="m-2"
+    (window:resize)="setColumns()"
+    >
+      <mat-grid-tile 
+      *ngFor="let element of fileElements" 
+      class=file-or-folder>
+      
+        <p-panel header="{{element.name}}" class="w-100">
+          <ng-template pTemplate="header">
+           
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <!-- <span  class="pi pi-cog p-panel-header-icon"  [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span> -->
+            <span  class="pi pi-reply p-panel-header-icon" [matMenuTriggerFor]="moveToMenu" [matMenuTriggerData]="{self: element}"></span>
+            <span  class="pi pi-pencil p-panel-header-icon pl-3"  (click)="openRenameDialog(element)"></span>
+            <span class="example-spacer"></span>
+            <span  class="pi pi-trash p-panel-header-icon pl-3" style="color:maroon"  (click)="deleteElement(element)"></span>
+  
+          </ng-template>
           
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/block/create/', element.fileid]" *ngIf="element.type === 'block'">
-            <i class="fa-solid fa-cube"></i><img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]">
-          </mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/instance/run/', element.fileid]" *ngIf="element.type === 'instance'">
-            <i class="fa-solid fa-cubes"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/step/run/', element.fileid]" *ngIf="element.type === 'flow'">
-            <i class="fa-solid fa-stairs"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>
-          <mat-icon style="color:rgb(48,60,84)"class="file-icon pointer" [routerLink]="['/dag/run/', element.fileid]" *ngIf="element.type === 'viz'">
-            <i class="fa-solid fa-diagram-project"></i><img class="littleimage"  *ngIf="element.image" [src]="this.imageUrls[element.image]"></mat-icon>            
-          <span>{{element.name}}</span>
-        </div>
+           <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span>
+
+          <div fxLayout="column" fxLayoutAlign="space-between center" (click)="navigate(element)" (contextmenu)="openMenu($event,element, menuTrigger)">
+  
+            <div *ngIf="element.isFolder; else elseBlock"><mat-icon class="file-or-folder-icon pointer">folder</mat-icon></div>
+            <ng-template #elseBlock>
+              <mat-icon 
+                class="file-icon pointer"
+                [routerLink]="['/'+element.type.replace('flow','step').replace('viz','dag')+'/'+(element.type=='block'?'create':'run')+'/', element.fileid]">
+                <i class="fa-solid fa-code" [ngClass]='{"fa-code":element.type=="block","fa-play-circle":element.type!="block"}'></i>
+              </mat-icon>
+              <img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]">
+
+            </ng-template>
+   
+  
+          </div>
+ 
+        </p-panel>
+      
       </mat-grid-tile>
     </mat-grid-list>
   </div>

@@ -7,6 +7,7 @@ const blockRoute = express.Router();
 const Block = require('../models/Block');
 const Instance = require('../models/Instance');
 const DockerInstance = require('../models/DockerInstance')
+const FileElement = require('../models/FileElement')
 const auth = require('../middleware/auth');
 
 blockRoute.use(auth);
@@ -169,6 +170,7 @@ blockRoute.route('/delete/:id').delete((req, res, next) => {
       return next(error);
     } else if (instance_data.length == 0){
         Block.findByIdAndRemove(req.params.id, (error, data) => {
+          FileElement.deleteMany({fileid: req.params.id}).exec();
           console.log("Removing: " + req.params.id)
           if (error) {
             res.status(500).json({

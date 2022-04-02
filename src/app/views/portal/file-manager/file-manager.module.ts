@@ -17,7 +17,9 @@ import { NewFileDialogComponent } from './modals/newFileDialog/newFileDialog.com
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
-
+import {PanelModule} from 'primeng/panel';
+import {ButtonModule} from 'primeng/button';
+import {MenuModule} from 'primeng/menu';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
     FlexLayoutModule,
     MatIconModule,
     MatGridListModule,
+    MenuModule,
     MatMenuModule,
     MatDialogModule,
     MatInputModule,
@@ -33,7 +36,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatButtonToggleModule,
     MatAutocompleteModule,
-    MatSelectModule
+    MatSelectModule,
+    PanelModule,
+    ButtonModule
   ],
   declarations: [FileManagerComponent, NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
   exports: [FileManagerComponent],

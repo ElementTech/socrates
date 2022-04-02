@@ -234,8 +234,11 @@ export class FlowVizComponent {
       nodes: [this.nodes, [Validators.required]],
       links: [this.links, [Validators.required]],
       on_error: ['', [Validators.required]],
+      user: [''],
       desc: [''],
-      image: ['']
+      image: [''],
+      createdAt: [''],
+      updatedAt: ['']
     })
   }
 

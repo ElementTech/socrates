@@ -164,6 +164,7 @@ export class FlowCreateComponent implements OnInit {
       desc: [''],
       createdAt: [''],
       updatedAt: [''],
+      user: [''],
       image: ['']
     })
   }

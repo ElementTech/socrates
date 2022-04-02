@@ -231,7 +231,7 @@
   
                   <span class="badge bg-primary rounded-pill">{{this.Instance.parameters.length+this.Instance.shared.length+this.Instance.booleans.length+this.Instance.multis.length}}</span>
                   </li> -->
-                  <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
+                  <li *ngIf='this.Instance.desc !== ""' class="list-group-item d-flex justify-content-between align-items-center bg-primary">
                     Description:
                  </li>
                   <li *ngIf='this.Instance.desc !== ""' class="list-group-item d-flex justify-content-between align-items-center">

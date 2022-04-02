@@ -45,7 +45,7 @@ server:
   affinity: {}
 
 worker:
-  replicaCount: 1
+  replicaCount: 2
   storageClass: gp2
   storage: 3Gi
   image:

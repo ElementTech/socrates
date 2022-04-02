@@ -1,5 +1,9 @@
 <mat-dialog-content class="mat-typography"  style="width:50vw !important">
-  <ngx-codemirror *ngIf="ready" 
+  <ngx-monaco-editor 
+  style="width: 100%;height:calc(60vh - 100px);" 
+  [options]="editorOptions" 
+  [(ngModel)]="data.content"></ngx-monaco-editor>
+  <!-- <ngx-codemirror *ngIf="ready" 
         [options]="{
           lineNumbers: true,
           theme: 'material',
@@ -7,7 +11,7 @@
           readOnly: true
         }"
         [(ngModel)]="data.content"
-    ></ngx-codemirror>
+    ></ngx-codemirror> -->
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>

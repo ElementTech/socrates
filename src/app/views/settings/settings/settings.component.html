@@ -82,6 +82,17 @@
 										</mat-form-field>
 									</mat-cell>
 								</ng-container>
+								<ng-container matColumnDef="syntax">
+									<mat-header-cell *matHeaderCellDef>Syntax </mat-header-cell>
+									<mat-cell *matCellDef="let element">
+										<p-dropdown appendTo="body"
+										[filter]="true" filterBy="id"
+											[(ngModel)]="element.syntax" [options]="monacoLanguages" optionLabel="id" optionValue="id" ></p-dropdown>
+										<!-- <mat-form-field floatLabel="never">
+											<input matInput placeholder="Type" [value]="element.syntax" [(ngModel)]="element.syntax">
+										</mat-form-field> -->
+									</mat-cell>
+								</ng-container>
 						
 								<ng-container matColumnDef="configure">
 									<mat-header-cell *matHeaderCellDef>Configure</mat-header-cell>

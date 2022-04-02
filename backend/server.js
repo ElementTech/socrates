@@ -193,6 +193,7 @@ async function mySeeder() {
           tag: 'latest',
           command: 'python -u',
           type: '.py',
+          syntax: 'python'
         },
         {
           lang: 'nodejs',
@@ -200,6 +201,7 @@ async function mySeeder() {
           tag: 'latest',
           command: 'node',
           type: '.js',
+          syntax: 'javascript'
         },
         {
           lang: 'bash',
@@ -207,6 +209,7 @@ async function mySeeder() {
           tag: 'latest',
           command: 'sh',
           type: '.sh',
+          syntax: 'shell'
         },
       ],
     },

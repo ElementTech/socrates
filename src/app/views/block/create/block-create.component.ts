@@ -43,12 +43,14 @@ export class BlockCreateComponent implements OnInit {
   imageUrls = {};
 
 
+
   sharedParams: any = [];
   dynamicParams: any = [];
   sharedBeforeForm: any = [];
   dynamicBeforeForm: any = [];
   shared: FormArray;
   dynamic: FormArray;
+  selectedLintLang:String;
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('CodeMirror') private cm: any;
@@ -56,6 +58,8 @@ export class BlockCreateComponent implements OnInit {
   blockForm: FormGroup;
   parameters: FormArray;
   selectedLang: String;
+  editorOptions:any = {theme: 'vs-dark', language: "shell",automaticLayout: true,wordWrap: true};
+
   selectedImage: String;
   Language: Object[] = []
   title = "New Block"
@@ -68,6 +72,7 @@ export class BlockCreateComponent implements OnInit {
     theme: 'material'
   }
   parametersForm: any;
+  settingsLangs: any;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -81,8 +86,15 @@ export class BlockCreateComponent implements OnInit {
   ) { 
    
   }
+  onChange(event)
+  {
+    this.editorOptions = { ...this.editorOptions, language: event.target.value }; 
+  }
 
-
+  onLanguagePick(event)
+  {
+    this.editorOptions = { ...this.editorOptions, language: this.settingsLangs.filter(lang=>lang.lang==event.value)[0].syntax }; 
+  }
 
 
   dropShared(event) {
@@ -172,6 +184,7 @@ export class BlockCreateComponent implements OnInit {
             this.blockForm.get('github').setValue(data.github)
             this.blockForm.get('desc').setValue(data.desc)
             this.blockForm.get('lang').setValue(data.lang)
+            this.editorOptions = { ...this.editorOptions, language: data.lang }; 
             this.blockForm.get('image').setValue(data.image)
             this.shared = this.blockForm.get('shared') as FormArray;
             this.dynamic = this.blockForm.get('dynamic') as FormArray;
@@ -246,7 +259,7 @@ export class BlockCreateComponent implements OnInit {
   //       console.log(error);
   //     })
   this.apiService.getSettings().subscribe(data=>{
-
+      this.settingsLangs = data[0]["langs"]
       data[0]["langs"].forEach(element => {
         this.Language.push({"name":element["lang"]})
       });
@@ -292,11 +305,12 @@ export class BlockCreateComponent implements OnInit {
     this.blockForm.get('github').setValue(true)
     document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
     document.getElementById(git.path).classList.add('bg-primary')
-    this.ngxOptions= {
-      lineNumbers: true,
-      theme: 'material',
-      readOnly: true
-    }
+    this.editorOptions = { ...this.editorOptions, language: this.settingsLangs.filter(lang=>lang.type==git.prefix)[0].syntax }; 
+    // this.ngxOptions= {
+    //   lineNumbers: true,
+    //   theme: 'material',
+    //   readOnly: true
+    // }
   }
 
   disconnectGit(){
@@ -304,11 +318,11 @@ export class BlockCreateComponent implements OnInit {
     this.blockForm.get('script').setValue('')
     this.blockForm.get('github').setValue(false)
     document.querySelectorAll('.bg-primary').forEach(item=>item.classList.remove('bg-primary'))
-    this.ngxOptions= {
-      lineNumbers: true,
-      theme: 'material',
-      readOnly: false
-    }
+    // this.ngxOptions= {
+    //   lineNumbers: true,
+    //   theme: 'material',
+    //   readOnly: false
+    // }
   }
 
   createItem(): FormGroup {

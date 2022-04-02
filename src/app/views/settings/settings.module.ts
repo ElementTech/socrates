@@ -103,7 +103,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {GithubListComponent,DialogContentExampleDialog} from './github/github-list.component'
 import {SettingsComponent} from './settings/settings.component'
 import {UserListComponent} from './users/user-list.component'
-
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 @NgModule({
   imports: [
     CommonModule,
@@ -195,7 +195,8 @@ import {UserListComponent} from './users/user-list.component'
     CodemirrorModule,
     // Infinite
     InfiniteScrollModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [
     GithubListComponent,

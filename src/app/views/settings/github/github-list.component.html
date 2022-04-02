@@ -29,7 +29,7 @@
 
         <ng-container matColumnDef="content">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Show Content</mat-header-cell>
-            <mat-cell *matCellDef="let row" [style.color]="row.content"><button mat-flat-button color="primary" (click)="openDialog(row.content)">Show</button></mat-cell>
+            <mat-cell *matCellDef="let row" ><button mat-flat-button color="primary" (click)="openDialog(row.content,row.prefix)">Show</button></mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="sha">

@@ -25,7 +25,7 @@
           </div>
           
           <div class="col-12">
-            <p-dropdown  appendTo="body" [options]="Language" [(ngModel)]="selectedLang"   formControlName="lang" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Code Language">
+            <p-dropdown  appendTo="body" [options]="Language" (onChange)="onLanguagePick($event)" [(ngModel)]="selectedLang"   formControlName="lang" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Code Language">
                 <ng-template pTemplate="selectedItem">
                     <div class="d-flex align-middle"  *ngIf="selectedLang">
                       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{selectedLang}}/{{selectedLang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30">
@@ -225,22 +225,23 @@
   </p-fieldset>
   <p-fieldset legend="Pre-Script" [toggleable]="true" *ngIf="prescript_enabled">
 
-    <ngx-codemirror
-    formControlName="prescript"
-      [options]="{
-        lineNumbers: true,
-        theme: 'material'
-      }"
-      
-    ></ngx-codemirror>
+    <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="{theme: 'vs-dark',wordWrap: true, language: 'shell',automaticLayout: true}" formControlName="prescript" ></ngx-monaco-editor>
   </p-fieldset>
   <p-fieldset legend="Code" [toggleable]="true">
-
+      <!-- <p-dropdown 
+      [ngModelOptions]="{standalone: true}"
+      [(ngModel)]="selectedLintLang" [options]="monrachList" optionLabel="name" ></p-dropdown> -->
+     Override Syntax:  <select (change)="onChange($event)" class="language-picker"><option>abap</option><option>aes</option><option>apex</option><option>azcli</option><option>bat</option><option>bicep</option><option>c</option><option>cameligo</option><option>clojure</option><option>coffeescript</option><option>cpp</option><option>csharp</option><option>csp</option><option>css</option><option>dart</option><option>dockerfile</option><option>ecl</option><option>elixir</option><option>flow9</option><option>freemarker2</option><option>freemarker2.tag-angle.interpolation-bracket</option><option>freemarker2.tag-angle.interpolation-dollar</option><option>freemarker2.tag-auto.interpolation-bracket</option><option>freemarker2.tag-auto.interpolation-dollar</option><option>freemarker2.tag-bracket.interpolation-bracket</option><option>freemarker2.tag-bracket.interpolation-dollar</option><option>fsharp</option><option>go</option><option>graphql</option><option>handlebars</option><option>hcl</option><option>html</option><option>ini</option><option>java</option><option>javascript</option><option>json</option><option>julia</option><option>kotlin</option><option>less</option><option>lexon</option><option>liquid</option><option>lua</option><option>m3</option><option>markdown</option><option>mips</option><option>msdax</option><option>mysql</option><option>objective-c</option><option>pascal</option><option>pascaligo</option><option>perl</option><option>pgsql</option><option>php</option><option>pla</option><option>plaintext</option><option>postiats</option><option>powerquery</option><option>powershell</option><option>proto</option><option>pug</option><option>python</option><option>qsharp</option><option>r</option><option>razor</option><option>redis</option><option>redshift</option><option>restructuredtext</option><option>ruby</option><option>rust</option><option>sb</option><option>scala</option><option>scheme</option><option>scss</option><option>shell</option><option>sol</option><option>sparql</option><option>sql</option><option>st</option><option>swift</option><option>systemverilog</option><option>tcl</option><option>twig</option><option>typescript</option><option>vb</option><option>verilog</option><option>xml</option><option>yaml</option></select>
     <div class="d-flex flex-row">
-      <ngx-codemirror class="flex-grow-1 "
+      <!-- <ngx-codemirror class="flex-grow-1 "
       formControlName="script"
         [options]="ngxOptions"
-      ></ngx-codemirror>
+      ></ngx-codemirror> -->
+      <div class="col">
+        <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" formControlName="script"></ngx-monaco-editor>
+
+      </div>
+        
       <div class="centered-text">
         <mat-chip-list>
             <mat-chip>OR</mat-chip>
@@ -320,3 +321,4 @@
     </div>
   </p-fieldset>
 </form>
+

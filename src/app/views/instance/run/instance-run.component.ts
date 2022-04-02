@@ -295,7 +295,7 @@ export class InstanceRunComponent implements OnInit {
        }
     });
   }// Good
-
+  editorOptions:any = {theme: 'vs-dark',language:'shell',automaticLayout: true,wordWrap: true};
   runInstance(id) {
     try{
       this.subscription.unsubscribe();
@@ -410,6 +410,9 @@ export class InstanceRunComponent implements OnInit {
         data.booleans = data.booleans.map(param=>Object.assign({"type":"checkbox"},param))
         data.multis = data.multis.map(param=>Object.assign({"type":"multi","choices":block.multis.filter(m=>m.key==param.key)[0].value},param))
         data.dynamic = data.dynamic.map(param=>Object.assign({"type":"dynamic","choices":this.createDynamicKeyValue(param.name)},param))
+        // this.apiService.getSettings().subscribe(settings=>{
+        //   this.editorOptions = { ...this.editorOptions, language: settings[0]["langs"].filter(lang=>lang.lang==block.lang)[0].syntax }; 
+        // });
         this.Instance = data
       })
 

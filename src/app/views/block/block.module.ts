@@ -4,6 +4,7 @@ import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import {DataViewModule} from 'primeng/dataview';
 import {PickListModule} from 'primeng/picklist';
 import {FieldsetModule} from 'primeng/fieldset';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 // CoreUI Modules
 import {
@@ -203,7 +204,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     // Infinite
     InfiniteScrollModule,
     NgxChartsModule,
-    PickListModule
+    PickListModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [
     BlockListComponent,

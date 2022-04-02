@@ -61,6 +61,8 @@ const APP_CONTAINERS = [
   DefaultLayoutComponent,
 ];
 import {ScrollTopModule} from 'primeng/scrolltop';
+import { NgxFontSizeModule } from 'ngx-font-size';
+
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS,SafePipe],
   imports: [
@@ -93,7 +95,7 @@ import {ScrollTopModule} from 'primeng/scrolltop';
     ListGroupModule,
     ScrollTopModule,
     CardModule,
-    LoadingBarRouterModule
+    LoadingBarRouterModule,
   ],
   providers: [
     {

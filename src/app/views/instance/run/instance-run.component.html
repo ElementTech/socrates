@@ -255,7 +255,7 @@
                     <button mat-stroked-button color="primary" (click)="makeFull()"><small>Press ESC To Enter/Exit Full Screen</small></button>
                     
                 </mat-toolbar>
-                <ngx-codemirror [options]="{lineNumbers: true, theme: 'material',lineWrapping: true,matchBrackets: true,readOnly:true}" (keydown)="fullScreen($event, this);" [(ngModel)]="output"></ngx-codemirror>
+                <ngx-monaco-editor class="CodeMirror" style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" (keydown)="fullScreen($event, this);" [(ngModel)]="output"></ngx-monaco-editor>
             </div>
         </div> 
     </div>

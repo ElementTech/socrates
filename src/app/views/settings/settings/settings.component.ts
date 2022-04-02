@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { element } from 'protractor';
 import { interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-
+import {languages} from 'monaco-editor'
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -28,9 +28,12 @@ export class SettingsComponent implements OnInit {
   SettingsID: string;
   socratesURL = window.location.protocol + "//" + window.location.host
   sha: any;
+  monacoLanguages: any;
   constructor(  private _snackBar: MatSnackBar,private apiService: ApiService) { }
   progressbarValue = 0;
   ngOnInit(): void {
+      this.monacoLanguages = languages.getLanguages()
+      console.log(this.monacoLanguages)
       this.getSettings()
   }
 
@@ -93,9 +96,9 @@ export class SettingsComponent implements OnInit {
       }
     });
   }
-  displayedColumns = ['lang', 'image', 'tag', 'command','type','configure'];
+  displayedColumns = ['lang', 'image', 'tag', 'command','type','syntax','configure'];
   dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-
+  
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
@@ -110,7 +113,7 @@ export class SettingsComponent implements OnInit {
   }
   addLang() {
     console.log("here")
-    this.ELEMENT_DATA.push({"lang":"","image":"","tag":"","command":"","type":""})
+    this.ELEMENT_DATA.push({"lang":"","image":"","tag":"","command":"","type":"","syntax":""})
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
   }
 
@@ -198,4 +201,5 @@ export interface Element {
   tag: string;
   command: string;
   type: string;
+  syntax: string;
 }

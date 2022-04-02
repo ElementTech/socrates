@@ -25,18 +25,20 @@ export class GithubListComponent implements OnInit {
   displayedColumns = ['path','prefix','content','sha'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  
+  settingsLangs;
   constructor(
     private router: Router,
     public dialog: MatDialog,
     private ngZone: NgZone,
     private apiService: ApiService) { 
     this.readGithub();
-
+    this.apiService.getSettings().subscribe(data=>{
+      this.settingsLangs = data[0]['langs']
+    })
   }
 
-  openDialog(content) {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:atob(content)}});
+  openDialog(content,prefix) {
+    const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:atob(content),syntax:this.settingsLangs.filter(lang=>lang.type==prefix)[0].syntax}});
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -91,6 +93,9 @@ export class DialogContentExampleDialog {
   constructor(
     public dialogRef: MatDialogRef<DialogContentExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) {this.dialogRef.afterOpened().subscribe(() => setTimeout(() => this.ready = true, 0));}
-  
+  ) {
+    // this.dialogRef.afterOpened().subscribe(() => setTimeout(() => this.ready = true, 0))
+    this.editorOptions = {...this.editorOptions,language:data.syntax}
+  }
+  editorOptions:any = {theme: 'vs-dark',automaticLayout: true,wordWrap: true};
 }

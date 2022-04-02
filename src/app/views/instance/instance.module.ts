@@ -105,6 +105,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {ScheduleDialogComponent} from '../../../components/schedule/schedule-dialog.component'
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CronEditorModule } from '../../../components/cron-editor/lib/cron-editor.module';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 @NgModule({
   imports: [
     CommonModule,
@@ -201,7 +202,8 @@ import { CronEditorModule } from '../../../components/cron-editor/lib/cron-edito
     // Infinite
     InfiniteScrollModule,
     NgxChartsModule,
-    CronEditorModule
+    CronEditorModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [
     InstanceListComponent,

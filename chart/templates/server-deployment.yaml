@@ -53,6 +53,8 @@ spec:
               value: random_string
             - name: MINIO_ADDR
               value: {{ template "socrates.name" . }}-minio
+            - name: MINIO_EXTERNAL_ADDR
+              value: https://socrates.minio.explorium.ninja              
             # - name: MINIO_PORT
             #   value: "9000"
             # - name: MINIO_SSL

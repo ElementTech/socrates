@@ -1,4 +1,4 @@
-# 🧙♂ What is Socrates?
+# 🧙 What is Socrates?
 
 ## _A Simple Automation Server_
 

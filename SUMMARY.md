@@ -7,6 +7,13 @@
 * [💾 Installation](guides/creating-your-first-project.md)
 * [🖥 Development](guides/creating-your-first-task.md)
 
+## Configuration
+
+* [✏ Settings](configuration/settings/README.md)
+  * [💽 Code Languages](configuration/settings/code-languages.md)
+  * [🖨 Github](configuration/settings/github.md)
+* [🫂 Users and Authentication](configuration/users-and-authentication.md)
+
 ## Fundamentals
 
 * [🧊 Blocks](fundamentals/projects.md)

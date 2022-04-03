@@ -1,71 +1,109 @@
-# What is MyProduct?
+# Socrates
+## _A Simple Automation Server_
+[![@coreui angular](https://img.shields.io/badge/@coreui%20-angular-lightgrey.svg?style=flat-square)](https://github.com/coreui/angular)
 
-{% hint style="info" %}
-**Good to know:** providing a brief overview of your product and its core use cases is a great place to start with product docs. Your product might seem obvious to you – you made it! However, to others, even folks who are trying your product after reading your site or getting a sales demo, it can still be unclear. This is your chance to clarify your product and set the right expectations!
-{% endhint %}
+Socrates is a simple automation server, inspired by Jenkins. It can run tasks in any code language and present them in a friendly dashboard to non-technical users.
 
-Here are a couple of examples of succinct overviews from products with really great docs:
+![Overview](https://github.com/jatalocks/socrates/blob/main/overview.png?raw=true "Overview")
 
-> Loom is a video messaging tool that helps you get your message across through instantly shareable videos.
->
-> With Loom, you can record your camera, microphone, and desktop simultaneously. Your video is then instantly available to share through Loom's patented technology.
->
-> — From the [Loom Docs](https://support.loom.com/hc/en-us/articles/360002158057-What-is-Loom-)
+## Features
 
-> The Mailchimp Marketing API provides programmatic access to Mailchimp data and functionality, allowing developers to build custom features to do things like sync email activity and campaign analytics with their database, manage audiences and campaigns, and more.
->
-> — From the [Mailchimp Marketing API docs](https://mailchimp.com/developer/marketing/docs/fundamentals/)
+- Define Parameterized Blocks of code in any language to be run in Docker.
+- Define Static and Dynamic parameters to be used by all Blocks.
+- Create Instances of code that can be run individually.
+- Create Steps and DAG Flows using Instances of code.
+- Save Artifacts and Outputs, managed by Minio S3.
+- Schedule any component and view it in a timeline.
+- Give any component an Icon to categorize them.
+- Connect a Github repository with or without a Webhook, automatically update all the code in the server.
+- Manage a friendly Developer Portal, give your jobs custom names and folders.
+- Can be run on Docker or on Kubernetes
 
-## Getting Started
+## Installation
 
-**Got 2 minutes?** Check out a video overview of our product:
+Socrates requires either Docker or Kubernetes to run.
 
-{% embed url="https://www.loom.com/share/3bfa83acc9fd41b7b98b803ba9197d90" %}
+#### docker
+`docker-compose.yaml` file available in root.
+```sh
+docker-compose up
+```
+#### Kubernetes
+Helm Chart available in `chart/`
+```sh
+helm install -f values.yaml socrates .
+```
 
-{% hint style="info" %}
-**Good to know:** A succinct video overview is a great way to introduce folks to your product. Embed a Loom, Vimeo or YouTube video and you're good to go! We love this video from the fine folks at [Loom](https://loom.com) as a perfect example of a succinct feature overview.
-{% endhint %}
+## Components
 
-### Guides: Jump right in
+Socrates's main components are the basic terms that define how to work with the server.
 
-Follow our handy guides to get started on the basics as quickly as possible:
+| Component | Description |
+| ------ | ------ |
+| Block | Block is a component made of a Code in a specific Language. It might have parameters, defaults, and a Pre-Code to execute before the main. It may also be directly attached to a file in Github. Any files created during execution will be saved as Artifacts, and Outputs can be set by printing following syntax: `::set-output key=value`.  |
+| Instance | Instance is attached to a Block. It is essentialy a Parameterized Block, with it's own execution History. Multiple Instance can exist for the same Block. It can be run individually and be scheduled. |
+| Steps Flow | Steps Flow is a pipeline of one or more Instances arranged in Steps. They share ENV Variables and Outputs to the next Steps. It has it's own execution history and can be drilled down to individual Instances. |
+| DAG Flow | DAG Flow is a pipeline of one or more Instances arranged in a Graph. They share ENV Variables, and pass Outputs to the next Nodes in the Branch. It has it's own execution history and can be drilled down to individual Instances. |
+| Parameters | Parameters can either be private to a Component, or shared between all. Parameters can also be dynamic, by running a small Instance with an Output of an array. This will become a Multi-Choice parameter. |
 
-{% content-ref url="guides/creating-your-first-project.md" %}
-[creating-your-first-project.md](guides/creating-your-first-project.md)
-{% endcontent-ref %}
+## Development
 
-{% content-ref url="guides/creating-your-first-task.md" %}
-[creating-your-first-task.md](guides/creating-your-first-task.md)
-{% endcontent-ref %}
+Want to contribute? Great!
 
-{% content-ref url="guides/advanced-permissions.md" %}
-[advanced-permissions.md](guides/advanced-permissions.md)
-{% endcontent-ref %}
+Socrates uses Node.JS + Angular for developing.
+For fast development, use these commands to run the infrastructure of Socrates.
 
-{% hint style="info" %}
-**Good to know:** your product docs aren't just a reference of all your features! use them to encourage folks to perform certain actions and discover the value in your product.
-{% endhint %}
+#### Infrastructure
 
-### Fundamentals: Dive a little deeper
+MongoDB Replica Set:
 
-Learn the fundamentals of MyProduct to get a deeper understanding of our main features:
+```sh
+docker run --rm -d -p 27017:27017 -h $(hostname) -v ~/mongo/data:/data/db --name mongo mongo:latest --replSet=test && sleep 4 && docker exec mongo mongo --eval "rs.initiate();
+```
 
-{% content-ref url="fundamentals/projects.md" %}
-[projects.md](fundamentals/projects.md)
-{% endcontent-ref %}
+Minio S3 Server:
 
-{% content-ref url="fundamentals/members.md" %}
-[members.md](fundamentals/members.md)
-{% endcontent-ref %}
+```sh
+docker run -p 9000:9000 -p 9001:9001 --name minio -v ~/minio/data:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
+```
 
-{% content-ref url="fundamentals/task-lists.md" %}
-[task-lists.md](fundamentals/task-lists.md)
-{% endcontent-ref %}
+(optional) MongoDB UI:
 
-{% content-ref url="fundamentals/tasks.md" %}
-[tasks.md](fundamentals/tasks.md)
-{% endcontent-ref %}
+```sh
+docker run -it --rm --name mongo-express -p 8081:8081 -e ME_CONFIG_OPTIONS_EDITORTHEME="ambiance" -e ME_CONFIG_MONGODB_SERVER="mongo" -e ME_CONFIG_MONGODB_AUTH_DATABASE="meandatabase" --link mongo mongo-express
+```
 
-{% hint style="info" %}
-**Good to know:** Splitting your product into fundamental concepts, objects, or areas can be a great way to let readers deep dive into the concepts that matter most to them. Combine guides with this approach to 'fundamentals' and you're well on your way to great documentation!
-{% endhint %}
+#### Application
+> Have Angular 13 Installed globally, and Node.JS 17 for the Backend.
+
+Start the Node.JS Backend:
+
+```sh
+cd backend
+DB_NAME=localhost ENV=development node server.js
+```
+
+Start the Angular Frontend:
+
+```sh
+ng serve
+```
+
+#### Building from source
+
+For production release:
+##### Backend
+
+```sh
+npm ci --only=production
+```
+
+##### Frontend
+
+```sh
+npm run build -- --configuration production
+```
+
+## License
+
+MIT

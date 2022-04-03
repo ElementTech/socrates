@@ -26,7 +26,9 @@ environ({
 })
 ```
 
-&#x20;These are the following types of parameters:
+Changing a Shared or Dynamic parameter will propagate changes to all Components who use it.
 
-<table><thead><tr><th>Type</th><th>Value</th><th data-type="checkbox">Can Be Secret</th><th data-type="checkbox">Can Be Shared</th><th>Disclaimer</th></tr></thead><tbody><tr><td>Text</td><td>String</td><td>true</td><td>true</td><td>Shared text parameters can be defined in <code>/parameters/shared</code></td></tr><tr><td>Boolean</td><td>Checkbox</td><td>false</td><td>false</td><td></td></tr><tr><td>Multi Choice</td><td>Comma Separated String</td><td>false</td><td>false</td><td></td></tr><tr><td><a href="dynamic.md">Dynamic</a></td><td>Comma Separated String (From Code)</td><td>false</td><td>true</td><td>Dynamic parameters can be defined in <code>/parameters/dynamic</code></td></tr></tbody></table>
+These are the following types of parameters:
+
+<table><thead><tr><th>Type</th><th>Value</th><th data-type="checkbox">Can Be Secret</th><th data-type="checkbox">Can Be Shared</th><th>Info</th></tr></thead><tbody><tr><td>Text</td><td>String</td><td>true</td><td>true</td><td>Shared text parameters can be defined in <code>/parameters/shared</code></td></tr><tr><td>Boolean</td><td>Checkbox</td><td>false</td><td>false</td><td></td></tr><tr><td>Multi Choice</td><td>Comma Separated String</td><td>false</td><td>false</td><td></td></tr><tr><td><a href="dynamic.md">Dynamic</a></td><td>Comma Separated String (From Code)</td><td>false</td><td>true</td><td>Dynamic parameters can be defined in <code>/parameters/dynamic</code></td></tr></tbody></table>
 

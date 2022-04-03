@@ -24,12 +24,12 @@
   * [🛤 Steps Flows](fundamentals/flows/step-flows.md)
 * [🕑 Scheduler](fundamentals/scheduler.md)
 * [📓 Parameters](fundamentals/parameters/README.md)
-  * [Dynamic](fundamentals/parameters/dynamic.md)
+  * [🚁 Dynamic](fundamentals/parameters/dynamic.md)
 
 ## Use Cases
 
-* [User Portal](use-cases/user-portal.md)
+* [🚪 User Portal](use-cases/user-portal.md)
 
 ## Extras
 
-* [Icons](extras/keyboard-shortcuts.md)
+* [🖼 Icons](extras/keyboard-shortcuts.md)

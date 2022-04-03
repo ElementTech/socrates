@@ -24,7 +24,7 @@
     "@angular/forms": "~13.3.0",
     "@angular/language-service": "~13.3.0",
     "@angular/material": "^13.3.0",
-    "@angular/platform-browser": "~13.3.0",
+    "@angular/platform-browser": "~13.3.1",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@coreui/angular": "^4.0.0-alpha.9",

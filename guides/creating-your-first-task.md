@@ -6,7 +6,7 @@ description: Want to contribute? Great!
 
 Socrates uses Node.JS + Angular for developing. For fast development, use these commands to run the infrastructure of Socrates.
 
-#### Infrastructure
+### Infrastructure
 
 MongoDB Replica Set:
 
@@ -26,7 +26,7 @@ docker run -p 9000:9000 -p 9001:9001 --name minio -v ~/minio/data:/data -e "MINI
 docker run -it --rm --name mongo-express -p 8081:8081 -e ME_CONFIG_OPTIONS_EDITORTHEME="ambiance" -e ME_CONFIG_MONGODB_SERVER="mongo" -e ME_CONFIG_MONGODB_AUTH_DATABASE="meandatabase" --link mongo mongo-express
 ```
 
-#### Application
+### Application
 
 > Have Angular 13 Installed globally, and Node.JS 17 for the Backend.
 
@@ -43,7 +43,7 @@ Start the Angular Frontend:
 ng serve
 ```
 
-#### Building from source
+### Building from source
 
 For production release:
 

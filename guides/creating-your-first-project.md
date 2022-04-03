@@ -1,13 +1,21 @@
-# Creating your first project
+---
+description: Socrates requires either Docker or Kubernetes to run.
+---
 
-{% hint style="info" %}
-**Good to know:** your product docs aren't just a reference of all your features! use them to encourage folks to perform certain actions and discover the value in your product.
-{% endhint %}
+# 💾 Installation
 
-## The basics
+#### Docker
 
-Projects are containers for task lists. Think of them as a library for everything your team needs to get done to complete or ship a project.
+`docker-compose.yaml` file available in root.
 
-## Creating a project
+```
+docker-compose up
+```
 
-Hit the big '+' button in your sidebar and select 'New Project' from the menu that pops up. Give your project a name, and you're good to go!
+#### Kubernetes
+
+Helm Chart available in `chart/`
+
+```
+helm install -f values.yaml socrates .
+```

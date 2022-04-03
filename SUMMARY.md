@@ -17,7 +17,8 @@
 ## Fundamentals
 
 * [🧊 Blocks](fundamentals/projects.md)
-* [🎲 Instances](fundamentals/instances.md)
+* [🎲 Instances](fundamentals/instances/README.md)
+  * [Artifacts](fundamentals/instances/artifacts.md)
 * [🚈 Flows](fundamentals/flows/README.md)
   * [📈 DAG Flows](fundamentals/flows/dag-flows.md)
   * [🛤 Step Flows](fundamentals/flows/step-flows.md)

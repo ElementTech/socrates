@@ -43,7 +43,7 @@
     "@swimlane/ngx-charts": "^20.1.0",
     "@swimlane/ngx-cron": "^4.0.0",
     "@swimlane/ngx-graph": "^8.0.0",
-    "@swimlane/ngx-ui": "^40.0.0",
+    "@swimlane/ngx-ui": "^40.1.0",
     "@zapinfo/ngx-cron-editor": "^0.4.10",
     "ajv": "^8.11.0",
     "angular-mgl-timeline": "^0.4.0",

@@ -4,7 +4,7 @@
 
 ![](<../../.gitbook/assets/Screen Shot 2022-04-03 at 14.53.41.png>)
 
-Click the <mark style="background-color:blue;">**Connect**</mark> Button to connect to a configuration you provided, and <mark style="background-color:red;">**Disconnect**</mark> will detach.
+Click the <mark style="background-color:blue;">**Connect**</mark> Button to connect to a configuration you provided, and <mark style="background-color:red;">**Disconnect**</mark> to detach.
 
 {% hint style="danger" %}
 [Blocks](../../fundamentals/projects.md) of code attached to Github files will not lose their code after Disconnect, but they will not update farther unless reconnecting again with the same file names and paths.

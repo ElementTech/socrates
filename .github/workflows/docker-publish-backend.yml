@@ -20,7 +20,7 @@ env:
   # REGISTRY: ghcr.io
   REGISTRY: docker.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}-backend
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_PREFIX }}-backend
 
 
 jobs:

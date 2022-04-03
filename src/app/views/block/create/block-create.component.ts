@@ -284,7 +284,7 @@ export class BlockCreateComponent implements OnInit {
       ]),
       multis: this.fb.array([
       ]),
-      script: ['You Can Drag and Drop a Text File Here', [Validators.required]],
+      script: ['Copy Your Code Here', [Validators.required]],
       github: [false, [Validators.required]],
       github_path: [''],
       prescript: ['false',this.prescript_enabled],

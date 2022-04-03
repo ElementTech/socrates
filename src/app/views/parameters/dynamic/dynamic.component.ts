@@ -25,6 +25,10 @@ export class DynamicParametersComponent {
     {severity:'custom', summary:'Print', detail:'::set-output result=[a,b,c]', icon: 'pi-code'},
   ];
 
+  editorOptions:any = {theme: 'vs-dark', language: "shell",automaticLayout: true,wordWrap: true};
+  editorRunOptions:any = {theme: 'vs-dark', language: "shell",automaticLayout: true,wordWrap: true};
+  editorOutputOptions:any = {theme: 'vs-dark', language: "shell",automaticLayout: true,wordWrap: true,readOnly:true};
+
   ngxOptions= {
     lineNumbers: true,
     lineWrapping: true,
@@ -32,6 +36,7 @@ export class DynamicParametersComponent {
     autoRefresh:true
   }
   parameters: any;
+  settingsLangs: any;
 
   constructor(private apiService: ApiService,public fb: FormBuilder,private messageService: MessageService) { }
   dynamicParameterForm: FormGroup;
@@ -40,7 +45,7 @@ export class DynamicParametersComponent {
   ngOnInit(){
     this.apiService.getDynamicParameters().subscribe(data => {this.parameters = data});
     this.apiService.getSettings().subscribe(data=>{
-
+      this.settingsLangs = data[0]["langs"]
       data[0]["langs"].forEach(element => {
         this.Language.push(element["lang"])
       });
@@ -54,8 +59,11 @@ export class DynamicParametersComponent {
     })
   
   }
-
-  @ViewChild('codeMirror') private codeEditorCmp: CodemirrorComponent;
+  onLanguagePick(event)
+  {
+    this.editorOptions = { ...this.editorOptions, language: this.settingsLangs.filter(lang=>lang.lang==event.value)[0].syntax }; 
+  }
+  // @ViewChild('codeMirror') private codeEditorCmp: CodemirrorComponent;
   chosenEditID = ""
   editThis(parameter)
   {
@@ -64,15 +72,16 @@ export class DynamicParametersComponent {
     delete parameter.__v
     delete parameter.createdAt
     delete parameter.updatedAt
+    this.editorOptions = { ...this.editorOptions, language: this.settingsLangs.filter(lang=>lang.lang==parameter.lang)[0].syntax };
     this.dynamicParameterForm.setValue(parameter)
     // @ts-ignore
     
   }
   ngAfterViewChecked(){
-    if (this.codeEditorCmp.codeMirror != undefined)
-    {
-      this.codeEditorCmp.codeMirror.refresh()
-    }
+    // if (this.codeEditorCmp.codeMirror != undefined)
+    // {
+    //   this.codeEditorCmp.codeMirror.refresh()
+    // }
   }
 
   onSubmit() {
@@ -115,6 +124,7 @@ export class DynamicParametersComponent {
   chosenRunParameter: any = {};
   chosenRunOutput: any = {};
   onRowRun(parameter) {
+    this.editorRunOptions = { ...this.editorRunOptions, language: this.settingsLangs.filter(lang=>lang.lang==parameter.lang)[0].syntax };
     this.chosenRunParameter = parameter
   }
   runtime: any = "";

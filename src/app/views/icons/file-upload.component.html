@@ -1,66 +1,48 @@
-  <div style="padding-left: 8em;padding-right: 8em;padding-top: 10px;">
-   <div>
+  <div >
+    <div>
 
     <p-fileUpload #primeFileUpload (onProgress)="progressReport($event)" name="myfile[]" customUpload="true" accept="image/*" (uploadHandler)="upload($event)"></p-fileUpload>
+    <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
 
-    <!-- <div class="col-4">
-        <div class="container">
-            <div class="fileUploadInput">
-            <label><i class="fa fa-photo" aria-hidden="true"></i>&nbsp; Upload File</label>
-            <input type="file" (change)="selectFile($event)" />
-            <button>+</button>
-        </div>
     </div>
-    </div>
-    <div class="col-1">
-        <div class="container justify-content-center d-flex h-100">
-            <button class="btn" [disabled]="!selectedFiles" [ngStyle]="{'color': (!selectedFiles) ? 'black' : 'blue',
-            'border': (!selectedFiles) ? '0px' : '1px solid black'}" (click)="upload()">
-              <i class="fa fa-upload" aria-hidden="true"></i> Upload
-            </button>
-        </div>
-    </div>
-    <div class="col-4"></div>
-    <div class="col-3">
-        <div class="alert alert-primary d-flex align-items-center" role="alert">
-          <svg class="flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-          <div>
-            Icons allow you to give Components (Block, Instance, Flow) an Image that will appear wherever they are.
-          </div>
-        </div>
-    </div> -->
-
-  <!-- <div *ngIf="currentFile" class="progress my-3">
-    <div
-      class="progress-bar progress-bar-info progress-bar-striped"
-      role="progressbar"
-      attr.aria-valuenow="{{ progress }}"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      [ngStyle]="{ width: progress + '%' }"
+    <p-table [value]="fileInfos | async" responsiveLayout="scroll"  #dt
+    [filterDelay]="0"
+    styleClass="p-datatable-sm p-datatable-gridlines"
+    [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
+    [globalFilterFields]="['name']"
     >
-      {{ progress }}%
-    </div>
-  </div> -->
-  <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-  <div class="card mt-3">
-    <div class="card-header">List of Images</div>
-    <ul
-      class="list-group list-group-flush"
-      *ngFor="let file of fileInfos | async"
-    >
-      <li class="list-group-item d-flex align-items-center">
-        <img width="70px" [src]="this.imageUrls[file.name]">
-        <mat-chip-list>
-            <mat-chip color="primary">{{ file.name }}</mat-chip>
-        </mat-chip-list>
-        <span class="example-spacer"></span>
-        <button mat-raised-button color="primary" (click)="downloadFile(file.name)"><i class="fa fa-download" aria-hidden="true"></i> Download</button>
-        <button mat-raised-button style="color: maroon;" (click)="deleteFile(file.name)"><mat-icon class="mat-18">delete</mat-icon> Delete</button>
-      </li>
-    </ul>
-  </div>
-   </div>
-
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+            </span>
+        </div>
+    </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+            <tr>
+                <td><img width="70px" [src]="this.imageUrls[event.name]"></td>
+                <td>{{event.name}}</td>
+                <td>
+                    <button mat-raised-button color="primary" (click)="downloadFile(event.name)"><i class="fa fa-download" aria-hidden="true"></i> Download</button>
+                    <button mat-raised-button style="color: maroon;" (click)="deleteFile(event.name)"><mat-icon class="mat-18">delete</mat-icon> Delete</button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 
   </div>
+
+
+
+
+
+  

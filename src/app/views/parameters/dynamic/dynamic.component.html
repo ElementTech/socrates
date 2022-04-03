@@ -78,7 +78,7 @@
 
               <mat-form-field class="w-100" appearance="outline">
                 <mat-label>Language</mat-label>
-                <mat-select formControlName="lang">
+                <mat-select formControlName="lang" (selectionChange)="onLanguagePick($event)">
                   <mat-option [value]="lang" *ngFor="let lang of Language">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{{lang}}/{{lang}}-original.svg" onerror="this.src='../../../assets/no_code.png'" width="30" height="30">{{lang}}
                   </mat-option>
@@ -89,10 +89,11 @@
         </div>
         <div class="col-6">
           <p-messages [(value)]="info" [enableService]="false"></p-messages>
-          <ngx-codemirror #codeMirror
+          <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" formControlName="script"></ngx-monaco-editor>
+          <!-- <ngx-codemirror #codeMirror
             formControlName="script"
             [options]="ngxOptions"
-          ></ngx-codemirror>
+          ></ngx-codemirror> -->
         </div>
       </div>
       <p-button type="submit" label="Submit"></p-button>
@@ -117,10 +118,12 @@
         </mat-toolbar>
         <div class="row">
           <div class="col-4">
-            <ngx-codemirror
+            <!-- <ngx-codemirror
             [(ngModel)]="this.chosenRunParameter.script"
             [options]="ngxOptions"
-            ></ngx-codemirror>
+            ></ngx-codemirror> -->
+            <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorRunOptions" [(ngModel)]="this.chosenRunParameter.script"></ngx-monaco-editor>
+
           </div>
           <div class="col-1">
             <div class="centered-text">
@@ -131,10 +134,12 @@
           </div>
 
           <div class="col-4">
-            <ngx-codemirror
+            <!-- <ngx-codemirror
             [(ngModel)]="this.chosenRunOutput.console"
             [options]="ngxOptions"
-            ></ngx-codemirror>
+            ></ngx-codemirror> -->
+            <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorOutputOptions" [(ngModel)]="this.chosenRunOutput.console"></ngx-monaco-editor>
+
           </div>
 
           <div class="col-1">

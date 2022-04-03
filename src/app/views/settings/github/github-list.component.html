@@ -4,47 +4,41 @@
         <span [class.connected]="this.githubConnected" [class.disconnected]="!this.githubConnected">Connected: {{this.githubConnected}}</span>
     </h1>
   </mat-toolbar>
-    <div class="example-header">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-      </mat-form-field>
-    </div>
-    
-    <div class="example-container mat-elevation-z8">
-      <mat-paginator [showFirstLastButtons]="true" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      <mat-table [dataSource]="dataSource" matSort>
-    
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="path">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Path</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.path}}</mat-cell>
-        </ng-container>
-    
-  
-        <ng-container matColumnDef="prefix">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Prefix</mat-header-cell>
-          <mat-cell *matCellDef="let row" [style.color]="row.prefix">{{row.prefix}}</mat-cell>
-        </ng-container>
 
-        <ng-container matColumnDef="content">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Show Content</mat-header-cell>
-            <mat-cell *matCellDef="let row" ><button mat-flat-button color="primary" (click)="openDialog(row.content,row.prefix)">Show</button></mat-cell>
-          </ng-container>
 
-          <ng-container matColumnDef="sha">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Sha</mat-header-cell>
-            <mat-cell *matCellDef="let row" [style.color]="row.sha">{{row.sha}}</mat-cell>
-          </ng-container>
-  
+  <p-table [value]="Github" responsiveLayout="scroll"  #dt
+  [filterDelay]="0"
+  styleClass="p-datatable-sm p-datatable-gridlines"
+  [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
+  [globalFilterFields]="['path','prefix','sha']"
+  >
+  <ng-template pTemplate="caption">
+      <div class="table-header">
+          <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+          </span>
+      </div>
+  </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Path</th>
+              <th>Prefix</th>
+              <th>Show</th>
+              <th>Sha</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-event>
+          <tr>
+              <td>{{event.path}}</td>
+              <td>{{event.prefix}}</td>
+              <td><button mat-flat-button color="primary" (click)="openDialog(event.content,event.prefix)">Show</button></td>
+              <td>{{event.sha}}</td>
+          </tr>
+      </ng-template>
+  </p-table>
   
 
-  
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-    
-   
-    </div>
-  
+

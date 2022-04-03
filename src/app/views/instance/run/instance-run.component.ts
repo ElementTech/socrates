@@ -295,7 +295,7 @@ export class InstanceRunComponent implements OnInit {
        }
     });
   }// Good
-  editorOptions:any = {theme: 'vs-dark',language:'shell',automaticLayout: true,wordWrap: true};
+  editorOptions:any = {theme: 'vs-dark',language:'shell',automaticLayout: true,wordWrap: true,readOnly: true};
   runInstance(id) {
     try{
       this.subscription.unsubscribe();

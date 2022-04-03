@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
-
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -193,7 +193,8 @@ import { DynamicParametersComponent } from './dynamic/dynamic.component';
     // Codemirror
     CodemirrorModule,
     // Infinite
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [
     ParametersComponent,

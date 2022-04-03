@@ -1,6 +1,6 @@
 # Table of contents
 
-* [🧙♂ What is Socrates?](README.md)
+* [🧙♂ 🧙♂ What is Socrates?](README.md)
 
 ## Guides
 

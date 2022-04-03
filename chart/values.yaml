@@ -8,8 +8,8 @@ istio:
 client:
   replicaCount: 1
   image:
-    repository: jatasocrates/socrates-client
-    tag: v1
+    repository: ghcr.io/jatalocks/socrates-frontend
+    tag: main
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -27,8 +27,8 @@ client:
 server:
   replicaCount: 2
   image:
-    repository: jatasocrates/socrates-server
-    tag: v1
+    repository: ghcr.io/jatalocks/socrates-backend
+    tag: main
     pullPolicy: Always
   service:
     type: ClusterIP

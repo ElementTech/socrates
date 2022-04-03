@@ -21,7 +21,7 @@
   * [Artifacts](fundamentals/instances/artifacts.md)
 * [🚈 Flows](fundamentals/flows/README.md)
   * [📈 DAG Flows](fundamentals/flows/dag-flows.md)
-  * [🛤 Step Flows](fundamentals/flows/step-flows.md)
+  * [🛤 Steps Flows](fundamentals/flows/step-flows.md)
 * [🕑 Scheduler](fundamentals/scheduler.md)
 * [📓 Parameters](fundamentals/parameters/README.md)
   * [Dynamic](fundamentals/parameters/dynamic.md)

@@ -1,6 +1,6 @@
 # 🎲 Instances
 
-An Instance is attached to a [Block](../projects.md). It is essentially a [Parameterized](../parameters/) [Block](../projects.md), with its own execution History. Multiple Instance can exist for the same [Block](../projects.md). It can be run individually, inside a [Flow](../flows/) or be [scheduled](../scheduler.md).
+An Instance is attached to a [Block](../projects.md). It is essentially a [Parameterized](../parameters/) [Block](../projects.md), with its own execution History. Multiple Instances can exist for the same [Block](../projects.md). It can be run individually, inside a [Flow](../flows/) or be [scheduled](../scheduler.md).
 
 ## Creating an Instance <a href="#creating-a-block" id="creating-a-block"></a>
 

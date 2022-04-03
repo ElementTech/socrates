@@ -8,7 +8,7 @@ istio:
 client:
   replicaCount: 1
   image:
-    repository: ghcr.io/jatalocks/socrates-frontend
+    repository: jatalocks333/socrates-frontend
     tag: main
     pullPolicy: Always
   service:
@@ -27,7 +27,7 @@ client:
 server:
   replicaCount: 2
   image:
-    repository: ghcr.io/jatalocks/socrates-backend
+    repository: jatalocks333/socrates-backend
     tag: main
     pullPolicy: Always
   service:

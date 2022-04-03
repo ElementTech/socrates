@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
-
+import { NgBytesPipeModule } from 'angular-pipes';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -133,7 +133,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     PaginationModule,
     PopoverModule,
     TableModule,
-    
+    NgBytesPipeModule,
     // PRIME NG
     TableNGModule,
     CalendarModule,

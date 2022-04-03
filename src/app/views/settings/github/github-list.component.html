@@ -27,6 +27,7 @@
               <th>Path</th>
               <th>Prefix</th>
               <th>Show</th>
+              <th>Size</th>
               <th>Sha</th>
           </tr>
       </ng-template>
@@ -35,6 +36,7 @@
               <td>{{event.path}}</td>
               <td>{{event.prefix}}</td>
               <td><button mat-flat-button color="primary" (click)="openDialog(event.content,event.prefix)">Show</button></td>
+              <td>{{event.size | bytes}}</td>
               <td>{{event.sha}}</td>
           </tr>
       </ng-template>

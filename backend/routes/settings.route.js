@@ -67,7 +67,7 @@ function updateGithubTree(tree, octokit, prefixList) {
     if ((blobdata.data.content == '') || (blobdata.data.content == null) || (!prefixList.includes(prefix))) {
       GithubElement.find({ path: item.path }).remove().exec();
     } else {
-      GithubElement.updateOne({ path: item.path }, { prefix, content: blobdata.data.content, sha: item.sha }, { upsert: true }).exec();
+      GithubElement.updateOne({ path: item.path }, { prefix, content: blobdata.data.content, sha: item.sha,size:item.size }, { upsert: true }).exec();
     }
   });
   console.log(tree);

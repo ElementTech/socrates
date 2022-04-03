@@ -16,6 +16,9 @@ const GithubElement = new Schema({
   sha: {
     type: String,
   },
+  size: {
+    type: Number
+  }
 }, {
   collection: 'github',
   timestamps: true,

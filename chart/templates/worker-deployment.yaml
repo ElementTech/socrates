@@ -19,7 +19,7 @@ spec:
       name: docker-graph-storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: {{ .Values.worker.storageClass }}
+      storageClassName: {{ .Values.worker.storageClass | default "gp2" }}
       resources:
         requests:
           storage: {{ .Values.worker.storage }}      
@@ -28,9 +28,14 @@ spec:
       labels:
         app: {{ template "socrates.name" . }}-worker
         release: {{ .Release.Name }}
+{{- with .Values.worker.annotations }}
       annotations:
-        sidecar.istio.io/inject: "false"  
+{{ toYaml . | indent 8 }}    
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
       restartPolicy: Always
       volumes: 
         - name: tmp
@@ -67,5 +72,3 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    #   imagePullSecrets:
-    #     - name: dc-2fjvj

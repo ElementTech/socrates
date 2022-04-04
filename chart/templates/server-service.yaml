@@ -7,6 +7,9 @@ metadata:
     chart: {{ template "socrates.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- with .Values.server.service.annotations }}
+  annotationss:
+{{ toYaml . | indent 4 }}       
 spec:
   type: {{ .Values.server.service.type }}
   ports:

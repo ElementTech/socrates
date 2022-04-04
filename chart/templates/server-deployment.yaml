@@ -18,9 +18,14 @@ spec:
       labels:
         app: {{ template "socrates.name" . }}-server
         release: {{ .Release.Name }}
+{{- with .Values.server.annotations }}
       annotations:
-        sidecar.istio.io/inject: "false"        
+{{ toYaml . | indent 8 }}       
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
       restartPolicy: Always
       volumes: 
         - name: tmp
@@ -34,35 +39,35 @@ spec:
               mountPath: /tmp           
           env:    
             - name: DOCKER_HOST 
-              value: tcp://worker:{{ .Values.worker.service.port }}
+              value: tcp://{{ template "socrates.name" . }}-worker:{{ .Values.worker.service.port | default 2375 }}
             - name: PORT
               value: "4000"
             - name: ENV
               value: production
             - name: DB_USERNAME
-              value: user
+              value: {{ .Values.server.database.user }}
             - name: DB_PASSWORD
-              value: password
+              value: {{ .Values.server.database.password }}
             - name: DB_NAME
               value: {{ template "socrates.name" . }}-mongodb-headless
             - name: MASTER_PASSWORD
-              value: Data123!@#
+              value: {{ .Values.adminPassword }}
             - name: MASTER_EMAIL
-              value: devops@explorium.ai
+              value: {{ .Values.adminEmail }}
             - name: AUTH_SECRET
-              value: random_string
+              value: {{ .Values.authSecret | default "random_string" }}
             - name: MINIO_ADDR
               value: {{ template "socrates.name" . }}-minio
             - name: MINIO_EXTERNAL_ADDR
-              value: https://socrates.minio.explorium.ninja              
+              value: {{ .Values.server.minio.externalAddress | default "" }}         
             # - name: MINIO_PORT
             #   value: "9000"
             # - name: MINIO_SSL
             #   value: false
             - name: MINIO_ACCESS_KEY
-              value: AKIAIOSFODNN7EXAMPLE
+              value: {{ .Values.minio.auth.rootUser }}
             - name: MINIO_SECRET_KEY
-              value: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY                                                        
+              value: {{ .Values.minio.auth.rootPassword }}                                        
           ports:
             - name: http
               containerPort: 4000
@@ -89,5 +94,3 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-      # imagePullSecrets:
-      #   - name: dc-2fjvj

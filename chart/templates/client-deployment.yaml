@@ -18,9 +18,14 @@ spec:
       labels:
         app: {{ template "socrates.name" . }}-client
         release: {{ .Release.Name }}
+{{- with .Values.client.annotations }}
       annotations:
-        sidecar.istio.io/inject: "false"
+{{ toYaml . | indent 8 }}        
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
@@ -43,5 +48,3 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-      # imagePullSecrets:
-      #   - name: dc-2fjvj

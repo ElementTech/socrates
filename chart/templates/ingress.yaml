@@ -33,13 +33,17 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              serviceName: client
+              serviceName: {{ $name }}-client
               servicePort: http
   {{- end }}
-    - host: socrates.minio.explorium.ninja
+  {{- if .Values.ingress.minio.enabled }}
+  {{- range .Values.ingress.minio.hosts }}  
+    - host: {{ . }}
       http:
         paths:
           - backend:
               serviceName: {{ $name }}-minio
               servicePort: 9001    
+  {{- end }}              
+  {{- end }}              
 {{- end }}

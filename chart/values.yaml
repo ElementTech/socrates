@@ -2,52 +2,56 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-istio:
-  enabled: true
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+adminPassword: "1234"
+adminEmail: admin@socrates.com
+
+authSecret: random_string
 
 client:
   replicaCount: 1
   image:
     repository: jatalocks333/socrates-frontend
-    tag: main
+    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
-  # resources:
-  #   limits:
-  #     cpu: 2
-  #     memory: 1024Mi
-  #   requests:
-  #     cpu: 100m
-  #     memory: 128Mi
+    port: 80
+    annotations: {}
+  annotations: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
 
 server:
-  replicaCount: 2
+  replicaCount: 1
+  database:
+    user: user
+    password: password
   image:
     repository: jatalocks333/socrates-backend
-    tag: main
+    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
     port: 4000
-  resources:
-    # limits:
-    #   cpu: 2
-    #   memory: 2048Mi
-    # requests:
-    #   cpu: 1
-    #   memory: 512Mi
+    annotations: {}
+  minio:
+    externalAddress: socrates.minio.my.domain
+  annotations: {}    
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
 
 worker:
-  replicaCount: 2
-  storageClass: gp2
+  replicaCount: 1
   storage: 3Gi
+  # storageClass: gp2
   image:
     repository: jatasocrates/socrates-server
     tag: v1
@@ -55,6 +59,7 @@ worker:
   service:
     type: ClusterIP
     port: 2375
+    annotations: {}
   resources:
     limits:
       cpu: 1
@@ -65,33 +70,26 @@ worker:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
+  annotations: {}
 
 ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.org/ssl-redirect: "true"
-    nginx.org/redirect-to-https: "true"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:182893536443:certificate/10de7fff-15f4-4c1b-8326-81d3ce500274"
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: "ELBSecurityPolicy-TLS-1-2-2017-01" 
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"    
+  enabled: false
+  annotations: {}
   path: /
   hosts:
-    - socrates.explorium.ninja
+    - socrates.my.domain
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  minio:
+    enabled: false
+    hosts:  
+      - socrates.minio.my.domain  
 
 mongodb:
-  disableSystemLog: true
-  podAnnotations:
-    sidecar.istio.io/inject: "false"
   persistence:
-    enabled: false
+    enabled: true
   architecture: replicaset
   replicaCount: 3
   auth:
@@ -104,10 +102,8 @@ mongodb:
       - meandatabase
 
 minio:
-  podAnnotations:
-    sidecar.istio.io/inject: "false"
   persistence:
-    enabled: false
+    enabled: true
   mode: distributed
   auth:
     rootUser: AKIAIOSFODNN7EXAMPLE

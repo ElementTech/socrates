@@ -7,5 +7,6 @@ COPY . .
 RUN npm run build -- --configuration production
 ### STAGE 2: Run ###
 FROM nginx:1.21.6-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
+# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
 COPY --from=build /usr/src/app/dist/socrates /usr/share/nginx/html

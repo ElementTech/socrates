@@ -25,10 +25,7 @@ mongoose.plugin(upsertMany);
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
   useNewUrlParser: true,
-  
-  
-  connectTimeoutMS: 20000,
-  socketTimeoutMS: 45000,
+  connectTimeoutMS: 2000,
 }).then(
   () => {
     console.log('Database sucessfully connected');

@@ -39,7 +39,7 @@ services:
     build: backend
     container_name: server
     restart: always
-    image: jatasocrates/socrates-server:v1
+    image: jatalocks333/socrates-server:latest
     ports:
       - '4000:4000'
     volumes:
@@ -55,9 +55,11 @@ services:
   client:
     container_name: client
     build: .
-    image: jatasocrates/socrates-client:v1
+    image: jatalocks333/socrates-client:latest
     restart: always
     ports:
       - '80:80'
+    environment:
+      - SERVER_ADDRESS=server        
 volumes:
   mongodb4_data:

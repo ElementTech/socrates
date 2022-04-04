@@ -31,6 +31,7 @@ spec:
 {{- with .Values.worker.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}    
+{{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

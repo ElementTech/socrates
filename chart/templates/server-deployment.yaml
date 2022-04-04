@@ -21,6 +21,7 @@ spec:
 {{- with .Values.server.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}       
+{{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

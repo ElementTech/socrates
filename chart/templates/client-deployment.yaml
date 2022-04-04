@@ -20,7 +20,8 @@ spec:
         release: {{ .Release.Name }}
 {{- with .Values.client.annotations }}
       annotations:
-{{ toYaml . | indent 8 }}        
+{{ toYaml . | indent 8 }}       
+{{- end }} 
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

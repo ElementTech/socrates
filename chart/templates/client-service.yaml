@@ -4,7 +4,8 @@ metadata:
   name: {{ template "socrates.name" . }}-client
 {{- with .Values.client.service.annotations }}
   annotationss:
-{{ toYaml . | indent 4 }}      
+{{ toYaml . | indent 4 }}  
+{{- end }}    
   labels:
     app: {{ template "socrates.name" . }}-client
     chart: {{ template "socrates.chart" . }}

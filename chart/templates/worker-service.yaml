@@ -9,7 +9,8 @@ metadata:
     heritage: {{ .Release.Service }}
 {{- with .Values.worker.service.annotations }}
   annotationss:
-{{ toYaml . | indent 4 }}       
+{{ toYaml . | indent 4 }}      
+{{- end }} 
 spec:
   type: {{ .Values.worker.service.type }}
   ports:

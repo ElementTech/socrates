@@ -6,7 +6,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-adminPassword: "1234"
+adminPassword: 1234
 adminEmail: admin@socrates.com
 
 authSecret: random_string

@@ -15,17 +15,12 @@ services:
       - 9000:9000
       - 9001:9001
   mongodb:
-    image : davybello/mongo-replica-set:4.4.8
-    container_name: mongodb
-    restart: on-failure
+    image: bitnami/mongodb
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
-      - "./.data/mongo1:/var/lib/mongo1"
-      - "./.data/mongo2:/var/lib/mongo2"
-      - "./.data/mongo3:/var/lib/mongo3"
-    ports:
-      - 27017:27017
-      - 27018:27018
-      - 27019:27019
+      - ./.data/mongo:/bitnami/mongodb
   docker:
     image: docker:dind
     container_name: docker

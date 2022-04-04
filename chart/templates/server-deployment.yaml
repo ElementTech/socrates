@@ -52,7 +52,7 @@ spec:
             - name: DB_NAME
               value: {{ template "socrates.name" . }}-mongodb-headless
             - name: MASTER_PASSWORD
-              value: {{ .Values.adminPassword | toString }}
+              value: {{ .Values.adminPassword | quote | toString }}
             - name: MASTER_EMAIL
               value: {{ .Values.adminEmail }}
             - name: AUTH_SECRET

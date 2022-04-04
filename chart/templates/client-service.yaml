@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "socrates.name" . }}-client
 {{- with .Values.client.service.annotations }}
-  annotationss:
+  annotations:
 {{ toYaml . | indent 4 }}  
 {{- end }}    
   labels:

@@ -56,7 +56,7 @@
     "cron-editor-with-translate": "^1.0.5",
     "d3-dag": "^0.10.0",
     "d3-transition": "^3.0.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
     "monaco-editor": "^0.33.0",
     "ng-in-viewport": "^13.0.1",

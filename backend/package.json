@@ -35,7 +35,7 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "minio": "^7.0.26",
-    "mongoose": "^6.2.9",
+    "mongoose": "^5.13.14",
     "mongoose-unique-validator": "^3.0.0",
     "multer": "^1.4.4",
     "multer-minio-storage": "^1.0.0",

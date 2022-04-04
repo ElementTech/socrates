@@ -30,7 +30,8 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
-          imagePullPolicy: {{ .Values.client.image.pullPolicy }}    
+          imagePullPolicy: {{ .Values.client.image.pullPolicy }}
+          command: ["/bin/sh","-c","envsubst '$${SERVER_ADDRESS}'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
           env:    
             - name: SERVER_ADDRESS 
               value: {{ template "socrates.name" . }}-server  

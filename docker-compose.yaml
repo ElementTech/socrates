@@ -17,7 +17,6 @@ services:
   mongodb:
     image : davybello/mongo-replica-set:5.0.2
     container_name: mongodb
-    network_mode: host
     restart: on-failure
     volumes:
       - "./.data/mongo1:/var/lib/mongo1"
@@ -40,14 +39,13 @@ services:
     build: backend
     container_name: server
     restart: always
-    network_mode: host
-    image: jatalocks333/socrates-backend:latest
+    image: jatalocks333/socrates-backend:niwi
     ports:
       - '4000:4000'
     volumes:
       - /tmp:/tmp
     environment:
-      - DB_NAME=localhost  
+      - DB_NAME=mongodb  
       - DOCKER_TLS_CERTDIR=
       - DOCKER_HOST=tcp://docker:2375      
       - MINIO_ADDR=minio
@@ -57,11 +55,19 @@ services:
   client:
     container_name: client
     build: .
-    image: jatalocks333/socrates-frontend:test2
+    image: jatalocks333/socrates-frontend:niwi
     restart: always
     ports:
       - '80:80'
     environment:
       - SERVER_ADDRESS=server
+    command: >
+        /bin/sh -c
+        "envsubst '
+        $${SERVER_ADDRESS}
+        '< /etc/nginx/nginx.conf.template
+        > /etc/nginx/nginx.conf
+        && nginx -g 'daemon off;'"
+
 # volumes:
 #   mongodb4_data:

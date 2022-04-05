@@ -41,4 +41,4 @@ Socrates's main components are the basic terms that define how to work with the 
 
 ## License
 
-MIT
+Apache 2.0

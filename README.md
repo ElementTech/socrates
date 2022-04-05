@@ -8,17 +8,24 @@
 
 ![Overview](overview.png)
 
+## Quickstart
+
+_For Evaluation and Testing:_
+
+1. Download the `docker-compose.yaml` file from the root of the repository.
+2. Run `docker-compose up` and wait until all components are healthy.
+
 ## Features
 
-* Define Parameterized Blocks of code in any language to be run in Docker.
-* Define Static and Dynamic parameters to be used by all Blocks.
-* Create Instances of code that can be run individually.
-* Create Steps and DAG Flows using Instances of code.
-* Save Artifacts and Outputs, managed by Minio S3.
-* Schedule any component and view it in a timeline.
-* Connect a Github repository with or without a Webhook, automatically update all the code in the server.
-* Manage a friendly Developer Portal, give your jobs custom names and folders.
-* Can be run on Docker or on Kubernetes
+* Define [Parameterized](fundamentals/parameters/) [Blocks](fundamentals/projects.md) of code in any language to be run in Docker.
+* Define Static and [Dynamic](fundamentals/parameters/dynamic.md) [parameters](fundamentals/parameters/) to be used by all Blocks.
+* Create [Instances](fundamentals/instances/) of code that can be run individually.
+* Create [Steps](fundamentals/flows/step-flows.md) and [DAG](fundamentals/flows/dag-flows.md) [Flows](fundamentals/flows/) using Instances of code.
+* Save [Artifacts](fundamentals/instances/artifacts.md) and Outputs, managed by Minio S3.
+* [Schedule](fundamentals/scheduler.md) any component and view it in a timeline.
+* Connect a [Github](configuration/settings/github.md) repository with or without a Webhook, automatically update all the code in the server.
+* Manage a friendly [Developer Portal](use-cases/user-portal.md), give your jobs custom names and folders.
+* Can be run on [Docker or on Kubernetes](guides/creating-your-first-project.md)
 
 ## Components
 

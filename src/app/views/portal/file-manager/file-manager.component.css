@@ -76,3 +76,10 @@
 .p-panel-header{
   max-height: 10px !important;
 }
+
+::ng-deep .p-panel-footer {
+  padding-left: 0 !important;
+  padding-right: 6px !important;
+  padding-bottom: 0 !important;
+  margin: 0;
+}

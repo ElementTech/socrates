@@ -19,14 +19,38 @@ FileRoute.route('/create').post((req, res, next) => {
 });
 
 // Get All Files
-FileRoute.route('/').get((req, res,next) => {
-  File.find((error, data) => {
+FileRoute.route('/').get(async (req, res,next) => {
+  File.find(async (error, data) => {
     if (error) {
       return next(error);
     }
+
+    data = await Promise.all(data.map(async (file)=>{
+      if (!file.isFolder)
+      {
+        console.log("jere")
+        const result = await require('../models/'+file.type.replace(/^./, file.type[0].toUpperCase())).findById(file.fileid).exec()
+        const lastRuns = ({
+          "instance": await require('../models/DockerInstance').find({"instance":file.fileid,done:true}).sort('-updatedAt').limit(8).exec(),
+          "flow": await require('../models/FlowInstance').find({"flow":file.fileid,done:true}).sort('-updatedAt').limit(8).exec(),
+          "flowviz": await require('../models/FlowvizInstance').find({"flow":file.fileid,done:true}).sort('-updatedAt').limit(8).exec()
+        })[file.type] ?? []
+
+        console.log(lastRuns)
+        return {...file.toObject(),"data":result.toObject(),"lastruns_fail":lastRuns.map(run=>(run.error)).reverse(),"lastruns_success":lastRuns.map(run=>(!run.error)).reverse()}
+      }
+      else
+      {
+        return file
+      }
+    }));
+
+    console.log(data)
+
     res.json(data);
   });
 });
+
 
 // Get single File
 FileRoute.route('/read/:id').get((req, res,next) => {

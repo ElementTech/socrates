@@ -36,7 +36,49 @@ export class FileManagerComponent implements OnChanges {
   @Output() elementMoved = new EventEmitter<{ element: FileElement; moveTo: FileElement }>();
   @Output() navigatedUp = new EventEmitter();
 
+  chartOptions = {
+    plugins: {
+      legend: {
+          display: false
+      }
+    },
+    animation: {
+      duration: 0, // general animation time
+    },
+    events: [],
+    tooltips: {
+      enabled: false
+    },
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      },
+      x: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    }
+  }
+
+
+
   ngOnInit() {
+
+    
     this.setColumns();
     this.uploadService.getFiles().subscribe(data=>{
       data.forEach(element => {

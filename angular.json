@@ -41,7 +41,7 @@
               "src/scss/styles.scss"
             ],
             "scripts": [
-              "./node_modules/chart.js/dist/Chart.js"
+         
             ],
             "allowedCommonJsDependencies": [
               "chart.js",
@@ -114,7 +114,7 @@
               "src/scss/styles.scss"
             ],
             "scripts": [
-              "./node_modules/chart.js/dist/Chart.js"
+         
             ]
           }
         },

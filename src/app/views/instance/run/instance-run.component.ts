@@ -16,7 +16,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import {ScheduleDialogComponent} from '../../../../components/schedule/schedule-dialog.component'
 
-
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+@AutoUnsubscribe()
 @Component({
   selector: 'app-instance-run',
   templateUrl: './instance-run.component.html',
@@ -24,7 +25,6 @@ import {ScheduleDialogComponent} from '../../../../components/schedule/schedule-
   providers: [DialogService, MessageService]
 })
 export class InstanceRunComponent implements OnInit {
- 
   dataSource: MatTableDataSource<any>;
   Instance:any= {name:"name",desc:"desc",parameters:[],shared:[],booleans:[],multis:[],dynamic:[]};
   displayedColumns = ['name','desc','parameters'];
@@ -312,9 +312,9 @@ export class InstanceRunComponent implements OnInit {
         });
         this.listItems.unshift({
           id: '?',
-          run_number: this.listItems[0].run_number + 1,
+          run_number: ((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1,
           artifacts: [],
-          title: `${this.listItems[0].run_number + 1} Started`,
+          title: `${((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1} Started`,
           content: 'Running...',
           runtime: 0,
           output: [],

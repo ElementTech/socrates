@@ -12,6 +12,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { filter, interval, map, Observable, pairwise, switchMap, tap, throttleTime } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
 import {FileUploadService} from '../../../services/file-upload.service'
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+@AutoUnsubscribe()
 @Component({
   selector: 'app-flow-run',
   templateUrl: './flow-run.component.html',
@@ -19,7 +21,11 @@ import {FileUploadService} from '../../../services/file-upload.service'
   providers: [DialogService, MessageService]
 })
 export class FlowRunComponent implements OnInit {
-
+  ngOnDestroy() {
+    if (this.ref) {
+        this.ref.close();
+    }
+  }
   loading: boolean = false;
   listItems = [];
   alreadyLoaded=0;
@@ -282,10 +288,10 @@ export class FlowRunComponent implements OnInit {
 
     // this.fetchMore(true)
     this.apiService.getFlowInstance(id).subscribe(data => {
-        console.log("Show console of instance "+id+" is "+data.done)
         this.chosenFlowInstance = data
         //this.output = data.console.join("\r\n")
         //this.getInstance(data.instance)
+        this.paintSteps(data)
         try{
           this.subscription.unsubscribe();
         }
@@ -297,10 +303,11 @@ export class FlowRunComponent implements OnInit {
         if (data.done == true)
         {
           this.fetchMore(true)
-          this.paintSteps(data)
+          // this.paintSteps(data)
         }
         else
         {
+          // this.setRunID(id)
           //this.getInstance(data.instance)
           this.updateConsole(id)
         }
@@ -376,6 +383,20 @@ export class FlowRunComponent implements OnInit {
           this._snackBar.open('Flow Run Started', 'Close', {
             duration: 3000
           });
+          this.listItems.unshift({
+            id: '?',
+            run_number: ((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1,
+            artifacts: [],
+            title: `${((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1} Started`,
+            content: 'Running...',
+            runtime: 0,
+            output: [],
+            done: false,
+            image: "../../assets/loading.gif",
+            createdAt: Date.now()
+          });
+          this.listItems = [...this.listItems];
+
         this.updateConsole(res)
         }, (error) => {
           this._snackBar.open('Please wait for all Dynamic Parameters to resolve', 'Close', {
@@ -391,6 +412,7 @@ export class FlowRunComponent implements OnInit {
       const element = this.listItems[index];
       if (element.id == id)
       {
+        console.log("settings",this.runNumber,element.run_number)
         this.runNumber = element.run_number;
       }
     }
@@ -400,12 +422,12 @@ export class FlowRunComponent implements OnInit {
   {
     
     let updatedInList = false
-    this.showConsole(run_id)
+    // this.showConsole(run_id)
     this.subscription = interval(1000)
     .pipe(
         switchMap(() => this.apiService.getFlowInstance(run_id)),
         map(response => {
-          // this.setRunID(run_id)
+          this.setRunID(run_id)
           
           if (Object.keys(response ? response : []).length == 0)
           {
@@ -413,6 +435,7 @@ export class FlowRunComponent implements OnInit {
           }
           else
           {
+            this.paintSteps(response)
             if (updatedInList == false)
             {
               this.fetchMore(true)

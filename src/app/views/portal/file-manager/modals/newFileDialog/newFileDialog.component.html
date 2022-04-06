@@ -38,5 +38,5 @@
 
 <mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button [mat-dialog-close]="{'name': fileName,'type': fileType, '_id': fileID._id,'image':fileImage}" color="primary">OK</button>
+  <button mat-raised-button [mat-dialog-close]="{'name': fileName,'type': fileType.replace('viz','flowviz'), '_id': fileID._id,'image':fileImage}" color="primary">OK</button>
 </mat-dialog-actions>

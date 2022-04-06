@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FileElement } from './file-manager/model/element';
 import { Observable } from 'rxjs';
 import { FileService } from './file-manager/service/file.service';
-
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+@AutoUnsubscribe()
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
@@ -10,6 +11,8 @@ import { FileService } from './file-manager/service/file.service';
   providers: [FileService]
 })
 export class PortalComponent implements OnInit {
+
+  ngOnDestroy(){clearInterval(this.refresher)}
 
   public fileElements: Observable<FileElement[]>;
 
@@ -19,14 +22,23 @@ export class PortalComponent implements OnInit {
   currentPath: string;
   canNavigateUp = false;
 
-  ngOnInit() {
+  refreshView()
+  {
     const createFileList = [
       this.fileService.getAll().toPromise()
     ]
     Promise.all(createFileList).then(result=>{
+      console.log(result)
       this.updateFileElementQuery();
     });
-    
+  }
+  refresher:any;
+
+  ngOnInit() {
+    this.refreshView()
+    this.refresher = setInterval(()=> {
+      this.refreshView()
+    },1000*30)
   }
 
   addFolder(folder: { name: string }) {
@@ -58,6 +70,7 @@ export class PortalComponent implements OnInit {
     ]
     Promise.all(createFileList).then(result=>{
       this.updateFileElementQuery();
+      this.refreshView()
     });
   }  
 

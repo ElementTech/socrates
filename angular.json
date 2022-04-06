@@ -40,7 +40,9 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/scss/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+         
+            ],
             "allowedCommonJsDependencies": [
               "chart.js",
               "@coreui/chartjs/dist/js/coreui-chartjs.js"
@@ -111,7 +113,9 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/scss/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+         
+            ]
           }
         },
         "lint": {

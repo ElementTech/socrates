@@ -54,11 +54,11 @@
         id="initial-list"
        
         (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let i of array" cdkDrag>
+        <div class="example-box justify-content-center" *ngFor="let i of array" cdkDrag>
          
-          <img width="50px" [src]="this.imageUrls[i.image]">
+          <img width="50px" *ngIf="this.imageUrls[i.image]" [src]="this.imageUrls[i.image]">
           {{i.name}}
-          <mat-chip-list>
+          <!-- <mat-chip-list>
             <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
            
               <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
@@ -74,7 +74,7 @@
               </mat-chip>
            
             </ng-container>
-          </mat-chip-list>
+          </mat-chip-list> -->
 
         </div>
       </div>
@@ -107,7 +107,7 @@
           <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="this.steps[i]" class="example-list-horiz" (cdkDropListDropped)="drop($event)">
             <div class="example-box-horiz" *ngFor="let item of this.steps[i]" cdkDrag>
               <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-              <img width="50px" [src]="this.imageUrls[item.image]">
+              <img width="50px"  *ngIf="this.imageUrls[i.image]" [src]="this.imageUrls[item.image]">
               {{item.name}}</div>
           </div>
           <div class="border-end border-start border-1" style="width:3em;">

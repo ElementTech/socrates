@@ -180,7 +180,7 @@
           style="cursor: pointer;"  cdkOverlayOrigin #trigger="cdkOverlayOrigin"
                 (click)="toggle(trigger)"
           >
-            <img width="30px" [src]="this.imageUrls[item.image]">
+            <img width="30px" *ngIf="this.imageUrls[item.image]" [src]="this.imageUrls[item.image]">
             {{item.name}}</div>
             
 

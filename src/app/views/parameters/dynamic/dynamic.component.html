@@ -63,7 +63,9 @@
         <span>Create/Edit</span>
     </ng-template>
     <form [formGroup]="dynamicParameterForm" (ngSubmit)="onSubmit()">
+     
       <div class="grid p-fluid">
+        
         <div class="col-6">
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon"><i class="pi pi-pencil"></i></span>
@@ -88,6 +90,7 @@
           </div>
         </div>
         <div class="col-6">
+          <p-button type="submit" label="Submit"></p-button>
           <p-messages [(value)]="info" [enableService]="false"></p-messages>
           <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" formControlName="script"></ngx-monaco-editor>
           <!-- <ngx-codemirror #codeMirror
@@ -96,7 +99,7 @@
           ></ngx-codemirror> -->
         </div>
       </div>
-      <p-button type="submit" label="Submit"></p-button>
+      
     </form>
   </p-tabPanel>
   <p-tabPanel>

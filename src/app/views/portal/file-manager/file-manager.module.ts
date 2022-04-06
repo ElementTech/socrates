@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {PanelModule} from 'primeng/panel';
 import {ButtonModule} from 'primeng/button';
 import {MenuModule} from 'primeng/menu';
+import { ChartjsModule } from '@coreui/angular-chartjs';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +39,8 @@ import {MenuModule} from 'primeng/menu';
     MatAutocompleteModule,
     MatSelectModule,
     PanelModule,
-    ButtonModule
+    ButtonModule,
+    ChartjsModule
   ],
   declarations: [FileManagerComponent, NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
   exports: [FileManagerComponent],

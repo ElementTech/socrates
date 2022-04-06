@@ -6,6 +6,8 @@ description: Socrates requires either Docker or Kubernetes to run.
 
 #### Docker
 
+The Docker method is intended for development or evaluation and not for Production as it is not easily scalable.
+
 `docker-compose.yaml` file available in root.
 
 ```

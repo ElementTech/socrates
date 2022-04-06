@@ -5,12 +5,15 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MessageService, PrimeIcons } from 'primeng/api';
 import { ApiService } from '../../../services/api.service';
 import {NgxTimelineEventGroup} from '@frxjs/ngx-timeline'
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+
 interface NgxTimelineEvent {
   timestamp?: Date;
   title?: string;
   description?: string;
   id?: any;
 }
+@AutoUnsubscribe()
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
@@ -19,7 +22,7 @@ interface NgxTimelineEvent {
 })
 
 export class TimelineComponent implements OnInit {
-
+  ngOnDestroy(){clearInterval(this.refresher)}
   constructor(private apiService: ApiService,public messageService: MessageService) { }
 
   // this.events = [
@@ -30,9 +33,10 @@ export class TimelineComponent implements OnInit {
   // ];
 
   timeline: Array<NgxTimelineEvent>
+  refresher: any;
   ngOnInit() {
     this.getData()
-    setInterval(()=> {
+    this.refresher = setInterval(()=> {
     this.getData()
     },1000*30)
   }

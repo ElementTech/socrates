@@ -15,9 +15,9 @@ export class NewFileDialogComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private uploadService: FileUploadService,private apiService: ApiService,public dialogRef: MatDialogRef<NewFileDialogComponent>) {}
 
-  fileName: string;
-  fileType: string;
-  fileImage: string;
+  fileName: string = "";
+  fileType: string = "";
+  fileImage: string = "";
   fileID: {"name":string,"_id":string,"image":string} = {"name":'',"_id":'',"image":''};
   options = [];
   selected;

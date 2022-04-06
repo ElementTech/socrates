@@ -8,48 +8,68 @@
   <button mat-mini-fab color="black" style="margin-left: 8px" (click)="openNewFolderDialog()">
     <mat-icon class="pointer">create_new_folder</mat-icon>
   </button>
+
+
 </mat-toolbar>
 
 <div fxFlex fxLayout="row" fxLayoutAlign="space-evenly">
   <div class="content2" fxFlex fxLayout="row" id="box" #box>
-    <mat-grid-list [cols]="columns" rowHeight="200px" gutterSize="10px" fxFlex class="m-2"
+    <mat-grid-list [cols]="columns" rowHeight="230px" gutterSize="10px" fxFlex class="m-2"
     (window:resize)="setColumns()"
     >
       <mat-grid-tile 
       *ngFor="let element of fileElements" 
       class=file-or-folder>
       
-        <p-panel header="{{element.name}}" class="w-100">
+        <p-panel class="w-100">
           <ng-template pTemplate="header">
+            <!-- <img width="30px p-0" *ngIf="element.image" [src]="this.imageUrls[element.image]"> -->
            
+            <span  class="pi pi-reply p-panel-header-icon" [matMenuTriggerFor]="moveToMenu" [matMenuTriggerData]="{self: element}"></span>
+            <span  class="pi pi-pencil p-panel-header-icon"  (click)="openRenameDialog(element)"></span>
+            <span class="example-spacer"></span>
+            <span  class="pi pi-trash p-panel-header-icon" style="color:maroon"  (click)="deleteElement(element)"></span>
           </ng-template>
           <ng-template pTemplate="footer">
+              <c-chart height="30" style="width: 100%;" [data]="{
+                labels: ['1', '2', '3', '4', '5','6','7','8'],
+                datasets: [
+                  {
+                    label: 'Bad',
+                    backgroundColor: 'maroon',
+                    data: element.lastruns_fail
+                  },
+                  {
+                    label: 'Good',
+                    backgroundColor: 'green',
+                    data: element.lastruns_success
+                  }
+                ]
+              }" [options]="chartOptions" type="bar"></c-chart>
+
             <!-- <span  class="pi pi-cog p-panel-header-icon"  [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span> -->
-            <span  class="pi pi-reply p-panel-header-icon" [matMenuTriggerFor]="moveToMenu" [matMenuTriggerData]="{self: element}"></span>
-            <span  class="pi pi-pencil p-panel-header-icon pl-3"  (click)="openRenameDialog(element)"></span>
-            <span class="example-spacer"></span>
-            <span  class="pi pi-trash p-panel-header-icon pl-3" style="color:maroon"  (click)="deleteElement(element)"></span>
-  
+
+            
           </ng-template>
           
            <span [matMenuTriggerFor]="rootMenu" [matMenuTriggerData]="{element: element}" #menuTrigger="matMenuTrigger"></span>
-
+       
           <div fxLayout="column" fxLayoutAlign="space-between center" (click)="navigate(element)" (contextmenu)="openMenu($event,element, menuTrigger)">
-  
+            <b>{{element.name}}</b>
             <div *ngIf="element.isFolder; else elseBlock"><mat-icon class="file-or-folder-icon pointer">folder</mat-icon></div>
             <ng-template #elseBlock>
               <mat-icon 
                 class="file-icon pointer"
-                [routerLink]="['/'+element.type.replace('flow','step').replace('viz','dag')+'/'+(element.type=='block'?'create':'run')+'/', element.fileid]">
+                [routerLink]="['/'+element.type.replace('flowviz','dag').replace('flow','step')+'/'+(element.type=='block'?'create':'run')+'/', element.fileid]">
                 <i class="fa-solid fa-code" [ngClass]='{"fa-code":element.type=="block","fa-play-circle":element.type!="block"}'></i>
               </mat-icon>
-              <img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]">
+              <!-- <img class="littleimage" *ngIf="element.image" [src]="this.imageUrls[element.image]"> -->
 
             </ng-template>
    
-  
+   
           </div>
- 
+
         </p-panel>
       
       </mat-grid-tile>

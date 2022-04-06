@@ -100,7 +100,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
 import { FileManagerModule } from './file-manager/file-manager.module';
 
 @NgModule({
@@ -194,7 +193,7 @@ import { FileManagerModule } from './file-manager/file-manager.module';
     // Codemirror
     CodemirrorModule,
     // Infinite
-    InfiniteScrollModule
+    InfiniteScrollModule,
   ],
   declarations: [
     PortalComponent

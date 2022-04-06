@@ -15,6 +15,8 @@ import {FileUploadService} from '../../../services/file-upload.service'
 import { stepRound } from './customStepCurved';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ScheduleDialogComponent } from '../../../../components/schedule/schedule-dialog.component';
+import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
+@AutoUnsubscribe()
 @Component({
   selector: 'app-flow-viz-run',
   templateUrl: './flow-viz-run.component.html',
@@ -22,7 +24,11 @@ import { ScheduleDialogComponent } from '../../../../components/schedule/schedul
   providers: [DialogService, MessageService]
 })
 export class FlowvizRunComponent implements OnInit {
-
+  ngOnDestroy() {
+    if (this.ref) {
+        this.ref.close();
+    }
+  }
   loading: boolean = false;
   listItems = [];
   alreadyLoaded=0;
@@ -289,6 +295,21 @@ export class FlowvizRunComponent implements OnInit {
           this._snackBar.open('Flow Run Started', 'Close', {
             duration: 3000
           });
+
+          this.listItems.unshift({
+            id: '?',
+            run_number: ((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1,
+            artifacts: [],
+            title: `${((this.listItems[0] != undefined) ? this.listItems[0].run_number : 0) + 1} Started`,
+            content: 'Running...',
+            runtime: 0,
+            output: [],
+            done: false,
+            image: "../../assets/loading.gif",
+            createdAt: Date.now()
+          });
+          this.listItems = [...this.listItems];
+
         this.updateConsole(res)
         }, (error) => {
           this._snackBar.open('Please wait for all Dynamic Parameters to resolve', 'Close', {

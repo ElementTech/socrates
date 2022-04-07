@@ -16,6 +16,19 @@ const agenda = cronController.agenda
 flowRoute.use(auth);
 // Add Flow
 flowRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Flow"
+                    }  
+                }
+            }
+    } */
+
+
   const newSteps = [];
   req.body.steps.forEach((step)=> {
     tempStep = [];

@@ -12,6 +12,18 @@ const auth = require('../middleware/auth');
 dockerRoute.use(auth);
 // Add Docker
 dockerRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/DockerInstance"
+                    }  
+                }
+            }
+    } */
+
   DockerInstance.create(req.body, (error, data) => {
     if (error) {
       return next(error)

@@ -43,7 +43,7 @@ export class FileManagerComponent implements OnChanges {
       }
     },
     animation: {
-      duration: 0, // general animation time
+      duration: 0
     },
     events: [],
     tooltips: {

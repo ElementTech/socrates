@@ -13,6 +13,18 @@ const auth = require('../middleware/auth');
 blockRoute.use(auth);
 // Add Block
 blockRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Block"
+                    }  
+                }
+            }
+    } */
+
   Block.create(Object.assign(req.body, { user: req.user._id }), (error, data) => {
     if (error) {
       res.status(400).json(error)

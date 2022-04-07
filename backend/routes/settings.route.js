@@ -13,6 +13,19 @@ const auth = require('../middleware/auth');
 settingsRoute.use(auth);
 // Add Settings
 settingsRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Settings"
+                    }  
+                }
+            }
+    } */
+
+
   Settings.create(req.body, (error, data) => {
     if (error) {
       return next(error);

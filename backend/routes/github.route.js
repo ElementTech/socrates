@@ -10,6 +10,19 @@ const Github = require('../models/GithubElement');
 
 // Add Github
 GithubRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Github"
+                    }  
+                }
+            }
+    } */
+
+
   Github.create(req.body, (error, data) => {
     if (error) {
       return next(error);

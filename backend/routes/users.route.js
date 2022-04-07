@@ -11,6 +11,18 @@ UserRoute.use(auth);
 // Add User
 UserRoute.route('/create').post((req, res, next) => {
   User.create(req.body, (error, data) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/User"
+                    }  
+                }
+            }
+    } */
+
     if (error) {
       return next(error);
     }

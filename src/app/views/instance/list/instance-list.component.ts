@@ -23,37 +23,74 @@ import { MessageService } from 'primeng/api';
 
 export class InstanceListComponent implements OnInit {
 
-  fetchLastBuild(thisInstance) {
+  // fetchLastBuild(thisInstance) {
   
-    for (let index = 0; index < thisInstance.length; index++) {
-      const element = thisInstance[index];
-      thisInstance[index].block_id = thisInstance[index].block._id
-      thisInstance[index].block = thisInstance[index].block.name
-      this.apiService.getDockerInstanceByInstanceID(element._id).subscribe(data => {
+  //   for (let index = 0; index < thisInstance.length; index++) {
+  //     const element = thisInstance[index];
+  //     thisInstance[index].block_id = thisInstance[index].block._id
+  //     thisInstance[index].block = thisInstance[index].block.name
+  //     this.apiService.getDockerInstanceByInstanceID(element._id).subscribe(data => {
       
-        if (data.length != 0)
-        {
-          thisInstance[index].numruns = data.length
-          if (data[0].done == true)
-          {
-            thisInstance[index].lastrun = !data[0].error
-          }
-          else
-          {
-            thisInstance[index].lastrun =  "running"
-          }
-        }
-        else
-        {
-          thisInstance[index].numruns = 0
-          thisInstance[index].lastrun =  "none"
-        }
-    });
-    }
+  //       if (data.length != 0)
+  //       {
+  //         thisInstance[index].numruns = data.length
+  //         if (data[0].done == true)
+  //         {
+  //           thisInstance[index].lastrun = !data[0].error
+  //         }
+  //         else
+  //         {
+  //           thisInstance[index].lastrun =  "running"
+  //         }
+  //       }
+  //       else
+  //       {
+  //         thisInstance[index].numruns = 0
+  //         thisInstance[index].lastrun =  "none"
+  //       }
+  //   });
+  //   }
   
-    return thisInstance
-  }
+  //   return thisInstance
+  // }
 
+  chartOptions = {
+    plugins: {
+      legend: {
+          display: false
+      }
+    },
+    animation: {
+      duration: 0
+    },
+    events: [],
+    tooltips: {
+      enabled: false
+    },
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      },
+      x: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    }
+  }
 
   instances: any[];
 
@@ -67,7 +104,7 @@ export class InstanceListComponent implements OnInit {
 
   activityValues: number[] = [0, 100];
 
-  lastRunOptions = ['true','false','running','none']
+  // lastRunOptions = ['true','false','running','none']
 
   imageUrls = {};
 
@@ -135,7 +172,8 @@ export class InstanceListComponent implements OnInit {
   ngOnInit() {
       this.apiService.getInstances().subscribe(instances => {
           this.instances = instances;
-          this.fetchLastBuild(instances)
+          console.log(instances)
+          // this.fetchLastBuild(instances)
           this.loading = false;
 
           if (this.actRoute.snapshot.paramMap.get('name') != ""){

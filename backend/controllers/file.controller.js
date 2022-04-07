@@ -38,11 +38,9 @@ const getListFiles = (req, res) => {
   const minioStream = minioClient.listObjects('icons', '', true);
   const artifacts = [];
   minioStream.on('data', (obj) => {
-    console.log('here', obj);
     artifacts.push({ name: obj.name });
   });
   minioStream.on('end', (obj) => {
-    console.log(artifacts);
     res.status(200).send(artifacts);
   });
   minioStream.on('error', (err) => {
@@ -58,7 +56,6 @@ const download = (req, res) => {
     if (err) {
       return console.log(err);
     }
-    console.log('success');
     res.download(`/tmp/${fileName}`, fileName, (err) => {
       if (err) {
         res.status(500).send({

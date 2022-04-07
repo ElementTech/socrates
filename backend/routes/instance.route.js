@@ -15,6 +15,18 @@ const FileElement = require('../models/FileElement')
 instanceRoute.use(auth);
 // Add Instance
 instanceRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Instance"
+                    }  
+                }
+            }
+    } */
+
   Instance.create(Object.assign(req.body, { user: req.user._id }), (error, data) => {
     if (error) {
       res.status(400).json(error)
@@ -30,18 +42,78 @@ instanceRoute.route('/').get((req, res, next) => {
   Instance.find().populate({
     path: 'block',
     model: 'Block', 
-    }).populate('user').exec((error, data)=> {
-    if (error) {
+    }).populate('user').exec(async (error, data)=> {
+    if (error) 
+    {
       return next(error);
-    } else {
-      Flow.find((error, flows) => {
-        Flowviz.find((error, flows_viz) => {
-          res.json(data.map((instance)=> ({ ...instance.toJSON(), flow_count: flows.filter((flow)=> flow.steps.flat().map((step)=> step.id).includes(instance._id.toString()),
-            ).length, flowviz_count: flows_viz.filter((flow)=> flow.nodes.map((node)=> node.data.name).includes(instance.name),
-            ).length }),
-          ));
-        });
-      });
+    } 
+    else 
+    {
+      let docs = await Flow.aggregate([
+          // Stage 1
+          {
+            $unwind: {
+                path : "$steps",
+            }
+          },
+
+          // Stage 2
+          {
+              $unwind: {
+                  path : "$steps",
+              }
+          },
+
+          // Stage 3
+          {
+            $project: {
+                "_id" : "$_id",
+                "steps":"$steps.id",
+            }
+          },
+
+          // Stage 4
+          {
+            $group: {
+                "_id":"$_id",
+                "steps": {$push:"$steps"}
+            }
+          },
+      ]);
+      let viz_docs = await Flowviz.aggregate([
+        {
+          $project: {
+              "_id" : "$_id",
+              "nodes":"$nodes.data.name",
+          }
+        },
+        {
+          $unwind: {
+              path : "$nodes",
+          }
+        },
+        {
+          $group: {
+              "_id":"$_id",
+              "nodes": {$push:"$nodes"}
+          }
+        },
+      ]);
+      data = await Promise.all(data.map(async (instance)=> {
+        const lastRuns = await require('../models/DockerInstance').find({"instance":instance._id,done:true}).sort('-updatedAt').exec()
+        const sliced = lastRuns.slice(-10)
+        return { 
+          ...instance.toJSON(),
+          block: instance.block.name,
+          blockid: instance.block._id,
+          numruns: lastRuns.length,
+          lastruns_fail: sliced.map(run=>(run.error)).reverse(),
+          lastruns_success: sliced.map(run=>(!run.error)).reverse(),
+          flow_count: docs.filter((flow)=> flow.steps.includes(instance._id.toString())).length, 
+          flowviz_count: viz_docs.filter((flow)=> flow.nodes.includes(instance.name)).length 
+        }
+      }));
+      res.json(data);
     }
   });
 });

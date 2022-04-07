@@ -34,7 +34,6 @@ const download = (req, res) => {
     if (err) {
       return console.log(err);
     }
-    console.log('success');
     res.download(`/tmp/${instanceID}/${dockerID}/${fileName}`, fileName, (err) => {
       if (err) {
         res.status(500).send({

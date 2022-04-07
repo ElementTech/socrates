@@ -12,6 +12,18 @@ const auth = require('../middleware/auth');
 parameterRoute.use(auth);
 // Add Parameter
 parameterRoute.route('/create').post((req, res, next) => {
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Parameter"
+                    }  
+                }
+            }
+    } */
+
+
   Parameter.create(req.body, (error, data) => {
     if (error) {
       return next(error);

@@ -15,6 +15,19 @@ const agenda = cronController.agenda
 flowvizRoute.use(auth);
 // Add Flowviz
 flowvizRoute.route('/create').post((req, res, next) => {
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/Flowviz"
+                    }  
+                }
+            }
+    } */
+
+
   Flowviz.create(Object.assign(req.body, { user: req.user._id }), (error, data) => {
     if (error) {
       console.log(error)

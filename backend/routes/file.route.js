@@ -10,6 +10,19 @@ const auth = require('../middleware/auth');
 FileRoute.use(auth);
 // Add File
 FileRoute.route('/create').post((req, res, next) => {
+
+
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/FileElement"
+                    }  
+                }
+            }
+    } */
+
   File.create(req.body, (error, data) => {
     if (error) {
       return next(error);
@@ -28,7 +41,6 @@ FileRoute.route('/').get(async (req, res,next) => {
     data = await Promise.all(data.map(async (file)=>{
       if (!file.isFolder)
       {
-        console.log("jere")
         const result = await require('../models/'+file.type.replace(/^./, file.type[0].toUpperCase())).findById(file.fileid).exec()
         const lastRuns = ({
           "instance": await require('../models/DockerInstance').find({"instance":file.fileid,done:true}).sort('-updatedAt').limit(8).exec(),
@@ -36,7 +48,6 @@ FileRoute.route('/').get(async (req, res,next) => {
           "flowviz": await require('../models/FlowvizInstance').find({"flow":file.fileid,done:true}).sort('-updatedAt').limit(8).exec()
         })[file.type] ?? []
 
-        console.log(lastRuns)
         return {...file.toObject(),"data":result.toObject(),"lastruns_fail":lastRuns.map(run=>(run.error)).reverse(),"lastruns_success":lastRuns.map(run=>(!run.error)).reverse()}
       }
       else
@@ -44,9 +55,6 @@ FileRoute.route('/').get(async (req, res,next) => {
         return file
       }
     }));
-
-    console.log(data)
-
     res.json(data);
   });
 });

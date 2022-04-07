@@ -17,6 +17,9 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dbConfig = require('./database/db');
 
+const swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./swagger/swagger.json');
+
 const healthcheck = new health.HealthChecker();
 const { minioClient } = require('./database/minio');
 
@@ -113,7 +116,6 @@ const blockRoute = require('./routes/block.route');
 const instanceRoute = require('./routes/instance.route');
 const dockerRoute = require('./routes/docker.route');
 const parameterRoute = require('./routes/parameter.route');
-// const webRequestsRoute = require('../backend/routes/web-requests.route')
 const flowRoute = require('./routes/flow.route');
 const flowvizRoute = require('./routes/flow-viz.route');
 const fileRoute = require('./routes/file.route');
@@ -125,7 +127,6 @@ const artifactRoute = require('./routes/artifact.route');
 const dashboardRoute = require('./routes/dashboard.route');
 const schedulerRoute = require('./routes/scheduler.route');
 const dynamicParameterRoute = require('./routes/dynamic.route');
-// let Instances = require('./models/Instances');
 
 const app = express();
 app.use(bodyParser.json());
@@ -160,6 +161,16 @@ app.get("/api/storage", (req, res) => {
   res.json(process.env.MINIO_EXTERNAL_ADDR ? process.env.MINIO_EXTERNAL_ADDR : "http://127.0.0.1:9001")
 
 })
+
+var options = {
+  explorer: true
+};
+
+app.use(
+  '/api/docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument,options)
+);
 app.use('/api', routesApi);
 app.use(createNodeMiddleware());
 // app.use('/api/web', webRequestsRoute)
@@ -167,15 +178,15 @@ app.use(createNodeMiddleware());
 // Settings.create({"langs":{"python":{"image":"latest","command":"python"}}}, (error, data) => {
 async function mySeeder() {
   minioClient.makeBucket('tmp', 'us-east-1', (err) => {
-    if (err) return console.log('Error creating bucket.', err);
+    // if (err) return console.log('Error creating bucket.', err);
     console.log('Bucket created successfully in "us-east-1".');
   });
   minioClient.makeBucket('artifacts', 'us-east-1', (err) => {
-    if (err) return console.log('Error creating bucket.', err);
+    // if (err) return console.log('Error creating bucket.', err);
     console.log('Bucket created successfully in "us-east-1".');
   });
   minioClient.makeBucket('icons', 'us-east-1', (err) => {
-    if (err) return console.log('Error creating bucket.', err);
+    // if (err) return console.log('Error creating bucket.', err);
     console.log('Bucket created successfully in "us-east-1".');
   });
 

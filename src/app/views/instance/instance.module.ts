@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import {ListboxModule} from 'primeng/listbox';
+import { ChartjsModule } from '@coreui/angular-chartjs';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -203,6 +204,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     InfiniteScrollModule,
     NgxChartsModule,
     CronEditorModule,
+    ChartjsModule,
     MonacoEditorModule.forRoot()
   ],
   declarations: [

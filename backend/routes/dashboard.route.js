@@ -73,15 +73,17 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
         }
     },
     {
-    $lookup:
+      $lookup:
        {
          from: "instances",
          localField: "component_id",
          foreignField: "_id",
          as: "instance_docs"
        }
-  },{
-    $project: {
+    },
+    {
+    $project: 
+    {
       _id: 1,
       done : 1,
       error: 1,
@@ -91,7 +93,16 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       updatedAt : 1,
       runtime: 1
     },
-  },{ $sort: { updatedAt: -1 } },{$limit: 20}
+  },
+  { 
+    $sort: 
+      { 
+        updatedAt: -1 
+      } 
+    },
+    {
+      $limit: 20
+    }
   ])
   const step_runs = await FlowInstance.aggregate([{ 
     $addFields: {

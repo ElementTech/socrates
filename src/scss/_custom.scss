@@ -183,12 +183,11 @@
 .play-btn {
   width: 50px;
   height: 50px;
-  background: radial-gradient( #006effcc 60%, rgba(255, 255, 255, 1) 62%);
+  background: radial-gradient( rgb(225, 146, 0) 60%, rgba(255, 255, 255, 1) 62%);
   border-radius: 50%;
   position: relative;
   display: block;
-
-  box-shadow: 0px 0px 25px 3px #008cffcc;
+  box-shadow: 0px 0px 25px 3px orange;
 }
 .play-btn:hover{
   cursor: pointer;

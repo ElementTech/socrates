@@ -4,6 +4,8 @@
     <div class="col-4">
       <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
         Runs:
+        <a class="play-btn" id="play-btn" (click)="ani();"></a>
+
      </li>
         <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content">
           
@@ -62,11 +64,10 @@
                 
             <div class="w-100">
 
-
 <mat-toolbar class="d-flex justify-content-center">
   <span class="example-spacer"></span>
   <i class="fa-solid fa-cubes" aria-hidden="true"></i> &nbsp; <h1 style="margin-right: 1em;">{{this.Instance.name}} </h1>
-  <a class="play-btn" id="play-btn" (click)="ani();"></a>
+  
   <span class="example-spacer"></span>
   <button pButton pRipple type="button" (click)="show()" icon="pi pi-clock" label="Schedule" class="p-button-outlined"></button>
 </mat-toolbar>

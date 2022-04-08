@@ -65,5 +65,5 @@ const endpointsFiles = [
 ]
 
 swaggerAutogen(outputFile, endpointsFiles,doc).then(() => {
-    require('./server.js')
+    // require('./server.js')
 })

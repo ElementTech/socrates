@@ -65,4 +65,87 @@ dashboardRoute.route('/').get(async (req, res, next) => {
   // });
 });
 
+dashboardRoute.route('/runs').get(async (req, res, next) => {
+  const docker_runs = await DockerInstance.aggregate([
+    { 
+      $addFields: {
+         component_id: { $toObjectId: "$instance" }
+        }
+    },
+    {
+    $lookup:
+       {
+         from: "instances",
+         localField: "component_id",
+         foreignField: "_id",
+         as: "instance_docs"
+       }
+  },{
+    $project: {
+      _id: 1,
+      done : 1,
+      error: 1,
+      type : "instance",
+      component: "$instance",
+      name: {$arrayElemAt: ["$instance_docs.name",0]},
+      updatedAt : 1,
+      runtime: 1
+    },
+  },{ $sort: { updatedAt: -1 } },{$limit: 20}
+  ])
+  const step_runs = await FlowInstance.aggregate([{ 
+    $addFields: {
+       component_id: { $toObjectId: "$flow" }
+      }
+  },
+  {
+  $lookup:
+     {
+       from: "flows",
+       localField: "component_id",
+       foreignField: "_id",
+       as: "flow_docs"
+     }
+},{
+    $project: {
+      _id: 1,
+      done : 1,
+      error: 1,
+      type : "step",
+      component: "$flow",
+      name: {$arrayElemAt: ["$flow_docs.name",0]},
+      updatedAt : 1,
+      runtime: 1
+    }
+  },{ $sort: { updatedAt: -1 } },{$limit: 20}])
+  const dag_runs = await FlowvizInstance.aggregate([{ 
+    $addFields: {
+       component_id: { $toObjectId: "$flow" }
+      }
+  },
+  {
+  $lookup:
+     {
+       from: "flows_viz",
+       localField: "component_id",
+       foreignField: "_id",
+       as: "flow_docs"
+     }
+},{
+    $project: {
+      _id: 1,
+      done : 1,
+      error: 1,
+      type : "dag",
+      component: "$flow",
+      name: {$arrayElemAt: ["$flow_docs.name",0]},
+      updatedAt : 1,
+      runtime: 1
+    }
+  },{ $sort: { updatedAt: -1 } },{$limit: 20}])
+  res.json([].concat(docker_runs,step_runs,dag_runs).sort(function(a,b){
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  }))
+});
+
 module.exports = dashboardRoute;

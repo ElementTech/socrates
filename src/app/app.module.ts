@@ -62,6 +62,12 @@ const APP_CONTAINERS = [
 ];
 import {ScrollTopModule} from 'primeng/scrolltop';
 import { NgxFontSizeModule } from 'ngx-font-size';
+import {SidebarModule as PrimeSidebarModule} from 'primeng/sidebar';
+import {ButtonModule as PrimeButtonModule} from 'primeng/button'
+import {OrderListModule} from 'primeng/orderlist';
+import { MatListModule } from '@angular/material/list';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
 
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS,SafePipe],
@@ -96,6 +102,11 @@ import { NgxFontSizeModule } from 'ngx-font-size';
     ScrollTopModule,
     CardModule,
     LoadingBarRouterModule,
+    PrimeSidebarModule,
+    PrimeButtonModule,
+    OrderListModule,
+    MatListModule,
+    ProgressSpinnerModule
   ],
   providers: [
     {

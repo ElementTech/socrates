@@ -3,8 +3,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
+import { interval, switchMap, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-
+import { ApiService } from '../../../services/api.service';
 @Component({
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
@@ -14,12 +15,13 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class DefaultHeaderComponent extends HeaderComponent {
 
   @Input() sidebarId: string = "sidebar";
-
+  display = false;
   public newMessages = new Array(4)
   public newTasks = new Array(5)
   public newNotifications = new Array(5)
 
   constructor(private classToggler: ClassToggleService,public auth: AuthenticationService,
+    private apiService: ApiService,
     private router: Router,
     private ngZone: NgZone,) {
     super();
@@ -30,6 +32,68 @@ export class DefaultHeaderComponent extends HeaderComponent {
     this.auth.logout()
     this.ngZone.run(() => this.router.navigateByUrl('/login'))
   }
+
+  toDocs()
+  {
+    window.location.href = window.location.protocol + "//" + window.location.host + "/api/docs"
+  }
+
+  getBorder(done,error){
+    if (done)
+    {
+      if (error)
+      {
+        return '8px solid red'
+      }
+      else
+      {
+        return '8px solid green'
+      }
+    }
+    else
+    {
+      return '8px solid grey'
+    }
+  }
+
+  getRuntime(duration)
+  {
+    let runtime = []
+    for (var key in duration) {
+      if (duration.hasOwnProperty(key)) {
+        runtime.push(key[0].toUpperCase()+":"+duration[key])
+      }
+    }
+    return runtime
+  }
+
+  redirectTo(uri:string){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    this.router.navigate([uri]));
+  }
+
+  all_runs:any;
+  refresher: any;
+  refreshSidebar()
+  {
+    // @ts-ignre
+    this.all_runs = this.apiService.getAllRuns().subscribe(data=>{
+      // @ts-ignre
+      this.all_runs = data
+    })
+    this.refresher = interval(1000).pipe(
+      // @ts-ignre
+      switchMap(() => this.apiService.getAllRuns())
+    ).subscribe(data=>{
+      // @ts-ignre
+      this.all_runs = data
+    })
+  }
+  hideSidebar()
+  {
+    this.refresher.unsubscribe()
+  }
+ 
   ngAfterViewInit()
   {
     // Designed by: Hoang Nguyen

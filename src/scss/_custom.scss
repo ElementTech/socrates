@@ -3,7 +3,7 @@
 @import '~codemirror/theme/material.css';
 @import "../../node_modules/@coreui/icons/css/all.min.css";
 @import '../../node_modules/primeicons/primeicons.css';
-@import '../../node_modules/primeng/resources/themes/nova/theme.css';
+@import './amitova.css';
 @import '../../node_modules/primeng/resources/primeng.min.css';
 @import "primeflex/primeflex.css";
 @import "~@coreui/chartjs/scss/coreui-chartjs";
@@ -210,7 +210,7 @@
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
   border-left: 20px solid #fff;
-  z-index: 100;
+  z-index: 20;
   -webkit-transition: all 400ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
   transition: all 400ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }

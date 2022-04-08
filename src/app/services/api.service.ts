@@ -38,6 +38,10 @@ export class ApiService {
   getDashboard() {
     return this.http.get(`${this.baseUri}/dashboard`,{headers: this.headers});
   }
+
+  getAllRuns() {
+    return this.http.get(`${this.baseUri}/dashboard/runs`,{headers: this.headers});
+  }
   
   getStorageUrl() {
     return this.http.get(`${this.baseUri}/storage`,{headers: this.headers});

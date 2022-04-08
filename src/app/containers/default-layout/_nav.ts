@@ -127,10 +127,5 @@ export const navItems: INavData[] = [
     name: 'Icons',
     url: '/icons',
     icon: 'cil-image'
-  },
-  {
-    name: 'Storage',
-    url: '/storage',
-    icon: 'cil-external-link'
   }
 ];

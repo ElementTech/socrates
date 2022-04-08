@@ -215,11 +215,11 @@
         </td>
         <td>
           <ng-container *ngFor="let param of instance.parameters.concat(instance.shared).concat(instance.multis).concat(instance.booleans)">
-            <p-tag *ngIf="param.key && !param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}={{param.value}}"></p-tag>
-            <p-tag *ngIf="param.key && param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}=****"></p-tag>
+            <p-tag *ngIf="param.key && !param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}"></p-tag>
+            <p-tag *ngIf="param.key && param.secret" [style.margin-right]="'.5rem'" value="{{param.key}}"></p-tag>
           </ng-container>
           <ng-container *ngFor="let param of instance.dynamic">
-            <p-tag *ngIf="param.name" [style.margin-right]="'.5rem'" severity="success" value="{{param.name}}={{param.output}}"></p-tag>
+            <p-tag *ngIf="param.name" [style.margin-right]="'.5rem'" severity="success" value="{{param.name}}"></p-tag>
           </ng-container>
         </td>
         <!-- <td>

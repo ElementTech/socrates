@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json swagger swagger.js ./
 ADD models models
-RUN npm install --force
+RUN npm install tmp --force && npm install --force
 RUN npm run swagger-autogen
 # If you are building your code for production
 RUN npm ci --only=production

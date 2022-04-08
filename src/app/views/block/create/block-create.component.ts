@@ -155,7 +155,8 @@ export class BlockCreateComponent implements OnInit {
     this.mainForm();
     this.id = this.actRoute.snapshot.paramMap.get('id')
     this.apiService.getSettings().subscribe(settings=>{
-        this.githubConnected = settings[0].github[0].githubConnected
+      console.log(settings)
+        this.githubConnected = (Object.keys(settings[0].github).includes("githubConnected") ? settings[0].github[0].githubConnected : false)
         if (this.githubConnected){
           this.apiService.getGithubElements().subscribe(data=>{
             this.githubList = data;

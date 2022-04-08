@@ -32,7 +32,7 @@ const doc = {
       title: 'Socrates',        // by default: 'REST API'
       description: '',  // by default: ''
     },
-    host: 'localhost:4200',      // by default: 'localhost:3000'
+    host: '',      // by default: 'localhost:3000'
     basePath: '',  // by default: '/'
     schemes: ['http','https'],   // by default: ['http']
     consumes: [],  // by default: ['application/json']

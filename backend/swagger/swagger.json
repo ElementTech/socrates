@@ -5,14 +5,7 @@
     "title": "Socrates",
     "description": ""
   },
-  "servers": [
-    {
-      "url": "http://localhost:4200"
-    },
-    {
-      "url": "https://localhost:4200"
-    }
-  ],
+  "host": "",
   "basePath": "",
   "tags": [
     {

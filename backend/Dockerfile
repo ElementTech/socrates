@@ -10,12 +10,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install tmp --force && npm install --force
-RUN npm run swagger-autogen
+
 # If you are building your code for production
 RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
-
+RUN npm run swagger-autogen
 EXPOSE 4000
 CMD [ "node","server.js" ]

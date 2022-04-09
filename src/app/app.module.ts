@@ -67,8 +67,9 @@ import {ButtonModule as PrimeButtonModule} from 'primeng/button'
 import {OrderListModule} from 'primeng/orderlist';
 import { MatListModule } from '@angular/material/list';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
-
-
+import { FormsModule } from '@angular/forms';
+import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule as PrimeDropdownModule} from 'primeng/dropdown';
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS,SafePipe],
   imports: [
@@ -76,9 +77,11 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     AppRoutingModule,
     AvatarModule,
     BreadcrumbModule,
+    PrimeDropdownModule,
     FooterModule,
     DropdownModule,
     GridModule,
@@ -106,7 +109,8 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     PrimeButtonModule,
     OrderListModule,
     MatListModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    InputTextModule
   ],
   providers: [
     {

@@ -112,7 +112,20 @@
       [showCloseIcon]="true"
       [modal]="false"
       [(visible)]="display" position="right" appendTo="body" >
-    
+      <!-- [].concat([{name:'all'}]).concat() -->
+      <div class="d-flex">
+        <p-dropdown (onChange)="onUserFilter($event)"
+        placeholder="Filter by User"
+        autoWidth="false" [style]="{'width':'100%'}"
+        [filter]="true" filterBy="name" [showClear]="true" optionValue="name"
+        [options]="allUsers | async" [(ngModel)]="userFilter" optionLabel="name"></p-dropdown>
+        <p-dropdown (onChange)="onTypeFilter($event)"
+        placeholder="Filter by Type"
+        autoWidth="false" [style]="{'width':'100%'}"
+        [filter]="true" filterBy="name" [showClear]="true" optionValue="name"
+        [options]="[{name:'instance'},{name:'step'},{name:'dag'}]" [(ngModel)]="typeFilter" optionLabel="name"></p-dropdown>
+      </div>
+
       <mat-list class="infinitelist" style="padding:0 !important;">
           <ng-container *ngFor="let item of all_runs">
             <mat-divider></mat-divider>
@@ -134,7 +147,7 @@
                 
                   <span> <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Duration: <code>{{getRuntime(item.runtime)}}</code>
                     <br>
-                    <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;Updated: <code>{{item.updatedAt | date:'short'}}</code>
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;Created: <code>{{item.createdAt | date:'short'}}</code>
                     <!-- <mat-chip-list class="artlist" *ngIf="item.artifacts.length != 0" >
                       <mat-chip style="min-height: 22px !important; cursor: pointer;">Artifacts: {{item.artifacts.length}}</mat-chip>
                       [routerLink]="['/instance/artifacts/', this.id , item.id]"

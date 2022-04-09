@@ -247,10 +247,10 @@
                   </li>
                   <br>
 
-                  <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
+                  <li *ngIf="this.dockerOutput != ''" class="list-group-item d-flex justify-content-between align-items-center bg-primary">
                     Output:
                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li *ngIf="this.dockerOutput != ''" class="list-group-item d-flex justify-content-between align-items-center">
                     <mat-chip-list>
                         <mat-chip *ngFor="let chip of this.dockerOutput">
                             {{chip.key}}={{chip.value}}

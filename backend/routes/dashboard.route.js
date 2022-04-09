@@ -100,6 +100,7 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       component: "$instance",
       name: {$arrayElemAt: ["$instance_docs.name",0]},
       updatedAt : 1,
+      createdAt : 1,
       runtime: 1,
       user: {$arrayElemAt: ["$username.name",0]}
     },
@@ -145,6 +146,7 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       component: "$flow",
       name: {$arrayElemAt: ["$flow_docs.name",0]},
       updatedAt : 1,
+      createdAt : 1,
       runtime: 1,
       user: {$arrayElemAt: ["$username.name",0]}
     }
@@ -181,6 +183,7 @@ $lookup:
       component: "$flow",
       name: {$arrayElemAt: ["$flow_docs.name",0]},
       updatedAt : 1,
+      createdAt : 1,
       runtime: 1,
       user: {$arrayElemAt: ["$username.name",0]}
     }

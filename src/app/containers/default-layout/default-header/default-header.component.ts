@@ -6,6 +6,7 @@ import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { interval, switchMap, tap } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ApiService } from '../../../services/api.service';
+import {FilterService} from 'primeng/api';
 @Component({
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
@@ -20,7 +21,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public newTasks = new Array(5)
   public newNotifications = new Array(5)
 
-  constructor(private classToggler: ClassToggleService,public auth: AuthenticationService,
+  constructor(
+    private filterService: FilterService,private classToggler: ClassToggleService,public auth: AuthenticationService,
     private apiService: ApiService,
     private router: Router,
     private ngZone: NgZone,) {
@@ -72,21 +74,34 @@ export class DefaultHeaderComponent extends HeaderComponent {
     this.router.navigate([uri]));
   }
 
+  userFilter: string;
+  typeFilter: string;
+  allUsers: any;
   all_runs:any;
   refresher: any;
+
+  onUserFilter(event)
+  {
+    this.all_runs = this.all_runs.filter(item=>this.filterService.filters.equals(item.user,this.userFilter))
+  }
+  onTypeFilter(event)
+  {
+    this.all_runs = this.all_runs.filter(item=>this.filterService.filters.equals(item.type,this.typeFilter))
+  }
+
   refreshSidebar()
   {
-    // @ts-ignre
+    // this.auth.profile().subscribe(data=>{
+    //   this.userFilter = data.name
+    // })
+    this.allUsers = this.apiService.getUsers().toPromise()
     this.all_runs = this.apiService.getAllRuns().subscribe(data=>{
-      // @ts-ignre
       this.all_runs = data
     })
     this.refresher = interval(1000).pipe(
-      // @ts-ignre
       switchMap(() => this.apiService.getAllRuns())
-    ).subscribe(data=>{
-      // @ts-ignre
-      this.all_runs = data
+    ).subscribe((data:any)=>{
+      this.all_runs = data.filter(item=>this.filterService.filters.equals(item.user,this.userFilter)).filter(item=>this.filterService.filters.equals(item.type,this.typeFilter))
     })
   }
   hideSidebar()

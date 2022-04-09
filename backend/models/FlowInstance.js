@@ -26,6 +26,11 @@ const FlowInstance = new Schema({
   runtime: {
     type: Object,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  }
 }, {
   collection: 'flow_instances',
   timestamps: true,

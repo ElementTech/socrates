@@ -163,7 +163,8 @@ export class FlowvizRunComponent implements OnInit {
               runtime: runtime,
               done: data[this.alreadyLoaded+i].done,
               image: imageToShow,
-              createdAt: data[this.alreadyLoaded+i].createdAt
+              createdAt: data[this.alreadyLoaded+i].createdAt,
+user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name : 'socrates')
             });
 
             
@@ -507,7 +508,8 @@ export class FlowvizRunComponent implements OnInit {
                 runtime: runtime,
                 done: data[this.alreadyLoaded+i].done,
                 image: imageToShow,
-              createdAt: data[this.alreadyLoaded+i].createdAt
+              createdAt: data[this.alreadyLoaded+i].createdAt,
+user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name : 'socrates')
               });
       
               

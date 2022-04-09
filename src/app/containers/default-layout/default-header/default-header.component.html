@@ -129,6 +129,7 @@
                 *ngIf="!item.done"></p-progressSpinner>
             
                 <small style="font-size:10px"> &nbsp;ID: {{item._id}}</small> </h3>
+                <p matLine><small style="font-size:10px"> Triggered By: {{item.user || "socrates"}}</small></p>
               <p matLine>
                 
                   <span> <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Duration: <code>{{getRuntime(item.runtime)}}</code>

@@ -235,6 +235,7 @@ instanceRoute.route('/run').post((req, res) => {
       data.booleans = req.body.booleans;
       data.multis = req.body.multis;
       data.dynamic = req.body.dynamic;
+      data.user = req.user._id
       console.log(data);
       docker.run(data, custom_id);
       res.json(custom_id);

@@ -528,7 +528,8 @@ export class InstanceRunComponent implements OnInit {
                 output: data[this.alreadyLoaded+i].output,
                 done: data[this.alreadyLoaded+i].done,
                 image: imageToShow,
-                createdAt: data[this.alreadyLoaded+i].createdAt
+                createdAt: data[this.alreadyLoaded+i].createdAt,
+user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name : 'socrates')
               });
       
               
@@ -597,7 +598,8 @@ export class InstanceRunComponent implements OnInit {
               output: data[this.alreadyLoaded+i].output,
               done: data[this.alreadyLoaded+i].done,
               image: imageToShow,
-              createdAt: data[this.alreadyLoaded+i].createdAt
+              createdAt: data[this.alreadyLoaded+i].createdAt,
+user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name : 'socrates')
             });
             
     

@@ -130,6 +130,7 @@ flowRoute.route('/run').post((req, res, next) => {
         "booleans": req.body.booleans,
         "multis": req.body.multis,
         "dynamic": req.body.dynamic,
+        "user": req.user._id
       }, flow_run_id);
       res.json(flow_run_id);
     }
@@ -173,7 +174,7 @@ flowRoute.route('/instance/one/read/:id').get((req, res, next) => {
 
 // Get All Flow Instances of a specific flow ID
 flowRoute.route('/instance/read/:id').get((req, res, next) => {
-  FlowInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data) => {
+  FlowInstance.find({ flow: req.params.id }).populate('user').sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

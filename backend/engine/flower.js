@@ -46,6 +46,7 @@ async function run_flow() {
   const run_ids = await Promise.resolve(asyncSearch(workerData.flow.steps, workerData.flow.steps.length));
   create_flow_instance_in_database({
     _id: workerData.flow_run_id, flow: workerData.flow._id, run: run_ids, on_error: workerData.flow.on_error, done: false, error: false, skipped: false,
+    user: workerData.flow.user
   });
   const generalEnv = await Promise.resolve(calculate_general_envs(run_ids));
   const startTime = new Date();

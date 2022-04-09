@@ -105,6 +105,7 @@ flowvizRoute.route('/run').post((req, res, next) => {
         "booleans": req.body.booleans,
         "multis": req.body.multis,
         "dynamic": req.body.dynamic,
+        "user": req.user._id
       }, flowviz_run_id);
       res.json(flowviz_run_id);
 
@@ -151,7 +152,7 @@ flowvizRoute.route('/instance/one/read/:id').get((req, res, next) => {
 
 // Get All Flowviz Instances of a specific flowviz ID
 flowvizRoute.route('/instance/read/:id').get((req, res, next) => {
-  FlowvizInstance.find({ flow: req.params.id }).sort({ _id: -1 }).exec((error,data) => {
+  FlowvizInstance.find({ flow: req.params.id }).populate('user').sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

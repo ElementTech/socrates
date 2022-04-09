@@ -15,9 +15,16 @@
                         <mat-list-item  class="listitem" [style.border-left]="getBorder(item.content)">
                          
                         
-                        <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> <small style="font-size:10px"> &nbsp;ID: {{item.id}}</small> </h3>
+                        <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> <small style="font-size:10px"> &nbsp;</small> </h3>
                         <p matLine>
-                          
+                          <small style="font-size:10px">ID: {{item.id}}</small>
+                         </p>
+                        <p matLine>
+                        <small style="font-size:10px">Triggered By: {{item.user || "socrates"}}</small>
+                       </p>
+                    
+                        <p matLine>
+                           
                             <span> <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Duration: <code>{{item.runtime}}</code>
                               <br>
                               <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;Started: <code>{{item.createdAt | date:'short'}}</code>

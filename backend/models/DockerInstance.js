@@ -31,6 +31,11 @@ const DockerInstance = new Schema({
   artifacts: {
     type: [String],
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  }
 }, {
   collection: 'docker',
   timestamps: true,

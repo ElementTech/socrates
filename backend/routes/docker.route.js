@@ -85,7 +85,7 @@ dockerRoute.route('/delete/:id').delete((req, res, next) => {
 
 // Get All Dockers of a specific instance ID
 dockerRoute.route('/instance/read/:id').get((req, res, next) => {
-  DockerInstance.find({ instance: req.params.id }).sort({ _id: -1 }).exec((error,data) => {
+  DockerInstance.find({ instance: req.params.id }).populate('user').sort({ _id: -1 }).exec((error,data) => {
     if (error) {
       return next(error);
     } else {

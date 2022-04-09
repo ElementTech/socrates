@@ -69,7 +69,8 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
   const docker_runs = await DockerInstance.aggregate([
     { 
       $addFields: {
-         component_id: { $toObjectId: "$instance" }
+         component_id: { $toObjectId: "$instance" },
+         user_id: { $toObjectId: "$user" }
         }
     },
     {
@@ -80,7 +81,15 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
          foreignField: "_id",
          as: "instance_docs"
        }
-    },
+    },{
+      $lookup:
+         {
+           from: "users",
+           localField: "user_id",
+           foreignField: "_id",
+           as: "username"
+         }
+      },
     {
     $project: 
     {
@@ -91,7 +100,8 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       component: "$instance",
       name: {$arrayElemAt: ["$instance_docs.name",0]},
       updatedAt : 1,
-      runtime: 1
+      runtime: 1,
+      user: {$arrayElemAt: ["$username.name",0]}
     },
   },
   { 
@@ -106,7 +116,8 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
   ])
   const step_runs = await FlowInstance.aggregate([{ 
     $addFields: {
-       component_id: { $toObjectId: "$flow" }
+       component_id: { $toObjectId: "$flow" },
+       user_id: { $toObjectId: "$user" }
       }
   },
   {
@@ -118,6 +129,14 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
        as: "flow_docs"
      }
 },{
+  $lookup:
+     {
+       from: "users",
+       localField: "user_id",
+       foreignField: "_id",
+       as: "username"
+     }
+  },{
     $project: {
       _id: 1,
       done : 1,
@@ -126,12 +145,14 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       component: "$flow",
       name: {$arrayElemAt: ["$flow_docs.name",0]},
       updatedAt : 1,
-      runtime: 1
+      runtime: 1,
+      user: {$arrayElemAt: ["$username.name",0]}
     }
   },{ $sort: { updatedAt: -1 } },{$limit: 20}])
   const dag_runs = await FlowvizInstance.aggregate([{ 
     $addFields: {
-       component_id: { $toObjectId: "$flow" }
+       component_id: { $toObjectId: "$flow" },
+       user_id: { $toObjectId: "$user" }
       }
   },
   {
@@ -142,6 +163,15 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
        foreignField: "_id",
        as: "flow_docs"
      }
+},
+{
+$lookup:
+   {
+     from: "users",
+     localField: "user_id",
+     foreignField: "_id",
+     as: "username"
+   }
 },{
     $project: {
       _id: 1,
@@ -151,7 +181,8 @@ dashboardRoute.route('/runs').get(async (req, res, next) => {
       component: "$flow",
       name: {$arrayElemAt: ["$flow_docs.name",0]},
       updatedAt : 1,
-      runtime: 1
+      runtime: 1,
+      user: {$arrayElemAt: ["$username.name",0]}
     }
   },{ $sort: { updatedAt: -1 } },{$limit: 20}])
   res.json([].concat(docker_runs,step_runs,dag_runs).sort(function(a,b){

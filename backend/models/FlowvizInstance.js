@@ -31,6 +31,11 @@ const FlowvizInstance = new Schema({
   instance_id: {
     type: String,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  }
 }, {
   collection: 'flowviz_instances',
   timestamps: true,

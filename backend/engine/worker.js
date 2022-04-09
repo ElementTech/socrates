@@ -185,6 +185,7 @@ function writeAndRun(path, folder_path, data, script) {
                           parameters: workerData.instance.parameters,
                           container_id: auxContainer.id,
                           instance: workerData.instance._id,
+                          user: workerData.instance.user,
                           console: [],
                           output: [],
                           done: false,

@@ -43,6 +43,7 @@ let tree_continue = true;
 function run_flow() {
   create_flow_instance_in_database({
     _id: workerData.flow_run_id, flow: workerData.flow._id, nodes: workerData.flow.nodes, links: workerData.flow.links, on_error: workerData.flow.on_error, done: false, error: false,
+    user: workerData.flow.user
   });
 
   const startTime = new Date();

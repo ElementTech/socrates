@@ -7,8 +7,9 @@ WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json swagger server.js swagger.js ./
-ADD models models
+# COPY package*.json swagger server.js swagger.js ./
+# ADD models models
+COPY . .
 RUN npm install tmp --force && npm install --force
 RUN npm run swagger-autogen
 # If you are building your code for production

@@ -6,7 +6,7 @@
 
 [Socrates](./#a-simple-automation-server) is a simple automation server, inspired by Jenkins. It can run tasks in any code language and present them in a friendly dashboard to non-technical users.
 
-![Overview](overview.png)
+![](<.gitbook/assets/Screen Shot 2022-04-09 at 16.16.17.png>)
 
 ## Quickstart
 

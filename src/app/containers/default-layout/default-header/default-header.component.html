@@ -123,7 +123,16 @@
         placeholder="Filter by Type"
         autoWidth="false" [style]="{'width':'100%'}"
         [filter]="true" filterBy="name" [showClear]="true" optionValue="name"
-        [options]="[{name:'instance'},{name:'step'},{name:'dag'}]" [(ngModel)]="typeFilter" optionLabel="name"></p-dropdown>
+        [options]="[{name:'instance'},{name:'step'},{name:'dag'}]" [(ngModel)]="typeFilter" optionLabel="name">
+      
+        <ng-template let-item pTemplate="item">
+          <i *ngIf="item.name == 'instance'" class="fa fa-cubes" aria-hidden="true"></i>
+          <i *ngIf="item.name == 'step'" class="fa fa-stairs" aria-hidden="true"></i>
+          <i *ngIf="item.name == 'dag'" class="fa fa-sitemap" aria-hidden="true"></i>
+          {{item.name}}
+      </ng-template>
+
+      </p-dropdown>
       </div>
 
       <mat-list class="infinitelist" style="padding:0 !important;">

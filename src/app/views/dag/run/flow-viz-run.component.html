@@ -176,6 +176,7 @@
         <mat-toolbar class="d-flex justify-content-between">
           <h1><i class="fa fa-hashtag" aria-hidden="true"></i> {{this.runNumber}}</h1>
         </mat-toolbar>
+        <p-progressBar *ngIf="this.subscription ? !this.subscription.closed : false" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
 
         <ngx-graph
           [links]="links"

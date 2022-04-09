@@ -173,6 +173,8 @@
 <mat-toolbar class="d-flex justify-content-between">
   <h1><i class="fa fa-hashtag" aria-hidden="true"></i> {{this.runNumber}}</h1>
 </mat-toolbar>
+<p-progressBar *ngIf="this.subscription ? !this.subscription.closed : false" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+
       <div class="d-flex flex-row" *ngFor="let num of this.steps; let i = index">
           <div class="align-middle border-end border-start border-1">
             <div>&nbsp;</div>

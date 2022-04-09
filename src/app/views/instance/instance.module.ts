@@ -107,6 +107,8 @@ import {ScheduleDialogComponent} from '../../../components/schedule/schedule-dia
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CronEditorModule } from '../../../components/cron-editor/lib/cron-editor.module';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import {ProgressBarModule as PrimeProgressBarModule} from 'primeng/progressbar';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -205,6 +207,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     NgxChartsModule,
     CronEditorModule,
     ChartjsModule,
+    PrimeProgressBarModule,
     MonacoEditorModule.forRoot()
   ],
   declarations: [

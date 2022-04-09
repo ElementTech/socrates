@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule} from 'primeng/progressspinner'
+import {ProgressBarModule as PrimeProgressBarModule} from 'primeng/progressbar';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -205,7 +206,8 @@ import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
     // Infinite
     InfiniteScrollModule,
     NgxChartsModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    PrimeProgressBarModule
   ],
   declarations: [
     FlowVizComponent,

@@ -219,8 +219,8 @@
 						<span class="example-spacer"></span>
 					
 						<div class="d-flex flex-row">
-							<button mat-flat-button color="primary" (click)="connectGithub()" class="col"><mat-icon class="mat-18">link</mat-icon>Connect</button>
-							<button mat-flat-button color="accent" (click)="disconnectGithub()" class="col"><mat-icon class="mat-18">link_off</mat-icon>Disconnect</button>
+							<button mat-flat-button [style.background-color]="'green'" [style.color]="'white'" (click)="connectGithub()" class="col"><mat-icon class="mat-18">link</mat-icon>Connect</button>
+							<button mat-flat-button [style.background-color]="'maroon'" [style.color]="'white'" (click)="disconnectGithub()" class="col"><mat-icon class="mat-18">link_off</mat-icon>Disconnect</button>
 						</div>
 						
 				</div>

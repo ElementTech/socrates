@@ -70,6 +70,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule as PrimeDropdownModule} from 'primeng/dropdown';
+import { ChipModule } from 'primeng/chip';
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS,SafePipe],
   imports: [
@@ -110,7 +111,8 @@ import {DropdownModule as PrimeDropdownModule} from 'primeng/dropdown';
     OrderListModule,
     MatListModule,
     ProgressSpinnerModule,
-    InputTextModule
+    InputTextModule,
+    ChipModule
   ],
   providers: [
     {

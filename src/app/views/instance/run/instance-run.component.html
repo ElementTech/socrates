@@ -71,13 +71,14 @@
                 
             <div class="w-100">
 
+
 <mat-toolbar class="d-flex justify-content-center">
   <span class="example-spacer"></span>
   <i class="fa-solid fa-cubes" aria-hidden="true"></i> &nbsp; <h1 style="margin-right: 1em;">{{this.Instance.name}} </h1>
-  
   <span class="example-spacer"></span>
   <button pButton pRipple type="button" (click)="show()" icon="pi pi-clock" label="Schedule" class="p-button-outlined"></button>
 </mat-toolbar>
+
                 <ul class="list-group">
                   <li  class="list-group-item d-flex justify-content-between align-items-center bg-primary">
                    Parameters:
@@ -169,7 +170,7 @@
                         </tr>
                     </ng-template>
                   </p-table>
-                <br>
+                <br *ngIf='this.Instance.desc !== ""'>
                   <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
                       <mat-list-item>
 
@@ -263,6 +264,7 @@
                     <button mat-stroked-button color="primary" (click)="makeFull()"><small>Press ESC To Enter/Exit Full Screen</small></button>
                     
                 </mat-toolbar>
+                <p-progressBar *ngIf="this.subscription ? !this.subscription.closed : false" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
                 <ngx-monaco-editor class="CodeMirror" style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" (keydown)="fullScreen($event, this);" [(ngModel)]="output"></ngx-monaco-editor>
             </div>
         </div> 

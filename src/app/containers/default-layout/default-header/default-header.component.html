@@ -104,7 +104,10 @@
     <c-header-nav class="ms-3">
       <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
 
-      <button pButton type="text" class="p-button-outlined p-button-sm text-dark" (click)="display = !display;refreshSidebar()" icon="pi pi-backward" label="Runs"></button>
+      <button pButton type="text" class="p-button-outlined p-button-sm text-dark" (click)="display = !display;refreshSidebar()">
+        <i class="fa fa-backward" aria-hidden="true"></i> &nbsp; Runs 
+      </button>
+      <!-- ({{runningNow()}}) -->
       <p-sidebar 
       (onHide)="hideSidebar()"
       [style]="{width:'23em'}"

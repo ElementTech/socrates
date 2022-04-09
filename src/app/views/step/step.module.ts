@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
-
+import {ProgressBarModule as PrimeProgressBarModule} from 'primeng/progressbar';
 // CoreUI Modules
 import {
   AccordionModule,
@@ -200,7 +200,8 @@ import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
     CodemirrorModule,
     // Infinite
     InfiniteScrollModule,
-    NgxChartsModule
+    NgxChartsModule,
+    ProgressBarModule
   ],
   declarations: [
     FlowListComponent,

@@ -287,6 +287,7 @@ export class InstanceRunComponent implements OnInit {
         })
     )
     .subscribe(response => {
+      console.log(this.subscription)
        if (response == false)
        {
          document.getElementById('play-btn').classList.remove("play-btn-animate");

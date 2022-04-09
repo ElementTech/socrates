@@ -108,6 +108,16 @@ export class DefaultHeaderComponent extends HeaderComponent {
   {
     this.refresher.unsubscribe()
   }
+
+  ngOnInit(){
+    this.all_runs = this.apiService.getAllRuns().subscribe(data=>{
+      this.all_runs = data
+    })
+  }
+  runningNow()
+  {
+    return this.all_runs.filter(it=>!it.done).length
+  }
  
   ngAfterViewInit()
   {

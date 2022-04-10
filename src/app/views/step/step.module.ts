@@ -106,6 +106,7 @@ import { DialogContentExampleDialog, FlowRunComponent } from './run/flow-run.com
 import { FlowStatsComponent } from './stats/flow-stats.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts'
 import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
+import { ChartjsModule } from '@coreui/angular-chartjs';
 @NgModule({
   imports: [
     CommonModule,
@@ -201,7 +202,8 @@ import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
     // Infinite
     InfiniteScrollModule,
     NgxChartsModule,
-    ProgressBarModule
+    ProgressBarModule,
+    ChartjsModule
   ],
   declarations: [
     FlowListComponent,

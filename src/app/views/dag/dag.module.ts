@@ -109,6 +109,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {OverlayModule} from '@angular/cdk/overlay';
 import {ListboxModule} from 'primeng/listbox';
 import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
+import { ChartjsModule } from '@coreui/angular-chartjs';
 
 @NgModule({
   imports: [
@@ -142,7 +143,7 @@ import {AccordionModule as PrimeAccordionModule} from 'primeng/accordion';
     PaginationModule,
     PopoverModule,
     TableModule,
-    
+    ChartjsModule,
     // PRIME NG
     TableNGModule,
     CalendarModule,

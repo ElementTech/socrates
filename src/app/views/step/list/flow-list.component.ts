@@ -70,6 +70,44 @@ export class FlowListComponent implements OnInit {
 
   onErrorOptions = ['continue','stop']
 
+  chartOptions = {
+    plugins: {
+      legend: {
+          display: false
+      }
+    },
+    animation: {
+      duration: 0
+    },
+    events: [],
+    tooltips: {
+      enabled: false
+    },
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      },
+      x: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    }
+  }
+
   constructor(
     private apiService: ApiService,
     private uploadService: FileUploadService,

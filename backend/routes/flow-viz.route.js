@@ -41,11 +41,30 @@ flowvizRoute.route('/create').post((req, res, next) => {
 
 // Get All Flowvizs
 flowvizRoute.route('/').get((req, res, next) => {
-  Flowviz.find({}).populate('user').exec((error, data) => {
+  Flowviz.find({}).populate('user').exec(async (error, data) => {
     if (error) {
       return next(error)
     } 
-      res.json(data)
+
+    
+
+
+
+    data = await Promise.all(data.map(async (instance)=> {
+      const lastRuns = await require('../models/FlowvizInstance').find({"flow":instance._id,done:true}).sort('-updatedAt').exec()
+      const sliced = lastRuns.slice(-10)
+      return { 
+        ...instance.toJSON(),
+        numruns: lastRuns.length,
+        lastruns_fail: sliced.map(run=>(run.error)).reverse(),
+        lastruns_success: sliced.map(run=>(!run.error)).reverse(),
+      }
+    }));
+    res.json(data);
+
+
+
+
     
   });
 });

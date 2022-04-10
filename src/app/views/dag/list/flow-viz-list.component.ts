@@ -70,6 +70,44 @@ export class FlowVizListComponent implements OnInit {
 
   onErrorOptions = ['continue','branch','tree']
 
+  chartOptions = {
+    plugins: {
+      legend: {
+          display: false
+      }
+    },
+    animation: {
+      duration: 0
+    },
+    events: [],
+    tooltips: {
+      enabled: false
+    },
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      },
+      x: {
+        stacked: true,
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    }
+  }
+
   constructor(
     private apiService: ApiService,
     private uploadService: FileUploadService,

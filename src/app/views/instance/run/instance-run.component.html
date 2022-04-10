@@ -15,13 +15,11 @@
                         <mat-list-item  class="listitem" [style.border-left]="getBorder(item.content)">
                          
                         
-                        <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="30"> <small style="font-size:10px"> &nbsp;</small> </h3>
+                        <h3 matLine> <i class="fa fa-hashtag" aria-hidden="true"></i> {{item.title}} <img [src]="item.image" width="25"> <small style="font-size:10px"> &nbsp;</small> </h3>
                         <p matLine>
                           <small style="font-size:10px">ID: {{item.id}}</small>
                          </p>
-                        <p matLine>
-                        <small style="font-size:10px">Triggered By: {{item.user || "socrates"}}</small>
-                       </p>
+                        <small *ngIf="item.user" style="font-size:10px;position: absolute;top: 0;right: 0;">Triggered By: {{item.user}}</small>
                     
                         <p matLine>
                            

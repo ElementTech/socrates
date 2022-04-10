@@ -82,7 +82,7 @@ DynamicParameterRoute.route('/delete/:id').delete((req, res, next) => {
 
 DynamicParameterRoute.route('/run').post((req, res) => {
   const custom_id = new mongoose.Types.ObjectId().toHexString();
-  console.log(req.body);
+  console.log("running");
   docker.run({
     block: { lang: req.body.lang, script: req.body.script, prescript: '' },
     parameters: [{ key: '', value: '' }],

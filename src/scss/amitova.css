@@ -1067,7 +1067,7 @@ p-inputnumber.ng-dirty.ng-invalid > .p-inputnumber > .p-inputtext {
   background: #cccccc;
 }
 .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
-  background: #116fbf;
+  background: darkorange;
 }
 
 p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
@@ -1540,8 +1540,8 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
   color: #ffffff;
 }
 .p-selectbutton .p-button.p-highlight:hover {
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
   color: #ffffff;
 }
 .p-selectbutton .p-button.p-highlight:hover .p-button-icon-left,
@@ -1634,8 +1634,8 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   color: #ffffff;
 }
 .p-togglebutton.p-button.p-highlight:hover {
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
   color: #ffffff;
 }
 .p-togglebutton.p-button.p-highlight:hover .p-button-icon-left,
@@ -1728,9 +1728,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   border-radius: 3px;
 }
 .p-button:enabled:hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
-  border-color: #116fbf;
+  border-color: darkorange;
 }
 .p-button:enabled:active {
   background: #005b9f;
@@ -1922,9 +1922,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   border: 1px solid #303c54;
 }
 .p-button.p-button-info:enabled:hover, .p-buttonset.p-button-info > .p-button:enabled:hover, .p-splitbutton.p-button-info > .p-button:enabled:hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
-  border-color: #116fbf;
+  border-color: darkorange;
 }
 .p-button.p-button-info:enabled:focus, .p-buttonset.p-button-info > .p-button:enabled:focus, .p-splitbutton.p-button-info > .p-button:enabled:focus {
   box-shadow: 0 0 0 0.2rem #8dcdff;
@@ -2950,8 +2950,8 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   border-right: 1px solid #c8c8c8;
 }
 .fc.fc-unthemed .fc-view-container .fc-event {
-  background: #116fbf;
-  border: 1px solid #116fbf;
+  background: darkorange;
+  border: 1px solid darkorange;
   color: #ffffff;
 }
 .fc.fc-unthemed .fc-view-container .fc-divider {
@@ -2969,9 +2969,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   align-items: center;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button:enabled:hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
-  border-color: #116fbf;
+  border-color: darkorange;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button:enabled:active {
   background: #005b9f;
@@ -3021,8 +3021,8 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   color: #ffffff;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button.fc-dayGridMonth-button.fc-button-active:hover, .fc.fc-unthemed .fc-toolbar .fc-button.fc-timeGridWeek-button.fc-button-active:hover, .fc.fc-unthemed .fc-toolbar .fc-button.fc-timeGridDay-button.fc-button-active:hover {
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
   color: #ffffff;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button.fc-dayGridMonth-button:focus, .fc.fc-unthemed .fc-toolbar .fc-button.fc-timeGridWeek-button:focus, .fc.fc-unthemed .fc-toolbar .fc-button.fc-timeGridDay-button:focus {
@@ -3105,15 +3105,15 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 }
 .fc.fc-theme-standard .fc-view-harness .fc-event.fc-daygrid-block-event {
   color: #ffffff;
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
 }
 .fc.fc-theme-standard .fc-view-harness .fc-event.fc-daygrid-block-event .fc-event-main {
   color: #ffffff;
 }
 .fc.fc-theme-standard .fc-view-harness .fc-event.fc-daygrid-dot-event .fc-daygrid-event-dot {
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
 }
 .fc.fc-theme-standard .fc-view-harness .fc-event.fc-daygrid-dot-event:hover {
   background: #eaeaea;
@@ -3131,9 +3131,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   border-radius: 3px;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button:enabled:hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
-  border-color: #116fbf;
+  border-color: darkorange;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button:enabled:active {
   background: #005b9f;
@@ -3189,8 +3189,8 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   color: #ffffff;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button.fc-dayGridMonth-button.fc-button-active:hover, .fc.fc-theme-standard .fc-toolbar .fc-button.fc-timeGridWeek-button.fc-button-active:hover, .fc.fc-theme-standard .fc-toolbar .fc-button.fc-timeGridDay-button.fc-button-active:hover {
-  background: #116fbf;
-  border-color: #116fbf;
+  background: darkorange;
+  border-color: darkorange;
   color: #ffffff;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button.fc-dayGridMonth-button:not(:disabled):focus, .fc.fc-theme-standard .fc-toolbar .fc-button.fc-timeGridWeek-button:not(:disabled):focus, .fc.fc-theme-standard .fc-toolbar .fc-button.fc-timeGridDay-button:not(:disabled):focus {
@@ -4303,7 +4303,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   right: -1rem;
 }
 .p-overlaypanel .p-overlaypanel-close:enabled:hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
 }
 .p-overlaypanel:after {
@@ -4417,9 +4417,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 }
 
 .p-fileupload-choose:not(.p-disabled):hover {
-  background: #116fbf;
+  background: darkorange;
   color: #ffffff;
-  border-color: #116fbf;
+  border-color: darkorange;
 }
 .p-fileupload-choose:not(.p-disabled):active {
   background: #005b9f;

@@ -5,7 +5,7 @@ import {DataViewModule} from 'primeng/dataview';
 import {PickListModule} from 'primeng/picklist';
 import {FieldsetModule} from 'primeng/fieldset';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
-
+import {ButtonModule as PrimeButtonModule} from 'primeng/button';
 // CoreUI Modules
 import {
   
@@ -194,6 +194,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatCardModule,
+    PrimeButtonModule,
     MatSlideToggleModule,
     MatProgressBarModule,
     MatDialogModule,

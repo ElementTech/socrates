@@ -50,11 +50,32 @@ flowRoute.route('/create').post((req, res, next) => {
 
 // Get All Flows
 flowRoute.route('/').get((req, res, next) => {
-  Flow.find({}).populate('user').exec((error, data) => {
+  Flow.find({}).populate('user').exec(async (error, data) => {
     if (error) {
       return next(error)
     } 
-      res.json(data)
+
+    
+
+
+
+
+
+    data = await Promise.all(data.map(async (instance)=> {
+      const lastRuns = await require('../models/FlowInstance').find({"flow":instance._id,done:true}).sort('-updatedAt').exec()
+      const sliced = lastRuns.slice(-10)
+      return { 
+        ...instance.toJSON(),
+        numruns: lastRuns.length,
+        lastruns_fail: sliced.map(run=>(run.error)).reverse(),
+        lastruns_success: sliced.map(run=>(!run.error)).reverse(),
+      }
+    }));
+    res.json(data);
+
+
+
+
     
   });
 });

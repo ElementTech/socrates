@@ -315,9 +315,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="text-center d-grid gap-2">
-      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id === ''"><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
-      <button class="btn btn-primary btn-lg btn-success" type="submit" *ngIf="this.id !== ''"><i class="fa fa-pencil" aria-hidden="true"></i> Update</button>
+    <div class="text-center d-grid gap-2" style="position: fixed; top: 8rem; right: 1rem;">
+      <button [icon]="this.id === '' ? 'pi pi-plus' : 'pi pi-pencil'" pButton pRipple type="button" [label]="this.id === '' ? 'Create' : 'Update'" class="p-button-raised p-button-help p-button-lg"></button>
     </div>
   </p-fieldset>
 </form>

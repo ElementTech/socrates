@@ -79,9 +79,9 @@
         </th> -->
 
         <th   pSortableColumn="lastrun"  style="width: 10rem">
-          <div class="flex justify-content-between align-items-center">
-              Last Run
-              <p-sortIcon field="lastrun"></p-sortIcon>
+          <!-- <div class="flex justify-content-between align-items-center"> -->
+              Last Runs
+              <!-- <p-sortIcon field="lastrun"></p-sortIcon>
               <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="lastrun" matchMode="equals" display="menu" class="ml-auto">
                   <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                       <p-dropdown [ngModel]="value" [options]="lastRunOptions" (onChange)="filter($event.value)" placeholder="Any">
@@ -90,8 +90,8 @@
                           </ng-template>
                       </p-dropdown>
                   </ng-template>
-              </p-columnFilter>
-          </div>
+              </p-columnFilter> -->
+          <!-- </div> -->
         </th>
         <th   pSortableColumn="on_error"  style="width: 10rem">
           <div class="flex justify-content-between align-items-center">
@@ -201,10 +201,21 @@
         </td> -->
         <td>
             <span class="p-column-title">Last Build</span>
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == true" matListAvatar src="../../../assets/success.png">
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun == false" matListAvatar src="../../../assets/fail.png">
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun === 'running'" width="50" matListAvatar src="../../../assets/loading.gif">
-            <img  style="height:30px;width: 30px;" *ngIf="flow.lastrun === 'none'" matListAvatar src="../../../assets/question.png">
+            <c-chart height="35" style="width: 100%;padding-top:8px;" *ngIf="flow.lastruns_fail != 0 || flow.lastruns_success != 0" [data]="{
+                labels: ['1', '2', '3', '4', '5','6','7','8','9','10'],
+                datasets: [
+                  {
+                    label: 'Bad',
+                    backgroundColor: 'maroon',
+                    data: flow.lastruns_fail
+                  },
+                  {
+                    label: 'Good',
+                    backgroundColor: 'green',
+                    data: flow.lastruns_success
+                  }
+                ]
+              }" [options]="chartOptions" type="bar"></c-chart>
         </td>
         <td>
           {{flow.on_error}}

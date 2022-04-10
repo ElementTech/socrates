@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="col-6">
-          <p-button type="submit" label="Submit"></p-button>
+          <button pButton type="submit" label="Submit"></button>
           <p-messages [(value)]="info" [enableService]="false"></p-messages>
           <ngx-monaco-editor style="width: 100%;height:calc(100vh - 100px);" [options]="editorOptions" formControlName="script"></ngx-monaco-editor>
           <!-- <ngx-codemirror #codeMirror
@@ -119,6 +119,7 @@
           <i class="fa fa-clock-o" aria-hidden="true"> </i>&nbsp;
           {{this.runtime}}
         </mat-toolbar>
+        <p-progressBar *ngIf="this.subscription ? !this.subscription.closed : false" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
         <div class="row">
           <div class="col-4">
             <!-- <ngx-codemirror

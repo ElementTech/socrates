@@ -168,3 +168,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.ui-buttonset:not(.ui-splitbutton) .ui-button {
+  font-size: 5px !important;
+}

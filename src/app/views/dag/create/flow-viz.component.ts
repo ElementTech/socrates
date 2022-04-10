@@ -105,6 +105,7 @@ export class FlowVizComponent {
   }
 
   instances: any;
+  selectedImage: any;
 
   inputChanged(event,nodeObject){
     console.log(event.value,nodeObject)

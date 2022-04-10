@@ -123,6 +123,7 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
     BreadcrumbModule,
     ButtonModule,
     CardModule,
+    ButtonNGModule,
     CollapseModule,
     GridModule,
     UtilitiesModule,

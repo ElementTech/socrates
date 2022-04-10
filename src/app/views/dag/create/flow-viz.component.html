@@ -1,279 +1,280 @@
+<form cdkDropListGroup [formGroup]="flowForm" (ngSubmit)="onSubmit()">
 
+    <mat-toolbar class="d-flex justify-content-center">
+      <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
+      <button [icon]="this.id === '' ? 'pi pi-plus' : 'pi pi-pencil'" pButton pRipple type="submit" [label]="this.id === '' ? 'Create' : 'Update'" class="p-button-raised p-button-help p-button-sm"></button>
+      <span class="example-spacer"></span>
+      <p-dropdown appendTo="body" [options]="Images | async"  [(ngModel)]="selectedImage"  formControlName="image" optionLabel="name" optionValue="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select an Icon">
+        <ng-template pTemplate="selectedItem">
+            <div class="d-flex align-middle" style="max-height: 2rem;max-width: 8rem;"  *ngIf="selectedImage">
+              <img width="30px" [src]="this.imageUrls[selectedImage]">
+              <div>{{selectedImage}}</div>
+            </div>
+        </ng-template>
+        <ng-template let-icon pTemplate="item">
+            <div class="d-flex align-middle">
+              <img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[icon.name]">
+              <div>{{icon.name}}</div>
+            </div>
+        </ng-template>
+      </p-dropdown>
+    </mat-toolbar>
+    <div class="row bg-white" style="margin-right:0.1rem;margin-left:0.1rem;">
+     
+      <input class="col-2" type="text"  pInputText placeholder="name" formControlName="name">
+      <div class="col-6">
+        On Error:
+      <p-selectButton [options]="error_options" formControlName="on_error" optionLabel="label" optionValue="value"></p-selectButton>
 
-<form cdkDropListGroup class="d-flex" [formGroup]="flowForm" (ngSubmit)="onSubmit()">
+      </div>
 
-    
-    <div class="example-container">
-      <mat-toolbar class="d-flex justify-content-center">
-        <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
-      </mat-toolbar>
-  
-        <!-- <div
-                infinite-scroll
-                [infiniteScrollDistance]="scrollDistance"
-                [scrollWindow]="false"
-                [horizontal]="false"
-                [infiniteScrollUpDistance]="scrollUpDistance"
-                [infiniteScrollThrottle]="throttle"
-                (scrolled)="onScrollDown($event)"
-                (scrolledUp)="onUp($event)"
-                cdkDropList
-                [cdkDropListData]="array"
-                class="example-list infinite"
-                id="initial-list"
-              
-                (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let i of array" cdkDrag>
-                
-                  <img width="50px" [src]="this.imageUrls[i.image]">
-                  {{i.name}}
-                  <mat-chip-list>
-                    <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
-                  
-                      <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
-            
-                          {{param.key}}
-                      </mat-chip>
-                  
-                    </ng-container>
-                    <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
-                    
-                      <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
-                        {{param.key}}
-                      </mat-chip>
-                  
-                    </ng-container>
-                  </mat-chip-list>
-
-                </div>
-              </div> -->
-          <div>
-                               
-
-
-
-            <mat-list class="infinite">
-
-              <ng-container  *ngFor="let i of nodes">
-                <!-- <mat-list-item  *ngIf="i.label != '+'" class="firstitem w-100">
-                  <div class="list-group w-100">
-                    <a class="list-group-item list-group-item-action">{{i.label}}</a>
-                  </div>
-                </mat-list-item> -->
-                <mat-list-item  *ngIf="i.label !== '+' && i.label !== 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
-                  <mat-form-field appearance="fill" class="w-100"  appearance="outline">
-                   
-                  
-                    <mat-label>Instance</mat-label>
-                    <!-- <mat-icon matPrefix style="margin-right:10px;"><i class="fa fa-cubes" aria-hidden="true"></i></mat-icon> -->
-
-                    <mat-select (selectionChange)="inputChanged($event,i)" >
-                      <mat-option *ngFor="let instance of instances | async"  (mouseover)="enter(i)" (mouseout)="leave(i)" [value]="instance.name">
-                        <img width="50px" class="example-option-img" [src]="this.imageUrls[instance.image]">
-                        <span>{{instance.name}}</span>
-                        <!-- <small>ID: {{instance._id}}</small> -->
-                      </mat-option>
-                    </mat-select>
-
-
-                        <span matSuffix><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;{{i.label}}</span>
-                  </mat-form-field>
-                </mat-list-item>
-              </ng-container>
-            </mat-list>
-
-          </div>
+      <textarea class="col-4" pInputTextarea placeholder="Description" formControlName="desc"></textarea>
 
     </div>
-  
-    <div style="min-width: 55%;">
-      <mat-toolbar class="d-flex justify-content-between" style="gap:10px">
-        <div>
-          <button type="button" mat-stroked-button color="primary" (click)="hidePlus()">
-            <i class="fa-solid fa-minus-square" aria-hidden="true"></i> Hide Plus
-          </button>
-          <button type="button" mat-stroked-button color="primary" (click)="showPlus()">
-            <i class="fa-solid fa-plus-square" aria-hidden="true"></i> Show Plus
-          </button>
-          
-        </div>
 
-        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
-        <div></div>
-      </mat-toolbar>
-      <div class="chart-container card">
-
-        <ngx-graph
-          [links]="links"
-          [nodes]="nodes"
-          [layout]="layout"
-          [curve]="curve"
-          [enableZoom]="true"
-          [draggingEnabled]="false"
-        >
-          <ng-template #defsTemplate>
-              <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
-              <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
-              </svg:marker>
-          </ng-template>
-      
-          <ng-template #clusterTemplate let-cluster>
-              <svg:g class="node cluster">
-              <svg:rect
-                  rx="5"
-                  ry="5"
-                  [attr.width]="cluster.dimension.width"
-                  [attr.height]="cluster.dimension.height"
-                  [attr.fill]="cluster.data.color"
-              />
-              </svg:g>
-          </ng-template>
-      
-          <ng-template #nodeTemplate let-node>
-              <svg:g *ngIf="node.label !== '+' && node.label !== 'Start'"
-              (click)="onNodeClick($event)"
-              (dblclick)="onNodeDblClick($event)"
-              class="node"
-              ngx-tooltip
-              [tooltipPlacement]="'top'"
-              [tooltipType]="'tooltip'"
-              [tooltipTitle]="node.label"
-              >
-              <filter id="neon" height="300%" width="300%" x="-75%" y="-75%">
-                <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
-                <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
-                <feFlood flood-color="rgb(48,60,84)" result="glowColor" />
-                <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
-                <feMerge>
-                  <feMergeNode in="softGlow_colored"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            
-              </filter>
-                <!-- <svg:rect
-                    [attr.width]="'5em'"
-                    [attr.height]="'5em'"
-                    [attr.fill]="'lightgrey'"
-                    id="{{node.label}}rect"
-                /> -->
-                <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
-                [attr.stroke]="node.data.name ? '#007ad9' : 'orange'"
-                style="
-                stroke-width: 5;
-                fill:rgb(48,60,84)"
-                />
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <foreignObject width="5em" height="5em">
-                    <!-- <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
-                     
-                        {{node.label}} 
-                    </div> -->
-                    <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
-          
-                      <span class="text-white"> {{node.label}} </span>
-                      <p class="text-white fifty-chars pl-2">{{node.data.name}}</p>
-                      <button pButton pRipple (click)="remvoeNode(node)" type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"  style="top:0;position:absolute;right:0;width:20px;height:20px"></button>
-                     
-                    </div>
-                      <!-- <img width="20px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0"> -->
-                  </foreignObject>
-                </svg>
-
-
-  
-              </svg:g>
-              <svg:g *ngIf="node.label === 'Start'"
-              class="node"
-              ngx-tooltip
-              [tooltipPlacement]="'top'"
-              [tooltipType]="'tooltip'"
-              [tooltipTitle]="node.label"
-              >
-         
-                <svg:rect
-                    [attr.width]="'5em'"
-                    [attr.height]="'5em'"
-                    [attr.fill]="'black'"
-                    id="{{node.label}}rect"
-                />
+    <div class="row">
+      <div class="col-3">
+        <mat-toolbar class="d-flex justify-content-center">
+          <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
+        </mat-toolbar>
     
-                <svg:text alignment-baseline="central" [attr.x]="14" [attr.y]="node.dimension.height / 2" [attr.fill]="'white'" style="font-size:x-large;">
-                  {{node.label}}
-                </svg:text>
-          
-              </svg:g>
-              <svg:g *ngIf="node.label === '+'"
-              (click)="onPlusClick(node)"
-             
-              class="plus"
-              ngx-tooltip
-              [tooltipPlacement]="'top'"
-              [tooltipType]="'tooltip'"
-              [tooltipTitle]="node.label"
-              >
-              <svg:rect class="rect"
-                  [attr.width]="node.dimension.width"
-                  [attr.height]="node.dimension.height"
-                  [attr.fill]="node.data.color"
+          <!-- <div
+                  infinite-scroll
+                  [infiniteScrollDistance]="scrollDistance"
+                  [scrollWindow]="false"
+                  [horizontal]="false"
+                  [infiniteScrollUpDistance]="scrollUpDistance"
+                  [infiniteScrollThrottle]="throttle"
+                  (scrolled)="onScrollDown($event)"
+                  (scrolledUp)="onUp($event)"
+                  cdkDropList
+                  [cdkDropListData]="array"
+                  class="example-list infinite"
+                  id="initial-list"
+                
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let i of array" cdkDrag>
                   
-              />
-              <svg:text class="text" alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
-                  {{node.label}}
-              </svg:text>
-              </svg:g>
-          </ng-template>
+                    <img width="50px" [src]="this.imageUrls[i.image]">
+                    {{i.name}}
+                    <mat-chip-list>
+                      <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
+                    
+                        <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
+              
+                            {{param.key}}
+                        </mat-chip>
+                    
+                      </ng-container>
+                      <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
+                      
+                        <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
+                          {{param.key}}
+                        </mat-chip>
+                    
+                      </ng-container>
+                    </mat-chip-list>
+  
+                  </div>
+                </div> -->
+            <div>
+                                 
+  
+  
+  
+              <mat-list class="infinite">
+  
+                <ng-container  *ngFor="let i of nodes">
+                  <!-- <mat-list-item  *ngIf="i.label != '+'" class="firstitem w-100">
+                    <div class="list-group w-100">
+                      <a class="list-group-item list-group-item-action">{{i.label}}</a>
+                    </div>
+                  </mat-list-item> -->
+                  <mat-list-item  *ngIf="i.label !== '+' && i.label !== 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
+              
+                    <!-- <p-dropdown [options]="instances | async" optionLabel="name"></p-dropdown> -->
+
+
+                    <mat-form-field appearance="fill" class="w-100"  appearance="standard">
+                     
+                    
+                      <mat-label>Instance</mat-label>
+                      <!-- <mat-icon matPrefix style="margin-right:10px;"><i class="fa fa-cubes" aria-hidden="true"></i></mat-icon> -->
+  
+                      <mat-select (selectionChange)="inputChanged($event,i)" >
+                        <mat-option *ngFor="let instance of instances | async"  (mouseover)="enter(i)" (mouseout)="leave(i)" [value]="instance.name">
+                          <img width="50px" class="example-option-img" [src]="this.imageUrls[instance.image]">
+                          <span>{{instance.name}}</span>
+                          <!-- <small>ID: {{instance._id}}</small> -->
+                        </mat-option>
+                      </mat-select>
+  
+  
+                          <span matSuffix><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;{{i.label}}</span>
+                    </mat-form-field>
+                  </mat-list-item>
+                </ng-container>
+              </mat-list>
+  
+            </div>
+  
+      </div>
+      <div class="col-9">
+        <mat-toolbar class="d-flex justify-content-between" style="gap:10px">
+          <div>
+            <button type="button" mat-stroked-button color="primary" (click)="hidePlus()">
+              <i class="fa-solid fa-minus-square" aria-hidden="true"></i> Hide Plus
+            </button>
+            <button type="button" mat-stroked-button color="primary" (click)="showPlus()">
+              <i class="fa-solid fa-plus-square" aria-hidden="true"></i> Show Plus
+            </button>
+            
+          </div>
+  
+          <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
+          <div></div>
+        </mat-toolbar>
+        <div class="chart-container card">
+  
+          <ngx-graph
+            [links]="links"
+            [nodes]="nodes"
+            [layout]="layout"
+            [curve]="curve"
+            [enableZoom]="true"
+            [draggingEnabled]="false"
+          >
+            <ng-template #defsTemplate>
+                <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+                <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                </svg:marker>
+            </ng-template>
+        
+            <ng-template #clusterTemplate let-cluster>
+                <svg:g class="node cluster">
+                <svg:rect
+                    rx="5"
+                    ry="5"
+                    [attr.width]="cluster.dimension.width"
+                    [attr.height]="cluster.dimension.height"
+                    [attr.fill]="cluster.data.color"
+                />
+                </svg:g>
+            </ng-template>
+        
+            <ng-template #nodeTemplate let-node>
+                <svg:g *ngIf="node.label !== '+' && node.label !== 'Start'"
+                (click)="onNodeClick($event)"
+                (dblclick)="onNodeDblClick($event)"
+                class="node"
+                ngx-tooltip
+                [tooltipPlacement]="'top'"
+                [tooltipType]="'tooltip'"
+                [tooltipTitle]="node.label"
+                >
+                <filter id="neon" height="300%" width="300%" x="-75%" y="-75%">
+                  <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
+                  <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
+                  <feFlood flood-color="rgb(48,60,84)" result="glowColor" />
+                  <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
+                  <feMerge>
+                    <feMergeNode in="softGlow_colored"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+              
+                </filter>
+                  <!-- <svg:rect
+                      [attr.width]="'5em'"
+                      [attr.height]="'5em'"
+                      [attr.fill]="'lightgrey'"
+                      id="{{node.label}}rect"
+                  /> -->
+                  <circle cx="40" cy="40" r="40"  id="{{node.label}}rect"
+                  [attr.stroke]="node.data.name ? '#007ad9' : 'orange'"
+                  style="
+                  stroke-width: 5;
+                  fill:rgb(48,60,84)"
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg">
+                    <foreignObject width="5em" height="5em">
+                      <!-- <div xmlns="http://www.w3.org/1999/xhtml"  class="text-center text-white" style="background-color: black;">
+                       
+                          {{node.label}} 
+                      </div> -->
+                      <div xmlns="http://www.w3.org/1999/xhtml" class="text-center" style="margin-top: 1em;">
+            
+                        <span class="text-white"> {{node.label}} </span>
+                        <p class="text-white fifty-chars pl-2">{{node.data.name}}</p>
+                        <button pButton pRipple (click)="remvoeNode(node)" type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"  style="top:0;position:absolute;right:0;width:20px;height:20px"></button>
+                       
+                      </div>
+                        <!-- <img width="20px" [src]="this.imageUrls[node.data.image]" style="position: absolute; top:0; left:0"> -->
+                    </foreignObject>
+                  </svg>
+  
+  
+    
+                </svg:g>
+                <svg:g *ngIf="node.label === 'Start'"
+                class="node"
+                ngx-tooltip
+                [tooltipPlacement]="'top'"
+                [tooltipType]="'tooltip'"
+                [tooltipTitle]="node.label"
+                >
+           
+                  <svg:rect
+                      [attr.width]="'5em'"
+                      [attr.height]="'5em'"
+                      [attr.fill]="'black'"
+                      id="{{node.label}}rect"
+                  />
       
-          <ng-template #linkTemplate let-link>
-              <svg:g class="edge">
-              <svg:path class="line" stroke-width="2" marker-end="url(#arrow)"></svg:path>
-              <svg:text class="edge-label" text-anchor="middle">
-                  <textPath
-                  class="text-path"
-                  [attr.href]="'#' + link.id"
-                  [style.dominant-baseline]="link.dominantBaseline"
-                  startOffset="50%"
-                  >
-                  <!-- {{link.label}} -->
-                  </textPath>
-              </svg:text>
-              </svg:g>
-          </ng-template>
-      
-        </ngx-graph>
+                  <svg:text alignment-baseline="central" [attr.x]="14" [attr.y]="node.dimension.height / 2" [attr.fill]="'white'" style="font-size:x-large;">
+                    {{node.label}}
+                  </svg:text>
+            
+                </svg:g>
+                <svg:g *ngIf="node.label === '+'"
+                (click)="onPlusClick(node)"
+               
+                class="plus"
+                ngx-tooltip
+                [tooltipPlacement]="'top'"
+                [tooltipType]="'tooltip'"
+                [tooltipTitle]="node.label"
+                >
+                <svg:rect class="rect"
+                    [attr.width]="node.dimension.width"
+                    [attr.height]="node.dimension.height"
+                    [attr.fill]="node.data.color"
+                    
+                />
+                <svg:text class="text" alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+                    {{node.label}}
+                </svg:text>
+                </svg:g>
+            </ng-template>
+        
+            <ng-template #linkTemplate let-link>
+                <svg:g class="edge">
+                <svg:path class="line" stroke-width="2" marker-end="url(#arrow)"></svg:path>
+                <svg:text class="edge-label" text-anchor="middle">
+                    <textPath
+                    class="text-path"
+                    [attr.href]="'#' + link.id"
+                    [style.dominant-baseline]="link.dominantBaseline"
+                    startOffset="50%"
+                    >
+                    <!-- {{link.label}} -->
+                    </textPath>
+                </svg:text>
+                </svg:g>
+            </ng-template>
+        
+          </ngx-graph>
+        </div>
       </div>
     </div>
 
-      
-    <div class="details text-center">
-     
-      <mat-toolbar class="d-flex justify-content-center">
-        <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id === ''">Create</button>
-        <button mat-raised-button color="primary" type="submit" *ngIf="this.id !== ''">Update</button>
-      </mat-toolbar>
-    
-      <mat-form-field class="w-100 pt-3" appearance="fill">
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="My Flow" formControlName="name" required>
-      </mat-form-field>
-
-      <h3>On Error:</h3>
-      <p-selectButton styleClass="mb-4"   [options]="error_options" formControlName="on_error" optionLabel="label" optionValue="value"></p-selectButton>
-
-
-      <mat-form-field class="w-100" appearance="fill">
-        <mat-label>Icon</mat-label>
-        <mat-select formControlName="image">
-          <mat-option [value]="image.name" *ngFor="let image of Images | async">
-            <img width="30px" [src]="this.imageUrls[image.name]"> {{image.name}}
-          </mat-option>
-        </mat-select>
-        <mat-icon matSuffix ><img width="30px" style="margin-bottom:25px;" [src]="this.imageUrls[this.flowForm.get('image').value]"></mat-icon>
-      </mat-form-field> 
-      <mat-form-field class="w-100" appearance="fill">
-        <mat-label>Description</mat-label>
-        <textarea class="desc" matInput placeholder="Description" formControlName="desc"></textarea>
-      </mat-form-field>
-   
-    </div>
-  </form>
+</form>

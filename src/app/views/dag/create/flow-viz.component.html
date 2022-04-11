@@ -1,5 +1,4 @@
 <form cdkDropListGroup [formGroup]="flowForm" (ngSubmit)="onSubmit()">
-
     <mat-toolbar class="d-flex justify-content-center">
       <i class="fa-solid fa-info-circle" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Details</h1>
       <button [icon]="this.id === '' ? 'pi pi-plus' : 'pi pi-pencil'" pButton pRipple type="submit" [label]="this.id === '' ? 'Create' : 'Update'" class="p-button-raised p-button-help p-button-sm"></button>
@@ -31,7 +30,6 @@
       <textarea class="col-4" pInputTextarea placeholder="Description" formControlName="desc"></textarea>
 
     </div>
-
     <div class="row">
       <div class="col-3">
         <mat-toolbar class="d-flex justify-content-center">
@@ -90,29 +88,56 @@
                       <a class="list-group-item list-group-item-action">{{i.label}}</a>
                     </div>
                   </mat-list-item> -->
-                  <mat-list-item  *ngIf="i.label !== '+' && i.label !== 'Start'" class="institem w-100" (mouseover)="enter(i)" (mouseout)="leave(i)">
-              
-                    <!-- <p-dropdown [options]="instances | async" optionLabel="name"></p-dropdown> -->
+              <ng-container  *ngIf="i.label !== '+' && i.label !== 'Start'">
+                <div class="d-flex">
+                  <p-chip label="{{i.label}}"><i class="fa fa-hashtag" aria-hidden="true"></i></p-chip>
+                  <p-dropdown   class=" w-100" (mouseover)="enter(i)" (mouseout)="leave(i)"
+                  [showClear]="true"
+                  placeholder="Filter for Instance"
+                  autoWidth="false" [style]="{'width':'100%'}"
+                  (onChange)="inputChanged($event,i)"
+                  [options]="instances | async" 
+                  optionLabel="name" 
+                  optionValue="name"
+                  [filter]="true" filterBy="name"
+                  [ngModelOptions]="{standalone: true}">
+            
+                    <ng-template let-item pTemplate="item">
+                        <img width="50px" class="example-option-img" [src]="this.imageUrls[item.image]">{{item.name}}
+                    </ng-template>
+
+                    <ng-template let-item pTemplate="selectedItem">
+                      <img width="25px" class="example-option-img" [src]="this.imageUrls[item.image]">{{item.name}}
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                      <i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;{{i.label}}
+                   </ng-template>
+
+                  </p-dropdown>
+       
+                </div>
+          
+              </ng-container>
+                    
+                  
 
 
-                    <mat-form-field appearance="fill" class="w-100"  appearance="standard">
+                    <!-- <mat-form-field appearance="fill" class="w-100"  appearance="standard">
                      
                     
                       <mat-label>Instance</mat-label>
-                      <!-- <mat-icon matPrefix style="margin-right:10px;"><i class="fa fa-cubes" aria-hidden="true"></i></mat-icon> -->
   
                       <mat-select (selectionChange)="inputChanged($event,i)" >
                         <mat-option *ngFor="let instance of instances | async"  (mouseover)="enter(i)" (mouseout)="leave(i)" [value]="instance.name">
                           <img width="50px" class="example-option-img" [src]="this.imageUrls[instance.image]">
                           <span>{{instance.name}}</span>
-                          <!-- <small>ID: {{instance._id}}</small> -->
                         </mat-option>
                       </mat-select>
   
   
                           <span matSuffix><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;{{i.label}}</span>
-                    </mat-form-field>
-                  </mat-list-item>
+                    </mat-form-field> -->
                 </ng-container>
               </mat-list>
   
@@ -276,5 +301,4 @@
         </div>
       </div>
     </div>
-
 </form>

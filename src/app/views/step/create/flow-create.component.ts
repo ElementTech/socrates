@@ -28,7 +28,7 @@ export class FlowCreateComponent implements OnInit {
   scrollUpDistance = 2;
   direction = "";
   submitted: boolean;
-
+  selectedImage: any;
   error_option = "";
   error_options = [{label: 'Continue', value: 'continue',icon: 'pi pi-fast-forward'},
   {label: 'Stop', value: 'stop',icon:'pi pi-filter-slash'}]

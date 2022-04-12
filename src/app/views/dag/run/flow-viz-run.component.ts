@@ -101,7 +101,6 @@ export class FlowvizRunComponent implements OnInit {
           this.apiService.scheduleFlowviz({"id":this.id,"parameters":this.Instance.parameters,"shared":this.Instance.shared,"booleans":this.Instance.booleans,
           "multis":this.Instance.multis,"dynamic":this.Instance.dynamic,"interval":data}).subscribe(
             (res) => {
-              console.log(res)
               this.messageService.add({severity:'success', summary: 'DAG Flow Run Scheduled', detail: data});
               
             }, (error) => {

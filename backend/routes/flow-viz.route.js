@@ -146,6 +146,9 @@ flowvizRoute.route('/cron').post((req, res, next) => {
       data.multis = req.body.multis;
       data.dynamic = req.body.dynamic;
       cronController.createDagFlow(req.body.interval,data)
+      res.status(200).json({
+        msg: data.name
+      })
       }
       else
       {

@@ -86,10 +86,18 @@ export class AuthenticationService {
 
     const request = base.pipe(
       map((data: TokenResponse) => {
-        if (data.token) {
-          this.saveToken(data.token);
+        if (data)
+        {
+          if (data.token) {
+            this.saveToken(data.token);
+          }
+          return data;
         }
-        return data;
+        else
+        {
+          this.router.navigate(['/login']);
+          return null
+        }
       })
     );
 

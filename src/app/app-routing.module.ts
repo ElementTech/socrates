@@ -21,6 +21,7 @@ const routes: Routes = [
         info: 'home'
       }
     },
+    canLoad: [AuthGuardService],
   },
   {
     path: '',
@@ -31,7 +32,7 @@ const routes: Routes = [
       breadcrumb: {
         label: 'app home',
         info: 'home'
-      }
+      },
     },
     canActivate: [AuthGuardService],
     children: [

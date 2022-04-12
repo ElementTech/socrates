@@ -98,7 +98,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FlowCreateComponent } from './create/flow-create.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
-
+import {PickListModule} from 'primeng/picklist';
+import {OrderListModule} from 'primeng/orderlist';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import {OverlayModule} from '@angular/cdk/overlay';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -138,7 +139,8 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
     PopoverModule,
     TableModule,
     ProgressSpinnerModule,
-    
+    PickListModule,
+    OrderListModule,
     // PRIME NG
     TableNGModule,
     CalendarModule,

@@ -79,7 +79,7 @@ export class FlowRunComponent implements OnInit {
         }
       ))
       console.log(data)
-      this.flowForm.setValue(data)
+      this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : '')}))
       this.steps=data.steps
 
     });

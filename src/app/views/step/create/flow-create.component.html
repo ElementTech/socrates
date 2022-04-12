@@ -30,13 +30,35 @@
     <textarea class="col-4" pInputTextarea placeholder="Description" formControlName="desc"></textarea>
 
   </div>
+  
   <div class="row">
     <div class="col-3">
-      <mat-toolbar class="d-flex justify-content-center">
-        <i class="fa-solid fa-cubes" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Instances</h1>
-      </mat-toolbar>
+      <p-orderList 
+        id="initial-list" 
+        [value]="array" 
+        [cdkDropListData]="array" 
+        cdkDropList 
+        (cdkDropListDropped)="drop($event)"
+        filterBy="name"
+        filterPlaceholder="Filter by name"
+        [dragdrop]="true"
+        header="List of Instances - Drag & Drop"
+      >
+        <ng-template let-item pTemplate="item">
+            <div cdkDrag style="min-height: 30px;" class="d-flex">
+          
+              {{item.name}}
+              <span class="example-spacer"></span>
+              <small>{{item.flow_count}} Step Flows</small>
+              <img width="30px" [src]="this.imageUrls[item.image]">
+
+            </div>
+        </ng-template>
+      </p-orderList>
+
+      
   
-      <div
+      <!-- <div
         infinite-scroll
         [infiniteScrollDistance]="scrollDistance"
         [scrollWindow]="false"
@@ -55,26 +77,8 @@
           
           <img width="50px" *ngIf="this.imageUrls[i.image]" [src]="this.imageUrls[i.image]">
           {{i.name}}
-          <!-- <mat-chip-list>
-            <ng-container aria-label="Parameters" *ngIf='i.parameters.length != 0'>
-            
-              <mat-chip style="font-size:smaller" color="primary" selected *ngFor="let param of i.parameters">
-      
-                  {{param.key}}
-              </mat-chip>
-            
-            </ng-container>
-            <ng-container aria-label="Parameters" *ngIf='i.shared.length != 0'>
-              
-              <mat-chip style="font-size:smaller" color="accent" selected *ngFor="let param of i.shared">
-                {{param.key}}
-              </mat-chip>
-            
-            </ng-container>
-          </mat-chip-list> -->
-  
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="col-9">
       <mat-toolbar class="d-flex justify-content-between">
@@ -83,7 +87,7 @@
           <i class="fa-solid fa-plus-circle" aria-hidden="true"></i> Add Step
         </button>
         
-        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-chain" aria-hidden="true"></i>&nbsp;Flow <code>{{this.flowForm.get("name").value}}</code></h1>
+        <h1 style="margin-right: 1em;">  <i class="fa-solid fa-stairs" aria-hidden="true"></i>&nbsp;Steps Flow <code>{{this.flowForm.get("name").value}}</code></h1>
         <div></div>
       </mat-toolbar>
   

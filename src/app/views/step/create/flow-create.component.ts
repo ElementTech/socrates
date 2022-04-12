@@ -68,9 +68,14 @@ export class FlowCreateComponent implements OnInit {
         );
       }
     }
+    console.log(event.previousContainer.data,event.container.data)
     this.flowForm.get('steps').setValue(this.steps)
   }
   ngOnInit(): void {
+    this.apiService.getInstances().subscribe((data) => {
+      this.array=data
+    })
+
     // this.sidenav.close();
     this.Images = this.uploadService.getFiles()
     this.uploadService.getFiles().subscribe(data=>{
@@ -96,7 +101,7 @@ export class FlowCreateComponent implements OnInit {
       this.apiService.getFlow(this.id).subscribe(data => {
         delete data.__v
         delete data._id
-        this.flowForm.setValue(data)
+        this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : '')}))
         this.steps= data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
         console.log(this.steps)
       });

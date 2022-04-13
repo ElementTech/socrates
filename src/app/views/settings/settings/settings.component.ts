@@ -33,7 +33,6 @@ export class SettingsComponent implements OnInit {
   progressbarValue = 0;
   ngOnInit(): void {
       this.monacoLanguages = languages.getLanguages()
-      console.log(this.monacoLanguages)
       this.getSettings()
   }
 
@@ -73,21 +72,21 @@ export class SettingsComponent implements OnInit {
       this.SettingsID = data[0]._id
       this.ELEMENT_DATA = data[0]["langs"]
       this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-      this.githubURL = data[0].github[0].githubURL
-      this.githubBranch = data[0].github[0].githubBranch
-      this.githubWebhook = data[0].github[0].githubWebhook
-      this.githubConnected = data[0].github[0].githubConnected
-      this.sha = data[0].github[0].sha
-      this.githubToken = data[0].github[0].githubToken
+      this.githubURL = data[0].github[0] ? data[0].github[0].githubURL : ''
+      this.githubBranch = data[0].github[0] ? data[0].github[0].githubBranch : 'main'
+      this.githubWebhook = data[0].github[0] ? data[0].github[0].githubWebhook : false
+      this.githubConnected = data[0].github[0] ? data[0].github[0].githubConnected : false
+      this.sha = data[0].github[0] ? data[0].github[0].sha : ''
+      this.githubToken = data[0].github[0] ? data[0].github[0].githubToken : ''
 
-      this.dockerAuth = data[0].docker_auth[0].auth
-      this.dockerUsername = data[0].docker_auth[0].username
-      this.dockerPassword = data[0].docker_auth[0].password
-      this.dockerEmail = data[0].docker_auth[0].email
-      this.dockerHost = data[0].docker_auth[0].host
+      this.dockerAuth = data[0].docker_auth[0] ? data[0].docker_auth[0].auth : ''
+      this.dockerUsername = data[0].docker_auth[0] ? data[0].docker_auth[0].username : ''
+      this.dockerPassword = data[0].docker_auth[0] ? data[0].docker_auth[0].password : ''
+      this.dockerEmail = data[0].docker_auth[0] ? data[0].docker_auth[0].email : ''
+      this.dockerHost = data[0].docker_auth[0] ? data[0].docker_auth[0].host : 'https://index.docker.io/v1'
 
 
-      if (data[0].github[0].githubConnected){
+      if (this.githubConnected){
         this.startTimer(60)
       }
       else

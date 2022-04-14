@@ -55,14 +55,16 @@ mongoose.connect(dbConfig.db, {
                   if (data[0].github[0].githubConnected) {
                     GithubElement.findOne({ path: workerData.instance.block.github_path }, (error, git) => {
                       if ((git.content != null) && (git.content != undefined)) {
-                        writeAndRun(path, folder_path, data = data, Buffer.from(git.content, 'base64').toString().replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ''));
+                        console.log(Buffer.from(git.content, 'base64').toString())
+                        // .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '')
+                        writeAndRun(path, folder_path, data = data, Buffer.from(git.content, 'base64').toString());
                       }
                     });
                   } else {
-                    writeAndRun(path, folder_path, data = data, workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ''));
+                    writeAndRun(path, folder_path, data = data, workerData.instance.block.script);
                   }
                 } else {
-                  writeAndRun(path, folder_path, data = data, workerData.instance.block.script.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, ''));
+                  writeAndRun(path, folder_path, data = data, workerData.instance.block.script);
                 }
               });
             });
@@ -82,7 +84,7 @@ function writeAndRun(path, folder_path, data, script) {
     if (err) {
       console.error(err);
     }
-    console.log('here');
+
     // Using fPutObject API upload your file to the bucket tmp.
     minioClient.fPutObject('tmp', require('path').basename(path), path, (err, etag) => {
       if (err) {
@@ -122,6 +124,7 @@ function writeAndRun(path, folder_path, data, script) {
             if (err) {
               console.error(err);
             }
+
             continueLogs(container);
 
             function continueLogs(container) {
@@ -142,6 +145,7 @@ function writeAndRun(path, folder_path, data, script) {
                       }
                       console.log('Removed the object');
                     });
+
                     if (workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') == '' || workerData.instance.block.prescript.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '') == 'false') {
                       workerData.instance.block.prescript = 'echo No Pre-Script';
                     }

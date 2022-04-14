@@ -67,9 +67,11 @@
         
 
         <div class="col-12">
-          <div class="p-inputgroup">
-            <mat-checkbox class="example-margin" id="prescript_check" formControlName="prescript" [(ngModel)]="prescript_enabled" [checked]="prescript_enabled">Enabled a Pre-Script</mat-checkbox>
-          </div>
+          <div class="field-checkbox">
+            <p-checkbox [(ngModel)]="prescript_enabled" [binary]="true" inputId="binary" [ngModelOptions]="{standalone: true}"></p-checkbox>
+            <label for="binary">Enable Pre-Script</label>
+         </div>
+    
         </div>
 
         </div>

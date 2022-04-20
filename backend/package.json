@@ -34,6 +34,7 @@
     "git-clone": "^0.2.0",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
+    "js-yaml": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "minio": "^7.0.26",
     "mongoose": "^5.13.14",

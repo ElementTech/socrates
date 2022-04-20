@@ -9,7 +9,13 @@ const { Worker } = require('worker_threads');
 const Settings = require('../models/Settings');
 const GithubElement = require('../models/GithubElement');
 const auth = require('../middleware/auth');
-
+const yaml = require('js-yaml');
+const Block = require('../models/Block');
+const Instance = require('../models/Instance');
+const Flow = require('../models/Flow');
+const Flowviz = require('../models/Flowviz');
+const Parameter = require('../models/Parameter');
+const Dynamic = require('../models/DynamicParameter');
 settingsRoute.use(auth);
 // Add Settings
 settingsRoute.route('/create').post((req, res, next) => {
@@ -63,12 +69,163 @@ function getExt(str) {
   const firstDot = basename.indexOf('.');
   const lastDot = basename.lastIndexOf('.');
   const extname = path.extname(basename).replace(/(\.[a-z0-9]+).*/i, '$1');
-
   if (firstDot === lastDot) {
     return extname;
   }
 
   return basename.slice(firstDot, lastDot) + extname;
+}
+
+function process_github_element(blobdata,item,prefixList,prefix) {
+  if ((blobdata.data.content == '') || (blobdata.data.content == null) || (!prefixList.includes(prefix))) {
+    GithubElement.find({ path: item.path }).remove().exec();
+    return false
+  } else {
+    GithubElement.updateOne({ path: item.path }, { prefix, content: blobdata.data.content, sha: item.sha,size:item.size }, { upsert: true }).exec();
+    return true
+  }
+}
+
+async function addComponent(blobdata,item,tree,octokit)
+{
+  let git_settings = await Settings.find({}).exec()
+  git_settings = git_settings[0].github[0]
+  const doc = yaml.load(Buffer.from(blobdata.data.content, 'base64').toString());
+  switch (path.basename(item.path).split(".")[1]) {
+    case "block":
+      const shared = doc.parameters.filter((p)=>p["type"]=='shared').map(async (p)=>{
+        if (git_settings.sharedParams)
+        {
+          console.log("updating param",p)
+          await Parameter.updateOne({key:p["key"]},p,{upsert:true}).exec()
+          return p
+        }
+        else
+        {
+          const paramExists = await Parameter.find({key:p["key"]}).exec()
+          if (paramExists.length != 0)
+          {
+            console.log("putting param",p)
+            return p
+          }
+          else
+          {
+            console.log("no param",p)
+            return false
+          }
+        }
+      })
+      const dynamic = doc.parameters.filter((p)=>p["type"]=='dynamic').map(async (p)=>{
+        delete Object.assign(p, {["name"]: p["key"] })["key"];
+        delete Object.assign(p, {["script"]: p["value"] })["value"];
+        if (git_settings.dynamicParams)
+        {
+          console.log("updating dynamic",p)
+          await Dynamic.updateOne({name:p["name"]},p,{upsert:true}).exec()
+          return p
+        }
+        else
+        {
+          const paramExists = await Dynamic.find({name:p["name"]}).exec()
+          if (paramExists.length != 0)
+          {
+            console.log("putting dynamic",p)
+            return p
+          }
+          else
+          {
+            console.log("no dynamic",p)
+            return false
+          }
+        }
+      })
+      Promise.all([
+        shared,dynamic
+      ].flat()).then(output=>{
+        Block.updateOne({name: doc.name},{
+          lang: doc.lang,
+          parameters: doc.parameters.filter(p=>p["type"]=='text'),
+          booleans: doc.parameters.filter(p=>p["type"]=='bool'),
+          multis: doc.parameters.filter(p=>p["type"]=='multi').map(p=>{
+            p["value"] = p["value"].join(",")
+            return p
+          }),
+          shared: output.filter(p=>p['type']=='shared'),
+          dynamic: output.filter(p=>p['type']=='dynamic'),
+          script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
+            const blobdata = await octokit.request('GET {url}', {url: item.url});
+            return Object.assign(item,{blobdata:blobdata})
+          }))[0].blobdata : doc.script.code) : doc.script.code,
+          github: (doc.script.github != undefined) ? true : false,
+          github_path: (doc.script.github != undefined) ? doc.script.github : '',
+          prescript: doc.prescript.enabled ? doc.prescript.script : false,
+          desc: doc.desc,
+          image: doc.image
+        }, { upsert: true }, (error, data) => {
+          if (error) {
+            console.log(error)
+          } 
+          console.log("Adding Block",doc.name,"Success")
+        });
+      })
+      break;
+    case "instance":
+      const blockExists = tree.map(async (item)=>{
+
+        if (item.path.includes(".block.yaml"))
+        {
+          const temp_blob = await octokit.request('GET {url}', {
+            url: item.url,
+          });
+          let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString())["name"];
+          if (doc.block == tempBlock)
+          {
+            return true
+          }
+        }
+        return false
+      })
+      Promise.all([
+        blockExists
+      ].flat()).then(output=>{
+        console.log("output",output)
+      });
+      // Instance.updateOne({name: doc.name},{
+      //   parameters: doc.parameters.filter(p=>p["type"]=='text'),
+      //   booleans: doc.parameters.filter(p=>p["type"]=='bool'),
+      //   multis: doc.parameters.filter(p=>p["type"]=='multi').map(p=>{
+      //     p["value"] = p["value"].join(",")
+      //     return p
+      //   }),
+      //   shared: output.filter(p=>p['type']=='shared'),
+      //   dynamic: output.filter(p=>p['type']=='dynamic'),
+      //   script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
+      //     const blobdata = await octokit.request('GET {url}', {url: item.url});
+      //     return Object.assign(item,{blobdata:blobdata})
+      //   }))[0].blobdata : doc.script.code) : doc.script.code,
+      //   github: (doc.script.github != undefined) ? true : false,
+      //   github_path: (doc.script.github != undefined) ? doc.script.github : '',
+      //   prescript: doc.prescript.enabled ? doc.prescript.script : false,
+      //   desc: doc.desc,
+      //   image: doc.image
+      // }, { upsert: true }, (error, data) => {
+      //   if (error) {
+      //     console.log(error)
+      //   } 
+      //   console.log("Adding Block",doc.name,"Success")
+      // });
+      break;
+    case "step":
+      console.log("step")
+      //addComponent()
+      break;               
+    case "dag":
+      console.log("dag")
+      //addComponent()
+      break;                 
+    default:
+      break;
+  }
 }
 
 function updateGithubTree(tree, octokit, prefixList) {
@@ -77,20 +234,46 @@ function updateGithubTree(tree, octokit, prefixList) {
       url: item.url,
     });
     const prefix = getExt(item.path);
-    if ((blobdata.data.content == '') || (blobdata.data.content == null) || (!prefixList.includes(prefix))) {
-      GithubElement.find({ path: item.path }).remove().exec();
-    } else {
-      GithubElement.updateOne({ path: item.path }, { prefix, content: blobdata.data.content, sha: item.sha,size:item.size }, { upsert: true }).exec();
+    if (!prefix.includes(".yaml"))
+    {
+      process_github_element(blobdata,item,prefixList,prefix)
+    }
+    else
+    {
+      if (process_github_element(blobdata,item,[".yaml"],".yaml"))
+      {
+        addComponent(blobdata,item,tree,octokit)
+      }
     }
   });
-  console.log(tree);
   GithubElement.find((error, data) => {
     if (error) {
       console.log(error);
     } else {
-      data.forEach((item) => {
+      data.forEach(async (item) => {
         if (!tree.find((gitelement) => gitelement.path === item.path)) {
-          GithubElement.find({ path: item.path }).remove().exec();
+          const removedElement = await GithubElement.find({ path: item.path }).remove().exec();
+          const prefix = getExt(item.path);
+          if (prefix.includes(".yaml"))
+          {
+            const removedName = yaml.load(Buffer.from(removedElement.content, 'base64').toString())["name"];
+            switch (path.basename(item.path).split(".")[1]) {
+              case "block":
+                Block.find({ name: removedName }).remove().exec();
+                break;
+              case "instance":
+                Instance.find({ name: removedName }).remove().exec();
+                break;     
+              case "step":
+                Flow.find({ name: removedName }).remove().exec();
+                break;
+              case "dag":
+                Flowviz.find({ name: removedName }).remove().exec();
+                break;      
+              default:
+                break;
+            }
+          }
         }
       });
     }
@@ -105,7 +288,6 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
       updateSetting(req.params.id, req.body, res, next);
       pullImages(req.body.langs, req.body, req.params.id, req.body.docker_auth);
     } else {
-      console.log(req.body.github);
       const octokit = new Octokit({ auth: `${req.body.github.githubToken}` });
       try {
         const response = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1', {
@@ -127,6 +309,10 @@ settingsRoute.route('/update/:id').put(async (req, res, next) => {
                   githubBranch: req.body.github.githubBranch,
                   githubWebhook: req.body.github.githubWebhook,
                   githubConnected: req.body.github.githubConnected,
+                  allowComponents: req.body.github.allowComponents,
+                  removeComponents: req.body.github.removeComponents,
+                  sharedParams: req.body.github.sharedParams,
+                  dynamicParams: req.body.github.dynamicParams,
                   sha: response.data.sha,
                 },
               ],

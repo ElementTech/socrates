@@ -26,6 +26,7 @@ export class GithubListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   settingsLangs;
+  Components: import("/Users/amitai.getzler/Desktop/Explorium/socrates/src/app/model/Block").Block[];
   constructor(
     private router: Router,
     public dialog: MatDialog,
@@ -38,22 +39,14 @@ export class GithubListComponent implements OnInit {
   }
 
   openDialog(content,prefix) {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:atob(content),syntax:this.settingsLangs.filter(lang=>lang.type==prefix)[0].syntax}});
+    const syntax = this.settingsLangs.filter(lang=>lang.type==prefix)[0] != undefined ? this.settingsLangs.filter(lang=>lang.type==prefix)[0].syntax : "yaml"
+    const dialogRef = this.dialog.open(DialogContentExampleDialog,{data: {content:atob(content),syntax:syntax}});
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
 
-
-  getGithub(id) {
-    this.apiService.getGithubElement(id).subscribe(data => {
-      
-      this.Github = data;
-        
-    });
-    
-  }
 
   ngOnInit() {
       this.apiService.getSettings().subscribe(data=>{
@@ -64,7 +57,8 @@ export class GithubListComponent implements OnInit {
  
   readGithub(){
     this.apiService.getGithubElements().subscribe((data) => {
-     this.Github = data;
+     this.Github = data.filter(item=>item["prefix"]!=".yaml");
+     this.Components = data.filter(item=>item["prefix"]==".yaml");
      
      this.dataSource = new MatTableDataSource(this.Github); //
      this.dataSource.paginator = this.paginator;

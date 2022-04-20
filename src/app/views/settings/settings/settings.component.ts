@@ -67,6 +67,11 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  allowComponents: Boolean = true;
+  deleteComponentsOnRemove: Boolean = false;
+  createSharedParams: Boolean = true;
+  createDynamicParams: Boolean = true;
+
   getSettings(){
     this.apiService.getSettings().subscribe(data=>{
       this.SettingsID = data[0]._id
@@ -78,6 +83,13 @@ export class SettingsComponent implements OnInit {
       this.githubConnected = data[0].github[0] ? data[0].github[0].githubConnected : false
       this.sha = data[0].github[0] ? data[0].github[0].sha : ''
       this.githubToken = data[0].github[0] ? data[0].github[0].githubToken : ''
+
+      console.log(data[0].github[0])
+      
+      this.allowComponents = data[0].github[0] ? data[0].github[0].allowComponents : true
+      this.deleteComponentsOnRemove = data[0].github[0] ? data[0].github[0].removeComponents : false
+      this.createSharedParams = data[0].github[0] ? data[0].github[0].sharedParams : true
+      this.createDynamicParams = data[0].github[0] ? data[0].github[0].dynamicParams : true
 
       this.dockerAuth = data[0].docker_auth[0] ? data[0].docker_auth[0].auth : ''
       this.dockerUsername = data[0].docker_auth[0] ? data[0].docker_auth[0].username : ''
@@ -160,7 +172,26 @@ export class SettingsComponent implements OnInit {
       }
       else
       {
-        this.apiService.updateSetting(this.SettingsID,{"github": {"githubToken":this.githubToken,"githubURL":this.githubURL,"githubBranch":this.githubBranch,"githubWebhook":this.githubWebhook,"githubConnected": true}}).subscribe(data=>{
+        console.log({"github": {
+          "githubToken":this.githubToken,
+          "githubURL":this.githubURL,
+          "githubBranch":this.githubBranch,
+          "githubWebhook":this.githubWebhook,
+          "githubConnected": true,
+          "allowComponents": this.allowComponents,
+          "removeComponents": this.deleteComponentsOnRemove,
+          "sharedParams": this.createSharedParams,
+          "dynamicParams": this.createDynamicParams
+        }})
+        this.apiService.updateSetting(this.SettingsID,{"github": {
+          "githubToken":this.githubToken,"githubURL":this.githubURL,"githubBranch":this.githubBranch,
+          "githubWebhook":this.githubWebhook,
+          "githubConnected": true,
+          "allowComponents": this.allowComponents,
+          "removeComponents": this.deleteComponentsOnRemove,
+          "sharedParams": this.createSharedParams,
+          "dynamicParams": this.createDynamicParams
+        }}).subscribe(data=>{
           this._snackBar.open(data, 'Close', {
             duration: 3000
           });
@@ -182,11 +213,21 @@ export class SettingsComponent implements OnInit {
     this._snackBar.open('Github Connection Detached', 'Close', {
       duration: 3000
     });
-    this.apiService.updateSetting(this.SettingsID,{"github": {"githubURL":"","sha":"","githubBranch":"","githubWebhook":false,"githubConnected": false}}).subscribe(data=>{
-      this.githubURL = ""
-      this.githubBranch = ""
-      this.githubWebhook = false
-      this.githubConnected = false
+    this.apiService.updateSetting(this.SettingsID,{"github": {
+      "githubURL":"",
+      "sha":"",
+      "githubBranch":"",
+      "githubWebhook":false,
+      "githubConnected": false,
+      "allowComponents": true,
+      "removeComponents": false,
+      "sharedParams": true,
+      "dynamicParams": true
+    }}).subscribe(data=>{
+      // this.githubURL = ""
+      // this.githubBranch = ""
+      // this.githubWebhook = false
+      // this.githubConnected = false
       this.getSettings()
   });
   }

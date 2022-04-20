@@ -74,7 +74,7 @@
 								</ng-container>
 					
 								<ng-container matColumnDef="type">
-									<mat-header-cell *matHeaderCellDef><i class="fa fa-github"></i>&nbsp;Type </mat-header-cell>
+									<mat-header-cell *matHeaderCellDef><i class="fa fa-github"></i>&nbsp;Suffix </mat-header-cell>
 									<mat-cell *matCellDef="let element">
 										<mat-form-field floatLabel="never">
 											<input matInput placeholder="Type" [value]="element.type" [(ngModel)]="element.type">
@@ -159,8 +159,8 @@
 
 		<c-card class="p-0">
 			<c-card-header><i class="fa fa-github" aria-hidden="true"></i> Github Integration</c-card-header>
-			<c-card-body>
-				<div>
+			<c-card-body class="row">
+				<div class="col-7">
 
 					<mat-progress-bar mode="determinate" [value]="progressbarValue"></mat-progress-bar>
 						
@@ -222,6 +222,27 @@
 							<button mat-flat-button [style.background-color]="'maroon'" [style.color]="'white'" (click)="disconnectGithub()" class="col"><mat-icon class="mat-18">link_off</mat-icon>Disconnect</button>
 						</div>
 						
+				</div>
+				<div class="col-5">
+					<mat-toolbar class="d-flex justify-content-center mb-2">
+						Options
+					</mat-toolbar>
+					<div class="field-checkbox">
+						<p-checkbox [(ngModel)]="allowComponents" [binary]="true" inputId="allowComponents"></p-checkbox>
+						<label for="allowComponents">Create Components from YAML</label>
+					</div>
+					<div class="field-checkbox">
+						<p-checkbox [(ngModel)]="deleteComponentsOnRemove" [binary]="true" inputId="deleteComponentsOnRemove"></p-checkbox>
+						<label for="deleteComponentsOnRemove">Delete Components on Remove</label>
+					</div>
+					<div class="field-checkbox">
+						<p-checkbox [(ngModel)]="createSharedParams" [binary]="true" inputId="createSharedParams"></p-checkbox>
+						<label for="createSharedParams">Create Shared Parameters from Block YAML</label>
+					</div>
+					<div class="field-checkbox">
+						<p-checkbox [(ngModel)]="createDynamicParams" [binary]="true" inputId="createDynamicParams"></p-checkbox>
+						<label for="createDynamicParams">Create Dynamic Parameters from Block YAML</label>
+					</div>
 				</div>
 			</c-card-body>
 		</c-card>

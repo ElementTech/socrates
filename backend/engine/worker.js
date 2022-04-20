@@ -55,7 +55,7 @@ mongoose.connect(dbConfig.db, {
                   if (data[0].github[0].githubConnected) {
                     GithubElement.findOne({ path: workerData.instance.block.github_path }, (error, git) => {
                       if ((git.content != null) && (git.content != undefined)) {
-                        console.log(Buffer.from(git.content, 'base64').toString())
+                        // console.log(Buffer.from(git.content, 'base64').toString())
                         // .replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '')
                         writeAndRun(path, folder_path, data = data, Buffer.from(git.content, 'base64').toString());
                       }

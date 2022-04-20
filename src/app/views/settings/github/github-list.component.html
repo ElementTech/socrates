@@ -1,46 +1,82 @@
 
-    <mat-toolbar class="d-flex justify-content-center">
-      <i class="fa fa-github" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Github Repository -
-        <span [class.connected]="this.githubConnected" [class.disconnected]="!this.githubConnected">Connected: {{this.githubConnected}}</span>
-    </h1>
-  </mat-toolbar>
+<mat-toolbar class="d-flex justify-content-center">
+    <i class="fa fa-github" aria-hidden="true"></i> <h1 style="margin-right: 1em;">&nbsp;Github Repository -
+    <span [class.connected]="this.githubConnected" [class.disconnected]="!this.githubConnected">Connected: {{this.githubConnected}}</span>
+</h1>
+</mat-toolbar>
 
-
-
-  <p-table [value]="Github" responsiveLayout="scroll"  #dt
-  [filterDelay]="0"
-  styleClass="p-datatable-sm p-datatable-gridlines"
-  [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
-  [globalFilterFields]="['path','prefix','sha']"
-  >
-  <ng-template pTemplate="caption">
-      <div class="table-header">
-          <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
-          </span>
-      </div>
-  </ng-template>
-      <ng-template pTemplate="header">
-          <tr>
-              <th>Path</th>
-              <th>Prefix</th>
-              <th>Show</th>
-              <th>Size</th>
-              <th>Sha</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-event>
-          <tr>
-              <td>{{event.path}}</td>
-              <td>{{event.prefix}}</td>
-              <td><button mat-flat-button color="primary" (click)="openDialog(event.content,event.prefix)"><i class="fa fa-code" aria-hidden="true"></i></button></td>
-              <td>{{event.size | bytes}}</td>
-              <td>{{event.sha}}</td>
-          </tr>
-      </ng-template>
-  </p-table>
-  
-
+<p-tabView>
+    <p-tabPanel header="Code Files">
+        <p-table [value]="Github" responsiveLayout="scroll"  #dt
+        [filterDelay]="0"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
+        [globalFilterFields]="['path','prefix','sha']"
+        >
+        <ng-template pTemplate="caption">
+            <div class="table-header">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+                </span>
+            </div>
+        </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Path</th>
+                    <th>Prefix</th>
+                    <th>Show</th>
+                    <th>Size</th>
+                    <th>Sha</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-event>
+                <tr>
+                    <td>{{event.path}}</td>
+                    <td>{{event.prefix}}</td>
+                    <td><button mat-flat-button color="primary" (click)="openDialog(event.content,event.prefix)"><i class="fa fa-code" aria-hidden="true"></i></button></td>
+                    <td>{{event.size | bytes}}</td>
+                    <td>{{event.sha}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-tabPanel>
+    <p-tabPanel header="Component Files">
+        <p-table [value]="Components" responsiveLayout="scroll"  #dt2
+        [filterDelay]="0"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
+        [globalFilterFields]="['path','prefix','sha']"
+        >
+        <ng-template pTemplate="caption">
+            <div class="table-header">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+                </span>
+            </div>
+        </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Path</th>
+                    <th>Prefix</th>
+                    <th>Show</th>
+                    <th>Size</th>
+                    <th>Sha</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-event>
+                <tr>
+                    <td>{{event.path}}</td>
+                    <td>{{event.prefix}}</td>
+                    <td><button mat-flat-button color="primary" (click)="openDialog(event.content,event.prefix)"><i class="fa fa-code" aria-hidden="true"></i></button></td>
+                    <td>{{event.size | bytes}}</td>
+                    <td>{{event.sha}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-tabPanel>
+</p-tabView>
 

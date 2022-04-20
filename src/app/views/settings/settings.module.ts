@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { NgBytesPipeModule } from 'angular-pipes';
+import {TabViewModule} from 'primeng/tabview';
+
 // CoreUI Modules
 import {
   AccordionModule,
@@ -104,6 +106,7 @@ import {GithubListComponent,DialogContentExampleDialog} from './github/github-li
 import {SettingsComponent} from './settings/settings.component'
 import {UserListComponent} from './users/user-list.component'
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import {CheckboxModule} from 'primeng/checkbox';
 @NgModule({
   imports: [
     CommonModule,
@@ -193,8 +196,10 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     MatAutocompleteModule,
     // Codemirror
     CodemirrorModule,
+    CheckboxModule,
     // Infinite
     InfiniteScrollModule,
+    TabViewModule,
     NgxChartsModule,
     MonacoEditorModule.forRoot()
   ],

@@ -159,7 +159,7 @@ export class BlockCreateComponent implements OnInit {
         this.githubConnected = (settings[0].github.length != 0) ? settings[0].github[0].githubConnected : false
         if (this.githubConnected){
           this.apiService.getGithubElements().subscribe(data=>{
-            this.githubList = data;
+            this.githubList = data.filter(item=>item['prefix']!=".yaml");
           });
         }
         if (this.id == ""){

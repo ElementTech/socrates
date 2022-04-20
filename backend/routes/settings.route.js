@@ -86,6 +86,121 @@ function process_github_element(blobdata,item,prefixList,prefix) {
   }
 }
 
+function addBlockFromGit(doc,git_settings,tree,octokit)
+{
+  const shared = doc.parameters.filter((p)=>p["type"]=='shared').map(async (p)=>{
+    if (git_settings.sharedParams)
+    {
+      console.log("updating param",p)
+      await Parameter.updateOne({key:p["key"]},p,{upsert:true}).exec()
+      return p
+    }
+    else
+    {
+      const paramExists = await Parameter.find({key:p["key"]}).exec()
+      if (paramExists.length != 0)
+      {
+        console.log("putting param",p)
+        return p
+      }
+      else
+      {
+        console.log("no param",p)
+        return false
+      }
+    }
+  })
+  const dynamic = doc.parameters.filter((p)=>p["type"]=='dynamic').map(async (p)=>{
+    delete Object.assign(p, {["name"]: p["key"] })["key"];
+    delete Object.assign(p, {["script"]: p["value"] })["value"];
+    if (git_settings.dynamicParams)
+    {
+      console.log("updating dynamic",p)
+      await Dynamic.updateOne({name:p["name"]},p,{upsert:true}).exec()
+      return p
+    }
+    else
+    {
+      const paramExists = await Dynamic.find({name:p["name"]}).exec()
+      if (paramExists.length != 0)
+      {
+        console.log("putting dynamic",p)
+        return p
+      }
+      else
+      {
+        console.log("no dynamic",p)
+        return false
+      }
+    }
+  })
+  return Promise.all([
+    shared,dynamic
+  ].flat()).then(output=>{
+    return Block.updateOne({name: doc.name},{
+      lang: doc.lang,
+      parameters: doc.parameters.filter(p=>p["type"]=='text'),
+      booleans: doc.parameters.filter(p=>p["type"]=='bool'),
+      multis: doc.parameters.filter(p=>p["type"]=='multi').map(p=>{
+        p["value"] = p["value"].join(",")
+        return p
+      }),
+      shared: output.filter(p=>p['type']=='shared'),
+      dynamic: output.filter(p=>p['type']=='dynamic'),
+      script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
+        const blobdata = await octokit.request('GET {url}', {url: item.url});
+        return Object.assign(item,{blobdata:blobdata})
+      }))[0].blobdata : doc.script.code) : doc.script.code,
+      github: (doc.script.github != undefined) ? true : false,
+      github_path: (doc.script.github != undefined) ? doc.script.github : '',
+      prescript: doc.prescript.enabled ? doc.prescript.script : false,
+      desc: doc.desc,
+      image: doc.image
+    }, { upsert: true }).exec();
+  })
+}
+
+async function addInstanceFromGit(doc,blockData)
+{
+  return Instance.updateOne({name: doc.name},{
+    parameters: blockData.parameters.map(p=>{
+      let instanceOverride = doc.parameters.filter(param=>(param["type"]=='text') && (param["key"] == p["key"]))
+      if (instanceOverride.length!=0)
+      {
+        p["value"] = instanceOverride[0]["value"]
+      }
+      return p
+    }),
+    booleans: blockData.booleans.map(p=>{
+      let instanceOverride = doc.parameters.filter(param=>(param["type"]=='bool') && (param["key"] == p["key"]))
+      if (instanceOverride.length!=0)
+      {
+        p["value"] = instanceOverride[0]["value"]
+      }
+      return p
+    }),
+    multis: blockData.multis.map(p=>{
+      let instanceOverride = doc.parameters.filter(param=>(param["type"]=='multi') && (param["key"] == p["key"]))
+      if (instanceOverride.length!=0)
+      {
+        p["value"] = instanceOverride[0]["value"]
+      }
+      return p
+    }),
+    block: blockData._id,
+    shared: blockData.shared.map(p=>{
+      delete p["$setOnInsert"]
+      return p
+    }),
+    dynamic: blockData.dynamic.map(p=>{
+      delete p["$setOnInsert"]
+      return p
+    }),
+    desc: doc.desc,
+    image: doc.image
+  }, { upsert: true }).exec();
+}
+
 async function addComponent(blobdata,item,tree,octokit)
 {
   let git_settings = await Settings.find({}).exec()
@@ -93,142 +208,79 @@ async function addComponent(blobdata,item,tree,octokit)
   const doc = yaml.load(Buffer.from(blobdata.data.content, 'base64').toString());
   switch (path.basename(item.path).split(".")[1]) {
     case "block":
-      const shared = doc.parameters.filter((p)=>p["type"]=='shared').map(async (p)=>{
-        if (git_settings.sharedParams)
-        {
-          console.log("updating param",p)
-          await Parameter.updateOne({key:p["key"]},p,{upsert:true}).exec()
-          return p
-        }
-        else
-        {
-          const paramExists = await Parameter.find({key:p["key"]}).exec()
-          if (paramExists.length != 0)
-          {
-            console.log("putting param",p)
-            return p
-          }
-          else
-          {
-            console.log("no param",p)
-            return false
-          }
-        }
-      })
-      const dynamic = doc.parameters.filter((p)=>p["type"]=='dynamic').map(async (p)=>{
-        delete Object.assign(p, {["name"]: p["key"] })["key"];
-        delete Object.assign(p, {["script"]: p["value"] })["value"];
-        if (git_settings.dynamicParams)
-        {
-          console.log("updating dynamic",p)
-          await Dynamic.updateOne({name:p["name"]},p,{upsert:true}).exec()
-          return p
-        }
-        else
-        {
-          const paramExists = await Dynamic.find({name:p["name"]}).exec()
-          if (paramExists.length != 0)
-          {
-            console.log("putting dynamic",p)
-            return p
-          }
-          else
-          {
-            console.log("no dynamic",p)
-            return false
-          }
-        }
-      })
-      Promise.all([
-        shared,dynamic
-      ].flat()).then(output=>{
-        Block.updateOne({name: doc.name},{
-          lang: doc.lang,
-          parameters: doc.parameters.filter(p=>p["type"]=='text'),
-          booleans: doc.parameters.filter(p=>p["type"]=='bool'),
-          multis: doc.parameters.filter(p=>p["type"]=='multi').map(p=>{
-            p["value"] = p["value"].join(",")
-            return p
-          }),
-          shared: output.filter(p=>p['type']=='shared'),
-          dynamic: output.filter(p=>p['type']=='dynamic'),
-          script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
-            const blobdata = await octokit.request('GET {url}', {url: item.url});
-            return Object.assign(item,{blobdata:blobdata})
-          }))[0].blobdata : doc.script.code) : doc.script.code,
-          github: (doc.script.github != undefined) ? true : false,
-          github_path: (doc.script.github != undefined) ? doc.script.github : '',
-          prescript: doc.prescript.enabled ? doc.prescript.script : false,
-          desc: doc.desc,
-          image: doc.image
-        }, { upsert: true }, (error, data) => {
-          if (error) {
-            console.log(error)
-          } 
-          console.log("Adding Block",doc.name,"Success")
-        });
-      })
+      addBlockFromGit(doc,git_settings,tree,octokit)
       break;
     case "instance":
       const blockExists = tree.map(async (item)=>{
-
         if (item.path.includes(".block.yaml"))
         {
           const temp_blob = await octokit.request('GET {url}', {
             url: item.url,
           });
-          let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString())["name"];
-          if (doc.block == tempBlock)
+          let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString());
+          if (doc.block == tempBlock["name"])
           {
-            return true
+            return tempBlock
           }
         }
         return false
       })
+      const blockExistsDB = await Block.find({name:doc.block}).exec()
       Promise.all([
-        blockExists
-      ].flat()).then(output=>{
-        console.log("output",output)
+        blockExists,
+        blockExistsDB
+      ].flat()).then(async (output)=>{
+        output = output.filter(item=>item)
+        switch (output.length) {
+          case 1:
+            if (Object.keys(output[0]).includes("_id"))
+            {
+              // this is mongo
+              addInstanceFromGit(doc,output[0])
+            }
+            else
+            {
+              // this is git
+              const res = addBlockFromGit(output[0],git_settings,tree,octokit)
+              res.then(async (output)=>{
+                const blockData = await Block.find({name:doc.block}).exec()
+                console.log(blockData)
+                addInstanceFromGit(doc,blockData)
+              })
+            }
+            break;
+          case 2:
+            if (Object.keys(output[0]).includes("_id"))
+            {
+              // first is mongo
+              addInstanceFromGit(doc,output[0])
+            }
+            else
+            {
+              // first is git
+              addInstanceFromGit(doc,output[1])
+            }            
+            break;        
+          default:
+            break;
+        }
       });
-      // Instance.updateOne({name: doc.name},{
-      //   parameters: doc.parameters.filter(p=>p["type"]=='text'),
-      //   booleans: doc.parameters.filter(p=>p["type"]=='bool'),
-      //   multis: doc.parameters.filter(p=>p["type"]=='multi').map(p=>{
-      //     p["value"] = p["value"].join(",")
-      //     return p
-      //   }),
-      //   shared: output.filter(p=>p['type']=='shared'),
-      //   dynamic: output.filter(p=>p['type']=='dynamic'),
-      //   script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
-      //     const blobdata = await octokit.request('GET {url}', {url: item.url});
-      //     return Object.assign(item,{blobdata:blobdata})
-      //   }))[0].blobdata : doc.script.code) : doc.script.code,
-      //   github: (doc.script.github != undefined) ? true : false,
-      //   github_path: (doc.script.github != undefined) ? doc.script.github : '',
-      //   prescript: doc.prescript.enabled ? doc.prescript.script : false,
-      //   desc: doc.desc,
-      //   image: doc.image
-      // }, { upsert: true }, (error, data) => {
-      //   if (error) {
-      //     console.log(error)
-      //   } 
-      //   console.log("Adding Block",doc.name,"Success")
-      // });
       break;
     case "step":
       console.log("step")
-      //addComponent()
       break;               
     case "dag":
       console.log("dag")
-      //addComponent()
       break;                 
     default:
       break;
   }
 }
 
-function updateGithubTree(tree, octokit, prefixList) {
+async function updateGithubTree(tree, octokit, prefixList) {
+  let git_settings = await Settings.find({}).exec()
+  git_settings = git_settings[0].github[0]
+
   tree.forEach(async (item) => {
     const blobdata = await octokit.request('GET {url}', {
       url: item.url,
@@ -240,7 +292,7 @@ function updateGithubTree(tree, octokit, prefixList) {
     }
     else
     {
-      if (process_github_element(blobdata,item,[".yaml"],".yaml"))
+      if (process_github_element(blobdata,item,[".yaml"],".yaml") && git_settings["allowComponents"])
       {
         addComponent(blobdata,item,tree,octokit)
       }
@@ -252,26 +304,31 @@ function updateGithubTree(tree, octokit, prefixList) {
     } else {
       data.forEach(async (item) => {
         if (!tree.find((gitelement) => gitelement.path === item.path)) {
-          const removedElement = await GithubElement.find({ path: item.path }).remove().exec();
+          const removedElement = await GithubElement.find({ path: item.path }).exec();
+          await GithubElement.find({ path: item.path }).remove().exec()
+          console.log(removedElement)
           const prefix = getExt(item.path);
-          if (prefix.includes(".yaml"))
+          if (git_settings.removeComponents)
           {
-            const removedName = yaml.load(Buffer.from(removedElement.content, 'base64').toString())["name"];
-            switch (path.basename(item.path).split(".")[1]) {
-              case "block":
-                Block.find({ name: removedName }).remove().exec();
-                break;
-              case "instance":
-                Instance.find({ name: removedName }).remove().exec();
-                break;     
-              case "step":
-                Flow.find({ name: removedName }).remove().exec();
-                break;
-              case "dag":
-                Flowviz.find({ name: removedName }).remove().exec();
-                break;      
-              default:
-                break;
+            if (prefix.includes(".yaml"))
+            {
+              const removedName = yaml.load(Buffer.from(removedElement[0].content, 'base64').toString())["name"];
+              switch (path.basename(item.path).split(".")[1]) {
+                case "block":
+                  Block.find({ name: removedName }).remove().exec();
+                  break;
+                case "instance":
+                  Instance.find({ name: removedName }).remove().exec();
+                  break;     
+                case "step":
+                  Flow.find({ name: removedName }).remove().exec();
+                  break;
+                case "dag":
+                  Flowviz.find({ name: removedName }).remove().exec();
+                  break;      
+                default:
+                  break;
+              }
             }
           }
         }

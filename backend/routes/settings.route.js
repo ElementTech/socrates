@@ -162,6 +162,7 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
 
 async function addInstanceFromGit(doc,blockData)
 {
+  console.log(blockData)
   return Instance.updateOne({name: doc.name},{
     parameters: blockData.parameters.map(p=>{
       let instanceOverride = doc.parameters.filter(param=>(param["type"]=='text') && (param["key"] == p["key"]))
@@ -201,6 +202,63 @@ async function addInstanceFromGit(doc,blockData)
   }, { upsert: true }).exec();
 }
 
+async function verifyInstanceAndCreateFromGit(doc,git_settings,tree,octokit)
+{
+  const blockExists = tree.map(async (item)=>{
+    if (item.path.includes(".block.yaml"))
+    {
+      const temp_blob = await octokit.request('GET {url}', {
+        url: item.url,
+      });
+      let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString());
+      if (doc.block == tempBlock["name"])
+      {
+        return tempBlock
+      }
+    }
+    return false
+  })
+  const blockExistsDB = await Block.find({name:doc.block}).exec()
+  return Promise.all([
+    blockExists,
+    blockExistsDB
+  ].flat()).then(async (output)=>{
+    output = output.filter(item=>item)
+    switch (output.length) {
+      case 1:
+        if (Object.keys(output[0]).includes("_id"))
+        {
+          // this is mongo
+          return addInstanceFromGit(doc,output[0])
+        }
+        else
+        {
+          // this is git
+          const res = addBlockFromGit(output[0],git_settings,tree,octokit)
+          return res.then(async (output)=>{
+            const blockData = await Block.find({name:doc.block}).exec()
+            return addInstanceFromGit(doc,blockData[0])
+          })
+        }
+        break;
+      case 2:
+        if (Object.keys(output[0]).includes("_id"))
+        {
+          // first is mongo
+          return addInstanceFromGit(doc,output[0])
+        }
+        else
+        {
+          // first is git
+          return addInstanceFromGit(doc,output[1])
+        }            
+        break;        
+      default:
+        break;
+    }
+  });
+}
+
 async function addComponent(blobdata,item,tree,octokit)
 {
   let git_settings = await Settings.find({}).exec()
@@ -211,66 +269,87 @@ async function addComponent(blobdata,item,tree,octokit)
       addBlockFromGit(doc,git_settings,tree,octokit)
       break;
     case "instance":
-      const blockExists = tree.map(async (item)=>{
-        if (item.path.includes(".block.yaml"))
-        {
-          const temp_blob = await octokit.request('GET {url}', {
-            url: item.url,
-          });
-          let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString());
-          if (doc.block == tempBlock["name"])
-          {
-            return tempBlock
-          }
-        }
-        return false
-      })
-      const blockExistsDB = await Block.find({name:doc.block}).exec()
-      Promise.all([
-        blockExists,
-        blockExistsDB
-      ].flat()).then(async (output)=>{
-        output = output.filter(item=>item)
-        switch (output.length) {
-          case 1:
-            if (Object.keys(output[0]).includes("_id"))
-            {
-              // this is mongo
-              addInstanceFromGit(doc,output[0])
-            }
-            else
-            {
-              // this is git
-              const res = addBlockFromGit(output[0],git_settings,tree,octokit)
-              res.then(async (output)=>{
-                const blockData = await Block.find({name:doc.block}).exec()
-                console.log(blockData)
-                addInstanceFromGit(doc,blockData)
-              })
-            }
-            break;
-          case 2:
-            if (Object.keys(output[0]).includes("_id"))
-            {
-              // first is mongo
-              addInstanceFromGit(doc,output[0])
-            }
-            else
-            {
-              // first is git
-              addInstanceFromGit(doc,output[1])
-            }            
-            break;        
-          default:
-            break;
-        }
-      });
+      verifyInstanceAndCreateFromGit(doc,git_settings,tree,octokit)
       break;
     case "step":
-      console.log("step")
+      const translatedSteps = doc.steps.map(step=>{
+        let num = -1
+        return step.map(async (inst)=>{
+          const instanceExists = tree.map(async (item)=>{
+            if (item.path.includes(".instance.yaml"))
+            {
+              const temp_blob = await octokit.request('GET {url}', {
+                url: item.url,
+              });
+              let tempBlock = yaml.load(Buffer.from(temp_blob.data.content, 'base64').toString());
+              if (inst.name == tempBlock["name"])
+              {
+                return tempBlock
+              }
+            }
+            return false
+          })
+          const instanceExistsDB = await Instance.find({name:inst.name}).exec()
+          return Promise.all([
+            instanceExists,
+            instanceExistsDB
+          ].flat()).then(async (output)=>{
+            output = output.filter(item=>item)
+            switch (output.length) {
+              case 1:
+                if (Object.keys(output[0]).includes("_id"))
+                {
+                  // this is mongo
+                  num = num + 1
+                  return {num: num, id: output[0]._id};
+                }
+                else
+                {
+                  // this is git
+                  const res = verifyInstanceAndCreateFromGit(output[0],git_settings,tree,octokit)
+                  return res.then(async (output)=>{
+                    const instData = await Instance.find({name:inst.name}).exec()
+                    num = num + 1
+                    return {num: num, id: instData[0]._id};
+                  })
+                }
+                break;
+              case 2:
+                if (Object.keys(output[0]).includes("_id"))
+                {
+                  // first is mongo
+                  num = num + 1
+                  return {num: num, id: output[0]._id};
+                }
+                else
+                {
+                  // first is git
+                  num = num + 1
+                  return {num: num, id: output[1]._id};
+                }            
+                break;        
+              default:
+                break;
+            }
+          });
+        })
+      })
+      Promise.all(translatedSteps.map(function(entity){
+        return Promise.all(entity)
+      })).then(function(data) {
+        if (!data.flat().flat().includes(undefined))
+        {
+          Flow.updateOne({name: doc.name},{
+            steps: data,
+            on_error: doc.on_error,
+            desc: doc.desc,
+            image: doc.image
+          }, { upsert: true }).exec();
+        }
+      });
       break;               
     case "dag":
-      console.log("dag")
+      console.log(doc)
       break;                 
     default:
       break;

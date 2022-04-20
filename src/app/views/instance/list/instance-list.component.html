@@ -43,11 +43,11 @@
                 <p-columnFilter type="text" field="name" display="menu" class="ml-auto"></p-columnFilter>
             </div>
         </th>
-        <th   pSortableColumn="block">
+        <th   pSortableColumn="block.name">
           <div class="flex justify-content-between align-items-center">
               Block
               <!-- <p-sortIcon field="block"></p-sortIcon> -->
-              <p-columnFilter type="text" field="block" display="menu" class="ml-auto"></p-columnFilter>
+              <p-columnFilter type="text" field="block.name" display="menu" class="ml-auto"></p-columnFilter>
           </div>
       </th>
     
@@ -173,7 +173,7 @@
         </td>
         <td>
           <span class="p-column-title">Block</span>
-          <button pButton type="button" class="p-button-sm p-button-outlined text-dark" label="{{instance.block}}" [routerLink]="['/block/create/', instance.blockid]">
+          <button pButton type="button" class="p-button-sm p-button-outlined text-dark" label="{{instance.block.name}}" [routerLink]="['/block/create/', instance.blockid]">
             <i class="fa fa-cube" ></i>&nbsp;
           </button>
         </td>

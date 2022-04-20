@@ -104,7 +104,7 @@ instanceRoute.route('/').get((req, res, next) => {
         const sliced = lastRuns.slice(-10)
         return { 
           ...instance.toJSON(),
-          block: instance.block.name,
+          block: instance.block,
           blockid: instance.block._id,
           numruns: lastRuns.length,
           lastruns_fail: sliced.map(run=>(run.error)).reverse(),

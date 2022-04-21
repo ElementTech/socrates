@@ -139,8 +139,14 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
         p["value"] = p["value"].join(",")
         return p
       }),
-      shared: output.filter(p=>p['type']=='shared'),
-      dynamic: output.filter(p=>p['type']=='dynamic'),
+      shared: output.filter(p=>p['type']=='shared').map(p=>{
+        delete p["$setOnInsert"]
+        return p
+      }),
+      dynamic: output.filter(p=>p['type']=='dynamic').map(p=>{
+        delete p["$setOnInsert"]
+        return p
+      }),
       script: (doc.script.github != undefined) ? ((tree.filter(item=>item.path==doc.script.github) != 0) ? (tree.filter(item=>item.path==doc.script.github).map(async (item)=>{
         const blobdata = await octokit.request('GET {url}', {url: item.url});
         return Object.assign(item,{blobdata:blobdata})

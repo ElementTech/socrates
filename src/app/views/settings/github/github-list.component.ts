@@ -26,7 +26,7 @@ export class GithubListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   settingsLangs;
-  Components: import("/Users/amitai.getzler/Desktop/Explorium/socrates/src/app/model/Block").Block[];
+  Components;
   constructor(
     private router: Router,
     public dialog: MatDialog,

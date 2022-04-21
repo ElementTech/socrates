@@ -6,12 +6,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import {MatDialogActions} from '@angular/material/dialog'
-
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-github-list',
   templateUrl: './github-list.component.html',
-  styleUrls: ['./github-list.component.css']
+  styleUrls: ['./github-list.component.css'],
+  providers: [MessageService]
 })
 
 
@@ -31,11 +32,23 @@ export class GithubListComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private ngZone: NgZone,
-    private apiService: ApiService) { 
+    private apiService: ApiService,
+    private messageService: MessageService) { 
     this.readGithub();
     this.apiService.getSettings().subscribe(data=>{
       this.settingsLangs = data[0]['langs']
     })
+  }
+  refreshGithub()
+  {
+    console.log("refreshing github")
+    this.apiService.refreshGithub().subscribe(data=>{
+      this.messageService.add({severity:'success', summary: 'Success', detail:'Github Tree Refreshing'});
+      this.readGithub();
+    },
+    error=>{
+      this.messageService.add({severity:'error', summary: 'Error', detail:error});
+    });
   }
 
   openDialog(content,prefix) {

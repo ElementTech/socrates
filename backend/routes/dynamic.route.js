@@ -8,7 +8,7 @@ const docker = require('../engine/docker');
 // DynamicParameter model
 const DynamicParameter = require('../models/DynamicParameter');
 const auth = require('../middleware/auth');
-
+const { Worker } = require('worker_threads');
 DynamicParameterRoute.use(auth);
 // Add DynamicParameter
 DynamicParameterRoute.route('/create').post((req, res, next) => {
@@ -29,6 +29,7 @@ DynamicParameterRoute.route('/create').post((req, res, next) => {
     if (error) {
       return next(error);
     }
+    updateDynamicParameter(data._id)
     res.json(data);
   });
 });
@@ -62,6 +63,7 @@ DynamicParameterRoute.route('/update/:id').put((req, res, next) => {
     if (error) {
       return next(error);
     }
+    updateDynamicParameter(req.params.id)
     res.json(data);
     console.log('Data updated successfully');
   });
@@ -94,4 +96,37 @@ DynamicParameterRoute.route('/run').post((req, res) => {
   res.json(custom_id);
 });
 
-module.exports = DynamicParameterRoute;
+async function updateDynamicParameter(id)
+{
+  const dynamicData = await DynamicParameter.findById(id).exec()
+  console.log("dynamicData",dynamicData)
+  const custom_id = new mongoose.Types.ObjectId().toHexString();
+  docker.run({
+    block: { lang: dynamicData.lang, script: dynamicData.script, prescript: '' },
+    parameters: [{ key: '', value: '' }],
+    shared: [],
+    booleans: [],
+    multis: [],
+  }, custom_id);
+
+  const worker = new Worker('./engine/watch.js', { 
+    workerData: { 
+      model: "DockerInstance", 
+      id: custom_id, 
+      field: "done"
+    }
+  });
+  return worker.once('message', async (message) => {
+    if (!message) // success
+    {
+      const dockerData = await DockerInstance.findById(custom_id).exec()
+      console.log(dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(','))
+      DynamicParameter.findByIdAndUpdate(id, {
+        $set: {output:dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',')},
+      }).exec()
+      return dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',')
+    }
+  });
+}
+
+module.exports = { DynamicParameterRoute, updateDynamicParameter };

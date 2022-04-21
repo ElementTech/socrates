@@ -153,7 +153,7 @@ app.use('/api/settings', settingsRoute.settingsRoute);
 app.use('/api/flow', flowRoute);
 app.use('/api/flowviz', flowvizRoute);
 app.use('/api/parameter', parameterRoute);
-app.use('/api/dynamic', dynamicParameterRoute);
+app.use('/api/dynamic', dynamicParameterRoute.DynamicParameterRoute);
 app.use('/api/file', fileRoute);
 app.use('/api/github', githubRoute);
 app.use('/api/user', UserRoute);

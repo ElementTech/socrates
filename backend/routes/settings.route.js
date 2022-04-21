@@ -16,6 +16,7 @@ const Flow = require('../models/Flow');
 const Flowviz = require('../models/Flowviz');
 const Parameter = require('../models/Parameter');
 const Dynamic = require('../models/DynamicParameter');
+const DynamicParameterRoute = require('./dynamic.route');
 settingsRoute.use(auth);
 // Add Settings
 settingsRoute.route('/create').post((req, res, next) => {
@@ -113,6 +114,9 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
     if (git_settings.dynamicParams)
     {
       await Dynamic.updateOne({name:p["name"]},p,{upsert:true}).exec()
+      const dynamoInDB = await Dynamic.find({name:p["name"]}).exec()
+      console.log("dynamoInDB",dynamoInDB)
+      DynamicParameterRoute.updateDynamicParameter(dynamoInDB[0]._id)
       return p
     }
     else
@@ -120,6 +124,8 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
       const paramExists = await Dynamic.find({name:p["name"]}).exec()
       if (paramExists.length != 0)
       {
+        console.log("paramExists",paramExists)
+        DynamicParameterRoute.updateDynamicParameter(paramExists[0]._id)
         return p
       }
       else
@@ -474,6 +480,32 @@ async function updateGithubTree(tree, octokit, prefixList) {
     }
   });
 }
+
+// Update settings
+settingsRoute.route('/refresh').post(async (req, res, next) => {
+  let dbSettings = await Settings.find({}).exec()
+  dbSettings = dbSettings[0]
+  if (dbSettings.github[0].githubConnected) {
+    console.log("git connected")
+    const octokit = new Octokit({ auth: `${dbSettings.github[0].githubToken}` });
+    try {
+      const response = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1', {
+        owner: dbSettings.github[0].githubURL.split('/')[0],
+        repo: dbSettings.github[0].githubURL.split('/')[1],
+        branch: dbSettings.github[0].githubBranch,
+      });
+      const prefixList = dbSettings.langs.map((lang) => lang.type);
+      res.status(200).json({
+        msg: 'Github Connection Succesful'
+      })      
+      updateGithubTree(response.data.tree, octokit, prefixList);
+    } catch (error) {
+      res.status(500).json({
+        msg: error.response.data.message
+      })
+    }
+  }
+});
 
 // Update settings
 settingsRoute.route('/update/:id').put(async (req, res, next) => {

@@ -437,6 +437,12 @@ export class ApiService {
       let url = `${this.baseUri}/settings/update/${id}`;
       return this.http.put(url, data, { headers: this.headers })
     }
+
+    refreshGithub(): Observable<any> {
+      let url = `${this.baseUri}/settings/refresh`;
+      return this.http.post(url,{},{headers: this.headers})
+        
+    }
   
   // Create
   createFlow(data: any): Observable<any> {

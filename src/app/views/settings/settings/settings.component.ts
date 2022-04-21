@@ -172,17 +172,7 @@ export class SettingsComponent implements OnInit {
       }
       else
       {
-        console.log({"github": {
-          "githubToken":this.githubToken,
-          "githubURL":this.githubURL,
-          "githubBranch":this.githubBranch,
-          "githubWebhook":this.githubWebhook,
-          "githubConnected": true,
-          "allowComponents": this.allowComponents,
-          "removeComponents": this.deleteComponentsOnRemove,
-          "sharedParams": this.createSharedParams,
-          "dynamicParams": this.createDynamicParams
-        }})
+
         this.apiService.updateSetting(this.SettingsID,{"github": {
           "githubToken":this.githubToken,"githubURL":this.githubURL,"githubBranch":this.githubBranch,
           "githubWebhook":this.githubWebhook,

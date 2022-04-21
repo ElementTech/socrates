@@ -185,7 +185,7 @@ export class FlowVizComponent {
         this.nodes = [...this.nodes]
         this.links = data.links
         this.links = [...this.links]
-        this.flowForm.setValue(data)
+        this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : ''),user:(data.user ? data.user : '')}))
         this.lastNum = parseInt(data.nodes.reduce((prev, current)=> ( (parseInt(prev.id)  > parseInt(current.id)) ? prev : current),0).label)
         this.hidePlus()
       });

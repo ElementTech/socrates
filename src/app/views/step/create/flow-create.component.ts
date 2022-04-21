@@ -101,7 +101,7 @@ export class FlowCreateComponent implements OnInit {
       this.apiService.getFlow(this.id).subscribe(data => {
         delete data.__v
         delete data._id
-        this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : '')}))
+        this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : ''),user:(data.user ? data.user : '')}))
         this.steps= data.steps.map(step=>step.map(inst=>JSON.parse(inst).data))
         console.log(this.steps)
       });

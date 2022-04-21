@@ -281,7 +281,8 @@ function recursiveLinkFlattening(nodes)
   })
   return links
 }
-
+const cron = require('cron-validator');
+const cronController = require('../controllers/cron.controller')
 async function addComponent(blobdata,item,tree,octokit)
 {
   let git_settings = await Settings.find({}).exec()
@@ -292,7 +293,14 @@ async function addComponent(blobdata,item,tree,octokit)
       addBlockFromGit(doc,git_settings,tree,octokit)
       break;
     case "instance":
-      verifyInstanceAndCreateFromGit(doc,git_settings,tree,octokit)
+      await verifyInstanceAndCreateFromGit(doc,git_settings,tree,octokit)
+      if (Object.keys(doc).includes("schedule"))
+      {
+        if (cron.isValidCron(doc.schedule, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+          const instanceExistsDB = await Instance.find({name:doc.name}).exec()
+          cronController.createInstance(doc.schedule,instanceExistsDB[0])
+        }
+      }
       break;
     case "step":
       const translatedSteps = doc.steps.map(step=>{
@@ -359,28 +367,42 @@ async function addComponent(blobdata,item,tree,octokit)
       })
       Promise.all(translatedSteps.map(function(entity){
         return Promise.all(entity)
-      })).then(function(data) {
+      })).then(async function(data) {
         if (!data.flat().flat().includes(undefined))
         {
-          Flow.updateOne({name: doc.name},{
+          await Flow.updateOne({name: doc.name},{
             steps: data,
             on_error: doc.on_error,
             desc: doc.desc,
             image: doc.image
           }, { upsert: true }).exec();
+          if (Object.keys(doc).includes("schedule"))
+          {
+            if (cron.isValidCron(doc.schedule, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+              const instanceExistsDB = await Flow.find({name:doc.name}).exec()
+              cronController.createStepFlow(doc.schedule,instanceExistsDB[0])
+            }
+          }          
         }
       });
       break;               
     case "dag":
       const nodes = [{id:"node0",label:"Start",parent:''}].concat(recursiveNodeFlattening(doc.nodes,1,"node0")).flat(Infinity)
       const links = recursiveLinkFlattening(nodes)
-      Flowviz.updateOne({name: doc.name},{
+      await Flowviz.updateOne({name: doc.name},{
         nodes: nodes,
         links: links,
         on_error: doc.on_error,
         desc: doc.desc,
         image: doc.image
       }, { upsert: true }).exec();
+      if (Object.keys(doc).includes("schedule"))
+      {
+        if (cron.isValidCron(doc.schedule, { alias: true,allowBlankDay: true,allowSevenAsSunday: true })) {
+          const instanceExistsDB = await Flowviz.find({name:doc.name}).exec()
+          cronController.createDagFlow(doc.schedule,instanceExistsDB[0])
+        }
+      }      
       break;                 
     default:
       break;

@@ -678,7 +678,6 @@ user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name 
             instances.forEach(inst=>{
               if (inst.name == element.data.name)
               {
-                console.log(inst)
                 this.Instance.parameters = this.Instance.parameters.concat(inst.parameters.map(param=>Object.assign({"type":"text"},param)))
                 this.Instance.shared = this.Instance.shared.concat(inst.shared.map(param=>Object.assign({"type":"text"},param)))
                 this.Instance.booleans = this.Instance.booleans.concat(inst.booleans.map(param=>Object.assign({"type":"checkbox"},param)))

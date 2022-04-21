@@ -155,7 +155,7 @@ function writeAndRun(path, folder_path, data, script) {
                       .concat(workerData.instance.shared)
                       .concat(workerData.instance.multis)
                       .concat(workerData.instance.booleans)
-                      .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map((dynamo) => ({ key: dynamo.name, value: dynamo.output })) : []) : [])
+                      .concat(workerData.instance.dynamic != undefined ? (workerData.instance.dynamic != 0 ? workerData.instance.dynamic.map((dynamo) => ({ key: dynamo.name, value: (dynamo.output != undefined ? dynamo.output : '') })) : []) : [])
                       .unique();
 
                     let auxContainer;

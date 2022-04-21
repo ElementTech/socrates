@@ -671,7 +671,7 @@ user: ((data[this.alreadyLoaded+i].user) ? data[this.alreadyLoaded+i].user.name 
       this.nodes = [...this.nodes]
       this.links = data.links
       this.links = [...this.links]
-      this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : '')}))
+      this.flowForm.setValue(Object.assign(data,{image:(data.image ? data.image : ''),user:(data.user ? data.user : 'socrates')}))
       this.lastNum = parseInt(data.nodes.reduce((prev, current)=> ( (parseInt(prev.id)  > parseInt(current.id)) ? prev : current),0).label)
       data.nodes.forEach(element => {
         this.apiService.getInstances().subscribe(instances=>{

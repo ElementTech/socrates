@@ -91,7 +91,6 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
   const shared = doc.parameters.filter((p)=>p["type"]=='shared').map(async (p)=>{
     if (git_settings.sharedParams)
     {
-      console.log("updating param",p)
       await Parameter.updateOne({key:p["key"]},p,{upsert:true}).exec()
       return p
     }
@@ -100,12 +99,10 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
       const paramExists = await Parameter.find({key:p["key"]}).exec()
       if (paramExists.length != 0)
       {
-        console.log("putting param",p)
         return p
       }
       else
       {
-        console.log("no param",p)
         return false
       }
     }
@@ -115,7 +112,6 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
     delete Object.assign(p, {["script"]: p["value"] })["value"];
     if (git_settings.dynamicParams)
     {
-      console.log("updating dynamic",p)
       await Dynamic.updateOne({name:p["name"]},p,{upsert:true}).exec()
       return p
     }
@@ -124,12 +120,10 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
       const paramExists = await Dynamic.find({name:p["name"]}).exec()
       if (paramExists.length != 0)
       {
-        console.log("putting dynamic",p)
         return p
       }
       else
       {
-        console.log("no dynamic",p)
         return false
       }
     }
@@ -162,7 +156,6 @@ function addBlockFromGit(doc,git_settings,tree,octokit)
 
 async function addInstanceFromGit(doc,blockData)
 {
-  console.log(blockData)
   return Instance.updateOne({name: doc.name},{
     parameters: blockData.parameters.map(p=>{
       let instanceOverride = doc.parameters.filter(param=>(param["type"]=='text') && (param["key"] == p["key"]))
@@ -259,6 +252,36 @@ async function verifyInstanceAndCreateFromGit(doc,git_settings,tree,octokit)
   });
 }
 
+function recursiveNodeFlattening(nodes,num=1,parent="")
+{
+  return nodes.map(node=>{
+    let tempId = "node" + num.toString()
+    let tempLabel = num.toString()
+    let tempData = {name:node.name}
+    num = num+1
+    if (Object.keys(node).includes("children"))
+    {
+      return [{id:tempId,label:tempLabel,data:tempData,parent:parent}].concat(recursiveNodeFlattening((node.children instanceof Array) ? node.children : [node.children],num+1,tempId))
+    }
+    else
+    {
+      return {id:tempId,label:tempLabel,data:tempData,parent:parent}
+    }
+  })
+}
+
+function recursiveLinkFlattening(nodes)
+{
+  let links = []
+  nodes.forEach(node=>{
+    if (node.parent != '')
+    {
+      links.push({id:node.id,label:node.id.replace("node",""),source:node.parent,target:node.id})
+    }
+  })
+  return links
+}
+
 async function addComponent(blobdata,item,tree,octokit)
 {
   let git_settings = await Settings.find({}).exec()
@@ -349,7 +372,15 @@ async function addComponent(blobdata,item,tree,octokit)
       });
       break;               
     case "dag":
-      console.log(doc)
+      const nodes = [{id:"node0",label:"Start",parent:''}].concat(recursiveNodeFlattening(doc.nodes,1,"node0")).flat(Infinity)
+      const links = recursiveLinkFlattening(nodes)
+      Flowviz.updateOne({name: doc.name},{
+        nodes: nodes,
+        links: links,
+        on_error: doc.on_error,
+        desc: doc.desc,
+        image: doc.image
+      }, { upsert: true }).exec();
       break;                 
     default:
       break;

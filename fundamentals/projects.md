@@ -1,6 +1,6 @@
 # 🧊 Blocks
 
-A Block is a component made of a Code in a specific Language. It might have [parameters](parameters/) (available as ENV variables to the code), defaults, and a Pre-Code in `Shell` to execute before the main. It may also be directly attached to a file in [Github](../configuration/settings/github.md).&#x20;
+A Block is a component made of a Code in a specific Language. It might have [parameters](parameters/) (available as ENV variables to the code), defaults, and a Pre-Code in `Shell` to execute before the main. It may also be directly attached to a file in [Github](../configuration/settings/github/).&#x20;
 
 * Any files created during execution will be saved as [Artifacts](instances/artifacts.md).
 * Outputs can be set by printing following syntax: `::set-output key=value`.

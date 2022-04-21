@@ -11,7 +11,8 @@
 
 * [✏ Settings](configuration/settings/README.md)
   * [💽 Code Languages](configuration/settings/code-languages.md)
-  * [🖨 Github](configuration/settings/github.md)
+  * [🖨 Github](configuration/settings/github/README.md)
+    * [🗃 Configuration as YAML](configuration/settings/github/configuration-as-yaml.md)
 * [🫂 Users and Authentication](configuration/users-and-authentication.md)
 
 ## Fundamentals

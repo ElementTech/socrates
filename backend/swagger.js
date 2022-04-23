@@ -26,6 +26,8 @@ models = objectMap(models, function(value) {
     return swaggerizeModel(m2s(value));
 });
 
+console.log(models)
+
 const doc = {
     info: {
       version: 'alpha',      // by default: '1.0.0'

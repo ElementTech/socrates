@@ -4,6 +4,7 @@ const app = express();
 const DynamicParameterRoute = express.Router();
 const mongoose = require('mongoose');
 const DockerInstance = require('../models/DockerInstance');
+const Instance = require('../models/Instance');
 const docker = require('../engine/docker');
 // DynamicParameter model
 const DynamicParameter = require('../models/DynamicParameter');
@@ -120,11 +121,29 @@ async function updateDynamicParameter(id)
     if (!message) // success
     {
       const dockerData = await DockerInstance.findById(custom_id).exec()
-      console.log(dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(','))
-      DynamicParameter.findByIdAndUpdate(id, {
-        $set: {output:dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',')},
-      }).exec()
-      return dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',')
+      const outputArray = dockerData.output[0].value.replaceAll('[','').replaceAll(']','').replace(/['"]+/g, '').split(',')
+      console.log(outputArray)
+      if (outputArray instanceof Array) {
+        if (outputArray.length!=0)
+        {
+          DynamicParameter.findByIdAndUpdate(id, {
+            $set: {output:outputArray},
+          }).exec()
+
+          Instance.updateMany(
+            {},
+            {
+              $set: {
+                'dynamic.$[outer].output': outputArray[0],
+              },
+            },
+            {
+              arrayFilters: [{ 'outer.script': { $exists: true }, 'outer.output': { $exists: false } }],
+          }).exec();
+
+        }
+      }
+      return outputArray
     }
   });
 }

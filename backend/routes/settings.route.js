@@ -191,6 +191,11 @@ async function addInstanceFromGit(doc,blockData)
       {
         p["value"] = instanceOverride[0]["value"]
       }
+      else
+      {
+        p["value"] = p["value"].split(",")[0]
+      }
+      console.log(p)
       return p
     }),
     block: blockData._id,
